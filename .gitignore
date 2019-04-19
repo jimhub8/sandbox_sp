@@ -1,0 +1,17 @@
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+/app.yalm
+/cron.yalm
+/.idea
+/.vscode
+/.vagrant
+Homestead.json
+speedball.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+.env
+.phpunit.result.cache
