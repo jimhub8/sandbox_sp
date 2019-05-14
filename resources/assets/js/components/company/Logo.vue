@@ -51,20 +51,14 @@ export default {
             axios.post(`/logo/${this.company.id}`, this.file)
                 .then((response) => {
                     this.loading = false
-                    console.log(response);
+                    console.log(response);            
                     this.$emit('alertRequest')
                     this.close()
                 })
                 .catch((error) => {
                     this.loading = false
                     this.Editloader = false
-                    this.close()
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        return
-                    } else if (error.response.status === 401 || error.response.status === 409) {
-                        eventBus.$emit('reloadRequest', error.response.statusText)
-                    }
+                    // this.close()
                     this.color = 'red'
                     this.message = 'Something went wrong'
                     this.snackbar = true
@@ -101,9 +95,10 @@ export default {
             this.$emit('closeRequest')
         },
 
-    },
-    mounted() {
 
+    },
+    mounted(){
+        
         axios.post('/getLogoOnly')
             .then((response) => {
                 if (response.data.length > 0) {

@@ -1,19 +1,20 @@
-@extends('layouts.app') 
+@extends('layouts.app')
+
 @section('content')
 
 <template>
 <v-app id="inspire">
-    <div id="login" style="margin-top: -120px;">
+    <div id="login">
     <v-content>
-        <v-container fluid fill-height style="background: url('/storage/ps/track.jpg'); margin-top: 200px; background-position: center; background-attachment: fixed; background-size: cover;height: 100vh;">
-            <v-layout align-center justify-center>
+        <v-container fluid fill-height>
+            <v-layout align-center justify-center style="margin-top: 200px;">
                 <v-flex xs12 sm8 md4>
                 <v-flex xs12 sm12>
                     {{-- <v-img style="width: 100px; height: 100px; marge"
                         src="{{ asset('storage/logo-white.png') }}"
                         gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
                     ></v-img> --}}
-                    <img src="{{ asset('/storage/logo1.jpg') }}" alt="Boxleo"  style="width: 150px; margin-top: -150px;
+                    <img src="{{ asset('storage/logo1.jpg') }}" alt="SpeedBall"  style="width: 150px; height: 150px; margin-top: -150px;
                     margin-left: 150px;">
                     </v-flex>
                     <v-card class="elevation-12">
@@ -84,4 +85,5 @@
 </div>
 </v-app>
 </template>
+
 @endsection

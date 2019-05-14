@@ -123,14 +123,14 @@ export default {
       this.notyShow = false;
     }
   },
-  created() {
-    this.timer = window.setInterval(() => {
-      this.getnotifications();
-    }, 5000);
+//   created() {
+//     this.timer = window.setInterval(() => {
+//       this.getnotifications();
+//     }, 60000);
+//   },
+  beforeDestroy() {
+    clearInterval(this.timer);
   },
-  // beforeDestroy() {
-  //   clearInterval(this.timer);
-  // },
   mounted() {
     axios
       .get("/notifications")

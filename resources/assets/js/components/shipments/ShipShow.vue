@@ -18,7 +18,7 @@
                         <v-flex xs7 sm7>
                             <v-card>
                                 <v-card-title primary-title>
-                                    <h3 class="headline mb-0">Speedball Services.</h3>
+                                    <h3 class="headline mb-0">SpeedBall Courier Services.</h3>
                                 </v-card-title>
                                 <v-card-actions>
                                     <v-list two-line>

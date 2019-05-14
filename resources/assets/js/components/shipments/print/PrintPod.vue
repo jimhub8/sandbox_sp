@@ -17,9 +17,9 @@
                         <!-- COURIER SCRIPTS PVT LTD. -->
                         <v-flex xs5 sm5>
                             <v-card style="border: 1px solid #000;">
-                                <img src="storage/logo-white.png" alt="Speedball" sizes="100">
+                                <img src="storage/logo-white.png" alt="SpeedBall" sizes="100">
                                 <v-card-title primary-title>
-                                    <h3 class="headline mb-0">Speedball Services.</h3>
+                                    <h3 class="headline mb-0">SpeedBall Courier Services.</h3>
                                 </v-card-title>
                                 <v-card-actions>
                                     <v-list two-line>
@@ -47,7 +47,7 @@
                                                 Email:
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>info@speedball.co.ke</v-list-tile-title>
+                                                <v-list-tile-title>info@speedballcourier.com</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                     </v-list>
@@ -117,7 +117,7 @@
                                                 <b>Name</b>
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>Speedball</v-list-tile-title>
+                                                <v-list-tile-title>SpeedBall</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                         <v-list-tile>

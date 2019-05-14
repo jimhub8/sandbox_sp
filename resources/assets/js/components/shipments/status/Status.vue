@@ -18,7 +18,7 @@
                         <v-spacer></v-spacer>
                         <v-tooltip bottom>
                             <v-btn slot="activator" color="info darken-2" class="mx-0">{{ AllShip }}
-                                <v-icon color="white darken-2" small>alarm_add</v-icon>
+                                <v-icon color="white darken-2" small>check_circle</v-icon>
                             </v-btn>
                             <span>Orders</span>
                         </v-tooltip>

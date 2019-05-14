@@ -85,107 +85,99 @@
 
 <script>
 export default {
-  props: ["openAddRequest", "AllBranches", "AllRoles", "countryList"],
-  data() {
-    const defaultForm = Object.freeze({
-      name: "",
-      // password: '',
-      email: "",
-      phone: "",
-      branch: "",
-      address: "",
-      city: ""
-      // country: '',
-    });
-    return {
-      loading: false,
-      errors: [],
-      selected: [],
-      permissions: [],
-      defaultForm,
-      loader: false,
-      e1: true,
-      form: Object.assign({}, defaultForm),
-      emailRules: [
-        v => {
-          return !!v || "E-mail is required";
-        },
-        v =>
-          /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-          "E-mail must be valid"
-      ],
-      rules: {
-        name: [val => (val || "").length > 0 || "This field is required"]
-      }
-    };
-  },
-  methods: {
-    save() {
-      this.loading = true;
-      axios
-        .post("/users", this.$data.form)
-        .then(response => {
-          // alert('error1')
-          this.loading = false;
-          // console.log(response);
-          this.$parent.Allusers.push(response.data);
-          this.close();
-          // this.resetForm();
-          this.$emit("alertRequest");
+    props: ['openAddRequest', 'AllBranches', 'AllRoles', 'countryList'],
+    data() {
+        const defaultForm = Object.freeze({
+            name: '',
+            // password: '',
+            email: '',
+            phone: '',
+            branch: '',
+            address: '',
+            city: '',
+            // country: '',
         })
-        .catch(error => {
-          // alert('error2')
-          this.loading = false;
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        return
-                    }
+        return {
+            loading: false,
+            errors: [],
+            selected: [],
+            permissions: [],
+            defaultForm,
+            loader: false,
+            e1: true,
+            form: Object.assign({}, defaultForm),
+            emailRules: [
+                v => {
+                    return !!v || 'E-mail is required'
+                },
+                v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+            ],
+            rules: {
+                name: [val => (val || '').length > 0 || 'This field is required']
+            },
+        }
+    },
+    methods: {
+        save() {
+            this.loading = true
+            axios.post('/users', this.$data.form).
+            then((response) => {
+                    // alert('error1')
+                    this.loading = false
+                    // console.log(response);
+                    this.$parent.Allusers.push(response.data)
+                    this.close();
+                    // this.resetForm();
+                    this.$emit('alertRequest');
+                })
+                .catch((error) => {
+                    // alert('error2')
+                    this.loading = false
+                    console.log(error)
                     this.errors = error.response.data.errors
-          console.log(error);
-          this.errors = error.response.data.errors;
-        });
+                })
+        },
+        resetForm() {
+            this.form = Object.assign({}, this.defaultForm)
+            this.$refs.form.reset()
+        },
+        close() {
+            this.$emit('closeRequest')
+        },
     },
-    resetForm() {
-      this.form = Object.assign({}, this.defaultForm);
-      this.$refs.form.reset();
-    },
-    close() {
-      this.$emit("closeRequest");
-    }
-  },
-  mounted() {
-    axios
-      .post("/getCompanyAdmin")
-      .then(response => {
-        this.Allusers = response.data;
-      })
-      .catch(error => {
-        this.errors = error.response.data.errors;
-      });
+    mounted() {
+        axios.post('/getCompanyAdmin')
+            .then((response) => {
+                this.Allusers = response.data
+            })
+            .catch((error) => {
+                this.errors = error.response.data.errors
+            })
 
-    axios
-      .get("/getPermissions")
-      .then(response => {
-        console.log(response.data);
-        this.permissions = response.data;
-      })
-      .catch(errors => {
-        this.errors = error.response.data.errors;
-      });
-  },
-  computed: {
-    formIsValid() {
-      return (
-        this.form.name &&
-        this.form.email &&
-        this.form.phone &&
-        // this.form.zipcode &&
-        this.form.branch &&
-        this.form.address &&
-        this.form.city
-      );
+        axios.get('/getPermissions')
+            .then((response) => {
+                console.log(response.data)
+                this.permissions = response.data
+            })
+            .catch((errors) => {
+                this.errors = error.response.data.errors
+            })
+    },
+    computed: {
+        formIsValid() {
+            return (
+                this.form.name &&
+                this.form.email &&
+                this.form.phone &&
+                // this.form.zipcode &&
+                this.form.branch &&
+                this.form.address &&
+                this.form.city
+            )
+        },
+    },
+    mounted() {
+
     }
-  },
-  mounted() {}
-};
+}
 </script>

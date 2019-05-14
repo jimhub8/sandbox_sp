@@ -30,7 +30,7 @@
         datasets: [
           {
             label: 'Country Shipments',
-            backgroundColor: '#0076c0',
+            backgroundColor: '#566c86',
             data: this.rows
           }
         ]

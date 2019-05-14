@@ -41,7 +41,7 @@
         <v-container fluid fill-height v-show="!loader">
             <v-layout justify-center align-center>
                 <!-- <v-btn @click="openAdd" color="primary">Add A Town</v-btn> -->
-                <div v-show="!loader" style="width: 100%;">
+                <div v-show="!loader">
                     <v-card-title>
                         <download-excel :data="AllTowns" :fields = "json_fields">
                             Export

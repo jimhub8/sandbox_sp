@@ -185,7 +185,7 @@
 
 <script>
 import VueBarcode from "vue-barcode";
-import AddShipment from"./AddShipment";
+let AddShipment = require("./AddShipment");
 let EditShipment = require("./EditShipment");
 let ShowShipment = require("../print/PrintSPdf");
 let UpdateShipment = require("./UpdateShipment");

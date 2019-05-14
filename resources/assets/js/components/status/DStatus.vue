@@ -44,7 +44,7 @@
         <v-container fluid fill-height v-show="!loader">
             <v-layout justify-center align-center>
                 <!-- <v-btn @click="openAdd" color="primary">Add A Branch</v-btn> -->
-                <div v-show="!loader" style="width: 100%;">
+                <div v-show="!loader">
                     <v-card-title>
                         
                         <v-btn color="primary" flat @click="openAdd">Add A Status</v-btn>

@@ -17,9 +17,9 @@
                         <!-- COURIER SCRIPTS PVT LTD. -->
                         <v-flex xs5 sm5>
                             <v-card>
-                                <img src="storage/logo-white.png" alt="Speedball" sizes="100">
+                                <img src="storage/logo-white.png" alt="SpeedBall" sizes="100">
                                 <v-card-title primary-title>
-                                    <h3 class="headline mb-0">Speedball Services.</h3>
+                                    <h3 class="headline mb-0">SpeedBall Courier Services.</h3>
                                 </v-card-title>
                                 <v-card-actions>
                                     <v-list two-line>
@@ -38,7 +38,7 @@
                                                 Phone:
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>+254743332743</v-list-tile-title>
+                                                <v-list-tile-title>+254728492446</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                         <v-list-tile>
@@ -47,7 +47,7 @@
                                                 Email:
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>info@speedball.co.ke</v-list-tile-title>
+                                                <v-list-tile-title>info@speedballcourier.com</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                     </v-list>
@@ -122,7 +122,7 @@
                                                 <b>Phone</b>
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>+254743332743</v-list-tile-title>
+                                                <v-list-tile-title>+254728492446</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                         <v-list-tile>
@@ -131,7 +131,7 @@
                                                 <b>Email:</b>
                                             </v-list-tile-action>
                                             <v-list-tile-content>
-                                                <v-list-tile-title>info@speedball.co.ke</v-list-tile-title>
+                                                <v-list-tile-title>info@speedballcourier.com</v-list-tile-title>
                                             </v-list-tile-content>
                                         </v-list-tile>
                                     </v-list>
@@ -278,24 +278,24 @@
 <script>
 import VueBarcode from "vue-barcode";
 export default {
-  components: {
-    barcode: VueBarcode
-  },
-  props: ["showItems", "ShowShipment"],
-  methods: {
-    close() {
-      this.$emit("closeRequest");
+    components: {
+        barcode: VueBarcode,
+    },
+    props: ['showItems', 'ShowShipment'],
+    methods: {
+        close() {
+            this.$emit('closeRequest')
+        }
     }
-  }
-};
+}
 </script>
 
 <style scoped>
 .vue-barcode-element {
-  margin-left: 40% !important;
+    margin-left: 40% !important;
 }
 
 .v-card {
-  border: 1px solid #000 !important;
+    border: 1px solid #000 !important;
 }
 </style>

@@ -30,7 +30,7 @@
         datasets: [
           {
             label: 'Canceled',
-            backgroundColor: '#e30613',
+            backgroundColor: '#fdc1ad',
             data: this.rows
           }
         ]

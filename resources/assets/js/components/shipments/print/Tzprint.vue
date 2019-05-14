@@ -21,7 +21,7 @@
 </template>
 
 <script>
-// import jsPDF from "jsPDF";
+import jsPDF from "jsPDF";
 import VueBarcode from "vue-barcode";
 
 export default {
@@ -54,7 +54,7 @@ export default {
                 });
         },
         download() {
-            let pdfName = "Speedball";
+            let pdfName = "SpeedBall";
             var doc = new jsPDF();
             // doc.text(this.name, 10, 10);
             var doc = new jsPDF();
@@ -87,7 +87,7 @@ export default {
                 doc.rect(18, 125, 170, 20);
                 doc.text(20, 132, "Sent By: GRAVYTONN LOGISTIC LIMITED");
                 doc.text(120, 132, "Phone: +255 737 338 744");
-                doc.text(20, 139, "Email:speedball.co.ke");
+                doc.text(20, 139, "Email: info@speedballcourier.com");
                 // Client Details
                 doc.rect(18, 145, 170, 10);
                 doc.setFontSize(14);
@@ -131,7 +131,7 @@ export default {
                 doc.text(
                     20,
                     240,
-                    "Clients are requested to pay through M-PESA NUMBER - 0744 288 687 "
+                    "Clients are requested to pay through M-PESA NUMBER - 0768 382 001 "
                 );
                 doc.text(
                     20,

@@ -66,7 +66,7 @@
         <v-container fluid fill-height v-show="!loader">
             <v-layout justify-center align-center>
                 <!-- <v-btn @click="openAdd" color="primary">Add A Branch</v-btn> -->
-                <div v-show="!loader" style="width: 100%;">
+                <div v-show="!loader">
                     <v-card-title>
                         <download-excel :data="AllBranches" :fields="json_fields">
                             Export
@@ -247,14 +247,8 @@ export default {
                 this.loader = false
             })
             .catch((error) => {
-                this.loader = false
-                if (error.response.status === 500) {
-                    eventBus.$emit('errorEvent', error.response.statusText)
-                    return
-                } else if(error.response.status === 401 || error.response.status === 409) {
-                    eventBus.$emit('reloadRequest', error.response.statusText)
-                }
                 this.errors = error.response.data.errors
+                this.loader = false
             })
 
         axios.get("/getCountry")
@@ -266,8 +260,8 @@ export default {
                 this.errors = error.response.data.errors;
                 this.loader = false;
             });
-    },
-    computed: {
+},
+computed: {
         // test() {
         //     return 'branch/1'
         // },

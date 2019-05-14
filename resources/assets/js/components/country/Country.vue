@@ -43,10 +43,10 @@
                 <!-- <v-btn @click="openAdd" color="primary">Add A Country</v-btn> -->
                 <div v-show="!loader">
                     <v-card-title>
-                        <v-btn color="primary" flat @click="openAdd">Add A Country</v-btn>
-                        Countries
-                        <v-spacer></v-spacer>
-                        <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+                            <v-btn color="primary" flat @click="openAdd">Add A Country</v-btn>
+                            Countries
+                            <v-spacer></v-spacer>
+                            <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
                     <v-data-table :headers="headers" :items="AllCountries" :search="search" counter class="elevation-1">
                         <template slot="items" slot-scope="props">
@@ -143,13 +143,12 @@ export default {
                     this.snackbar = true
                 })
                 .catch((error) => {
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        return
-                    } else if (error.response.status === 401 || error.response.status === 409) {
-                        eventBus.$emit('reloadRequest', error.response.statusText)
-                    }
                     this.errors = error.response.data.errors
+                    this.Editloader = false
+                    this.close()
+                    this.color = 'red'
+                    this.message = 'Something went wrong'
+                    this.snackbar = true
                 })
         },
         openAdd() {
@@ -183,12 +182,6 @@ export default {
             })
             .catch((error) => {
                 this.loader = false
-                if (error.response.status === 500) {
-                    eventBus.$emit('errorEvent', error.response.statusText)
-                    return
-                } else if (error.response.status === 401 || error.response.status === 409) {
-                    eventBus.$emit('reloadRequest', error.response.statusText)
-                }
                 this.errors = error.response.data.errors
             })
     },

@@ -109,12 +109,6 @@ export default {
                 })
                 .catch(error => {
                     this.loading = false;
-                if (error.response.status === 500) {
-                    eventBus.$emit('errorEvent', error.response.statusText)
-                    return
-                } else if(error.response.status === 401 || error.response.status === 409) {
-                    eventBus.$emit('reloadRequest', error.response.statusText)
-                }
                     this.errors = error.response.data.errors;
                 });
         },
@@ -129,12 +123,6 @@ export default {
                 this.statuses = response.data;
             })
             .catch(error => {
-                if (error.response.status === 500) {
-                    eventBus.$emit('errorEvent', error.response.statusText)
-                    return
-                } else if(error.response.status === 401 || error.response.status === 409) {
-                    eventBus.$emit('reloadRequest', error.response.statusText)
-                }
                 this.errors = error.response.data.errors;
             });
     }

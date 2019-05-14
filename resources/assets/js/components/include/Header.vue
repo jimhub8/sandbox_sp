@@ -61,14 +61,14 @@
                             </div>
                         </router-link>
 
-                        <!-- <router-link to="/subscribers" class="v-list__tile v-list__tile--link" v-if="user.can['view subscribers']">
+                        <router-link to="/subscribers" class="v-list__tile v-list__tile--link" v-if="user.can['view subscribers']">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">email</i>
                             </div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">Subscribers</div>
                             </div>
-                        </router-link> -->
+                        </router-link>
 
                         <!-- <router-link to="/scanner" class="v-list__tile v-list__tile--link" v-if="user.can['outscan', 'inscan']">
                             <div class="v-list__tile__action"><i class="fa fa-barcode nav_icon"></i></div>
@@ -77,7 +77,7 @@
                                     Scan Shipments
                                 </div>
                             </div>
-                        </router-link>-->
+              </router-link>-->
                         <router-link to="/profile" class="v-list__tile v-list__tile--link">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">account_circle</i>
@@ -106,7 +106,7 @@
                                 </div>
                             </div>
               </router-link>-->
-                        <v-list-group prepend-icon="print" v-if="user.can['print waybill']">
+                        <v-list-group prepend-icon="book" v-if="user.can['print waybill']">
                             <v-list-tile slot="activator">
                                 <v-list-tile-title>Print</v-list-tile-title>
                             </v-list-tile>
@@ -132,9 +132,9 @@
                         <!--  -->
                         <!--  -->
                         <!--  -->
-                        <v-list-group prepend-icon="edit_location" v-if="user.can['outscan', 'inscan']">
+                        <v-list-group prepend-icon="book" v-if="user.can['outscan', 'inscan']">
                             <v-list-tile slot="activator">
-                                <v-list-tile-title>Shipments</v-list-tile-title>
+                                <v-list-tile-title>Scan Shipments</v-list-tile-title>
                             </v-list-tile>
 
                             <router-link to="/scanner" class="v-list__tile theme--light" style="text-decoration: none">
@@ -142,7 +142,7 @@
                                     <i class="fa fa-barcode nav_icon"></i>
                                 </div>
                                 <div class="v-list__tile__content">
-                                    <div class="v-list__tile__title">Dispatch Shipments</div>
+                                    <div class="v-list__tile__title">Scan Shipments</div>
                                 </div>
                             </router-link>
                             <router-link to="/filter" class="v-list__tile theme--light" style="text-decoration: none">
@@ -151,19 +151,11 @@
                                 </v-list-tile-action>
                                 <v-list-tile-title>Delivery Report</v-list-tile-title>
                             </router-link>
-
-
-                            <router-link to="/status" class="v-list__tile theme--light" style="text-decoration: none">
-                                <v-list-tile-action>
-                                    <v-icon>question_answer</v-icon>
-                                </v-list-tile-action>
-                                <v-list-tile-title>Shipment Followups</v-list-tile-title>
-                            </router-link>
                         </v-list-group>
 
-                        <v-list-group prepend-icon="people_outline" v-if="user.can['view users']">
+                        <v-list-group prepend-icon="account_circle" v-if="user.can['view users']">
                             <v-list-tile slot="activator">
-                                <v-list-tile-title>Users & Roles</v-list-tile-title>
+                                <v-list-tile-title>User&Roles</v-list-tile-title>
                             </v-list-tile>
 
                             <router-link to="/users" class="v-list__tile theme--light" style="text-decoration: none" id="link-router">
@@ -182,7 +174,7 @@
 
                         <v-list-group prepend-icon="insert_drive_file" v-if="user.can['view branches']">
                             <v-list-tile slot="activator">
-                                <v-list-tile-title>Branches & Countries</v-list-tile-title>
+                                <v-list-tile-title>Branches$Countries</v-list-tile-title>
                             </v-list-tile>
 
                             <router-link to="/branches" class="v-list__tile theme--light" style="text-decoration: none">
@@ -196,6 +188,13 @@
                                     <v-icon>map</v-icon>
                                 </v-list-tile-action>
                                 <v-list-tile-title>Countries</v-list-tile-title>
+                            </router-link>
+
+                            <router-link to="/status" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>question_answer</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Shipment Followups</v-list-tile-title>
                             </router-link>
                         </v-list-group>
 
@@ -281,11 +280,11 @@
         </v-navigation-drawer>
         <v-toolbar dark app :color="color" :clipped-left="$vuetify.breakpoint.lgAndUp" fixed>
             <v-toolbar-title style="width: 600px" class="ml-0 pl-3">
-                <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+                <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>SpeedBall Courier
                 <img
-            src="/storage/Speedball.png"
+            src="/storage/logo1.jpg"
             alt
-            style="width: 25%;"
+            style="width: 60px; height: 60px; border-radius: 25%;"
           >
         </v-toolbar-title>
                 <v-spacer></v-spacer>
@@ -312,13 +311,13 @@
         {{ message }}
         <v-icon dark right>check_circle</v-icon>
     </v-snackbar>
-    <AddShipment :adddialog="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers"></AddShipment>
+    <AddShipment :addShipment="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers"></AddShipment>
 </div>
 </template>
 
 <script>
-import Notifications from "../notification/Notification"; 
-import AddShipment from"../shipments/create/Create";
+import Notifications from "../notification/Notification";
+let AddShipment = require("../shipments/AddShipment");
 import { vueTopprogress } from "vue-top-progress";
 import Logout from "./Logout";
 // import chattyNoty from '../notification/chattyNoty'
@@ -327,7 +326,7 @@ export default {
     Notifications,
     AddShipment,
     vueTopprogress,
-    Logout
+    Logout 
     //  chattyNoty
   },
   props: ["user"],
@@ -335,7 +334,7 @@ export default {
     return {
       role: "",
       Snackcolor: '',
-      color: "#1a76c0",
+      color: "#132f51",
       dialog: false,
       drawer: true,
       drawerRight: false,
@@ -399,11 +398,6 @@ export default {
       this.message = data;
       this.Snackcolor = "indigo";
       this.snackbar = true;
-    },
-    showerror(data) {
-        this.message = data;
-        this.Snackcolor = "red";
-        this.snackbar = true;
     }
   },
   created() {
@@ -416,15 +410,6 @@ export default {
     eventBus.$on("alertRequest", data => {
       this.showalert(data)
     });
-    eventBus.$on("reloadRequest", data => {
-      this.showalert(data)
-      window.location.reload()
-
-    });
-
-        eventBus.$on("errorEvent", data => {
-            this.showerror(data);
-        });
   },
   mounted() {
     // axios.post('/getLogo')

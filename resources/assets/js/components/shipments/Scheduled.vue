@@ -115,18 +115,12 @@ export default {
         axios
             .get("/scheduled")
             .then(response => {
-                this.loader = false;
                 this.AllShipments = response.data;
+                this.loader = false;
             })
             .catch(error => {
-                this.loader = false;
-                if (error.response.status === 500) {
-                    eventBus.$emit('errorEvent', error.response.statusText)
-                    return
-                } else if(error.response.status === 401 || error.response.status === 409) {
-                    eventBus.$emit('reloadRequest', error.response.statusText)
-                }
                 this.errors = error.response.data.errors;
+                this.loader = false;
             });
     },
 }

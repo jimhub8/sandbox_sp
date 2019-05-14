@@ -1,7 +1,7 @@
 <template></template>
 
 <script>
-// import jsPDF from "jsPDF";
+import jsPDF from "jsPDF";
 import VueBarcode from "vue-barcode";
 
 export default {
@@ -40,7 +40,7 @@ export default {
         });
     },
     download() {
-      let pdfName = "Speedball";
+      let pdfName = "SpeedBall";
       var doc = new jsPDF();
       // doc.text(this.name, 10, 10);
       // var doc = new jsPDF();
@@ -71,9 +71,9 @@ export default {
       doc.text(100, 120, "Sender Details", null, null, "center");
       doc.setFontSize(12);
       doc.rect(18, 125, 170, 20);
-      doc.text(20, 132, "Sent By: Speedball Services");
+      doc.text(20, 132, "Sent By: SpeedBall Courier Services");
       doc.text(120, 132, "Phone: +25420760877");
-      doc.text(20, 139, "Email:speedball.co.ke");
+      doc.text(20, 139, "Email: info@speedballcourier.com");
       // Client Details
       doc.rect(18, 145, 170, 10);
       doc.setFontSize(14);

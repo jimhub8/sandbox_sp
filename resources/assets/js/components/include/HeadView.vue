@@ -62,7 +62,7 @@
     <v-toolbar dark app :color="color" :clipped-left="$vuetify.breakpoint.lgAndUp" fixed>
         <v-toolbar-title style="width: 600px" class="ml-0 pl-3">
             <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-            Speedball
+            SpeedBall Courier
             <img src="storage/logo1.jpg" alt="" style="width: 60px; height: 60px; border-radius: 25%;">
             </v-toolbar-title>
             <v-spacer></v-spacer>

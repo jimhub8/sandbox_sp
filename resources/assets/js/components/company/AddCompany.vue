@@ -51,7 +51,8 @@
 <script>
 export default {
     props: ['openAddRequest', 'compAdmin'],
-    components: {},
+    components: {
+    },
     data() {
         const defaultForm = Object.freeze({
             company_name: '',
@@ -81,15 +82,7 @@ export default {
                     this.$emit('alertRequest');
 
                 })
-                .catch((error) => {
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        return
-                    } else if (error.response.status === 401 || error.response.status === 409) {
-                        eventBus.$emit('reloadRequest', error.response.statusText)
-                    }
-                    this.errors = error.response.data.errors
-                })
+                .catch((error) => this.errors = error.response.data.errors)
         },
         resetForm() {
             this.form = Object.assign({}, this.defaultForm)

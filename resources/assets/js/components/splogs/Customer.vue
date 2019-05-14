@@ -78,9 +78,9 @@
                             </v-flex>
                             <v-flex xs12 sm6>
                                 <ul class="list-group">
-                                    <li class="list-group-item"><label for=""><b>Sender Name:</b> </label>Speedball Services</li>
-                                    <li class="list-group-item"><label for=""><b>Sender Email:</b> </label>info@speedball.co.ke</li>
-                                    <li class="list-group-item"><label for=""><b>Sender Phone:</b> </label>+254743332743</li>
+                                    <li class="list-group-item"><label for=""><b>Sender Name:</b> </label>SpeedBall Courier Services</li>
+                                    <li class="list-group-item"><label for=""><b>Sender Email:</b> </label>info@speedballcourier.com</li>
+                                    <li class="list-group-item"><label for=""><b>Sender Phone:</b> </label>+254728492446</li>
                                 </ul>
                             </v-flex>
 

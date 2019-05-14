@@ -7,7 +7,7 @@
             </div>
             <v-layout justify-center align-center v-show="!loader">
                 <v-layout row wrap>
-                    <v-card style="width: 100%;">
+                    <v-card>
                         <v-card-title>
                             Charges
                             <v-btn @click="openAdd" flat color="primary">Add Charges</v-btn>
@@ -62,93 +62,88 @@ let EditCharge = require("./EditCharge");
 // let ShowTask = require('./ShowTask');
 
 export default {
-    components: {
-        AddCharge,
-        EditCharge
-        // ShowTask,
-    },
+  components: {
+    AddCharge,
+    EditCharge
+    // ShowTask,
+  },
 
-    data() {
-        return {
-            search: "",
-            loading: false,
-            dispAdd: false,
-            dispShow: false,
-            dispEdit: false,
-            AllCharges: [],
-            editCharge: [],
-            loader: false,
-            snackbar: false,
-            timeout: 5000,
-            color: "",
-            message: "",
-            headers: [{
-                    text: "Town",
-                    align: "left",
-                    value: "town"
-                },
-                {
-                    text: "Charges",
-                    value: "charge"
-                },
-                {
-                    text: "16%VAT",
-                    value: "vat"
-                },
-                {
-                    text: "Total",
-                    value: "total"
-                },
-                {
-                    text: "Actions",
-                    value: "name",
-                    sortable: false
-                }
-            ]
+  data() {
+    return {
+      search: "",
+      loading: false,
+      dispAdd: false,
+      dispShow: false,
+      dispEdit: false,
+      AllCharges: [],
+      editCharge: [],
+      loader: false,
+      snackbar: false,
+      timeout: 5000,
+      color: "",
+      message: "",
+      headers: [
+        {
+          text: "Town",
+          align: "left",
+          value: "town"
+        },
+        {
+          text: "Charges",
+          value: "charge"
+        },
+        {
+          text: "16%VAT",
+          value: "vat"
+        },
+        {
+          text: "Total",
+          value: "total"
+        },
+        {
+          text: "Actions",
+          value: "name",
+          sortable: false
         }
-    },
-
-    methods: {
-        openAdd() {
-            this.dispAdd = true;
-        },
-        close() {
-            this.dispAdd = this.dispShow = this.dispEdit = this.dispMail = false;
-        },
-        showAlert() {
-            this.message = "Successifully Added";
-            this.snackbar = true;
-            this.color = "indigo";
-        },
-
-        taskEdit(task) {
-            this.editCharge = Object.assign({}, task);
-            this.editedIndex = this.AllCharges.indexOf(task);
-            this.dispEdit = true;
-        },
-        getCharges() {
-            this.loader = true;
-            axios
-                .get("/getCharges")
-                .then(response => {
-                    this.loader = false;
-                    this.AllCharges = response.data;
-                })
-                .catch(error => {
-                    this.loader = false;
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        return
-                    } else if (error.response.status === 401 || error.response.status === 409) {
-                        eventBus.$emit('reloadRequest', error.response.statusText)
-                    }
-                    this.errors = error.response.data.errors;
-                });
-        }
-    },
-    mounted() {
-        this.loader = true;
-        this.getCharges();
+      ]
     }
+  },
+
+  methods: {
+    openAdd() {
+      this.dispAdd = true;
+    },
+    close() {
+      this.dispAdd = this.dispShow = this.dispEdit = this.dispMail = false;
+    },
+    showAlert() {
+      this.message = "Successifully Added";
+      this.snackbar = true;
+      this.color = "indigo";
+    },
+
+    taskEdit(task) {
+      this.editCharge = Object.assign({}, task);
+      this.editedIndex = this.AllCharges.indexOf(task);
+      this.dispEdit = true;
+    },
+    getCharges() {
+      this.loader = true;
+      axios
+        .get("/getCharges")
+        .then(response => {
+          this.loader = false;
+          this.AllCharges = response.data;
+        })
+        .catch(error => {
+          this.loader = false;
+          this.errors = error.response.data.errors;
+        });
+    }
+  },
+  mounted() {
+    this.loader = true;
+    this.getCharges();
+  }
 };
 </script>

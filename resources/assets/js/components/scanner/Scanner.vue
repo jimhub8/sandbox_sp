@@ -82,14 +82,14 @@
                                         <label for="inputAddress2">Location</label>
                                         <input type="text" class="form-control" id="inputAddress2" placeholder="Location" v-model="form_out.location_out">
                                     </div>
-
-                                        <v-flex xs6 sm6>
-                                            <v-text-field v-model="form_out.scan_date_out" :type="'date'" color="blue darken-2" label="Date" required></v-text-field>
-                                        </v-flex>
-                                        <div class="form-group col-md-12">
-                                            <label for="inputCity">Remarks</label>
-                                            <textarea class="form-control" v-model="form_out.remarks_out" placeholder="Remarks" rows="3"></textarea>
-                                        </div>
+                                    
+                                    <v-flex xs6 sm6>
+                                        <v-text-field v-model="form_out.scan_date_out" :type="'date'" color="blue darken-2" label="Date" required></v-text-field>
+                                    </v-flex> 
+                                    <div class="form-group col-md-12">
+                                        <label for="inputCity">Remarks</label>
+                                        <textarea class="form-control" v-model="form_out.remarks_out" placeholder="Remarks" rows="3"></textarea>
+                                    </div>
                                 </v-layout>
                                 <v-layout row wrap>
                                     <v-flex xs12 sm12>
@@ -308,12 +308,6 @@ export default {
                 })
                 .catch((error) => {
                     this.loading = false
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        return
-                    } else if (error.response.status === 401 || error.response.status === 409) {
-                        eventBus.$emit('reloadRequest', error.response.statusText)
-                    }
                     this.errors = error.response.data.errors
                 })
         },
@@ -339,12 +333,6 @@ export default {
                 })
                 .catch((error) => {
                     this.loading_in = false
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        return
-                    } else if (error.response.status === 401 || error.response.status === 409) {
-                        eventBus.$emit('reloadRequest', error.response.statusText)
-                    }
                     this.errors = error.response.data.errors
                 })
         },
@@ -366,15 +354,9 @@ export default {
                 this.loader = false
             })
             .catch((error) => {
-                if (error.response.status === 500) {
-                    eventBus.$emit('errorEvent', error.response.statusText)
-                    return
-                } else if (error.response.status === 401 || error.response.status === 409) {
-                    eventBus.$emit('reloadRequest', error.response.statusText)
-                }
                 this.errors = error.response.data.errors
             })
-
+            
         axios.get('/getBranch')
             .then((response) => {
                 this.branches = response.data
@@ -406,6 +388,8 @@ export default {
     },
 }
 </script>
+
+  
 
 <style scoped>
 

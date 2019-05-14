@@ -30,7 +30,7 @@
         datasets: [
           {
             label: 'Branch Shipments',
-            backgroundColor: '#e30613',
+            backgroundColor: 'hsla(205, 100%, 59%, 0.3)',
             data: this.rows
           }
         ]

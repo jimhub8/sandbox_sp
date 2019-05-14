@@ -6,7 +6,7 @@
                 <div v-show="loader" style="text-align: center; width: 100%;">
                     <v-progress-circular :width="3" indeterminate color="red" style="margin: 1rem"></v-progress-circular>
                 </div>
-                <v-card v-show="!loader" style="width: 100%;">
+                <v-card v-show="!loader">
                     <v-card-title>
                         Roles
                         <v-btn @click="openAdd" flat color="primary">Add Roles</v-btn>

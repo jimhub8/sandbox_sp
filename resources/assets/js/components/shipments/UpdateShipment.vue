@@ -1,7 +1,7 @@
 <template>
 <v-layout row justify-center>
 
-    <v-dialog v-model="UpdateShipment" persistent width="500px">
+    <v-dialog v-model="UpdateShipment" persistent width="1300px">
         <v-card v-if="UpdateShipment">
             <v-card-title>
                 Update Shipment
@@ -13,7 +13,7 @@
             <v-container grid-list-md>
                 <v-card style="width: 100%;">
                     <v-layout row wrap>
-                        <!-- <v-flex sm8>
+                        <v-flex sm8>
                             <v-layout wrap>
                                 <v-flex sm6>
                                     <GmapAutocomplete @place_changed="setPlace" class="form-control" v-show="showMap">
@@ -37,8 +37,8 @@
                                 }" />
                             </GmapMap>
                             <v-divider></v-divider>
-                        </v-flex> -->
-                        <v-flex sm12 style="border-left: 1px solid #c1c1c1;">
+                        </v-flex>
+                        <v-flex sm4 style="border-left: 1px solid #c1c1c1;">
                             <div class="form-group col-md-12">
                                 <label for="">Status</label>
                                 <select class="custom-select custom-select-md col-md-12" v-model="updateitedItem.status">
@@ -98,7 +98,7 @@
                     <v-flex xs4 sm3>
                         <v-text-field v-model="dist" color="blue darken-2" label="Distance" ref="distanceGet" required></v-text-field>
                     </v-flex>
-                    <v-btn flat @click="calcCrow">Dist</v-btn>
+                    <v-btn flat @click="getDistance">Dist</v-btn>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" flat @click="UpdateStatus" :loading="loading" :disabled="loading">Update Status</v-btn>
                 </v-card-actions>
@@ -133,10 +133,7 @@ export default {
             this.loading_loc = true;
             this.updateitedItem.location = this.updateitedItem.location;
             axios
-                .post(`/locationUpdate/${this.updateitedItem.id}`, {
-                    markers: this.markers,
-                    dist: this.dist,
-                })
+                .post(`/locationUpdate/${this.updateitedItem.id}`, this.markers)
                 .then(response => {
                     this.loading_loc = false;
                     this.alert();
@@ -144,12 +141,6 @@ export default {
                 })
                 .catch(error => {
                     this.loading_loc = false;
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        return
-                    } else if (error.response.status === 401 || error.response.status === 409) {
-                        eventBus.$emit('reloadRequest', error.response.statusText)
-                    }
                     this.errors = error.response.data.errors;
                 });
         },
@@ -175,12 +166,6 @@ export default {
                 })
                 .catch(error => {
                     this.loading = false;
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        return
-                    } else if (error.response.status === 401 || error.response.status === 409) {
-                        eventBus.$emit('reloadRequest', error.response.statusText)
-                    }
                     this.errors = error.response.data.errors;
                 });
         },
@@ -232,13 +217,21 @@ export default {
             }
         },
         mapUpsd() {
-            this.markers = [];
+            this.markers = []; 
             this.showMap = true;
         },
         getDistance() {
-            this.dist = computeDistanceBetween((-1.2920659, 36.82194619999996), (-4.0434771, 39.6682065));
-            return
-
+            // var p1 = new google.maps.LatLng(45.463688, 9.18814);
+            // var p2 = new google.maps.LatLng(46.0438317, 9.75936230000002);
+            // if (this.place) {
+            //     this.markers.push({
+            //         position: {
+            //             lat: this.place.geometry.location.lat(),
+            //             lng: this.place.geometry.location.lng()
+            //         } 
+            //     });
+            //     this.place = null;
+            // }
             var dist = []
             for (let i = 0; i < this.markers.length; i++) {
                 const element = this.markers[i];
@@ -250,50 +243,75 @@ export default {
                 // alert(p1)
                 // var p2 = new google.maps.LatLng(-4.05052, 39.667169);
             }
-
             alert(dist)
-            console.log(computeDistanceBetween(dist))
+            // alert(calcDistance(p1, p2));
+            // console.log(calcDistance(dist))
 
+            //calculates distance between two points in km's
             function calcDistance(dist) {
                 return this.dist = (google.maps.geometry.spherical.computeDistanceBetween(dist) / 1000).toFixed(2);
             }
-        },
+            // var directionsService = new google.maps.DirectionsService();
 
-        calcCrow(lat1, lon1, lat2, lon2) {
+            // var request = {
+            //     origin: "Mombasa, Kenya", // a city, full address, landmark etc
+            //     destination: "Nairobi, Kenya",
+            //     travelMode: google.maps.DirectionsTravelMode.DRIVING
+            // };
+            // // var dista = this.dist
 
-            var dist = []
-            for (let i = 0; i < this.markers.length; i++) {
-                const element = this.markers[i];
-                var p1 = element['position']['lat'];
-                var l1 = element['position']['lng'];
-                dist.push(p1, l1)
-            }
-            var lat1 = dist[0]
-            var lon1 = dist[1]
-            var lat2 = dist[2]
-            var lon2 = dist[3]
-            var R = 6371; // km
-            var dLat = this.toRad(lat2 - lat1);
-            var dLon = this.toRad(lon2 - lon1);
-            var lat1 = this.toRad(lat1);
-            var lat2 = this.toRad(lat2);
-
-            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
-            console.log(a);
-
-            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            console.log(c);
-
-            var d = R * c;
-            this.dist = d
-            return d;
-        },
-
-        // Converts numeric degrees to radians
-        toRad(Value) {
-            return Value * Math.PI / 180;
+            // directionsService.route(request, function (response, status, dista) {
+            //     // if (status == google.maps.DirectionsStatus.OK) {
+            //     this.$refs["distanceGet"];
+            //     console.log(response.routes[0].legs[0].distance.value);
+            //     alert(response.routes[0].legs[0].distance.value);
+            //     dista = response.routes[0].legs[0].distance.value; // the distance in metres
+            //     this.dist = dista;
+            //     alert(dista);
+            //     alert(this.dist);
+            //     // } else {
+            //     //     alert('wrong');
+            //     // oops, there's no route between these two locations
+            //     // every time this happens, a kitten dies
+            //     // so please, ensure your address is formatted properly
+            //     // }
+            // });
+            // alert(this.dista)
+            // this.dist = dista
+            // return dist
         }
+    },
+    computed: {
+        // getDistance() {
+        //     var directionsService = new google.maps.DirectionsService();
+        //     var request = {
+        //         origin: 'Mombasa, Kenya', // a city, full address, landmark etc
+        //         destination: 'Nairobi, Kenya',
+        //         travelMode: google.maps.DirectionsTravelMode.DRIVING
+        //     };
+        //     directionsService.route(request, function (response, status) {
+        //         // if (status == google.maps.DirectionsStatus.OK) {
+        //             // alert(response.routes[0].legs[0].distance.value);
+        //             this.dist = response.routes[0].legs[0].distance.value // the distance in metres
+        //         // } else {
+        //         //     alert('wrong');
+        //             // oops, there's no route between these two locations
+        //             // every time this happens, a kitten dies
+        //             // so please, ensure your address is formatted properly
+        //         // }
+        //     });
+        //     // return dist
+        // }
+        // getMarkers() {
+        //     if (this.UpdateShipment) {
+        //         this.markers.push({
+        //             position: {
+        //                 lat: this.updateitedItem.lat,
+        //                 lng: this.updateitedItem.lng,
+        //             }
+        //         })
+        //     }
+        // }
     },
 
     mounted() {
@@ -303,12 +321,6 @@ export default {
                 this.statuses = response.data;
             })
             .catch(error => {
-                if (error.response.status === 500) {
-                    eventBus.$emit('errorEvent', error.response.statusText)
-                    return
-                } else if (error.response.status === 401 || error.response.status === 409) {
-                    eventBus.$emit('reloadRequest', error.response.statusText)
-                }
                 this.errors = error.response.data.errors;
             });
     }

@@ -208,34 +208,22 @@ export default {
                 }*/
             })
             .catch((error) => {
-                if (error.response.status === 500) {
-                    eventBus.$emit('errorEvent', error.response.statusText)
-                    return
-                } else if (error.response.status === 401 || error.response.status === 409) {
-                    eventBus.$emit('reloadRequest', error.response.statusText)
-                }
                 this.errors = error.response.data.errors
             })
 
         axios.post('/getLogoOnly')
             .then((response) => {
-                this.loader = false
                 if (response.data.length > 0) {
                     this.imagePlaced = true
                     this.avatar = response.data
                 } else {
                     this.avatar = ''
                 }
+                this.loader = false
             })
             .catch((error) => {
-                this.loader = false
-                if (error.response.status === 500) {
-                    eventBus.$emit('errorEvent', error.response.statusText)
-                    return
-                } else if (error.response.status === 401 || error.response.status === 409) {
-                    eventBus.$emit('reloadRequest', error.response.statusText)
-                }
                 this.errors = error.response.data.errors
+                this.loader = false
             })
     },
     computed: {

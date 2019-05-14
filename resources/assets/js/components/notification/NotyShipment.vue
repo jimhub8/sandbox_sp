@@ -12,7 +12,6 @@
                         </div>
                     </div>
                 </router-link>
-                <v-btn flat color="primary" @click="updateShip">Update Status</v-btn>
                  <v-btn icon dark @click="close">
                     <v-icon color="black">close</v-icon>
                 </v-btn>
@@ -44,16 +43,11 @@
             </v-card-actions>
         </v-card>
     </v-dialog>
-    <Update></Update>
 </v-layout>
 </template>
 
 <script>
-import Update from './Update';
 export default {
-    components: {
-        Update
-    },
     props: ['openRequest', 'shipment', 'user'],
     data() {
         return {
@@ -61,9 +55,6 @@ export default {
         }
     },
     methods: {
-        updateShip() {
-            eventBus.$emit('updateEvent', this.shipment)
-        },
         close() {
             this.$emit('closeRequest')
         }

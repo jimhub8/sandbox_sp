@@ -44,11 +44,11 @@
         <v-container fluid fill-height v-show="!loader">
             <v-layout justify-center align-center>
                 <!-- <v-btn @click="openAdd" color="primary">Add A Branch</v-btn> -->
-                <div v-show="!loader" style="width: 100%;">
+                <div v-show="!loader">
                     <v-card-title>
                         
                         <v-btn color="primary" flat @click="openAdd">Add A Status</v-btn>
-                        Status
+                        Branchs
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
@@ -195,7 +195,7 @@ export default {
     },
     mounted() {
         this.loader = true
-        axios.get('/getStatuses')
+        axios.get('/delStatus')
             .then((response) => {
                 this.AllStatus = response.data
                 this.loader = false

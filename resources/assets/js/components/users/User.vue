@@ -3,7 +3,7 @@
     <v-content>
         <v-container fluid fill-height v-show="!loader">
             <v-layout justify-center align-center>
-                <div>
+                <div class="container">
                     <v-card style="background: rgba(5, 117, 230, 0.16);">
                         <v-layout wrap>
                             <v-flex xs4 sm3 offset-sm4>
