@@ -40,11 +40,11 @@ import Pusher from 'pusher-js';
 import Toaster from 'v-toaster'
 import 'v-toaster/dist/v-toaster.css'
 Vue.use(Toaster, { timeout: 5000 })
-import jsPDF from 'jsPDF'
+// import jsPDF from 'jsPDF'
 // vue.use(Vuetify, {
-//     iconfont: 'mdi' 
-// }) 
-// Vue.use(VueChartkick, {adapter: Chart}) 
+//     iconfont: 'mdi'
+// })
+// Vue.use(VueChartkick, {adapter: Chart})
 
 Vue.use(abilitiesPlugin)
 Vue.use(VueChatScroll)
@@ -76,45 +76,45 @@ Vue.component('upload-list', require('./components/upload/Upload.vue'));
 
 Vue.component('message', require('./components/message.vue'));
 Vue.component('message', require('./components/chat/Message.vue'));
-let myHeader = require('./components/include/Header.vue');
-let myUser = require('./components/users/User.vue');
-let myShipment = require('./components/shipments/Shipment.vue');
-let myScanner = require('./components/scanner/Scanner.vue');
-// let myContainer = require('./components/containers/Container.vue');
-let myMap = require('./components/reports/Map.vue');
-let myBranch = require('./components/branches/Branch.vue');
-let myProfile = require('./components/users/Profile.vue');
-let myCompany = require('./components/company/Company.vue');
-let myCustomer = require('./components/customers/Customer.vue');
-let mysubsicriber = require('./components/emails/Subscribe.vue');
-let myInvice = require('./components/invoices/Invoice.vue');
-let myReceipt = require('./components/receipt/Receipt.vue');
-let myReports = require('./components/reports/Reports.vue');
-let mybranchShip = require('./components/branches/BranchShipments.vue');
-let myRoles = require('./components/users/roles/Roles.vue');
-let myscheduled = require('./components/shipments/Scheduled.vue');
-let myTasks = require('./components/tasks/Task.vue');
-let myUploadFile = require('./components/upload/UploadFile.vue');
-let myCharges = require('./components/charge/Charge.vue');
-let myTown = require('./components/town/Town.vue');
-let mySticker = require('./components/shipments/print/Sticker.vue');
-let myWaybill = require('./components/shipments/print/Waybills.vue');
-let myStatus = require('./components/shipments/status/Status.vue');
-let myCountry = require('./components/country/Country.vue');
-let myRinder = require('./components/drivers/Driver.vue');
-let myunauth = require('./components/Unauthorized.vue');
+import myHeader from './components/include/Header.vue';
+import myUser from './components/users/User.vue';
+import myShipment from './components/shipments/Shipment.vue';
+import myScanner from './components/scanner/Scanner.vue';
+// import myContainer from './components/containers/Container.vue';
+import myMap from './components/reports/Map.vue';
+import myBranch from './components/branches/Branch.vue';
+import myProfile from './components/users/Profile.vue';
+import myCompany from './components/company/Company.vue';
+import myCustomer from './components/customers/Customer.vue';
+import mysubsicriber from './components/emails/Subscribe.vue';
+// import myInvice from './components/invoices/Invoice.vue';
+// import myReceipt from './components/receipt/Receipt.vue';
+import myReports from './components/reports/Reports.vue';
+import mybranchShip from './components/branches/BranchShipments.vue';
+import myRoles from './components/users/roles/Roles.vue';
+import myscheduled from './components/shipments/Scheduled.vue';
+import myTasks from './components/tasks/Task.vue';
+import myUploadFile from './components/upload/UploadFile.vue';
+import myCharges from './components/charge/Charge.vue';
+import myTown from './components/town/Town.vue';
+import mySticker from './components/shipments/print/Sticker.vue';
+import myWaybill from './components/shipments/print/Waybills.vue';
+import myStatus from './components/shipments/status/Status.vue';
+import myCountry from './components/country/Country.vue';
+import myRinder from './components/drivers/Driver.vue';
+import myunauth from './components/Unauthorized.vue';
 
-let myCustDash = require('./components/customers/Dashboard.vue');
-let myDrivDash = require('./components/drivers/Dashboard.vue');
+import myCustDash from './components/customers/Dashboard.vue';
+import myDrivDash from './components/drivers/Dashboard.vue';
 
-let myDash = require('./components/App.vue');
+import myDash from './components/App.vue';
 
-let myFilter = require('./components/scanner/Filter.vue');
-let myChatty = require('./components/chat/Chatty.vue');
-let myFinance = require('./components/finance/Finance.vue');
-let myFinClient = require('./components/finance/Clients.vue');
-let myLogs = require('./components/splogs/Log.vue');
-let mySc = require('./components/splogs/Schedule.vue');
+import myFilter from './components/scanner/Filter.vue';
+import myChatty from './components/chat/Chatty.vue';
+import myFinance from './components/finance/Finance.vue';
+import myFinClient from './components/finance/Clients.vue';
+import myLogs from './components/splogs/Log.vue';
+import mySc from './components/splogs/Schedule.vue';
 
 
 const routes = [
@@ -126,10 +126,10 @@ const routes = [
     { path: '/branches', component: myBranch },
     { path: '/profile', component: myProfile },
     { path: '/companies', component: myCompany },
-    { path: '/subscribers', component: mysubsicriber },
+    // { path: '/subscribers', component: mysubsicriber },
     { path: '/customers', component: myCustomer },
-    { path: '/invoices', component: myInvice },
-    { path: '/receipts', component: myReceipt },
+    // { path: '/invoices', component: myInvice },
+    // { path: '/receipts', component: myReceipt },
     { path: '/reports', component: myReports },
     { path: '/roles', component: myRoles },
     { path: '/branch/:id', component: mybranchShip },
@@ -171,7 +171,7 @@ const app = new Vue({
     router,
     components: {
         myHeader, myUser, myShipment, myScanner, myMap,
-        myBranch, myProfile, myCompany, myCustomer, mysubsicriber, myInvice, myReceipt,
+        myBranch, myProfile, myCompany, myCustomer,
         myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
         myTown, myWaybill, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash,
         myunauth, myDash, myFilter, myChatty, myFinance, myFinClient, mySticker, myDStatus, myLogs, mySc
@@ -192,7 +192,7 @@ const app = new Vue({
     //     loading: false,
     //     error: false,
     //     query: '',
-    //     // chats: '', 
+    //     // chats: '',
     // }, watch: {
     //     message() {
     //         Echo.private('chat')

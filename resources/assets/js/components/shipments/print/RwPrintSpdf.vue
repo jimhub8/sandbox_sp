@@ -1,7 +1,7 @@
 <template></template>
 
 <script>
-import jsPDF from "jsPDF";
+// import jsPDF from "jsPDF";
 import VueBarcode from "vue-barcode";
 
 export default {

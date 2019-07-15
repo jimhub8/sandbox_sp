@@ -208,22 +208,22 @@
 
 <script>
 import VueBarcode from "vue-barcode";
-let AddShipment = require("./AddShipment");
-let EditShipment = require("./EditShipment");
-let ShowShipment = require("./print/PrintSpdf");
-let TzShipment = require("./print/TzSprint");
-let RwPrintSpdf = require("./print/RwPrintSpdf");
-let UgPrintSpdf = require("./print/UgPrintSpdf");
-let UpdateShipment = require("./UpdateShipment");
-let UpdateShipmentStatus = require("./UpdateShipmentStatus");
-let AssignDriver = require("./AssignDriver");
-let AssignBranch = require("./AssignBranch");
-let TrackShipment = require("./TrackShipment");
-let myCsvFile = require("../csv/CsvFile");
-let mySCharges = require("./Charge");
-// let myPrintPod = require('./PrintPod')
-let myRows = require("./rows/Rows");
-// let myPrintSPdf = require('./PrintSPdf.js');
+import AddShipment from "./Addshipment";
+import EditShipment from "./EditShipment";
+import ShowShipment from "./print/PrintSpdf";
+import TzShipment from "./print/TzSprint";
+import RwPrintSpdf from "./print/RwPrintSpdf";
+import UgPrintSpdf from "./print/UgPrintSpdf";
+import UpdateShipment from "./UpdateShipment";
+import UpdateShipmentStatus from "./UpdateShipmentStatus";
+import AssignDriver from "./AssignDriver";
+import AssignBranch from "./AssignBranch";
+import TrackShipment from "./TrackShipment";
+import myCsvFile from "../csv/CsvFile";
+import mySCharges from "./Charge";
+// import myPrintPod from './PrintPod)
+import myRows from "./rows/Rows";
+// import myPrintSPdf from './PrintSPdf.js';
 export default {
     props: ["user", "role"],
     components: {
@@ -828,7 +828,7 @@ export default {
     },
     // computed: {
     //     resetFilter() {
-    //         if(this.between.start < this.shipmentsCount) { 
+    //         if(this.between.start < this.shipmentsCount) {
     //             this.between.start = 1
     //             this.between.end = 500
     //             this.sortItem()

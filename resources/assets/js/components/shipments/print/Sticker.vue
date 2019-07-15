@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import jsPDF from 'jsPDF'
+// import jsPDF from 'jsPDF'
 import VueBarcode from "vue-barcode";
 
 export default {
@@ -40,7 +40,7 @@ export default {
                 start_date: '2019-01-01',
                 end_date: '2019-01-03'
             },
-            disp_name: 'Kevin Matoka',  
+            disp_name: 'Kevin Matoka',
             errors: [],
             loading: false,
         }

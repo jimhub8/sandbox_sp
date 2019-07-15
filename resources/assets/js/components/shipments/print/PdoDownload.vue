@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import jsPDF from 'jsPDF'
+// import jsPDF from 'jsPDF'
 import VueBarcode from "vue-barcode";
 
 export default {
@@ -67,7 +67,7 @@ export default {
             // doc.text(20, 109, 'To: ' + this.element.client_address);
 
 
-            
+
             doc.rect(18, 75, 170, 10);
             doc.setFontSize(14)
             doc.text(20, 80, 'Product Details', null, null, 'center');
@@ -89,7 +89,7 @@ export default {
 
 
 
-            // Sender Details 
+            // Sender Details
             doc.rect(18, 115, 170, 10);
             doc.setFontSize(14)
             doc.text(100, 120, 'Sender Details', null, null, 'center');

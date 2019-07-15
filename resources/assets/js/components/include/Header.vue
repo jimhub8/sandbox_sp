@@ -61,14 +61,14 @@
                             </div>
                         </router-link>
 
-                        <router-link to="/subscribers" class="v-list__tile v-list__tile--link" v-if="user.can['view subscribers']">
+                        <!-- <router-link to="/subscribers" class="v-list__tile v-list__tile--link" v-if="user.can['view subscribers']">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">email</i>
                             </div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">Subscribers</div>
                             </div>
-                        </router-link>
+                        </router-link> -->
 
                         <!-- <router-link to="/scanner" class="v-list__tile v-list__tile--link" v-if="user.can['outscan', 'inscan']">
                             <div class="v-list__tile__action"><i class="fa fa-barcode nav_icon"></i></div>
@@ -317,7 +317,7 @@
 
 <script>
 import Notifications from "../notification/Notification";
-let AddShipment = require("../shipments/AddShipment");
+import AddShipment from  "../shipments/Addshipment";
 import { vueTopprogress } from "vue-top-progress";
 import Logout from "./Logout";
 // import chattyNoty from '../notification/chattyNoty'
@@ -326,7 +326,7 @@ export default {
     Notifications,
     AddShipment,
     vueTopprogress,
-    Logout 
+    Logout
     //  chattyNoty
   },
   props: ["user"],
