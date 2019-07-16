@@ -1,6 +1,7 @@
 <?php
 use App\Shipment;
 use Illuminate\Support\Carbon;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,39 @@ use Illuminate\Support\Carbon;
 // 	\Illuminate\Support\Facades\Artisan::call('notifications:SchedueledShipment');
 //  });
 
-	// M-pesa
+
+
+// API
+Route::get('/apilogin', function () {
+    $query = http_build_query([
+        'client_id' => env('MFT_CLIENT_ID'), // Replace with Client ID
+        'redirect_uri' => 'http://127.0.0.1:8001/callback',
+        'response_type' => 'code',
+        'scope' => ''
+    ]);
+
+    return redirect('http://127.0.0.1:8000/oauth/authorize?'.$query);
+});
+
+Route::get('/callback', function (Request $request) {
+    $response = (new GuzzleHttp\Client)->post('http://127.0.0.1:8000/oauth/token', [
+        'form_params' => [
+            'grant_type' => 'authorization_code',
+            'client_id' => env('MFT_CLIENT_ID'), // Replace with Client ID
+            'client_secret' => env('MFT_CLIENT_SECRET'), // Replace with client secret
+            'redirect_uri' => 'http://127.0.0.1:8001/callback',
+            'code' => $request->code,
+        ]
+    ]);
+
+    session()->put('token', json_decode((string) $response->getBody(), true));
+
+    return redirect('/courier/#/shipments');
+});
+
+
+
+
 Route::any('confirmation', 'SafaricomController@confirmation')->name('confirmation');
 Route::any('register_url', 'SafaricomController@register_url')->name('register_url');
 Route::any('validation', 'SafaricomController@validation')->name('validation');

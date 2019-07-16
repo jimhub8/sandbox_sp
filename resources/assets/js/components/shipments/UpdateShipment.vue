@@ -155,7 +155,7 @@ export default {
                 .then(response => {
                     this.loading = false;
                     this.alert();
-                    this.close();
+                    // this.close();
                     // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.updateitedItem)
                     eventBus.$emit("refreshShipEvent")
                     this.updateitedItem.derivery_date = "";
@@ -217,7 +217,7 @@ export default {
             }
         },
         mapUpsd() {
-            this.markers = []; 
+            this.markers = [];
             this.showMap = true;
         },
         getDistance() {
@@ -228,7 +228,7 @@ export default {
             //         position: {
             //             lat: this.place.geometry.location.lat(),
             //             lng: this.place.geometry.location.lng()
-            //         } 
+            //         }
             //     });
             //     this.place = null;
             // }

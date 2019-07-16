@@ -16,11 +16,17 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Notification;
+use GuzzleHttp\Client;
 
 // use App\Observers\BaseObserver;
 
 class ShipmentController extends Controller
 {
+
+    public function token_f()
+    {
+        return session()->get('token.access_token');
+    }
     public function getShipments()
     {
         if (Auth::user()->hasRole('Client')) {
@@ -390,6 +396,28 @@ class ShipmentController extends Controller
 
     public function updateStatus(Request $request, Shipment $shipment, $id)
     {
+        try {
+            $client = new Client;
+            $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->token_f(),
+                ],
+                'body' => json_encode([
+                    'data' => $request->all(),
+                ])
+            ]);
+            // $response = $http->get(env('API_URL').'/api/getUsers');
+            return $response = $request->getBody()->getContents();
+        } catch (\Exception $e) {
+
+            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+            return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        }
+        return $shipment;
+
+
         // return $request->all();
         $no = $request->formobg['client_phone'];
         $no_A = explode(' ', $no);
@@ -415,45 +443,45 @@ class ShipmentController extends Controller
         } elseif ($request->formobg['status'] == 'Dispatched') {
             $shipment->dispatch_date = now();
         }
-        if ($shipment->save()) {
-            $shipStatus = Shipment::find($id);
-            $statusUpdate = new ShipmentStatus;
-            $statusUpdate->remark = $request->formobg['speciial_instruction'];
-            $statusUpdate->status = $request->formobg['status'];
-            $statusUpdate->location = $request->formobg['location'];
-            // $statusUpdate->derivery_time = $request->formobg['derivery_time'];
-            $statusUpdate->user_id = Auth::id();
-            $statusUpdate->branch_id = Auth::user()->branch_id;
-            $statusUpdate->shipment_id = $id;
+        // if ($shipment->save()) {
+        //     $shipStatus = Shipment::find($id);
+        //     $statusUpdate = new ShipmentStatus;
+        //     $statusUpdate->remark = $request->formobg['speciial_instruction'];
+        //     $statusUpdate->status = $request->formobg['status'];
+        //     $statusUpdate->location = $request->formobg['location'];
+        //     // $statusUpdate->derivery_time = $request->formobg['derivery_time'];
+        //     $statusUpdate->user_id = Auth::id();
+        //     $statusUpdate->branch_id = Auth::user()->branch_id;
+        //     $statusUpdate->shipment_id = $id;
 
-            $ip = $request->ip();
-            // $ip = '197.136.134.5';
-            // return view('home');
-            $arr_ip = geoip()->getLocation($ip);
-            // dd($arr_ip);
-            $statusUpdate->ip = $arr_ip->ip;
-            $statusUpdate->lat = $arr_ip->lat;
-            $statusUpdate->lng = $arr_ip->lon;
-            $statusUpdate->city = $arr_ip->city;
-            $statusUpdate->state = $arr_ip->state;
-            $statusUpdate->state_name = $arr_ip->state_name;
-            // return $statusUpdate;
-            // $this->shipmentUpdated($shipment);
-            $statusUpdate->save();
+        //     // $ip = $request->ip();
+        //     // $ip = '197.136.134.5';
+        //     // return view('home');
+        //     // $arr_ip = geoip()->getLocation($ip);
+        //     // // dd($arr_ip);
+        //     // $statusUpdate->ip = $arr_ip->ip;
+        //     // $statusUpdate->lat = $arr_ip->lat;
+        //     // $statusUpdate->lng = $arr_ip->lon;
+        //     // $statusUpdate->city = $arr_ip->city;
+        //     // $statusUpdate->state = $arr_ip->state;
+        //     // $statusUpdate->state_name = $arr_ip->state_name;
+        //     // return $statusUpdate;
+        //     // $this->shipmentUpdated($shipment);
+        //     $statusUpdate->save();
 
-        }
-        $sms = new Sms;
+        // }
+        // $sms = new Sms;
 
-        if ($request->formobg['status'] == 'Not picking') {
-            $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
-        } elseif ($request->formobg['status'] == 'Not available') {
-            $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
-        } elseif ($request->formobg['status'] == 'Delivered') {
-            $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered. Incase of queries call +254207608777, +254207608778, +254207608779    ');
-        } elseif ($request->formobg['status'] == 'Dispatched') {
-            $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been dispatched to ' . $City . '  Incase of queries call +254207608777, +254207608778, +254207608779  ');
-        }
-        return $shipment;
+        // if ($request->formobg['status'] == 'Not picking') {
+        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
+        // } elseif ($request->formobg['status'] == 'Not available') {
+        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
+        // } elseif ($request->formobg['status'] == 'Delivered') {
+        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered. Incase of queries call +254207608777, +254207608778, +254207608779    ');
+        // } elseif ($request->formobg['status'] == 'Dispatched') {
+        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been dispatched to ' . $City . '  Incase of queries call +254207608777, +254207608778, +254207608779  ');
+        // }
+
     }
 
     public function shipmentUpdated($shipment)
