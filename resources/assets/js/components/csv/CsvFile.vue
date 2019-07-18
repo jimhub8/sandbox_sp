@@ -7,17 +7,18 @@
         <v-container grid-list-md>
             <v-card-text>
                 <v-layout wrap>
-                    <form action="/csv/import" method="post" enctype="multipart/form-data">
+                    <form action="/importShipments" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="_token" :value="csrf">
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">Client</label>
                             <select class="custom-select custom-select-md col-md-8" name="client">
-                                    <option v-for="client in Allcustomers" :key="client.id" :value="client.id">{{ client.name }}</option>
+                                <option v-for="client in Allcustomers" :key="client.id" :value="client.id">{{ client.name }}</option>
                             </select>
                         </div>
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">Country</label>
                             <select class="custom-select custom-select-md col-md-8" name="country_id">
-                                    <option v-for="country in AllCountries" :key="country.id" :value="country.id">{{ country.country_name }}</option>
+                                <option v-for="country in AllCountries" :key="country.id" :value="country.id">{{ country.country_name }}</option>
                             </select>
                         </div>
                         <!-- <div class="form-group row">
@@ -49,6 +50,9 @@ export default {
     props: ['OpenCsv'],
     data() {
         return {
+            csrf: document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
             imagePlaced: false,
             Allcustomers: [],
             AllCountries: [],

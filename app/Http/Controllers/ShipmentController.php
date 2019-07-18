@@ -60,7 +60,7 @@ class ShipmentController extends Controller
             $ships[] = Shipment::setEagerLoads([])->select('id')->where('status', '!=', 'Scheduled')
                 ->Where('status', '!=', 'Delivered')
                 ->Where('status', '!=', 'Dispatched')
-            // ->where('id', $shipment->id)
+                // ->where('id', $shipment->id)
                 ->Where('status', '!=', 'Cancelled')
                 ->whereDate('created_at', '<=', $prev_month)
                 ->take(10)->get();
@@ -96,7 +96,6 @@ class ShipmentController extends Controller
 
             // If there are results return them, if none, return the error message.
             return $posts->count() ? $posts : $error;
-
         }
 
         // Return the error message if no keywords existed
@@ -111,48 +110,47 @@ class ShipmentController extends Controller
      */
     public function import(Request $request)
     {
+
         // dd($request->all());
         $user = User::find($request->client);
         if ($request->file('shipment')) {
             $path = $request->file('shipment')->getRealPath();
-            $data = Excel::load($path, function ($reader) {
-
-            })->get();
+            $data = Excel::load($path, function ($reader) { })->get();
 
             if (!empty($data) && $data->count()) {
                 foreach ($data->toArray() as $row) {
                     if (!empty($row)) {
                         $dataArray[] =
                             [
-                            'client_name' => $row['name_of_the_client'],
-                            'order_id' => $row['order_id'],
-                            'client_email' => $row['sender_mail'],
-                            'client_phone' => $row['phone'],
-                            'client_address' => $row['address'],
-                            'client_city' => $row['city'],
-                            'amount_ordered' => $row['quantity'],
-                            'cod_amount' => $row['cod_amount'],
-                            'client_region' => $row['region'],
-                            'airway_bill_no' => $row['order_id'],
-                            'bar_code' => $row['order_id'],
-                            'user_id' => Auth::id(),
-                            'status' => 'Warehouse',
-                            'created_at' => new DateTime(),
-                            'booking_date' => new DateTime(),
-                            'updated_at' => new DateTime(),
-                            'shipment_id' => random_int(1000000, 9999999),
-                            'paid' => 0,
-                            'printReceipt' => 0,
-                            'printed' => 0,
-                            'sender_name' => $user->name,
-                            'sender_email' => $user->email,
-                            'sender_phone' => $user->phone,
-                            'sender_address' => $user->address,
-                            'sender_city' => $user->city,
-                            'client_id' => $request->client,
-                            // 'country' => $request->country,
-                            'country_id' => $request->country_id,
-                        ];
+                                'client_name' => $row['name_of_the_client'],
+                                'order_id' => $row['order_id'],
+                                'client_email' => $row['sender_mail'],
+                                'client_phone' => $row['phone'],
+                                'client_address' => $row['address'],
+                                'client_city' => $row['city'],
+                                'amount_ordered' => $row['quantity'],
+                                'cod_amount' => $row['cod_amount'],
+                                'client_region' => $row['region'],
+                                'airway_bill_no' => $row['order_id'],
+                                'bar_code' => $row['order_id'],
+                                'user_id' => Auth::id(),
+                                'status' => 'Warehouse',
+                                'created_at' => new DateTime(),
+                                'booking_date' => new DateTime(),
+                                'updated_at' => new DateTime(),
+                                'shipment_id' => random_int(1000000, 9999999),
+                                'paid' => 0,
+                                'printReceipt' => 0,
+                                'printed' => 0,
+                                'sender_name' => $user->name,
+                                'sender_email' => $user->email,
+                                'sender_phone' => $user->phone,
+                                'sender_address' => $user->address,
+                                'sender_city' => $user->city,
+                                'client_id' => $request->client,
+                                // 'country' => $request->country,
+                                'country_id' => $request->country_id,
+                            ];
                     }
                 }
                 if (!empty($dataArray)) {
@@ -160,7 +158,6 @@ class ShipmentController extends Controller
                 }
                 // Notification::send(Auth::user(), new ShipmentNoty($shipment));
                 return redirect('courier#/Shipments');
-
             }
         } else {
             var_dump('something went wrong');
@@ -175,9 +172,7 @@ class ShipmentController extends Controller
             $excel->sheet('Sheetname', function ($sheet) {
 
                 $sheet->fromModel(Shipment::all());
-
             });
-
         })->export('csv');
     }
 
@@ -378,7 +373,9 @@ class ShipmentController extends Controller
     public function getAdmin()
     {
         // return User::all();
-        return User::whereHas("roles", function ($q) {$q->where("name", "Admin");})->get();
+        return User::whereHas("roles", function ($q) {
+            $q->where("name", "Admin");
+        })->get();
         $usersRolem = User::with('roles')->get();
         $userArr = [];
         foreach ($usersRolem as $user) {
@@ -396,6 +393,70 @@ class ShipmentController extends Controller
 
     public function updateStatus(Request $request, Shipment $shipment, $id)
     {
+        // return $request->all();
+        $no = $request->formobg['client_phone'];
+        $no_A = explode(' ', $no);
+        $phone_no = $no_A[0];
+        // return $request->all();
+        $shipment = Shipment::find($request->id);
+        $City = $shipment->client_city;
+        $shipment->derivery_status = $request->formobg['status'];
+        $shipment->status = $request->formobg['status'];
+        // var_dump($request->formobg['status']); die;
+        // $shipment->remark = $request->formobg['remark'];
+        $shipment->speciial_instruction = $request->formobg['speciial_instruction'];
+        if ($request->formobg['status'] == 'Scheduled') {
+            $shipment->derivery_date = $request->formobg['derivery_date'];
+            $shipment->derivery_time = $request->formobg['derivery_time'];
+        } elseif ($request->formobg['status'] == 'Delivered') {
+            $shipment->derivery_date = $request->formobg['derivery_date'];
+            $shipment->derivery_time = $request->formobg['derivery_time'];
+            // $shipment->receiver_id = ($request->formobg['receiver_id']) ? $request->formobg['receiver_id'] : null;
+            $shipment->receiver_name = $request->formobg['receiver_name'];
+        } elseif ($request->formobg['status'] == 'Returned') {
+            // $shipment->driver = null;
+        } elseif ($request->formobg['status'] == 'Dispatched') {
+            $shipment->dispatch_date = now();
+        }
+        if ($shipment->save()) {
+            $shipStatus = Shipment::find($id);
+            $statusUpdate = new ShipmentStatus;
+            $statusUpdate->remark = $request->formobg['speciial_instruction'];
+            $statusUpdate->status = $request->formobg['status'];
+            $statusUpdate->location = $request->formobg['location'];
+            // $statusUpdate->derivery_time = $request->formobg['derivery_time'];
+            $statusUpdate->user_id = Auth::id();
+            $statusUpdate->branch_id = Auth::user()->branch_id;
+            $statusUpdate->shipment_id = $id;
+
+            // $ip = $request->ip();
+            // $ip = '197.136.134.5';
+            // return view('home');
+            // $arr_ip = geoip()->getLocation($ip);
+            // // dd($arr_ip);
+            // $statusUpdate->ip = $arr_ip->ip;
+            // $statusUpdate->lat = $arr_ip->lat;
+            // $statusUpdate->lng = $arr_ip->lon;
+            // $statusUpdate->city = $arr_ip->city;
+            // $statusUpdate->state = $arr_ip->state;
+            // $statusUpdate->state_name = $arr_ip->state_name;
+            // return $statusUpdate;
+            // $this->shipmentUpdated($shipment);
+            $statusUpdate->save();
+        }
+        // return $shipment;
+        // $sms = new Sms;
+
+        // if ($request->formobg['status'] == 'Not picking') {
+        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
+        // } elseif ($request->formobg['status'] == 'Not available') {
+        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
+        // } elseif ($request->formobg['status'] == 'Delivered') {
+        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered. Incase of queries call +254207608777, +254207608778, +254207608779    ');
+        // } elseif ($request->formobg['status'] == 'Dispatched') {
+        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been dispatched to ' . $City . '  Incase of queries call +254207608777, +254207608778, +254207608779  ');
+        // }
+        // return $response;
         try {
             $client = new Client;
             $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
@@ -415,73 +476,6 @@ class ShipmentController extends Controller
             \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
             return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
         }
-        return $shipment;
-
-
-        // return $request->all();
-        $no = $request->formobg['client_phone'];
-        $no_A = explode(' ', $no);
-        $phone_no = $no_A[0];
-        // return $request->all();
-        $shipment = Shipment::find($request->id);
-        $City = $shipment->client_city;
-        $shipment->derivery_status = $request->formobg['status'];
-        $shipment->status = $request->formobg['status'];
-        // var_dump($request->formobg['status']); die;
-        // $shipment->remark = $request->formobg['remark'];
-        $shipment->speciial_instruction = $request->formobg['speciial_instruction'];
-        if ($request->formobg['status'] == 'Scheduled') {
-            $shipment->derivery_date = $request->formobg['derivery_date'];
-            $shipment->derivery_time = $request->formobg['derivery_time'];
-        } elseif ($request->formobg['status'] == 'Delivered') {
-            $shipment->derivery_date = $request->formobg['derivery_date'];
-            $shipment->derivery_time = $request->formobg['derivery_time'];
-            $shipment->receiver_id = $request->formobg['receiver_id'];
-            $shipment->receiver_name = $request->formobg['receiver_name'];
-        } elseif ($request->formobg['status'] == 'Returned') {
-            // $shipment->driver = null;
-        } elseif ($request->formobg['status'] == 'Dispatched') {
-            $shipment->dispatch_date = now();
-        }
-        // if ($shipment->save()) {
-        //     $shipStatus = Shipment::find($id);
-        //     $statusUpdate = new ShipmentStatus;
-        //     $statusUpdate->remark = $request->formobg['speciial_instruction'];
-        //     $statusUpdate->status = $request->formobg['status'];
-        //     $statusUpdate->location = $request->formobg['location'];
-        //     // $statusUpdate->derivery_time = $request->formobg['derivery_time'];
-        //     $statusUpdate->user_id = Auth::id();
-        //     $statusUpdate->branch_id = Auth::user()->branch_id;
-        //     $statusUpdate->shipment_id = $id;
-
-        //     // $ip = $request->ip();
-        //     // $ip = '197.136.134.5';
-        //     // return view('home');
-        //     // $arr_ip = geoip()->getLocation($ip);
-        //     // // dd($arr_ip);
-        //     // $statusUpdate->ip = $arr_ip->ip;
-        //     // $statusUpdate->lat = $arr_ip->lat;
-        //     // $statusUpdate->lng = $arr_ip->lon;
-        //     // $statusUpdate->city = $arr_ip->city;
-        //     // $statusUpdate->state = $arr_ip->state;
-        //     // $statusUpdate->state_name = $arr_ip->state_name;
-        //     // return $statusUpdate;
-        //     // $this->shipmentUpdated($shipment);
-        //     $statusUpdate->save();
-
-        // }
-        // $sms = new Sms;
-
-        // if ($request->formobg['status'] == 'Not picking') {
-        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
-        // } elseif ($request->formobg['status'] == 'Not available') {
-        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
-        // } elseif ($request->formobg['status'] == 'Delivered') {
-        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered. Incase of queries call +254207608777, +254207608778, +254207608779    ');
-        // } elseif ($request->formobg['status'] == 'Dispatched') {
-        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been dispatched to ' . $City . '  Incase of queries call +254207608777, +254207608778, +254207608779  ');
-        // }
-
     }
 
     public function shipmentUpdated($shipment)
@@ -806,7 +800,7 @@ class ShipmentController extends Controller
 
     public function btwRefShipments(Request $request)
     {
-// return $request->all();
+        // return $request->all();
         $start = $request->start;
         if (Auth::user()->hasRole('Client')) {
             return Shipment::latest()->where('client_id', Auth::id())->take(500)->skip($request->end)->get();
@@ -817,10 +811,10 @@ class ShipmentController extends Controller
 
     public function getshipD(Request $request, $id)
     {
-// return $request->all();
+        // return $request->all();
         $shipments = Shipment::setEagerLoads([])->select('driver', 'branch_id')->where('id', $id)->get();
         $shipments->transform(function ($shipment, $key) {
-// return $shipment->driver;
+            // return $shipment->driver;
             if (!empty($shipment->branch_id)) {
                 $branch = Branch::find($shipment->branch_id);
                 $shipment->branch_id = $branch->branch_name;
@@ -857,5 +851,4 @@ class ShipmentController extends Controller
         });
         return $statuses;
     }
-
 }

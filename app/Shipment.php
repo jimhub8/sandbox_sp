@@ -44,26 +44,26 @@ class Shipment extends Model
         'sender_phone', 'sender_address', 'sender_city', 'total_freight',
     ];
 
-    public static function boot() {
+    // public static function boot() {
 
-        parent::boot();
-    
-        static::created(function($shipment) {
-            Event::fire('shipment.created', $shipment);
-        });
-    
-        static::updated(function($shipment) {
-            Event::fire('shipment.updated', $shipment);
-        });
-    
-        static::deleted(function($shipment) {
-            Event::fire('shipment.deleted', $shipment);
-        });
+    //     parent::boot();
 
-        static::creating(function($shipment) {
-            Event::fire('shipment.creating', $shipment);
-        });
-    }
+    //     static::created(function($shipment) {
+    //         Event::fire('shipment.created', $shipment);
+    //     });
+
+    //     static::updated(function($shipment) {
+    //         Event::fire('shipment.updated', $shipment);
+    //     });
+
+    //     static::deleted(function($shipment) {
+    //         Event::fire('shipment.deleted', $shipment);
+    //     });
+
+    //     static::creating(function($shipment) {
+    //         Event::fire('shipment.creating', $shipment);
+    //     });
+    // }
 
     // public  function scopeLike($query, $field, $value){
     //     return $query->where($field, 'LIKE', "%$value%");

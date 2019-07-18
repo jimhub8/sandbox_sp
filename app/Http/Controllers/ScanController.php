@@ -49,13 +49,31 @@ class ScanController extends Controller
         // dd($assign_date);
         // $shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'driver' => $rider_out, 'assign_date' => $assign_date, 'derivery_date' => $scan_date_out]);
         foreach ($id as $value) {
-            $shipment = Shipment::find($value);
-            $shipment->status = $status;
-            $shipment->remark = $remark;
-            $shipment->driver = $rider_out;
-            $shipment->assign_date = $assign_date;
-            $shipment->dispatch_date = now();
-            $shipment->save();
+
+            try {
+                $client = new Client;
+                $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
+                    'headers' => [
+                        'Content-type' => 'application/json',
+                        'Accept' => 'application/json',
+                        'Authorization' => 'Bearer ' . $this->token_f(),
+                    ],
+                    'body' => json_encode([
+                        'data' => $request->all(),
+                    ])
+                ]);
+                $shipment = Shipment::find($value);
+                $shipment->status = $status;
+                $shipment->remark = $remark;
+                $shipment->driver = $rider_out;
+                $shipment->assign_date = $assign_date;
+                $shipment->dispatch_date = now();
+                $shipment->save();
+            } catch (\Exception $e) {
+
+                \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+                return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+            }
         }
 
         $shipStatus = Shipment::whereIn('id', $id)->get();
@@ -87,7 +105,7 @@ class ScanController extends Controller
                 $no = $phone->client_phone;
                 $no_A = explode(' ', $no);
                 $phone_no = $no_A[0];
-                $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your parcel (waybill number: ' . $phone->bar_code . ') has been dispatched. Expected time of arrival 10am-4pm '.$today.'. If you are not at the address given at the time of order i.e ('. $phone->client_address. '), please call or text 0799869844/0799870144, Our rider ' . $rider . ' phone number ' . $rider_no . ' will do the delivery');
+                $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your parcel (waybill number: ' . $phone->bar_code . ') has been dispatched. Expected time of arrival 10am-4pm ' . $today . '. If you are not at the address given at the time of order i.e (' . $phone->client_address . '), please call or text 0799869844/0799870144, Our rider ' . $rider . ' phone number ' . $rider_no . ' will do the delivery');
             }
         }
 

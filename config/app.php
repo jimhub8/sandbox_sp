@@ -165,9 +165,9 @@ return [
         // Maatwebsite\Excel\ExcelServiceProvider::class,
         // niklasravnsborg\LaravelPdf\PdfServiceProvider::class
         // Snowfire\Beautymail\BeautymailServiceProvider::class,
-        App\Providers\SpeedballServiceProvider::class,
+        // App\Providers\SpeedballServiceProvider::class,
 
-        \Safaricom\Mpesa\MpesaServiceProvider::class,
+        // \Safaricom\Mpesa\MpesaServiceProvider::class,
         \Torann\GeoIP\GeoIPServiceProvider::class,
 
 
@@ -227,7 +227,7 @@ return [
         // 'ExcelReport' => Jimmyjs\ReportGenerator\Facades\ExcelReportFacade::class,
         // 'CSVReport' => Jimmyjs\ReportGenerator\Facades\CSVReportFacade::class,
         'GeoIP' => \Torann\GeoIP\Facades\GeoIP::class,
-        'Mpesa'=> \Safaricom\Mpesa\MpesaServiceProvider::class
+        // 'Mpesa'=> \Safaricom\Mpesa\MpesaServiceProvider::class
     ],
 
 ];

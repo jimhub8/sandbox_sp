@@ -400,7 +400,10 @@ Route::group(['middleware' => ['auth']], function () {
 
 	Route::get('chat', 'ChatsController@index');
 	Route::get('messages', 'ChatsController@fetchMessages');
-	Route::post('messages', 'ChatsController@sendMessage');
+    Route::post('messages', 'ChatsController@sendMessage');
+
+    Route::post('importShipments', 'UploadController@importShipments')->name('importShipments');
+
 });
 Route::any('/failsafe', 'ShipmentController@failsafe')->name('failsafe');
 
