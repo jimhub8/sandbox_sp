@@ -49,7 +49,8 @@ class ShipmentController extends Controller
         // enabling the event dispatcher
         $today = Carbon::today();
         $prev_month = $today->subMonth();
-        $shipments = Shipment::setEagerLoads([])->where('status', '!=', 'Scheduled')
+        $shipments = Shipment::setEagerLoads([])
+            ->where('status', '!=', 'Scheduled')
             ->Where('status', '!=', 'Delivered')
             ->Where('status', '!=', 'Dispatched')
             ->Where('status', '!=', 'Cancelled')->take(10)->get();
@@ -57,7 +58,8 @@ class ShipmentController extends Controller
         $ships = [];
         foreach ($shipments as $shipment) {
             // dd($shipment->created_at.'::'.$shipment->created_at->addMonth(1));
-            $ships[] = Shipment::setEagerLoads([])->select('id')->where('status', '!=', 'Scheduled')
+            $ships[] = Shipment::setEagerLoads([])->select('id')
+                ->where('status', '!=', 'Scheduled')
                 ->Where('status', '!=', 'Delivered')
                 ->Where('status', '!=', 'Dispatched')
                 // ->where('id', $shipment->id)
@@ -71,9 +73,10 @@ class ShipmentController extends Controller
         foreach ($arr_R as $ship) {
             $id[] = $ship->id;
         }
-        Shipment::setEventDispatcher($dispatcher);
         // return $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->take(10)->get();
-        return Shipment::whereIn('id', $id)->update(['status' => 'Cancelled']);
+        $ship = Shipment::whereIn('id', $id)->update(['status' => 'Cancelled']);
+        Shipment::setEventDispatcher($dispatcher);
+        return $ship;
     }
 
     /**
