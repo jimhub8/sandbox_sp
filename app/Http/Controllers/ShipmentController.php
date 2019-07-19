@@ -421,32 +421,32 @@ class ShipmentController extends Controller
         } elseif ($request->formobg['status'] == 'Dispatched') {
             $shipment->dispatch_date = now();
         }
-        if ($shipment->save()) {
-            $shipStatus = Shipment::find($id);
-            $statusUpdate = new ShipmentStatus;
-            $statusUpdate->remark = $request->formobg['speciial_instruction'];
-            $statusUpdate->status = $request->formobg['status'];
-            $statusUpdate->location = $request->formobg['location'];
-            // $statusUpdate->derivery_time = $request->formobg['derivery_time'];
-            $statusUpdate->user_id = Auth::id();
-            $statusUpdate->branch_id = Auth::user()->branch_id;
-            $statusUpdate->shipment_id = $id;
+        // if ($shipment->save()) {
+        //     $shipStatus = Shipment::find($id);
+        //     $statusUpdate = new ShipmentStatus;
+        //     $statusUpdate->remark = $request->formobg['speciial_instruction'];
+        //     $statusUpdate->status = $request->formobg['status'];
+        //     $statusUpdate->location = $request->formobg['location'];
+        //     // $statusUpdate->derivery_time = $request->formobg['derivery_time'];
+        //     $statusUpdate->user_id = Auth::id();
+        //     $statusUpdate->branch_id = Auth::user()->branch_id;
+        //     $statusUpdate->shipment_id = $id;
 
-            // $ip = $request->ip();
-            // $ip = '197.136.134.5';
-            // return view('home');
-            // $arr_ip = geoip()->getLocation($ip);
-            // // dd($arr_ip);
-            // $statusUpdate->ip = $arr_ip->ip;
-            // $statusUpdate->lat = $arr_ip->lat;
-            // $statusUpdate->lng = $arr_ip->lon;
-            // $statusUpdate->city = $arr_ip->city;
-            // $statusUpdate->state = $arr_ip->state;
-            // $statusUpdate->state_name = $arr_ip->state_name;
-            // return $statusUpdate;
-            // $this->shipmentUpdated($shipment);
-            $statusUpdate->save();
-        }
+        //     // $ip = $request->ip();
+        //     // $ip = '197.136.134.5';
+        //     // return view('home');
+        //     // $arr_ip = geoip()->getLocation($ip);
+        //     // // dd($arr_ip);
+        //     // $statusUpdate->ip = $arr_ip->ip;
+        //     // $statusUpdate->lat = $arr_ip->lat;
+        //     // $statusUpdate->lng = $arr_ip->lon;
+        //     // $statusUpdate->city = $arr_ip->city;
+        //     // $statusUpdate->state = $arr_ip->state;
+        //     // $statusUpdate->state_name = $arr_ip->state_name;
+        //     // return $statusUpdate;
+        //     // $this->shipmentUpdated($shipment);
+        //     $statusUpdate->save();
+        // }
         // return $shipment;
         // $sms = new Sms;
 
