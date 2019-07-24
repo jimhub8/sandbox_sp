@@ -20,7 +20,6 @@ class AuthController extends Controller
      */
     public function signup(Request $request)
     {
-        return 'dwd';
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
@@ -30,10 +29,10 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'activation_token' => str_random(60)
+            // 'activation_token' => str_random(60)
         ]);
         $user->save();
-        $user->notify(new SignupActivate($user));
+        // $user->notify(new SignupActivate($user));
         return response()->json([
             'message' => 'Successfully created user!'
         ], 201);
@@ -51,7 +50,6 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        return 'dwd';
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
@@ -84,7 +82,6 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        return 'dwd';
         $request->user()->token()->revoke();
         return response()->json([
             'message' => 'Successfully logged out'
@@ -98,13 +95,11 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        return 'dwd';
         return response()->json($request->user());
     }
 
     public function signupActivate($token)
     {
-        return 'dwd';
         $user = User::where('activation_token', $token)->first();
         if (!$user) {
             return response()->json([
