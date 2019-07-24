@@ -39,7 +39,8 @@ class UploadController extends Controller
                 ])
             ]);
             // $response = $http->get(env('API_URL').'/api/getUsers');
-            // return $response = $request->getBody()->getContents();
+            $response = $request->getBody()->getContents();
+            // dd($response);
         } catch (\Exception $e) {
 
             \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
