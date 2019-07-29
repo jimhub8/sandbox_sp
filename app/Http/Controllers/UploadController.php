@@ -51,27 +51,27 @@ class UploadController extends Controller
         foreach ($arr as $key => $order) {
             // dd($order);
             $order_data = new Shipment();
-            $order_data->order_id = $order["Order ID"];
-            $order_data->airway_bill_no = $order["Order ID"];
-            $order_data->bar_code = $order["Order ID"];
-            $order_data->client_name = $order["Name of The client"];
-            $order_data->client_address = $order["Address"];
+            $order_data->order_id = $order["order_id"];
+            $order_data->airway_bill_no = $order["order_id"];
+            $order_data->bar_code = $order["order_id"];
+            $order_data->client_name = $order["name_of_the_client"];
+            $order_data->client_address = $order["address"];
             // $order_data-> = $order["Postal Code"];
-            $order_data->client_city = $order["City"];
+            $order_data->client_city = $order["city"];
             // $order_data-> = $order["Region"];
-            $order_data->client_phone = $order["Phone"];
-            $order_data->cod_amount = $order["COD Amount"];
+            $order_data->client_phone = $order["phone"];
+            $order_data->cod_amount = $order["cod_amount"];
 
             $order_data->user_id = Auth::id();
             $order_data->status = 'Warehouse';
             $order_data->save();
 
-            $order_data->client_email = $order['Sender mail'];
-            $order_data->client_phone = $order['Phone'];
-            $order_data->client_address = $order['Address'];
-            $order_data->client_city = $order['City'];
+            $order_data->client_email = $order['sender_mail'];
+            $order_data->client_phone = $order['phone'];
+            $order_data->client_address = $order['address'];
+            $order_data->client_city = $order['city'];
             $order_data->amount_ordered = $order['quantity'];
-            $order_data->client_region = $order['Region'];
+            $order_data->client_region = $order['region'];
             $order_data->user_id = Auth::id();
             $order_data->status = 'Warehouse';
             $order_data->shipment_id = random_int(1000000, 9999999);

@@ -484,9 +484,9 @@ class ShipmentController extends Controller
             // $response = $http->get(env('API_URL').'/api/getUsers');
             return $response = $request->getBody()->getContents();
         } catch (\Exception $e) {
-
             \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
             return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+            // return $e->getMessage();
         }
     }
 
