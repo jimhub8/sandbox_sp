@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class StatusController extends Controller
 {
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -105,7 +105,7 @@ class StatusController extends Controller
     public function getScheduled(Request $request)
     {
         // return $request->all();
-        $print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->take(500)->latest()->get();
+        $print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->where('country_id', Auth::user()->country_id)->take(500)->latest()->get();
         $id = [];
         foreach ($print_shipment as $selectedItems) {
             $id[] = $selectedItems['id'];

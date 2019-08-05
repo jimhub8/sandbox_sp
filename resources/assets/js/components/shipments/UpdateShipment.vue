@@ -153,9 +153,14 @@ export default {
                     address: this.address
                 })
                 .then(response => {
+                    // console.log(response.data.message);
                     this.loading = false;
-                    this.alert();
-                    // this.close();
+                    this.close();
+
+                    if (response.data.message) {
+                        eventBus.$emit('errorEvent', response.data.message)
+                        return
+                    }
                     // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.updateitedItem)
                     eventBus.$emit("refreshShipEvent")
                     this.updateitedItem.derivery_date = "";
@@ -166,6 +171,16 @@ export default {
                 })
                 .catch(error => {
                     this.loading = false;
+                    if (error.response.status === 500) {
+                        eventBus.$emit('errorEvent', error.response.statusText)
+                        return
+                    } else if (error.response.status === 401 || error.response.status === 409) {
+                        eventBus.$emit('reloadRequest', error.response.statusText)
+                    }
+                    else if (error.response.status === 422) {
+                        eventBus.$emit('errorEvent', error.response.message)
+                        return
+                    }
                     this.errors = error.response.data.errors;
                 });
         },
