@@ -153,7 +153,7 @@ export default {
                     address: this.address
                 })
                 .then(response => {
-                    // console.log(response.data.message);
+                    console.log(response.data);
                     this.loading = false;
                     this.close();
 
@@ -170,6 +170,7 @@ export default {
                     //   );
                 })
                 .catch(error => {
+                    console.log(error.response.data.message);
                     this.loading = false;
                     if (error.response.status === 500) {
                         eventBus.$emit('errorEvent', error.response.statusText)
@@ -178,7 +179,7 @@ export default {
                         eventBus.$emit('reloadRequest', error.response.statusText)
                     }
                     else if (error.response.status === 422) {
-                        eventBus.$emit('errorEvent', error.response.message)
+                        eventBus.$emit('errorEvent', error.response.data.message)
                         return
                     }
                     this.errors = error.response.data.errors;
