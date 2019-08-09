@@ -435,31 +435,31 @@ class ShipmentController extends Controller
 
     public function updateStatus(Request $request, Shipment $shipment, $id)
     {
-        try {
-            $client = new Client;
-            $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
-                'headers' => [
-                    'Content-type' => 'application/json',
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
-                ],
-                'body' => json_encode([
-                    'data' => $request->all(),
-                ])
-            ]);
-            // $response = $http->get(env('API_URL').'/api/getUsers');
-            return $response = $request->getBody()->getContents();
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
-            // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
-            // return $e->getMessage();
-            $message = $e->getResponse()->getBody();
-            // $arrayName = array('error' => 'Error', 'message' => $message);
-            // dd($message)
-            abort(422, $message);
-            // return $e->getMessage();
-        }
-        // $this->update_status($request->all());
+        // try {
+        //     $client = new Client;
+        //     $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
+        //         'headers' => [
+        //             'Content-type' => 'application/json',
+        //             'Accept' => 'application/json',
+        //             'Authorization' => 'Bearer ' . $this->token_f(),
+        //         ],
+        //         'body' => json_encode([
+        //             'data' => $request->all(),
+        //         ])
+        //     ]);
+        //     // $response = $http->get(env('API_URL').'/api/getUsers');
+        //     return $response = $request->getBody()->getContents();
+        // } catch (\Exception $e) {
+        //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+        //     // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        //     // return $e->getMessage();
+        //     $message = $e->getResponse()->getBody();
+        //     // $arrayName = array('error' => 'Error', 'message' => $message);
+        //     // dd($message)
+        //     abort(422, $message);
+        //     // return $e->getMessage();
+        // }
+        $this->update_status($request->all());
         // return $request->all();
         $no = $request->formobg['client_phone'];
         $no_A = explode(' ', $no);
