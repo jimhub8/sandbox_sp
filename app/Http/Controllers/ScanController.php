@@ -9,10 +9,16 @@ use App\User;
 use Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
+
 // use Illuminate\Support\Carbon;
 
 class ScanController extends Controller
 {
+    public function token_f()
+    {
+        return session()->get('token.access_token');
+    }
     // Out Scan
     public function barcodeUpdate(Request $request, Shipment $shipment, $bar_code = null)
     {
@@ -25,10 +31,34 @@ class ScanController extends Controller
             return response()->json(['errors' => 'errors']);
         }
     }
+    public function update_status($data)
+    {
 
+        try {
+            $client = new Client;
+            $request = $client->request('POST', env('API_URL') . '/api/orderScan', [
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->token_f(),
+                ],
+                'body' => json_encode([
+                    'data' => $data->all(),
+                ])
+            ]);
+            return $response = $request->getBody()->getContents();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+            $message = $e->getResponse()->getBody();
+            // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+            abort(422, $message);
+        }
+    }
     public function statusUpdate(Request $request)
     {
+        $this->update_status($request->all());
         // return $request->all();
+        // $request->all()
         // $this->validate($request, [
         //     'form.status_out' => 'required',
         //     'form.rider_out' => 'required',
@@ -51,7 +81,7 @@ class ScanController extends Controller
         foreach ($id as $value) {
 
             try {
-                $client = new Client;
+                $client = new Client();
                 $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
                     'headers' => [
                         'Content-type' => 'application/json',
@@ -70,7 +100,6 @@ class ScanController extends Controller
                 $shipment->dispatch_date = now();
                 $shipment->save();
             } catch (\Exception $e) {
-
                 \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
                 return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
             }
@@ -91,23 +120,23 @@ class ScanController extends Controller
             // return $statusUpdate;
         }
 
-        $sms = new Sms;
-        $rider = User::find($rider_out);
-        // dd($rider['phone']);
-        $rider_no = $rider['phone'];
-        $rider = $rider['name'];
-        $today = Carbon::now();
-        // $delivery_d = $today->englishMonth();
-        // dd($delivery_d);
-        if ($status == 'Dispatched') {
-            // foreach ($id as $phone) {
-            foreach ($shipStatus as $phone) {
-                $no = $phone->client_phone;
-                $no_A = explode(' ', $no);
-                $phone_no = $no_A[0];
-                $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your parcel (waybill number: ' . $phone->bar_code . ') has been dispatched. Expected time of arrival 10am-4pm ' . $today . '. If you are not at the address given at the time of order i.e (' . $phone->client_address . '), please call or text 0799869844/0799870144, Our rider ' . $rider . ' phone number ' . $rider_no . ' will do the delivery');
-            }
-        }
+        // $sms = new Sms;
+        // $rider = User::find($rider_out);
+        // // dd($rider['phone']);
+        // $rider_no = $rider['phone'];
+        // $rider = $rider['name'];
+        // $today = Carbon::now();
+        // // $delivery_d = $today->englishMonth();
+        // // dd($delivery_d);
+        // if ($status == 'Dispatched') {
+        //     // foreach ($id as $phone) {
+        //     foreach ($shipStatus as $phone) {
+        //         $no = $phone->client_phone;
+        //         $no_A = explode(' ', $no);
+        //         $phone_no = $no_A[0];
+        //         $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your parcel (waybill number: ' . $phone->bar_code . ') has been dispatched. Expected time of arrival 10am-4pm ' . $today . '. If you are not at the address given at the time of order i.e (' . $phone->client_address . '), please call or text 0799869844/0799870144, Our rider ' . $rider . ' phone number ' . $rider_no . ' will do the delivery');
+        //     }
+        // }
 
         // return $shipment;
 

@@ -404,7 +404,7 @@ class ShipmentController extends Controller
         // dd(UserResource::collection($admin));
     }
 
-    public function update_status($request)
+    public function update_status($data)
     {
         // dd($request);
         try {
@@ -416,7 +416,7 @@ class ShipmentController extends Controller
                     'Authorization' => 'Bearer ' . $this->token_f(),
                 ],
                 'body' => json_encode([
-                    'data' => $request,
+                    'data' => $data,
                 ])
             ]);
             // $response = $http->get(env('API_URL').'/api/getUsers');

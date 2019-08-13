@@ -82,10 +82,10 @@
                                         <label for="inputAddress2">Location</label>
                                         <input type="text" class="form-control" id="inputAddress2" placeholder="Location" v-model="form_out.location_out">
                                     </div>
-                                    
+
                                     <v-flex xs6 sm6>
                                         <v-text-field v-model="form_out.scan_date_out" :type="'date'" color="blue darken-2" label="Date" required></v-text-field>
-                                    </v-flex> 
+                                    </v-flex>
                                     <div class="form-group col-md-12">
                                         <label for="inputCity">Remarks</label>
                                         <textarea class="form-control" v-model="form_out.remarks_out" placeholder="Remarks" rows="3"></textarea>
@@ -294,17 +294,17 @@ export default {
                 })
                 .then((response) => {
                     this.loading = false
-                    this.resetForm()
+                    // this.resetForm()
                     this.snackbar = true
                     this.message = 'successifully scanned'
                     this.icon = 'check_circle'
                     this.color = 'indigo'
-                    this.form_out.rider_out = ''
-                    this.form_out.bar_code_out = ''
-                    this.form_out.status_out = ''
-                    this.form_out.scan_date_out = ''
-                    this.form_out.remarks_out = ''
-                    this.form_out.location_out = ''
+                    // this.form_out.rider_out = ''
+                    // this.form_out.bar_code_out = ''
+                    // this.form_out.status_out = ''
+                    // this.form_out.scan_date_out = ''
+                    // this.form_out.remarks_out = ''
+                    // this.form_out.location_out = ''
                 })
                 .catch((error) => {
                     this.loading = false
@@ -323,13 +323,13 @@ export default {
                     this.message = 'successifully scanned'
                     this.icon = 'check_circle'
                     this.color = 'indigo'
-                    this.resetForm()
-                    this.form_in.branch_id = ''
-                    this.form_in.bar_code_in = ''
-                    this.form_in.status_in = ''
-                    // this.form_in.scan_date_in = ''
-                    this.form_in.remarks_in = ''
-                    this.form_in.location_in = ''
+                    // this.resetForm()
+                    // this.form_in.branch_id = ''
+                    // this.form_in.bar_code_in = ''
+                    // this.form_in.status_in = ''
+                    // // this.form_in.scan_date_in = ''
+                    // this.form_in.remarks_in = ''
+                    // this.form_in.location_in = ''
                 })
                 .catch((error) => {
                     this.loading_in = false
@@ -356,7 +356,7 @@ export default {
             .catch((error) => {
                 this.errors = error.response.data.errors
             })
-            
+
         axios.get('/getBranch')
             .then((response) => {
                 this.branches = response.data
@@ -389,7 +389,7 @@ export default {
 }
 </script>
 
-  
+
 
 <style scoped>
 
