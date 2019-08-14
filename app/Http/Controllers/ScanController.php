@@ -43,7 +43,7 @@ class ScanController extends Controller
                     'Authorization' => 'Bearer ' . $this->token_f(),
                 ],
                 'body' => json_encode([
-                    'data' => $data->all(),
+                    'data' => $data,
                 ])
             ]);
             return $response = $request->getBody()->getContents();
@@ -56,8 +56,8 @@ class ScanController extends Controller
     }
     public function statusUpdate(Request $request)
     {
-        $this->update_status($request->all());
         // return $request->all();
+        $this->update_status($request->all());
         // $request->all()
         // $this->validate($request, [
         //     'form.status_out' => 'required',
@@ -142,22 +142,11 @@ class ScanController extends Controller
 
     }
 
-    // In Scan
-    public function barcodeIn(Request $request, Shipment $shipment, $bar_code_in = null)
-    {
-        $bar_code = str_replace("-", "", $request->bar_code_in);
-        // dd($barcode);
-        $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->first();
-        if ($barcode) {
-            return $barcode;
-        } else {
-            return response()->json(['errors' => 'errors']);
-        }
-    }
 
     public function statusUpdateIn(Request $request)
     {
         // return $request->all();
+        $this->update_status($request->all());
         $this->validate($request, [
             'form.status_in' => 'required',
             'form.branch_id' => 'required',
@@ -238,6 +227,19 @@ class ScanController extends Controller
         }
         // $shipStatus->statuses()->saveMany($shipStatus);
         return $shipment;
+    }
+
+    // In Scan
+    public function barcodeIn(Request $request, Shipment $shipment, $bar_code_in = null)
+    {
+        $bar_code = str_replace("-", "", $request->bar_code_in);
+        // dd($barcode);
+        $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->first();
+        if ($barcode) {
+            return $barcode;
+        } else {
+            return response()->json(['errors' => 'errors']);
+        }
     }
 
     public function filterR(Request $request)
