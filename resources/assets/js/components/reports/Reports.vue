@@ -17,7 +17,7 @@
                         <hr>
                         <!-- <form action="userDateExpo" method="post"> -->
                         <label for="">Client</label>
-                        <option value=""></option><select class="custom-select custom-select-md col-md-12 col-md-12" v-model="Client.client_id" style="font-size: 
+                        <option value=""></option><select class="custom-select custom-select-md col-md-12 col-md-12" v-model="Client.client_id" style="font-size:
                         13px;">
                                     <option v-for="customer in Allcustomers" :value="customer.id" :key="customer.id">{{ customer.name }}</option>
                             </select> Between
@@ -310,7 +310,8 @@ export default {
                 'Quantity': 'amount_ordered',
                 'COD Amount': 'cod_amount',
                 'Booking Date': 'booking_date',
-                'Special Instructions': 'speciial_instruction'
+                'Special Instructions': 'speciial_instruction',
+                'Last updated': 'updated_at'
             },
         }
     },

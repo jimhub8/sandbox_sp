@@ -426,8 +426,12 @@ class ShipmentController extends Controller
             // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
             // return $e->getMessage();
             $message = $e->getResponse()->getBody();
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 401) {
+                abort(401);
+            }
             // $arrayName = array('error' => 'Error', 'message' => $message);
-            // dd($message)
+            // dd($message);
             abort(422, $message);
             // return $e->getMessage();
         }
@@ -452,12 +456,12 @@ class ShipmentController extends Controller
         // } catch (\Exception $e) {
         //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
         //     // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
-        //     // return $e->getMessage();
+        //     $code = $e->getResponse()->getStatusCode();
+        //     if ($code == 401) {
+        //         abort(401);
+        //     }
         //     $message = $e->getResponse()->getBody();
-        //     // $arrayName = array('error' => 'Error', 'message' => $message);
-        //     // dd($message)
         //     abort(422, $message);
-        //     // return $e->getMessage();
         // }
         $this->update_status($request->all());
         // return $request->all();

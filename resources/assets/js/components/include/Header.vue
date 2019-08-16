@@ -284,6 +284,9 @@
                 <img src="/storage/logo1.jpg" alt style="width: 60px; height: 60px; border-radius: 25%;">
             </v-toolbar-title>
             <v-spacer></v-spacer>
+
+            <!-- <v-btn color="info"></v-btn> -->
+            <a href="/apilogin" style="margin-right: 10px;border: 1px solid #fff;padding: 5px;color: #000 !important;background: #fff;">api login</a>
             <v-tooltip bottom style="margin-right: 10px;">
                 <v-btn icon class="mx-0" @click="openShipment" slot="activator">
                     <v-icon color="white darken-2" large>add</v-icon>

@@ -259,8 +259,19 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    this.errors = error.response.data.errors
-                    this.loading = false
+                    this.loading = false;
+                    if (error.response.status === 500) {
+                        eventBus.$emit('errorEvent', error.response.statusText)
+                        return
+                    } else if (error.response.status === 401 || error.response.status === 409) {
+                        window.location.href = "/apilogin";
+                        // eventBus.$emit('reloadRequest', error.response.statusText)
+                    }
+                    else if (error.response.status === 422) {
+                        eventBus.$emit('errorEvent', error.response.data.message)
+                        return
+                    }
+                    this.errors = error.response.data.errors;
                 })
         },
         // },
@@ -281,8 +292,19 @@ export default {
                     }
                 })
                 .catch((error) => {
-                    this.errors = error.response.data.errors
-                    this.loading_in = false
+                    this.loading = false;
+                    if (error.response.status === 500) {
+                        eventBus.$emit('errorEvent', error.response.statusText)
+                        return
+                    } else if (error.response.status === 401 || error.response.status === 409) {
+                        window.location.href = "/apilogin";
+                        // eventBus.$emit('reloadRequest', error.response.statusText)
+                    }
+                    else if (error.response.status === 422) {
+                        eventBus.$emit('errorEvent', error.response.data.message)
+                        return
+                    }
+                    this.errors = error.response.data.errors;
                 })
         },
 
@@ -307,8 +329,19 @@ export default {
                     // this.form_out.location_out = ''
                 })
                 .catch((error) => {
-                    this.loading = false
-                    this.errors = error.response.data.errors
+                    this.loading = false;
+                    if (error.response.status === 500) {
+                        eventBus.$emit('errorEvent', error.response.statusText)
+                        return
+                    } else if (error.response.status === 401 || error.response.status === 409) {
+                        window.location.href = "/apilogin";
+                        // eventBus.$emit('reloadRequest', error.response.statusText)
+                    }
+                    else if (error.response.status === 422) {
+                        eventBus.$emit('errorEvent', error.response.data.message)
+                        return
+                    }
+                    this.errors = error.response.data.errors;
                 })
         },
         Inscansub() {
@@ -332,8 +365,19 @@ export default {
                     // this.form_in.location_in = ''
                 })
                 .catch((error) => {
-                    this.loading_in = false
-                    this.errors = error.response.data.errors
+                    this.loading = false;
+                    if (error.response.status === 500) {
+                        eventBus.$emit('errorEvent', error.response.statusText)
+                        return
+                    } else if (error.response.status === 401 || error.response.status === 409) {
+                        window.location.href = "/apilogin";
+                        // eventBus.$emit('reloadRequest', error.response.statusText)
+                    }
+                    else if (error.response.status === 422) {
+                        eventBus.$emit('errorEvent', error.response.data.message)
+                        return
+                    }
+                    this.errors = error.response.data.errors;
                 })
         },
     },

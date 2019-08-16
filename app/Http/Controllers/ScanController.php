@@ -33,10 +33,10 @@ class ScanController extends Controller
     }
     public function update_status($data)
     {
-
+        $url = env('API_URL') . '/api/orderScan';
         try {
             $client = new Client;
-            $request = $client->request('POST', env('API_URL') . '/api/orderScan', [
+            $request = $client->request('POST', $url, [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
@@ -51,9 +51,14 @@ class ScanController extends Controller
             \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
             $message = $e->getResponse()->getBody();
             // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 401) {
+                abort(401);
+            }
             abort(422, $message);
         }
     }
+
     public function statusUpdate(Request $request)
     {
         // return $request->all();
@@ -101,6 +106,10 @@ class ScanController extends Controller
                 $shipment->save();
             } catch (\Exception $e) {
                 \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+                $code = $e->getResponse()->getStatusCode();
+                if ($code == 401) {
+                    abort(401);
+                }
                 return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
             }
         }

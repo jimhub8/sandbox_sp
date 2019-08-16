@@ -156,6 +156,7 @@ export default {
                     console.log(response.data);
                     this.loading = false;
                     this.close();
+                    eventBus.$emit('alertRequest', 'updated');
 
                     if (response.data.message) {
                         eventBus.$emit('errorEvent', response.data.message)
@@ -170,13 +171,14 @@ export default {
                     //   );
                 })
                 .catch(error => {
-                    console.log(error.response.data.message);
+                    // console.log(error.response.data.message);
                     this.loading = false;
                     if (error.response.status === 500) {
                         eventBus.$emit('errorEvent', error.response.statusText)
                         return
                     } else if (error.response.status === 401 || error.response.status === 409) {
-                        eventBus.$emit('reloadRequest', error.response.statusText)
+                        window.location.href = "/apilogin";
+                        // eventBus.$emit('reloadRequest', error.response.statusText)
                     }
                     else if (error.response.status === 422) {
                         eventBus.$emit('errorEvent', error.response.data.message)
