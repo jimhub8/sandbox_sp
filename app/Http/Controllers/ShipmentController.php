@@ -903,4 +903,19 @@ class ShipmentController extends Controller
         });
         return $statuses;
     }
+    public function register()
+    {
+        $client = new GuzzleHttp\Client;
+        $response = $client->request('POST', env('SERVER_URL') . '/api/register', [
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+            'form_params' => [
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'api_token' => Str::random(60),
+            ],
+        ]);
+    }
 }
