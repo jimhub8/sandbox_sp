@@ -310,7 +310,7 @@ export default {
 
         OutscanSub() {
             this.loading = true
-            axios.post('/statusUpdate', {
+            axios.post('/statusUpdateIn', {
                     scan: this.$data.AllScanned,
                     form: this.$data.form_out
                 })
@@ -365,7 +365,7 @@ export default {
                     // this.form_in.location_in = ''
                 })
                 .catch((error) => {
-                    this.loading = false;
+                    this.loading_in = false;
                     if (error.response.status === 500) {
                         eventBus.$emit('errorEvent', error.response.statusText)
                         return

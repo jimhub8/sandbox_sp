@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use Notification;
 use GuzzleHttp\Client;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Response;
 
 // use App\Observers\BaseObserver;
@@ -439,32 +440,32 @@ class ShipmentController extends Controller
 
     public function updateStatus(Request $request, Shipment $shipment, $id)
     {
-        try {
-            $client = new Client;
-            $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
-                'headers' => [
-                    'Content-type' => 'application/json',
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
-                ],
-                'body' => json_encode([
-                    'data' => $request->all(),
-                ])
-            ]);
-            // $response = $http->get(env('API_URL').'/api/getUsers');
-            return $response = $request->getBody()->getContents();
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
-            // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
-            $code = $e->getResponse()->getStatusCode();
-            if ($code == 401) {
-                abort(401);
-            }
-            $message = $e->getResponse()->getBody();
-            abort(422, $message);
-        }
-        $this->update_status($request->all());
+        // try {
+        //     $client = new Client;
+        //     $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
+        //         'headers' => [
+        //             'Content-type' => 'application/json',
+        //             'Accept' => 'application/json',
+        //             'Authorization' => 'Bearer ' . $this->token_f(),
+        //         ],
+        //         'body' => json_encode([
+        //             'data' => $request->all(),
+        //         ])
+        //     ]);
+        //     // $response = $http->get(env('API_URL').'/api/getUsers');
+        //     return $response = $request->getBody()->getContents();
+        // } catch (\Exception $e) {
+        //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+        //     // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        //     $code = $e->getResponse()->getStatusCode();
+        //     if ($code == 401) {
+        //         abort(401);
+        //     }
+        //     $message = $e->getResponse()->getBody();
+        //     abort(422, $message);
+        // }
         // return $request->all();
+        $this->update_status($request->formobg);
         $no = $request->formobg['client_phone'];
         $no_A = explode(' ', $no);
         $phone_no = $no_A[0];
@@ -546,7 +547,7 @@ class ShipmentController extends Controller
             // );
             $users = Auth::id();
             $ship_model = ScheduleLogs::where('user_id', $users)->whereBetween('created_at', [$today, $tomorrow])->first();
-            dd($ship_model);
+            // dd($ship_model);
             // $logs = new ScheduleLogs;
             if (!empty($ship_model)) {
                 $ship_model = ScheduleLogs::where('user_id', $users)->whereBetween('created_at', [$today, $tomorrow])->increment('count', 1);
@@ -572,10 +573,45 @@ class ShipmentController extends Controller
     {
         // return $request->all();
         $id = [];
+        $status = $request->form['status'];
         foreach ($request->selected as $selectedItems) {
+            // return $selectedItems;
+            $array_item = Arr::prepend($selectedItems, $status, 'status');
+            // return $array_item;
+
+            // try {
+            //     $client = new Client;
+            //     $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
+            //         'headers' => [
+            //             'Content-type' => 'application/json',
+            //             'Accept' => 'application/json',
+            //             'Authorization' => 'Bearer ' . $this->token_f(),
+            //         ],
+            //         'body' => json_encode([
+            //             'data' => $array_item,
+            //         ])
+            //     ]);
+            //     // $response = $http->get(env('API_URL').'/api/getUsers');
+            //     return $response = $request->getBody()->getContents();
+            // } catch (\Exception $e) {
+            //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+            //     // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+            //     // return $e->getMessage();
+            //     $message = $e->getResponse()->getBody();
+            //     $code = $e->getResponse()->getStatusCode();
+            //     if ($code == 401) {
+            //         abort(401);
+            //     }
+            //     // $arrayName = array('error' => 'Error', 'message' => $message);
+            //     // dd($message);
+            //     abort(422, $message);
+            //     // return $e->getMessage();
+            // }
+            $this->update_status($array_item);
             $id[] = $selectedItems['id'];
         }
         $status = $request->form['status'];
+        // dd($status);
         $derivery_time = $request->form['derivery_time'];
         $remark = $request->form['remark'];
         // return 'iio';

@@ -128,48 +128,35 @@ class ScanController extends Controller
             $statusUpdate->save();
             // return $statusUpdate;
         }
-
-        // $sms = new Sms;
-        // $rider = User::find($rider_out);
-        // // dd($rider['phone']);
-        // $rider_no = $rider['phone'];
-        // $rider = $rider['name'];
-        // $today = Carbon::now();
-        // // $delivery_d = $today->englishMonth();
-        // // dd($delivery_d);
-        // if ($status == 'Dispatched') {
-        //     // foreach ($id as $phone) {
-        //     foreach ($shipStatus as $phone) {
-        //         $no = $phone->client_phone;
-        //         $no_A = explode(' ', $no);
-        //         $phone_no = $no_A[0];
-        //         $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your parcel (waybill number: ' . $phone->bar_code . ') has been dispatched. Expected time of arrival 10am-4pm ' . $today . '. If you are not at the address given at the time of order i.e (' . $phone->client_address . '), please call or text 0799869844/0799870144, Our rider ' . $rider . ' phone number ' . $rider_no . ' will do the delivery');
-        //     }
-        // }
-
-        // return $shipment;
-
     }
-
 
     public function statusUpdateIn(Request $request)
     {
         // return $request->all();
+        $status = (array_key_exists('status_in', $request->form)) ? $request->form['status_in'] : $request->form['status_out'];
+
+        // return $status;
+        if (array_key_exists('rider_out', $request->form)) {
+        $rider_out = $request->form['rider_out'];
+        }
         $this->update_status($request->all());
-        $this->validate($request, [
-            'form.status_in' => 'required',
-            'form.branch_id' => 'required',
-        ]);
+        // $this->validate($request, [
+        //     'form.status_in' => 'required',
+        //     'form.branch_id' => 'required',
+        // ]);
+        $assign_date = date("Y-m-d");
         $id = [];
         foreach ($request->scan as $selectedItems) {
             $id[] = $selectedItems['id'];
         }
         // return $id;
-        $status = $request->form['status_in'];
+        // $status = $request->form['status_in'];
         // $derivery_time = $request->derivery_time;
-        $remark = $request->form['remarks_in'];
-        $branch_id = $request->form['branch_id'];
-        $location = $request->form['location_in'];
+        $remark = (array_key_exists('remarks_in', $request->form)) ? $request->form['remarks_in'] :  $request->form['remarks_out'];
+        if (array_key_exists('branch_id', $request->form)) {
+            $branch_id = $request->form['branch_id'];
+        }
+        // $location = $request->form['location_in'];
         $dispatch_date = null;
         if ($status == 'Dispatched') {
             $dispatch_date = now();
@@ -181,9 +168,15 @@ class ScanController extends Controller
 
         foreach ($id as $value) {
             $shipment = Shipment::find($value);
-            $shipment->status = $status;
+                $shipment->assign_date = $assign_date;
+                $shipment->status = $status;
             $shipment->dispatch_date = $dispatch_date;
-            $shipment->branch_id = $branch_id;
+            if (array_key_exists('branch_id', $request->form)) {
+                $shipment->branch_id = $branch_id;
+            }
+            if (array_key_exists('rider_out', $request->form)) {
+                $shipment->driver = $rider_out;
+            }
             $shipment->save();
             // ->update(['status' => $status, 'dispatch_date' => $dispatch_date, 'branch_id' => $branch_id]);
 
@@ -194,7 +187,7 @@ class ScanController extends Controller
             $statusUpdate = new ShipmentStatus;
             $statusUpdate->remark = $remark;
             $statusUpdate->status = $status;
-            $statusUpdate->location = $location;
+            // $statusUpdate->location = $location;
             // $statusUpdate->derivery_time = $request->derivery_time;
             $statusUpdate->user_id = Auth::id();
             $statusUpdate->branch_id = Auth::user()->branch_id;
@@ -204,36 +197,36 @@ class ScanController extends Controller
             // return $statusUpdate;
         }
 
-        $sms = new Sms;
-        if ($status == 'Not picking') {
-            foreach ($shipStatus as $phone) {
-                $no = $phone->client_phone;
-                $no_A = explode(' ', $no);
-                $phone_no = $no_A[0];
-                $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
-            }
-        } elseif ($status == 'Not available') {
-            foreach ($shipStatus as $phone) {
-                $no = $phone->client_phone;
-                $no_A = explode(' ', $no);
-                $phone_no = $no_A[0];
-                $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
-            }
-        } elseif ($status == 'Delivered') {
-            foreach ($shipStatus as $phone) {
-                $no = $phone->client_phone;
-                $no_A = explode(' ', $no);
-                $phone_no = $no_A[0];
-                $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been delivered  Incase of queries call +254207608777, +254207608778, +254207608779    ');
-            }
-        } elseif ($status == 'Dispatched') {
-            foreach ($shipStatus as $phone) {
-                $no = $phone->client_phone;
-                $no_A = explode(' ', $no);
-                $phone_no = $no_A[0];
-                $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been dispatched to ' . $phone->client_city . '  Incase of queries call +254207608777, +254207608778, +254207608779    ');
-            }
-        }
+        // $sms = new Sms;
+        // if ($status == 'Not picking') {
+        //     foreach ($shipStatus as $phone) {
+        //         $no = $phone->client_phone;
+        //         $no_A = explode(' ', $no);
+        //         $phone_no = $no_A[0];
+        //         $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
+        //     }
+        // } elseif ($status == 'Not available') {
+        //     foreach ($shipStatus as $phone) {
+        //         $no = $phone->client_phone;
+        //         $no_A = explode(' ', $no);
+        //         $phone_no = $no_A[0];
+        //         $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
+        //     }
+        // } elseif ($status == 'Delivered') {
+        //     foreach ($shipStatus as $phone) {
+        //         $no = $phone->client_phone;
+        //         $no_A = explode(' ', $no);
+        //         $phone_no = $no_A[0];
+        //         $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been delivered  Incase of queries call +254207608777, +254207608778, +254207608779    ');
+        //     }
+        // } elseif ($status == 'Dispatched') {
+        //     foreach ($shipStatus as $phone) {
+        //         $no = $phone->client_phone;
+        //         $no_A = explode(' ', $no);
+        //         $phone_no = $no_A[0];
+        //         $sms->send_sms($phone_no, 'Dear ' . $phone->client_name . ', Your shipment (waybill number: ' . $phone->bar_code . ') has been dispatched to ' . $phone->client_city . '  Incase of queries call +254207608777, +254207608778, +254207608779    ');
+        //     }
+        // }
         // $shipStatus->statuses()->saveMany($shipStatus);
         return $shipment;
     }
@@ -254,6 +247,7 @@ class ScanController extends Controller
     public function filterR(Request $request)
     {
         $driver = $request->selectRider['id'];
+        // return $driver;
         $start_date = $request->form['start_date'];
         $end_date = $request->form['end_date'];
         return Shipment::where('driver', $driver)->where('status', '!=', 'Returned')->whereBetween('assign_date', [$start_date, $end_date])->take(500)->latest()->get();
