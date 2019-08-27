@@ -449,7 +449,7 @@ class ShipmentController extends Controller
         //             'Authorization' => 'Bearer ' . $this->token_f(),
         //         ],
         //         'body' => json_encode([
-        //             'data' => $request->all(),
+        //             'data' => $request->formobg,
         //         ])
         //     ]);
         //     // $response = $http->get(env('API_URL').'/api/getUsers');

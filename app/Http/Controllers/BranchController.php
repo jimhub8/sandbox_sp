@@ -15,7 +15,7 @@ class BranchController extends Controller
         $user = auth('api')->user();
         return Branch::where('country_id', $user->country_id)->orderBy('branch_name', 'asc')->get();
     }
-    
+
     public function show($id)
     {
         return Branch::find($id);
@@ -90,7 +90,7 @@ class BranchController extends Controller
 	 */
 	public function getBranch()
 	{
-		return Branch::where('country_id', Auth::id())->get();
+		return Branch::where('country_id', Auth::user()->country_id)->get();
 	}
 
 	public function getBranchShip(Request $request, $id)
@@ -190,7 +190,7 @@ class BranchController extends Controller
 				if ($request->selectStatus['name'] == 'All') {
 					if ($request->selectAss['Assigned'] == 'All') {
 						return Shipment::whereNotNull('branch_id')->where('branch_id', $request->select['id'])->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->take(500)->latest()->get();
-					// return Shipment::whereNotNull('branch_id')->latest()->take(500)->get();	
+					// return Shipment::whereNotNull('branch_id')->latest()->take(500)->get();
 					} else {
 						if ($request->selectAss['Assigned'] == 'Assigned') {
 							return Shipment::whereNotNull('branch_id')->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('branch_id', $request->select['id'])->take(500)->latest()->get();

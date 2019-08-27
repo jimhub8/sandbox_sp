@@ -134,7 +134,30 @@ class ScanController extends Controller
     {
         // return $request->all();
         $status = (array_key_exists('status_in', $request->form)) ? $request->form['status_in'] : $request->form['status_out'];
-
+        $url = env('API_URL') . '/api/orderScan';
+        // try {
+        //     $client = new Client;
+        //     $request = $client->request('POST', $url, [
+        //         'headers' => [
+        //             'Content-type' => 'application/json',
+        //             'Accept' => 'application/json',
+        //             'Authorization' => 'Bearer ' . $this->token_f(),
+        //         ],
+        //         'body' => json_encode([
+        //             'data' => $request->all(),
+        //         ])
+        //     ]);
+        //     return $response = $request->getBody()->getContents();
+        // } catch (\Exception $e) {
+        //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+        //     $message = $e->getResponse()->getBody();
+        //     // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        //     $code = $e->getResponse()->getStatusCode();
+        //     if ($code == 401) {
+        //         abort(401);
+        //     }
+        //     abort(422, $message);
+        // }
         // return $status;
         if (array_key_exists('rider_out', $request->form)) {
         $rider_out = $request->form['rider_out'];
