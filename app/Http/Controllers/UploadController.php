@@ -16,16 +16,8 @@ class UploadController extends Controller
     {
         return session()->get('token.access_token');
     }
-    public function importShipments(Request $request)
+    public function update_status($data)
     {
-        // dd($request->all());
-        $orders = Excel::toArray(new ShipmentImport, request()->file('shipment'));
-        $client_det = User::find($request->client);
-        // dd($client);
-        // $orders_col = Excel::toCollection(new OrderImport, request()->file('orders'));
-        $arr = $orders[0];
-        $data = array('data' => $arr, 'client' => $client_det);
-        // dd($data);
         try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/importOrder', [
@@ -39,13 +31,44 @@ class UploadController extends Controller
                 ])
             ]);
             // $response = $http->get(env('API_URL').'/api/getUsers');
-            $response = $request->getBody()->getContents();
+            return $response = $request->getBody()->getContents();
             // dd($response);
         } catch (\Exception $e) {
 
             \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
             return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
         }
+    }
+    public function importShipments(Request $request)
+    {
+        // dd($request->all());
+        $orders = Excel::toArray(new ShipmentImport, request()->file('shipment'));
+        $client_det = User::find($request->client);
+        // dd($client);
+        // $orders_col = Excel::toCollection(new OrderImport, request()->file('orders'));
+        $arr = $orders[0];
+        $data = array('data' => $arr, 'client' => $client_det);
+        // dd($data);
+        // try {
+        //     $client = new Client();
+        //     $request = $client->request('POST', env('API_URL') . '/api/importOrder', [
+        //         'headers' => [
+        //             'Content-type' => 'application/json',
+        //             'Accept' => 'application/json',
+        //             'Authorization' => 'Bearer ' . $this->token_f(),
+        //         ],
+        //         'body' => json_encode([
+        //             'data' => $data,
+        //         ])
+        //     ]);
+        //     // $response = $http->get(env('API_URL').'/api/getUsers');
+        //     return $response = $request->getBody()->getContents();
+        //     // dd($response);
+        // } catch (\Exception $e) {
+
+        //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+        //     return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        // }
 
 
         foreach ($arr as $key => $order) {
@@ -85,7 +108,7 @@ class UploadController extends Controller
             $order_data->sender_city = $client_det->city;
             $order_data->client_id = $client_det->client;
             // $order_data->country = $order->country;
-            $order_data->country_id = $client_det->country_id;
+            $order_data->country_id = Auth::user()->country_id;
             $order_data->save();
         }
         return redirect('/#/shipments');

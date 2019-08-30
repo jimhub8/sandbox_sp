@@ -23,21 +23,21 @@ use Illuminate\Http\Request;
 Route::get('/apilogin', function () {
     $query = http_build_query([
         'client_id' => env('MFT_CLIENT_ID'), // Replace with Client ID
-        'redirect_uri' => 'http://127.0.0.1:8001/callback',
+        'redirect_uri' => env('API_REDIRECT_URL'),
         'response_type' => 'code',
         'scope' => ''
     ]);
 
-    return redirect('http://127.0.0.1:8000/oauth/authorize?'.$query);
+    return redirect(env('API_URL') . '/oauth/authorize?'.$query);
 });
 
 Route::get('/callback', function (Request $request) {
-    $response = (new GuzzleHttp\Client)->post('http://127.0.0.1:8000/oauth/token', [
+    $response = (new GuzzleHttp\Client)->post(env('API_URL') . '/oauth/token', [
         'form_params' => [
             'grant_type' => 'authorization_code',
             'client_id' => env('MFT_CLIENT_ID'), // Replace with Client ID
             'client_secret' => env('MFT_CLIENT_SECRET'), // Replace with client secret
-            'redirect_uri' => 'http://127.0.0.1:8001/callback',
+            'redirect_uri' => env('API_REDIRECT_URL'),
             'code' => $request->code,
         ]
     ]);
