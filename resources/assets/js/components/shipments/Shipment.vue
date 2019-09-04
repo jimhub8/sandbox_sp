@@ -62,16 +62,23 @@
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
-                            <v-btn color="primary" flat @click="openShipment" v-if="user.can['create shipments']">Add Shipment</v-btn>
-                            <v-btn color="primary" flat @click="ShipmentCsv" v-if="user.can['upload excel']">Upload Excel</v-btn>
-                            <v-tooltip right>
-                                <v-btn icon slot="activator" class="mx-0" @click="sortItem">
-                                    <v-icon color="blue darken-2" small>refresh</v-icon>
-                                </v-btn>
-                                <span>Refresh</span>
-                            </v-tooltip>
-                            <v-spacer></v-spacer>
-                            <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+                        <v-btn color="primary" flat @click="openShipment" v-if="user.can['create shipments']">Add Shipment</v-btn>
+                        <v-btn color="primary" flat @click="ShipmentCsv" v-if="user.can['upload excel']">Upload Excel</v-btn>
+                        <v-tooltip right>
+                            <v-btn icon slot="activator" class="mx-0" @click="sortItem">
+                                <v-icon color="blue darken-2" small>refresh</v-icon>
+                            </v-btn>
+                            <span>Refresh</span>
+                        </v-tooltip>
+
+                        <!-- <v-tooltip right>
+                            <v-btn icon slot="activator" class="mx-0" @click="updateCancelled">
+                                <v-icon color="red darken-2" small>refresh</v-icon>
+                            </v-btn>
+                            <span>Refresh</span>
+                        </v-tooltip> -->
+                        <v-spacer></v-spacer>
+                        <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
                     <v-data-table :headers="headers" :items="AllShipments" :search="search" counter select-all class="elevation-1" v-model="selected" :loading="loading">
                         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
@@ -554,6 +561,16 @@ export default {
                 })
                 .catch(error => (this.errors = error.response.data.errors));
         },
+        updateCancelled() {
+            axios
+                .get("/updateCancelled")
+                .then(response => {
+                    console.log(response.data);
+                })
+                .catch(error => {
+                    this.errors = error.response.data.errors;
+                });
+        },
         UpdateShipmentStatus(item) {
             if (this.selected.length < 1) {
                 this.message = "please select a shipment";
@@ -814,16 +831,7 @@ export default {
             .catch(error => {
                 this.errors = error.response.data.errors;
             });
-
-        axios
-            .get("/updateCancelled")
-            .then(response => {
-                console.log(response.data);
-            })
-            .catch(error => {
-                this.errors = error.response.data.errors;
-            });
-
+        this.updateCancelled();
         this.sortItem();
     },
     // computed: {

@@ -42,52 +42,43 @@ class ShipmentController extends Controller
     {
         // getting the dispatcher instance (needed to enable again the event observer later on)
         $dispatcher = Shipment::getEventDispatcher();
-
         // disabling the events
         Shipment::unsetEventDispatcher();
-
-        // perform the operation you want
-
-        // enabling the event dispatcher
         $today = Carbon::today();
         // $tomorrow = Carbon::tomorrow();
         $yest = Carbon::now()->subDays(1);
         $prev_month = $today->subMonth();
-        $shipments = Shipment::select('id')->setEagerLoads([])
-            // ->where('status', '!=', 'Scheduled')
-            ->Where('status', '!=', 'Delivered')
-            ->Where('status', '!=', 'Warehouse')
-            // ->Where('status', '!=', 'Dispatched')
-            ->Where('status', '!=', 'Cancelled')
+        $refused = Shipment::select('id')->setEagerLoads([])
+            ->where(function ($query) {
+                $query->where('status', 'Returned');
+                $query->orWhere('status', 'Scheduled');
+                $query->orWhere('status', 'Dispatched');
+            })
+            ->orderBy('created_at')
+            ->whereDate('derivery_date', '<=', $yest)
+            ->whereDate('created_at', '<=', $prev_month)
+            ->get('id')->toArray();
+
+        $cancelled = Shipment::select('id')->setEagerLoads([])
+            ->where('status', '!=', 'Returned')
+            ->where('status', '!=', 'Scheduled')
+            ->where('status', '!=', 'Dispatched')
+            ->where('status', '!=', 'Delivered')
+            ->where('status', '!=', 'Warehouse')
+            ->where('status', '!=', 'Cancelled')
             ->orderBy('created_at')
             ->whereDate('derivery_date', '<=', $yest)
             ->whereDate('created_at', '<=', $prev_month)
             ->get('id')->toArray();
 
 
-        $id = array_flatten($shipments);
-        // $ships = [];
-        // return $shipments;
-        // foreach ($shipments as $shipment) {
-        //     // dd($shipment->created_at.'::'.$shipment->created_at->addMonth(1));
-        //     $ships[] = Shipment::setEagerLoads([])->select('id')
-        //             // ->where('status', '!=', 'Scheduled')
-        //         ->Where('status', '!=', 'Delivered')
-        //         // ->Where('status', '!=', 'Dispatched')
-        //         // ->where('id', $shipment->id)
-        //         ->Where('status', '!=', 'Cancelled')
-        //         ->whereDate('created_at', '<=', $prev_month)
-        //         ->take(100)->get();
-        // }
-        // return $ships;
-        // $id = [];
-        // $arr_R = array_flatten($ships);
-        // foreach ($arr_R as $ship) {
-        //     $id[] = $ship->id;
-        // }
-        // Shipment::setEventDispatcher($dispatcher);
-        // return $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->get();
-        return Shipment::whereIn('id', $id)->update(['status' => 'Cancelled']);
+        $id_ref = array_flatten($refused);
+        $id_can = array_flatten($cancelled);
+        // enabling the event dispatcher
+        Shipment::whereIn('id', $id_ref)->update(['status' => 'Refused']);
+        Shipment::whereIn('id', $id_can)->update(['status' => 'Cancelled']);
+        Shipment::setEventDispatcher($dispatcher);
+        return;
     }
 
 
