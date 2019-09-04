@@ -50,6 +50,7 @@ class ShipmentController extends Controller
 
         // enabling the event dispatcher
         $today = Carbon::today();
+        // $tomorrow = Carbon::tomorrow();
         $yest = Carbon::now()->subDays(1);
         $prev_month = $today->subMonth();
         $shipments = Shipment::select('id')->setEagerLoads([])
@@ -59,7 +60,7 @@ class ShipmentController extends Controller
             // ->Where('status', '!=', 'Dispatched')
             ->Where('status', '!=', 'Cancelled')
             ->orderBy('created_at')
-            ->whereDate('derivery_date', '<=', now())
+            ->whereDate('derivery_date', '<=', $yest)
             ->whereDate('created_at', '<=', $prev_month)
             ->get('id')->toArray();
 

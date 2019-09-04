@@ -14,7 +14,7 @@ class FilterController extends Controller
         // return $request->all();
         // dd($start = $request->no_btw['start'] - 1);
         $start = $request->no_btw['start'] - 1;
-        if (Auth::user()->hasRole('Admin')) {
+        if (Auth::user()->hasRole('Admin') || Auth::user()->hasPermissionTo('filter by country')) {
             if ($request->selectCountry['id'] == 'all') {
                 if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
                     if ($request->select['id'] == 'all') {
@@ -123,6 +123,62 @@ class FilterController extends Controller
                 }
             }
 
+        }  else if (Auth::user()->hasRole('Client')) {
+            // return $request->all();
+            if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
+                if ($request->select['id'] == 'all') {
+                    if ($request->selectStatus['name'] == 'All') {
+                        // return 'st6';
+                        $shipment_filter = Shipment::latest()->skip($start)->where('client_id', Auth::id())->take(500)->get();
+                    } else {
+                        // return 'st5';
+                        $shipment_filter = Shipment::where('status', $request->selectStatus['name'])->where('client_id', Auth::id())->latest()->skip($start)->take(500)->get();
+                    }
+                } else {
+                    if ($request->selectStatus['name'] == 'All') {
+                        // return 'st6';
+                        $shipment_filter = Shipment::latest()->skip($start)->where('branch_id', $request->select['id'])->where('client_id', Auth::id())->where('client_id', Auth::id())->take(500)->get();
+                    } else {
+                        // return 'st5';
+                        $shipment_filter = Shipment::where('status', $request->selectStatus['name'])->where('branch_id', $request->select['id'])->where('client_id', Auth::id())->where('client_id', Auth::id())->latest()->skip($start)->take(500)->get();
+                    }
+                    // return 'st4';
+                    // $shipment_filter = Shipment::where('branch_id', $request->select['id'])->where('client_id', Auth::id())->latest()->skip($start)->take(500)->get();
+                }
+            } else {
+                if ($request->select['id'] == 'all') {
+                    if ($request->selectStatus['name'] == 'All') {
+                        // return 'st1';
+                        $shipment_filter = Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('client_id', Auth::id())->latest()->skip($start)->take(500)->get();
+                    } else {
+                        // return 'st2';
+                        if ($request->selectStatus['name'] == 'Delivered') {
+                            $shipment_filter = Shipment::whereBetween('derivery_date', [$request->form['start_date'], $request->form['end_date']])->where('client_id', Auth::id())->latest()->skip($start)->take(500)->where('status', $request->selectStatus['name'])->get();
+                        } elseif ($request->selectStatus['name'] == 'Dispatched') {
+                            $shipment_filter = Shipment::whereBetween('dispatch_date', [$request->form['start_date'], $request->form['end_date']])->where('client_id', Auth::id())->latest()->skip($start)->take(500)->where('status', $request->selectStatus['name'])->get();
+                        } else {
+                            $shipment_filter = Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('client_id', Auth::id())->latest()->skip($start)->take(500)->where('status', $request->selectStatus['name'])->get();
+                        }
+                        // $shipment_filter = Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('client_id', Auth::id())->latest()->skip($start)->take(500)->where('status', $request->selectStatus['name'])->get();
+                    }
+                } else {
+                    if ($request->selectStatus['name'] == 'All') {
+                        // return 'st1';
+                        $shipment_filter = Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('client_id', Auth::id())->where('branch_id', $request->select['id'])->latest()->skip($start)->take(500)->get();
+                    } else {
+                        // return 'st2';
+
+                        if ($request->selectStatus['name'] == 'Delivered') {
+                            $shipment_filter = Shipment::whereBetween('derivery_date', [$request->form['start_date'], $request->form['end_date']])->where('client_id', Auth::id())->where('branch_id', $request->select['id'])->latest()->skip($start)->take(500)->where('status', $request->selectStatus['name'])->get();
+                        } elseif ($request->selectStatus['name'] == 'Dispatched') {
+                            $shipment_filter = Shipment::whereBetween('dispatch_date', [$request->form['start_date'], $request->form['end_date']])->where('client_id', Auth::id())->where('branch_id', $request->select['id'])->latest()->skip($start)->take(500)->where('status', $request->selectStatus['name'])->get();
+                        } else {
+                            $shipment_filter = Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('client_id', Auth::id())->where('branch_id', $request->select['id'])->latest()->skip($start)->take(500)->where('status', $request->selectStatus['name'])->get();
+                        }
+                        // $shipment_filter = Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']])->where('client_id', Auth::id())->where('branch_id', $request->select['id'])->latest()->skip($start)->take(500)->where('status', $request->selectStatus['name'])->get();
+                    }
+                }
+            }
         } elseif (Auth::user()->hasPermissionTo('Filter Shipments')) {
             // return $request->all();
             if ($request->form['start_date'] == '' || $request->form['end_date'] == '') {
@@ -187,7 +243,7 @@ class FilterController extends Controller
         //             $user = User::find($status->id);
 		// 			$item->user_name = $user->name;
         //             var_dump($user->name);die;
-					
+
         //         }
         //     }
         //     return $item;

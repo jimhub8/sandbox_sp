@@ -16,8 +16,8 @@
 
 <script>
 import Dashboard from "./Dashboard.vue";
-import DrDashboard from "./customers/Dashboard.vue";
-import ClDashboard from "./drivers/Dashboard.vue";
+import ClDashboard from "./customers/Dashboard.vue";
+import DrDashboard from "./drivers/Dashboard.vue";
 export default {
     props: ["user"],
     components: {

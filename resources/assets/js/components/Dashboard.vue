@@ -3,7 +3,7 @@
     <v-container fluid fill-height>
         <v-layout justify-center align-center>
             <v-flex sm12>
-                <div v-for="role in user.roles" :key="role.id" v-if="role.name === 'Admin'" style="width: 100%; margin-top: 70px;">
+                <div v-if="user.can['filter by country']" style="width: 100%; margin-top: 70px;">
                     <v-select :items="AllCount" v-model="select" hint="COUNTRY" label="Filter By Country" single-line item-text="country_name" item-value="id" return-object persistent-hint @change="countryDash()"></v-select>
                 </div>
                 <v-layout wrap>
@@ -347,7 +347,7 @@ export default {
             axios.post('/countPending', this.countryFilter)
                 .then((response) => {
                     this.AllPending = response.data
-                }) 
+                })
                 .catch((error) => {
                     this.errors = error.response.data.errors
                 })

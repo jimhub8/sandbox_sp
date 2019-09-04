@@ -32,7 +32,7 @@
                     </v-layout>
                     <v-card style="background: rgba(5, 117, 230, 0.16);">
                         <v-layout wrap>
-                            <v-flex xs4 sm2 v-for="role in user.roles" :key="role.id" v-if="role.name === 'Admin'">
+                            <v-flex xs4 sm2 v-if="user.can['filter by country']">
                                 <v-select :items="AllCountries" v-model="selectCountry" hint="COUNTRY" label="Filter By country" single-line item-text="country_name" item-value="id" return-object persistent-hint @change="changeCat(selectCountry)"></v-select>
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>

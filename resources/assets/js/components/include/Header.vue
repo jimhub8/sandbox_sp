@@ -281,12 +281,12 @@
         <v-toolbar dark app :color="color" :clipped-left="$vuetify.breakpoint.lgAndUp" fixed>
             <v-toolbar-title style="width: 600px" class="ml-0 pl-3">
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>SpeedBall Courier
-                <img src="/storage/logo1.jpg" alt style="width: 60px; height: 60px; border-radius: 25%;">
+                <img src="/storage/logo.png" alt style="width: 60px; height: 60px; border-radius: 25%;">
             </v-toolbar-title>
             <v-spacer></v-spacer>
 
             <!-- <v-btn color="info"></v-btn> -->
-            <a href="/apilogin" style="margin-right: 10px;border: 1px solid #fff;padding: 5px;color: #000 !important;background: #fff;">api login</a>
+            <a href="/apilogin" style="margin-right: 10px;border: 1px solid #fff;padding: 5px;color: #000 !important;background: #fff;" v-for="role in user.roles" :key="role.id" v-if="role.name != 'Client'">api login</a>
             <v-tooltip bottom style="margin-right: 10px;">
                 <v-btn icon class="mx-0" @click="openShipment" slot="activator">
                     <v-icon color="white darken-2" large>add</v-icon>
