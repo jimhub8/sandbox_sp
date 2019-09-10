@@ -39,6 +39,7 @@ Route::group([
     Route::resource('companies', 'CompanyController');
     Route::resource('email', 'EmailController');
     Route::resource('invoice', 'InvoiceController');
+	Route::resource('status', 'StatusController');
 
 	Route::post('glSearch', 'api\ShipmentController@glSearch')->name('glSearch');
 
