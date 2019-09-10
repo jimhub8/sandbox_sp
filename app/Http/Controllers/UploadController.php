@@ -48,6 +48,7 @@ class UploadController extends Controller
         // $orders_col = Excel::toCollection(new OrderImport, request()->file('orders'));
         $arr = $orders[0];
         $data = array('data' => $arr, 'client' => $client_det);
+        $this->update_status($data);
         // dd($data);
         // try {
         //     $client = new Client();
@@ -69,8 +70,6 @@ class UploadController extends Controller
         //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
         //     return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
         // }
-
-
         foreach ($arr as $key => $order) {
             // dd($order);
             $order_data = new Shipment();
@@ -106,12 +105,11 @@ class UploadController extends Controller
             $order_data->sender_phone = $client_det->phone;
             $order_data->sender_address = $client_det->address;
             $order_data->sender_city = $client_det->city;
-            $order_data->client_id = $client_det->client;
+            $order_data->client_id = $request->client;
             // $order_data->country = $order->country;
             $order_data->country_id = Auth::user()->country_id;
             $order_data->save();
         }
         return redirect('/#/shipments');
-
     }
 }
