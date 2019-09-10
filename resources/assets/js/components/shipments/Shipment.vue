@@ -39,7 +39,7 @@
                                 <v-select :items="AllBranches" v-model="select" hint="BRANCHES" label="Filter By Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select>
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
-                                <v-select :items="AllStatus" v-model="selectItem" hint="STATUS" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
+                                <v-select :items="AllStatus" v-model="selectItem" hint="STATUS" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint @blur="close_select"></v-select>
                             </v-flex>
                             <!-- <v-spacer></v-spacer> -->
                             <v-flex xs12 sm2 offset-sm1>
@@ -412,6 +412,10 @@ export default {
                     this.snackbar = true;
                     // this.markers.push(response.data);
                 });
+        },
+        close_select(payload) {
+            // console.log(payload);
+            // alert('bluer')
         },
         resetForm() {
             this.form = Object.assign({}, this.defaultForm);
