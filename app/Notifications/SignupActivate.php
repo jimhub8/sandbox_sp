@@ -8,9 +8,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\User;
 
-class SignupActivate extends Notification implements ShouldQueue
+class SignupActivate extends Notification 
 {
-    use Queueable;
+    // use Queueable;
     protected $password, $user;
     /**
      * Create a new notification instance.

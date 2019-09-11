@@ -104,6 +104,7 @@ class UserController extends Controller
             'form.email' => 'required|email',
             'form.phone' => 'required|numeric',
         ]);
+        $old_email = $user->email;
         $user = User::find($request->form['id']);
         $user->name = $request->form['name'];
         $user->email = $request->form['email'];
@@ -118,12 +119,19 @@ class UserController extends Controller
             $role_name = $role['name'];
         }
         $user->syncRoles($role_name);
+        $user->old_email = $old_email;
+        if ($request->role_id == 'Client') {
+            $this->clientupdate_api($user);
+        } else {
+            $this->userupdate_api($user);
+        }
         return $user;
     }
 
     public function AuthUserUp(Request $request)
     {
         $user = User::find(Auth::id());
+        $old_email = $user->email;
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
@@ -132,6 +140,8 @@ class UserController extends Controller
         $user->city = $request->city;
         $user->country = $request->country;
         $user->save();
+        $user->old_email = $old_email;
+        $this->userupdate_api($user);
     }
 
     /**
@@ -143,6 +153,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         User::find($user->id)->delete();
+        $this->api_delete($user->email);
     }
 
     public function getLogedinUsers()
@@ -238,6 +249,9 @@ class UserController extends Controller
         $user = User::find(Auth::id());
         $user->password = Hash::make($request->password);
         $user->save();
+        $user->password_hash = Hash::make($request->password);
+        // dd($user);
+        $this->reset_password($user);
         return $user;
     }
 
@@ -340,6 +354,118 @@ class UserController extends Controller
         }
     }
 
+    public function clientupdate_api($user)
+    {
+        try {
+            $client = new Client();
+            $request = $client->request('PATCH', env('API_URL') . '/api/clients', [
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->token_f(),
+                ],
+                'body' => json_encode([
+                    'data' => $user,
+                ])
+            ]);
+            return $response = $request->getBody()->getContents();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+
+            $message = $e->getResponse()->getBody();
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 401) {
+                abort(401);
+            }
+            abort(422, $message);
+            return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        }
+    }
+
+    public function userupdate_api($user)
+    {
+        try {
+            $client = new Client();
+            $request = $client->request('POST', env('API_URL') . '/api/update_user', [
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->token_f(),
+                ],
+                'body' => json_encode([
+                    'data' => $user,
+                ])
+            ]);
+            return $response = $request->getBody()->getContents();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+
+            $message = $e->getResponse()->getBody();
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 401) {
+                abort(401);
+            }
+            abort(422, $message);
+            return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        }
+    }
+
+    public function reset_password($user)
+    {
+        try {
+            $client = new Client();
+            $request = $client->request('POST', env('API_URL') . '/api/user_password', [
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->token_f(),
+                ],
+                'body' => json_encode([
+                    'data' => $user,
+                ])
+            ]);
+            return $response = $request->getBody()->getContents();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+
+            $message = $e->getResponse()->getBody();
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 401) {
+                abort(401);
+            }
+            abort(422, $message);
+            return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        }
+    }
+
+
+    public function api_delete($user)
+    {
+        try {
+            $client = new Client();
+            $request = $client->request("DELETE", env('API_URL') . '/api/user', [
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->token_f(),
+                ],
+                'body' => json_encode([
+                    'data' => $user,
+                ])
+            ]);
+            return $response = $request->getBody()->getContents();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+
+            $message = $e->getResponse()->getBody();
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 401) {
+                abort(401);
+            }
+            abort(422, $message);
+            return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        }
+    }
 
     public function token_f()
     {
