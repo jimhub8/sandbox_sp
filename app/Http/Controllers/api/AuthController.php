@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers;
+namespace App\Http\api\Controllers;
 
 use App\Notifications\SignupActivate;
 use App\User;

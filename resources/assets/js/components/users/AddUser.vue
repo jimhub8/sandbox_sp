@@ -38,22 +38,22 @@
                                     <div class="form-group col-md-6">
                                         <label class="col-md-6 col-form-label text-md-right" for="">Role</label>
                                         <select class="custom-select custom-select-md col-md-12" v-model="form.role_id">
-                                        <option v-for="roles in AllRoles" :key="roles.id" :value="roles.name">{{ roles.name }}</option>
-                                    </select>
+                                            <option v-for="roles in AllRoles" :key="roles.id" :value="roles.name">{{ roles.name }}</option>
+                                        </select>
                                         <small class="has-text-danger" v-if="errors.role_id">{{ errors.role_id[0] }}</small>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="col-md-6 col-form-label text-md-right" for="">Branch</label>
                                         <select class="custom-select custom-select-md col-md-12" v-model="form.branch_id">
-                                        <option v-for="branches in AllBranches" :key="branches.id" :value="branches.id">{{ branches.branch_name }}</option>
-                                    </select>
+                                            <option v-for="branches in AllBranches" :key="branches.id" :value="branches.id">{{ branches.branch_name }}</option>
+                                        </select>
                                         <small class="has-text-danger" v-if="errors.branch_id">{{ errors.branch_id[0] }}</small>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="col-md-6 col-form-label text-md-right" for="">Country</label>
                                         <select class="custom-select custom-select-md col-md-12" v-model="form.countryList">
-                                        <option v-for="country in countryList" :key="country.id" :value="country.id">{{ country.country_name }}</option>
-                                    </select>
+                                            <option v-for="country in countryList" :key="country.id" :value="country.id">{{ country.country_name }}</option>
+                                        </select>
                                         <small class="has-text-danger" v-if="errors.countryList">{{ errors.countryList[0] }}</small>
                                     </div>
                                 </v-layout>
@@ -131,7 +131,19 @@ export default {
                     this.$emit('alertRequest');
                 })
                 .catch((error) => {
+                        this.loading = false
                     // alert('error2')
+                    if (error.response.status === 500) {
+                        eventBus.$emit('errorEvent', error.response.statusText)
+                        this.loading = false
+                        return
+                    } else if (error.response.status === 401 || error.response.status === 409) {
+                        this.loading = false
+                        eventBus.$emit('reloadRequest', error.response.statusText)
+                    } else if (error.response.status === 422) {
+                        this.loading = false
+                        eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                    }
                     this.loading = false
                     console.log(error)
                     this.errors = error.response.data.errors

@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\DB;
 use App\Notifications\ShipmentNoty;
 use Notification;
 
-class ShipmentController extends Controller
+class ShipmentController1 extends Controller
 {
-	
+
 	/**
 	 * Store a newly created resource in storage.
 	 *
@@ -29,10 +29,10 @@ class ShipmentController extends Controller
 
 	public function store(Request $request)
 	{
-		
+
 		$api_user = new ApiUser();
 		$user_data = $api_user->login($request);
-		
+
 		if (empty($user_data) || isset($user_data['error'])) {
 			return response()->json(['error'=>'Unauthorised User','status' => '401'], 401);
 		}
@@ -101,7 +101,7 @@ class ShipmentController extends Controller
 			$shipment->sender_address = '636400100';
 			$shipment->sender_city = 'Nairobi';
 		}
-		
+
 		$shipment->user_id = $user_id;
 		$shipment->shipment_id = random_int(1000000, 9999999);
 
@@ -110,7 +110,7 @@ class ShipmentController extends Controller
 			$shipment->products()->saveMany($products);
 		}
 		// Notification::send($users, new ShipmentNoty($shipment));
-		return response()->json(['success' => $shipment, 'status' => '200'], '200'); 
+		return response()->json(['success' => $shipment, 'status' => '200'], '200');
 		die();
 	}
 
@@ -129,7 +129,7 @@ class ShipmentController extends Controller
 		$users = $userArr;
 		return $admin = User::whereIn('id', $userArr)->get();
 	}
-	
+
 	public function delete(Request $request) {
 		$api_user = new ApiUser();
 		$user_data = $api_user->login($request);
@@ -141,12 +141,12 @@ class ShipmentController extends Controller
 		if (empty($user_data['id']) || empty($request->get('awb_no')) ) {
 			return response()->json(['error'=>'Required Parameter Missing','status' => '400'], 400);
 		}
-		
+
 		$data = Shipment::where(['user_id' => $user_data['id'], 'airway_bill_no' => $request->get('awb_no')])->select()->get()->toArray();
 		if (empty($data)) {
 			return response()->json(['error'=>'Awb Number Does not exsist','status' => '200'], 200);
 		}
-		
+
 		Shipment::where(['user_id' => $user_data['id'], 'airway_bill_no' => $request->get('awb_no')])->delete();
 
 		return response()->json(['success'=> 'Tracking number sucessfully deleted','status' => '200'], 200);
@@ -163,13 +163,13 @@ class ShipmentController extends Controller
 		if (empty($user_data['id']) || empty($request->get('awb_no')) ) {
 			return response()->json(['error'=>'Required Parameter Missing', 'status' => '400'], 400);
 		}
-		
+
 		$data = Shipment::where(['user_id' => $user_data['id'], 'airway_bill_no' => $request->get('awb_no')])->select()->get()->first();
 		if (empty($data)) {
 			return response()->json(['error'=>'Awb Number Does not exsist', 'status' => '200'], 200);
 		}
-		
-		$status = !empty($data['status']) ? $data['status'] : 'No Status Found'; 
+
+		$status = !empty($data['status']) ? $data['status'] : 'No Status Found';
 		return response()->json(['success'=> $status, 'status' => '200'], 200);
 	}
 
@@ -184,16 +184,16 @@ class ShipmentController extends Controller
 		if (empty($request->get('pincode')) ) {
 			return response()->json(['error'=>'Required Parameter Missing', 'status' => '400'], 400);
 		}
-		
+
 
 		$pincode = Pincode::where(['pincode' => $request->get('pincode')])->select('cod', 'prepaid')->get()->first();
 
 		if (empty($pincode)) {
-			return response()->json(['error'=> 'Pincode is not Available', 'status' => '200'], 200);	
+			return response()->json(['error'=> 'Pincode is not Available', 'status' => '200'], 200);
 		}
 
 		$pincode_data = array();
-		$pincode_data['cod'] 	 = !empty($pincode['cod']) ? $pincode['cod'] : 0;  
+		$pincode_data['cod'] 	 = !empty($pincode['cod']) ? $pincode['cod'] : 0;
 		$pincode_data['prepaid'] = !empty($pincode['prepaid']) ? $pincode['prepaid'] : 0;
 
 		return response()->json(['success'=> $pincode_data, 'status' => '200'], 200);
@@ -217,12 +217,12 @@ class ShipmentController extends Controller
 
 			if (empty($value['awb_no']) || empty($value['pickup_at'])) {
 				continue;
-			}	
+			}
 
 			$response[$key]['awb_no'] = $value['awb_no'];
 
 			$data = Shipment::where(['user_id' => $user_data['id'], 'airway_bill_no' => $value['awb_no']])->select()->get()->first();
-			
+
 			if (empty($data)) {
 				continue;
 			}elseif(!empty($data['pickup_id'])) {
@@ -233,7 +233,7 @@ class ShipmentController extends Controller
 			$pickup_time = strtotime($value['pickup_at']);
 
 			$pickup_id = Shipment::max('pickup_id');
-			$pickup_id = !empty($pickup_id) ? $pickup_id + 1 : 1; 
+			$pickup_id = !empty($pickup_id) ? $pickup_id + 1 : 1;
 
 			Shipment::where(['user_id' => $user_data['id'], 'airway_bill_no' => $value['awb_no']])->update(['pickup_id' => $pickup_id, 'pickup_at' => $pickup_time]);
 

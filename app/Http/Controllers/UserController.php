@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Branch;
 use App\Country;
+use GuzzleHttp\Client;
 
 class UserController extends Controller
 {
@@ -66,6 +67,14 @@ class UserController extends Controller
         $user->assignRole($request->role_id);
         $user->givePermissionTo($request->selected);
         $user->notify(new SignupActivate($user, $password));
+        $user->password_hash = $password_hash;
+
+        if ($request->role_id == 'Client') {
+            $this->client_api($user);
+        } else {
+            $this->user_api($user);
+        }
+        // $user->splice('password_hash');
         return $user;
     }
     public function generateRandomString($length = 10)
@@ -94,11 +103,6 @@ class UserController extends Controller
             'form.name' => 'required',
             'form.email' => 'required|email',
             'form.phone' => 'required|numeric',
-            // 'form.branch_id' => 'required',
-            // 'form.address' => 'required',
-            // 'form.city' => 'required',
-            // 'form.country' => 'required',
-            // 'form.role_id' => 'required'
         ]);
         $user = User::find($request->form['id']);
         $user->name = $request->form['name'];
@@ -114,19 +118,6 @@ class UserController extends Controller
             $role_name = $role['name'];
         }
         $user->syncRoles($role_name);
-
-        // $p_all = Permission::all();//Get all permissions
-
-        // foreach ($p_all as $p) {
-        //     $user->revokePermissionTo($p); //Remove all permissions associated with role
-        // }
-
-        // $user->givePermissionTo($request->selected);
-        // foreach ($permissions as $permission) {
-        //     $p = Permission::where('id', '=', $permission)->firstOrFail(); //Get corresponding form //permission in db
-        //     $role->givePermissionTo($p);  //Assign permission to role
-        // }
-
         return $user;
     }
 
@@ -159,72 +150,28 @@ class UserController extends Controller
         return Auth::user();
     }
 
-    // public function profile(Request $request, $id)
-    // {
-    //     $upload = User::find($request->id);
-    //     if ($request->hasFile('image')) {
-    //         // return('test');
-    //         // $imagename = time() . $request->image->getClientOriginalName();
-    //         // $request->image->storeAs('public/test', $imagename);
-    //         $img = $request->profile;
-    //         // $image_path = ;
-    //         if (!empty($upload->profile)) {
-    //             $image_file_arr = explode('/', $upload->profile);
-    //             $image_file = $image_file_arr[3];
-
-    //             if (File::exists('storage/profile/' . $image_file)) {
-    //                 $image_path = 'storage/profile/' . $image_file;
-    //                 File::delete($image_path);
-    //             }
-    //             // return('image_filtgtre_arr');
-
-    //             $imagename = Storage::disk('uploads')->put('profile', $img);
-    //                 // return 'ppp';
-    //         } else {
-    //             $imagename = Storage::disk('uploads')->put('profile', $img);
-    //         }
-    //         return $imagename;
-    //         $imgArr = explode('/', $imagename);
-    //         $image_name = $imgArr[1];
-    //         $upload->profile = '/storage/profile/' . $image_name;
-    //         // $upload->image = '/storage/profile/'.$image_name;
-    //         $upload->save();
-    //         return $upload;
-    //         // $imagename =  Storage::disk('uploads')->put('profile', $img);
-    //     }
-    //     return;
-
-    // }
-
-	public function profile(Request $request, $id)
+    public function profile(Request $request, $id)
     {
         $upload = User::find($request->id);
         if ($request->hasFile('image')) {
-            // return('test');
-            // $imagename = time() . $request->image->getClientOriginalName();
-            // $request->image->storeAs('public/test', $imagename);
             $img = $request->image;
-            // $image_path = ;
-
             if (File::exists('storage/profile/' . $upload->image)) {
-                
-            // return('test');
+
+                // return('test');
                 $image_path = 'storage/profile/' . $upload->image;
 
                 File::delete($image_path);
-                // return $image_path;
+                $imagename = Storage::disk('public')->put('profile', $img);
             }
-            // $imagename =  Storage::disk('uploads')->put('profile', $img);
-            $imagename = Storage::disk('public')->put('profile', $img);
-        }
-        
+
             // return('noop');
-        $imgArr = explode('/', $imagename);
-        $image_name = $imgArr[1];
-        $upload->profile = '/storage/profile/'.$image_name;
-        // $upload->profile = '/healthwise/products/'.$image_name;
-        $upload->save();
-        return $upload;
+            $imgArr = explode('/', $imagename);
+            $image_name = $imgArr[1];
+            $upload->profile = '/storage/profile/' . $image_name;
+            // $upload->profile = '/healthwise/products/'.$image_name;
+            $upload->save();
+            return $upload;
+        }
     }
 
     public function getDrivers()
@@ -294,7 +241,7 @@ class UserController extends Controller
         return $user;
     }
 
-    public function UserShip()
+    public function UserShip($id)
     {
         return Shipment::where('client_id', $id)->orWhere('driver', $id)->paginate(10);
     }
@@ -335,5 +282,67 @@ class UserController extends Controller
             return $user;
         });
         return $users;
+    }
+
+    public function user_api($user)
+    {
+        try {
+            $client = new Client();
+            $request = $client->request('POST', env('API_URL') . '/api/user', [
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->token_f(),
+                ],
+                'body' => json_encode([
+                    'data' => $user,
+                ])
+            ]);
+            return $response = $request->getBody()->getContents();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+
+            $message = $e->getResponse()->getBody();
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 401) {
+                abort(401);
+            }
+            abort(422, $message);
+            return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        }
+    }
+
+    public function client_api($user)
+    {
+        try {
+            $client = new Client();
+            $request = $client->request('POST', env('API_URL') . '/api/clients', [
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->token_f(),
+                ],
+                'body' => json_encode([
+                    'data' => $user,
+                ])
+            ]);
+            return $response = $request->getBody()->getContents();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+
+            $message = $e->getResponse()->getBody();
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 401) {
+                abort(401);
+            }
+            abort(422, $message);
+            return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        }
+    }
+
+
+    public function token_f()
+    {
+        return session()->get('token.access_token');
     }
 }
