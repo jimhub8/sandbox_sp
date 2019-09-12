@@ -84,7 +84,7 @@ export default {
                 .post("/branches", this.$data.form)
                 .then(response => {
                     this.loading = false;
-                    console.log(response);
+                    // console.log(response);
                     this.$parent.AllBranches.push(response.data);
                     this.close;
                     this.resetForm();

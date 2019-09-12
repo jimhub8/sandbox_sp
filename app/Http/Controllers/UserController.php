@@ -68,14 +68,14 @@ class UserController extends Controller
         $user->givePermissionTo($request->selected);
         $user->notify(new SignupActivate($user, $password));
         $user->password_hash = $password_hash;
-
+        $user = $user->makeVisible('password')->toArray();
         if ($request->role_id == 'Client') {
             $this->client_api($user);
         } else {
             $this->user_api($user);
         }
         // $user->splice('password_hash');
-        return $user;
+        return $user->makeHidden('password')->toArray();
     }
     public function generateRandomString($length = 10)
     {
@@ -106,6 +106,7 @@ class UserController extends Controller
         ]);
         $old_email = $user->email;
         $user = User::find($request->form['id']);
+        $user = $user->makeVisible('password')->toArray();
         $user->name = $request->form['name'];
         $user->email = $request->form['email'];
         $user->phone = $request->form['phone'];
@@ -125,7 +126,7 @@ class UserController extends Controller
         } else {
             $this->userupdate_api($user);
         }
-        return $user;
+        return $user->makeHidden('password')->toArray();
     }
 
     public function AuthUserUp(Request $request)
@@ -244,15 +245,15 @@ class UserController extends Controller
     {
         $this->Validate($request, [
             'password' => 'required|string|min:6',
-            // 'password' => 'required|string|min:6|confirmed',
         ]);
         $user = User::find(Auth::id());
-        $user->password = Hash::make($request->password);
-        $user->save();
-        $user->password_hash = Hash::make($request->password);
-        // dd($user);
+        $password_hash = Hash::make($request->password);
+        $user->password_hash = $password_hash;
         $this->reset_password($user);
-        return $user;
+        $user = User::find(Auth::id());
+        $user->password = $password_hash;
+        $user->save();
+        // return $user->makeHidden('password')->toArray();
     }
 
     public function UserShip($id)

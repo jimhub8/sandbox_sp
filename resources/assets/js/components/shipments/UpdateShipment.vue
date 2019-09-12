@@ -177,8 +177,9 @@ export default {
                         eventBus.$emit('errorEvent', error.response.statusText)
                         return
                     } else if (error.response.status === 401 || error.response.status === 409) {
-                        window.location.href = "/apilogin";
-                        // eventBus.$emit('reloadRequest', error.response.statusText)
+                       // window.location.href = "/apilogin";
+                        eventBus.$emit('reloadRequest')
+                        return
                     }
                     else if (error.response.status === 422) {
                         eventBus.$emit('errorEvent', error.response.data.message)

@@ -139,10 +139,12 @@ export default {
                         return
                     } else if (error.response.status === 401 || error.response.status === 409) {
                         this.loading = false
-                        eventBus.$emit('reloadRequest', error.response.statusText)
+                        eventBus.$emit('reloadRequest')
+                        return
                     } else if (error.response.status === 422) {
                         this.loading = false
                         eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                        return
                     }
                     this.loading = false
                     console.log(error)

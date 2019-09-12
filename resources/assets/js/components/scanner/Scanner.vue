@@ -37,10 +37,10 @@
                                         <label for="inputAddress2">Location</label>
                                         <input type="text" class="form-control" id="inputAddress2" placeholder="Location" v-model="form_in.location_in">
                                     </div>
-                                        <div class="form-group col-md-12">
-                                            <label for="inputCity">Remarks</label>
-                                            <textarea class="form-control" v-model="form_in.remarks_in" placeholder="Remarks" rows="3"></textarea>
-                                        </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="inputCity">Remarks</label>
+                                        <textarea class="form-control" v-model="form_in.remarks_in" placeholder="Remarks" rows="3"></textarea>
+                                    </div>
                                 </v-layout>
                                 <v-layout row wrap>
                                     <v-flex xs12 sm12>
@@ -48,12 +48,12 @@
                                             <label for="inputAddress1">Inscan</label>
                                             <input type="text" class="form-control" id="inputAddress1" placeholder="Barcode" v-model="form_in.bar_code_in" @change="Inscan" ref="scanIn">
                                         </div><br>
-                                            <v-flex xs12 sm12>
-                                                <barcode :value="form_in.bar_code_in" style="height: 30px;"></barcode>
-                                            </v-flex>
-                                            <v-divider></v-divider>
-                                            <v-btn color="primary" flat @click="Inscansub" :disabled="loading_in" :loading="loading_in">Outscan
-                                            </v-btn>
+                                        <v-flex xs12 sm12>
+                                            <barcode :value="form_in.bar_code_in" style="height: 30px;"></barcode>
+                                        </v-flex>
+                                        <v-divider></v-divider>
+                                        <v-btn color="primary" flat @click="Inscansub" :disabled="loading_in" :loading="loading_in">Outscan
+                                        </v-btn>
                                     </v-flex>
                                 </v-layout>
                             </v-container>
@@ -97,12 +97,12 @@
                                             <label for="inputAddress2">Outscan</label>
                                             <input type="text" class="form-control" id="inputAddress2" placeholder="Barcode" v-model="form_out.bar_code_out" @change="Outscan">
                                         </div><br>
-                                            <v-flex xs12 sm12>
-                                                <barcode :value="form_out.bar_code_out" style="height: 30px;"></barcode>
-                                            </v-flex>
-                                            <v-divider></v-divider>
-                                            <v-btn color="primary" flat @click="OutscanSub" :disabled="loading" :loading="loading">Outscan
-                                            </v-btn>
+                                        <v-flex xs12 sm12>
+                                            <barcode :value="form_out.bar_code_out" style="height: 30px;"></barcode>
+                                        </v-flex>
+                                        <v-divider></v-divider>
+                                        <v-btn color="primary" flat @click="OutscanSub" :disabled="loading" :loading="loading">Outscan
+                                        </v-btn>
                                     </v-flex>
                                 </v-layout>
                             </v-container>
@@ -264,10 +264,11 @@ export default {
                         eventBus.$emit('errorEvent', error.response.statusText)
                         return
                     } else if (error.response.status === 401 || error.response.status === 409) {
-                        window.location.href = "/apilogin";
-                        // eventBus.$emit('reloadRequest', error.response.statusText)
-                    }
-                    else if (error.response.status === 422) {
+                        // window.location.href = "/apilogin";
+                        eventBus.$emit('reloadRequest')
+                        return
+                        eventBus.$emit('reloadRequest')
+                    } else if (error.response.status === 422) {
                         eventBus.$emit('errorEvent', error.response.data.message)
                         return
                     }
@@ -297,10 +298,10 @@ export default {
                         eventBus.$emit('errorEvent', error.response.statusText)
                         return
                     } else if (error.response.status === 401 || error.response.status === 409) {
-                        window.location.href = "/apilogin";
-                        // eventBus.$emit('reloadRequest', error.response.statusText)
-                    }
-                    else if (error.response.status === 422) {
+                        // window.location.href = "/apilogin";
+                        eventBus.$emit('reloadRequest')
+                        return
+                    } else if (error.response.status === 422) {
                         eventBus.$emit('errorEvent', error.response.data.message)
                         return
                     }
@@ -334,10 +335,10 @@ export default {
                         eventBus.$emit('errorEvent', error.response.statusText)
                         return
                     } else if (error.response.status === 401 || error.response.status === 409) {
-                        window.location.href = "/apilogin";
-                        // eventBus.$emit('reloadRequest', error.response.statusText)
-                    }
-                    else if (error.response.status === 422) {
+                        // window.location.href = "/apilogin";
+                        eventBus.$emit('reloadRequest')
+                        return
+                    } else if (error.response.status === 422) {
                         eventBus.$emit('errorEvent', error.response.data.message)
                         return
                     }
@@ -370,10 +371,10 @@ export default {
                         eventBus.$emit('errorEvent', error.response.statusText)
                         return
                     } else if (error.response.status === 401 || error.response.status === 409) {
-                        window.location.href = "/apilogin";
-                        // eventBus.$emit('reloadRequest', error.response.statusText)
-                    }
-                    else if (error.response.status === 422) {
+                        // window.location.href = "/apilogin";
+                        eventBus.$emit('reloadRequest')
+                        return
+                    } else if (error.response.status === 422) {
                         eventBus.$emit('errorEvent', error.response.data.message)
                         return
                     }
@@ -398,6 +399,19 @@ export default {
                 this.loader = false
             })
             .catch((error) => {
+                if (error.response.status === 500) {
+                    eventBus.$emit('errorEvent', error.response.statusText)
+                    this.loading = false
+                    return
+                } else if (error.response.status === 401 || error.response.status === 409) {
+                    this.loading = false
+                    eventBus.$emit('reloadRequest')
+                    return
+                } else if (error.response.status === 422) {
+                    this.loading = false
+                    eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                        return
+                }
                 this.errors = error.response.data.errors
             })
 
@@ -406,6 +420,19 @@ export default {
                 this.branches = response.data
             })
             .catch((error) => {
+                    if (error.response.status === 500) {
+                        eventBus.$emit('errorEvent', error.response.statusText)
+                        this.loading = false
+                        return
+                    } else if (error.response.status === 401 || error.response.status === 409) {
+                        this.loading = false
+                        eventBus.$emit('reloadRequest')
+                        return
+                    } else if (error.response.status === 422) {
+                        this.loading = false
+                        eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                        return
+                    }
                 this.errors = error.response.data.errors
                 this.loader = false
             })
@@ -432,8 +459,6 @@ export default {
     },
 }
 </script>
-
-
 
 <style scoped>
 

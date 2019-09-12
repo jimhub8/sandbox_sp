@@ -407,6 +407,10 @@ export default {
             this.snackbar = true;
             this.icon = 'block'
         },
+
+        reload_page() {
+            window.location.href = "/apilogin";
+        },
     },
     created() {
         eventBus.$on("progressEvent", data => {
@@ -418,7 +422,9 @@ export default {
         eventBus.$on("alertRequest", data => {
             this.showalert(data)
         });
-
+        eventBus.$on("reloadRequest", data => {
+            this.reload_page()
+        });
         eventBus.$on("errorEvent", data => {
             this.errorAlert(data)
         });

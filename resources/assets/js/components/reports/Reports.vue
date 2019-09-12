@@ -19,8 +19,8 @@
                         <label for="">Client</label>
                         <option value=""></option><select class="custom-select custom-select-md col-md-12 col-md-12" v-model="Client.client_id" style="font-size:
                         13px;">
-                                    <option v-for="customer in Allcustomers" :value="customer.id" :key="customer.id">{{ customer.name }}</option>
-                            </select> Between
+                            <option v-for="customer in Allcustomers" :value="customer.id" :key="customer.id">{{ customer.name }}</option>
+                        </select> Between
                         <hr>
                         <v-flex xs12 sm12>
                             <v-text-field v-model="Client.start_date" label="start date" type="date" color="blue darken-2" required></v-text-field>
@@ -39,7 +39,7 @@
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
 
-                            <!-- </form> -->
+                        <!-- </form> -->
                     </v-card>
                 </v-flex>
 
@@ -72,7 +72,7 @@
                             <download-excel :data="AllStatus" :fields="json_fields" v-show="Sdown">
                                 Export
                                 <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
-                        </download-excel>
+                            </download-excel>
                         </form>
                     </v-card>
                 </v-flex>
@@ -85,9 +85,9 @@
                         <div>
                             <label for="">Status</label>
                             <select v-model="branchStatus.status" class="custom-select custom-select-md col-md-12">
-                                    <option value=""></option>
-                                    <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
-                                </select>
+                                <option value=""></option>
+                                <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
+                            </select>
                         </div>
                         <label for="">Branch</label>
                         <select class="custom-select custom-select-md col-md-12" v-model="branchR.branch_id">
@@ -111,7 +111,7 @@
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
-                            <!-- </form> -->
+                        <!-- </form> -->
                     </v-card>
                 </v-flex>
                 <!-- <v-divider vertical></v-divider> -->
@@ -122,9 +122,9 @@
                         <!-- <form action="DriverReport" method="post"> -->
                         <label for="">Rider</label>
                         <select class="custom-select custom-select-md col-md-12" v-model="Rinder.rinder_id">
-                                    <option value=""></option>
-                                    <option v-for="driver in AllDrivers" :key="driver.id" :value="driver.id">{{ driver.name }}</option>
-                                </select> Between
+                            <option value=""></option>
+                            <option v-for="driver in AllDrivers" :key="driver.id" :value="driver.id">{{ driver.name }}</option>
+                        </select> Between
                         <hr>
                         <v-flex xs12 sm12>
                             <v-text-field v-model="Rinder.start_date" label="start date" type="date" color="blue darken-2" required></v-text-field>
@@ -142,7 +142,7 @@
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
-                            <!-- </form> -->
+                        <!-- </form> -->
                     </v-card>
                 </v-flex>
                 <v-flex xs4 sm4 style="margin-top: 40px;">
@@ -193,11 +193,11 @@
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
-                            <!-- </form> -->
-                            <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
-                                {{ message }}
-                                <v-icon dark right>check_circle</v-icon>
-                            </v-snackbar>
+                        <!-- </form> -->
+                        <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
+                            {{ message }}
+                            <v-icon dark right>check_circle</v-icon>
+                        </v-snackbar>
                     </v-card>
                 </v-flex>
 
@@ -232,11 +232,11 @@
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
-                            <!-- </form> -->
-                            <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
-                                {{ message }}
-                                <v-icon dark right>check_circle</v-icon>
-                            </v-snackbar>
+                        <!-- </form> -->
+                        <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
+                            {{ message }}
+                            <v-icon dark right>check_circle</v-icon>
+                        </v-snackbar>
                     </v-card>
                 </v-flex>
             </v-layout>
@@ -525,6 +525,19 @@ export default {
                 this.statuses = response.data
             })
             .catch((error) => {
+                if (error.response.status === 500) {
+                    eventBus.$emit('errorEvent', error.response.statusText)
+                    this.loading = false
+                    return
+                } else if (error.response.status === 401 || error.response.status === 409) {
+                    this.loading = false
+                    eventBus.$emit('reloadRequest')
+                    return
+                } else if (error.response.status === 422) {
+                    this.loading = false
+                    eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                    return
+                }
                 this.errors = error.response.data.errors
             })
 
