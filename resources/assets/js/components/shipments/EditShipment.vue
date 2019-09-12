@@ -24,24 +24,24 @@
                                         <div v-if="role === 'Customer'">
                                             <v-layout wrap row>
                                                 <v-flex xs6 sm6>
-                                                    <v-text-field v-model="role" :rules="rules.name" color="blue darken-2" label="Sender name" required></v-text-field>
+                                                    <v-text-field v-model="role" color="blue darken-2" label="Sender name" required></v-text-field>
                                                 </v-flex>
                                                 <!-- </div> -->
                                                 <v-flex xs6 sm6>
-                                                    <v-text-field v-model="user.email" :rules="emailRules" color="blue darken-2" label="Sender Email" required></v-text-field>
+                                                    <v-text-field v-model="user.email" color="blue darken-2" label="Sender Email" required></v-text-field>
                                                 </v-flex>
                                                 <v-flex xs6 sm6>
-                                                    <v-text-field v-model="user.address" :rules="rules.name" color="blue darken-2" label="Sender Address" required></v-text-field>
+                                                    <v-text-field v-model="user.address" color="blue darken-2" label="Sender Address" required></v-text-field>
                                                 </v-flex>
                                                 <v-flex xs6 sm6>
-                                                    <v-text-field v-model="user.city" :rules="rules.name" color="blue darken-2" label="Sender City" required></v-text-field>
+                                                    <v-text-field v-model="user.city" color="blue darken-2" label="Sender City" required></v-text-field>
                                                 </v-flex>
                                                 <v-flex xs6 sm6>
                                                     <v-text-field v-model="user.phone" color="blue darken-2" label="Sender Phone" required></v-text-field>
                                                 </v-flex>
 
                                                 <v-flex xs6 sm6>
-                                                    <v-text-field v-model="user.country" :rules="rules.name" color="blue darken-2" label="Country" required></v-text-field>
+                                                    <v-text-field v-model="user.country" color="blue darken-2" label="Country" required></v-text-field>
                                                 </v-flex>
                                             </v-layout>
                                         </div>
@@ -83,16 +83,16 @@
                                             <div v-if="!model">
                                                 <v-layout wrap row>
                                                     <v-flex xs6 sm6>
-                                                        <v-text-field v-model="form.sender_name" :rules="rules.name" color="blue darken-2" label="Sender Name" required></v-text-field>
+                                                        <v-text-field v-model="form.sender_name" color="blue darken-2" label="Sender Name" required></v-text-field>
                                                     </v-flex>
                                                     <v-flex xs6 sm6>
                                                         <v-text-field v-model="form.sender_email" :rules="emailRules" color="blue darken-2" label="Sender Email" required></v-text-field>
                                                     </v-flex>
                                                     <v-flex xs6 sm6>
-                                                        <v-text-field v-model="form.sender_address" :rules="rules.name" color="blue darken-2" label="Sender Address" required></v-text-field>
+                                                        <v-text-field v-model="form.sender_address" color="blue darken-2" label="Sender Address" required></v-text-field>
                                                     </v-flex>
                                                     <v-flex xs6 sm6>
-                                                        <v-text-field v-model="form.sender_city" :rules="rules.name" color="blue darken-2" label="Sender City" required></v-text-field>
+                                                        <v-text-field v-model="form.sender_city" color="blue darken-2" label="Sender City" required></v-text-field>
                                                     </v-flex>
                                                     <v-flex xs6 sm6>
                                                         <v-text-field v-model="form.sender_phone" color="blue darken-2" label="Sender Phone" required></v-text-field>
@@ -105,23 +105,23 @@
                                             <div v-if="model" v-for="cust in Allcustomer" :key="cust.id">
                                                 <v-layout wrap row>
                                                     <v-flex xs6 sm6 v-if="cust.id === model">
-                                                        <v-text-field v-model="cust.name" :rules="rules.name" color="blue darken-2" label="Sender Name" required></v-text-field>
+                                                        <v-text-field v-model="cust.name" color="blue darken-2" label="Sender Name" required></v-text-field>
                                                     </v-flex>
                                                     <v-flex xs6 sm6 v-if="cust.id === model">
                                                         <v-text-field v-model="cust.email" :rules="emailRules" color="blue darken-2" label="Sender Email" required></v-text-field>
                                                     </v-flex>
                                                     <v-flex xs6 sm6 v-if="cust.id === model">
-                                                        <v-text-field v-model="cust.address" :rules="rules.name" color="blue darken-2" label="Sender Address" required></v-text-field>
+                                                        <v-text-field v-model="cust.address" color="blue darken-2" label="Sender Address" required></v-text-field>
                                                     </v-flex>
                                                     <v-flex xs6 sm6 v-if="cust.id === model">
-                                                        <v-text-field v-model="cust.city" :rules="rules.name" color="blue darken-2" label="Sender City" required></v-text-field>
+                                                        <v-text-field v-model="cust.city" color="blue darken-2" label="Sender City" required></v-text-field>
                                                     </v-flex>
                                                     <v-flex xs6 sm6 v-if="cust.id === model">
                                                         <v-text-field v-model="cust.phone" color="blue darken-2" label="Sender Phone" required></v-text-field>
                                                     </v-flex>
 
                                                     <v-flex xs6 sm6 v-if="cust.id === model">
-                                                        <v-text-field v-model="cust.country" :rules="rules.name" color="blue darken-2" label="Country" required></v-text-field>
+                                                        <v-text-field v-model="cust.country" color="blue darken-2" label="Country" required></v-text-field>
                                                     </v-flex>
                                                 </v-layout>
                                             </div>
@@ -132,30 +132,33 @@
                                         <v-divider></v-divider>
                                         <v-layout wrap>
                                             <v-flex xs6 sm6>
-                                                <v-text-field v-model="form.client_name" :rules="rules.name" color="blue darken-2" label="Client name" required></v-text-field>
+                                                <v-text-field v-model="form.client_name" color="blue darken-2" label="Client name" required></v-text-field>
                                             </v-flex>
                                             <!-- </div> -->
                                             <v-flex xs6 sm6>
                                                 <v-text-field v-model="form.client_email" :rules="emailRules" color="blue darken-2" label="Client Email" required></v-text-field>
                                             </v-flex>
                                             <v-flex xs6 sm6>
-                                                <v-text-field v-model="form.client_address" :rules="rules.name" color="blue darken-2" label="Client Address" required></v-text-field>
+                                                <v-text-field v-model="form.client_address" color="blue darken-2" label="Client Address" required></v-text-field>
                                             </v-flex>
                                             <v-flex xs6 sm6>
-                                                <v-text-field v-model="form.client_city" :rules="rules.name" color="blue darken-2" label="Client City" required></v-text-field>
+                                                <v-text-field v-model="form.client_city" color="blue darken-2" label="Client City" required></v-text-field>
                                             </v-flex>
                                             <v-flex xs6 sm6>
                                                 <v-text-field v-model="form.client_phone" color="blue darken-2" label="Client Phone" required></v-text-field>
                                             </v-flex>
 
                                             <v-flex xs6 sm6>
-                                                <v-text-field v-model="form.from_city" :rules="rules.name" color="blue darken-2" label="From" required></v-text-field>
+                                                <v-text-field v-model="form.from_city" color="blue darken-2" label="From" required></v-text-field>
                                             </v-flex>
                                             <v-flex xs6 sm6>
-                                                <v-text-field v-model="form.cod_amount" :rules="rules.name" color="blue darken-2" label="COD Amount" required></v-text-field>
+                                                <v-text-field v-model="form.cod_amount" color="blue darken-2" label="COD Amount" required></v-text-field>
                                             </v-flex>
                                             <v-flex xs6 sm6>
-                                                <v-text-field v-model="form.to_city" :rules="rules.name" color="blue darken-2" label="To" required></v-text-field>
+                                                <v-text-field v-model="form.to_city" color="blue darken-2" label="To" required></v-text-field>
+                                            </v-flex>
+                                            <v-flex xs6 sm6>
+                                                <v-text-field v-model="form.amount_ordered" color="blue darken-2" label="Quantity" required></v-text-field>
                                             </v-flex>
                                         </v-layout>
                                     </v-flex>
@@ -182,7 +185,7 @@
                                                         <tr v-for="product, key in form.products">
                                                             <th scope="row">{{ key+1 }}</th>
                                                             <td><input type="text" class="form-control" placeholder="Product Description" v-model="product.product_name"></td>
-                                                                <!-- <td><input type="text" class="form-control" placeholder="COD Amount" v-model="product.cod_amount"></td> -->
+                                                            <!-- <td><input type="text" class="form-control" placeholder="COD Amount" v-model="product.cod_amount"></td> -->
                                                             <td><input type="text" class="form-control" placeholder="Price" v-model="product.price"></td>
                                                             <td><input type="text" class="form-control" placeholder="Quantity" v-model="product.quantity"></td>
                                                             <td><input type="text" class="form-control" placeholder="Total Weight" v-model="product.weight"></td>
@@ -241,7 +244,7 @@
                                                 <v-divider></v-divider>
                                                 <v-layout wrap>
                                                     <select class="custom-select custom-select-md col-md-12" v-model="form.status">
-                                                       <option value="Awaiting Approval">Awaiting Approval</option>
+                                                        <option value="Awaiting Approval">Awaiting Approval</option>
                                                         <option value="Approved">Approved</option>
                                                         <option value="Arrived">Arrived</option>
                                                         <option value="Awaiting Confirmation">Awaiting Confirmation</option>

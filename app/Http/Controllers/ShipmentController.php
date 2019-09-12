@@ -334,6 +334,7 @@ class ShipmentController extends Controller
         $shipment->bar_code = $request->form['bar_code'];
         $shipment->to_city = $request->form['to_city'];
         $shipment->cod_amount = $request->form['cod_amount'];
+        $shipment->amount_ordered = $request->form['amount_ordered'];
         // $shipment->receiver_name = $request->form['receiver_name'];
         $shipment->from_city = $request->form['from_city'];
 
