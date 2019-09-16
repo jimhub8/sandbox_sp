@@ -106,7 +106,7 @@ class UserController extends Controller
         ]);
         $old_email = $user->email;
         $user = User::find($request->form['id']);
-        $user = $user->makeVisible('password')->toArray();
+        // $user = $user->makeVisible('password')->toArray();
         $user->name = $request->form['name'];
         $user->email = $request->form['email'];
         $user->phone = $request->form['phone'];

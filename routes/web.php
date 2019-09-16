@@ -161,12 +161,12 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getRolesPerm/{id}', 'RoleController@getRolesPerm')->name('getRolesPerm');
 	Route::get('getRoles', 'RoleController@getRoles')->name('getRoles');
 
-
 	Route::get('getBranch', 'BranchController@getBranch')->name('getBranch');
 	Route::post('getShipBranch', 'BranchController@getShipBranch')->name('getShipBranch');
 	Route::post('getBranchShip/{id}', 'BranchController@getBranchShip')->name('getBranchShip');
 	Route::get('getBranchEger', 'BranchController@getBranchEger')->name('getBranchEger');
 	Route::get('getBranchC', 'BranchController@getBranchC')->name('getBranchC');
+	Route::get('country_branch/{id}', 'BranchController@country_branch')->name('country_branch');
 
 	Route::any('getCountry', 'CountryController@getCountry')->name('getCountry');
 

@@ -66,6 +66,7 @@ class ShipmentController extends Controller
             ->where('status', '!=', 'Delivered')
             ->where('status', '!=', 'Warehouse')
             ->where('status', '!=', 'Cancelled')
+            ->where('status', '!=', 'Refused')
             ->orderBy('created_at')
             ->whereDate('derivery_date', '<=', $yest)
             ->whereDate('created_at', '<=', $prev_month)

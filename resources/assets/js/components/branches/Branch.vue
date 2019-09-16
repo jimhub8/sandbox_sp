@@ -4,7 +4,6 @@
         <div v-show="loader" style="text-align: center; width: 100%;">
             <v-progress-circular :width="3" indeterminate color="red" style="margin: 1rem"></v-progress-circular>
         </div>
-
         <!-- Edit dialog -->
         <v-dialog v-model="editModal" persistent max-width="700px">
             <v-card>
@@ -44,8 +43,8 @@
                                             <label for="password" class="col-md-6 col-form-label text-md-right">Country</label>
                                             <select class="custom-select custom-select-md col-md-12" v-model="editedItem.country_id">
                                                 <option v-for="country in AllCountries" :key="country.id" :value="country.id">{{ country.country_name }}</option>
-                                        </select>
-                                            <small class="has-text-danger" v-if="errors.country_id" >{{ errors.country_id[0] }}</small>
+                                            </select>
+                                            <small class="has-text-danger" v-if="errors.country_id">{{ errors.country_id[0] }}</small>
                                         </div>
                                     </v-layout>
                                 </v-container>
@@ -72,12 +71,17 @@
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
-                            <v-btn color="primary" flat @click="openAdd">Add A Branch</v-btn>
-                            Branchs
-                            <v-spacer></v-spacer>
-                            <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+                        <el-select v-model="filter_country.country_id" clearable placeholder="Select" @change="filter_branch" style="margin: 0 20px">
+                            <el-option v-for="item in AllCountries" :key="item.id" :label="item.country_name" :value="item.id">
+                            </el-option>
+                        </el-select>
+                        <v-btn color="primary" flat @click="openAdd">Add A Branch</v-btn>
+                        Branchs
+                        <v-spacer></v-spacer>
+                        <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
-                    <v-data-table :headers="headers" :items="AllBranches" :search="search" counter class="elevation-1">
+                    <v-data-table :headers="headers" :items="AllBranches" :search="search" counter class="elevation-1" :loading="loading">
+                        <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
                         <template slot="items" slot-scope="props">
                             <td>{{ props.item.branch_name }} </td>
                             <td class="text-xs-right">{{ props.item.phone }}</td>
@@ -118,6 +122,7 @@ export default {
     },
     data() {
         return {
+            loading: false,
             errors: {},
             OpenAdd: false,
             search: '',
@@ -127,6 +132,9 @@ export default {
             color: 'black',
             y: 'bottom',
             x: 'left',
+            filter_country: {
+                country_id: ''
+            },
             AllCountries: [],
             dialog: false,
             headers: [{
@@ -238,6 +246,19 @@ export default {
             this.form = Object.assign({}, this.defaultForm)
             this.$refs.form.reset()
         },
+        filter_branch() {
+            this.loading = true
+            axios.get(`/country_branch/${this.filter_country.country_id}`)
+                .then((response) => {
+                    this.AllBranches = response.data
+                    this.loading = false
+                })
+                .catch((error) => {
+                    this.loading = false
+                    this.errors = error.response.data.errors
+                })
+
+        }
     },
     mounted() {
         this.loader = true
@@ -260,15 +281,15 @@ export default {
                 this.errors = error.response.data.errors;
                 this.loader = false;
             });
-},
-computed: {
+    },
+    computed: {
         // test() {
         //     return 'branch/1'
         // },
         // test: function () {
         //     var vm = this;
         //     return function (item) {
-        //         return 'branch/1';  
+        //         return 'branch/1';
         //     };
         // },
         formIsValid() {

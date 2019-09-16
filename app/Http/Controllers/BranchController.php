@@ -20,6 +20,12 @@ class BranchController extends Controller
     {
         return Branch::find($id);
     }
+
+
+    public function country_branch($id)
+    {
+        return Branch::where('country_id', $id)->get();
+    }
 	/**
 	 * Store a newly created resource in storage.
 	 *

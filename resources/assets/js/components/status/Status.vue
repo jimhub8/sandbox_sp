@@ -9,7 +9,7 @@
         <v-dialog v-model="editModal" persistent max-width="400px">
             <v-card>
                 <v-card-title fixed>
-                    <span class="headline">Add A Branch</span>
+                    <span class="headline">Status</span>
                 </v-card-title>
                 <v-card-text>
                     <v-container grid-list-md>
@@ -46,9 +46,9 @@
                 <!-- <v-btn @click="openAdd" color="primary">Add A Branch</v-btn> -->
                 <div v-show="!loader">
                     <v-card-title>
-                        
+
                         <v-btn color="primary" flat @click="openAdd">Add A Status</v-btn>
-                        Branchs
+                        Status
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
@@ -195,7 +195,7 @@ export default {
     },
     mounted() {
         this.loader = true
-        axios.get('/delStatus')
+        axios.get('/status')
             .then((response) => {
                 this.AllStatus = response.data
                 this.loader = false
@@ -208,7 +208,7 @@ export default {
     computed: {
         formIsValid() {
             return (
-                this.editedItem.name 
+                this.editedItem.name
             )
         },
     },

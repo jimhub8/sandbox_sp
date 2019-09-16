@@ -105,7 +105,7 @@
                             <td class="text-xs-right">{{ props.item.derivery_date }}</td>
                             <td class="text-xs-right" v-if="props.item.printReceipt === '1' || props.item.printReceipt === 1" style="background: rgba(23, 193, 60, 0.76);">
                                 <!-- <v-btn color="white" flat @click="notPrinted(props.item)" :loading="nloading" :disabled="nloading">Mark Not Printed</v-btn> -->
-                                <v-tooltip bottom v-if="user.can['edit shipments']">
+                                <v-tooltip bottom v-if="user.can['print waybill']">
                                     <v-btn icon class="mx-0" @click="notPrinted(props.item)" slot="activator">
                                         <v-icon color="white darken-2">check_circle</v-icon>
                                     </v-btn>
@@ -114,7 +114,7 @@
                             </td>
                             <td class="text-xs-right" v-else>
                                 <!-- <v-btn color="info" flat @click="printed(props.item)" :loading="ploading" :disabled="ploading">Mark Printed </v-btn> -->
-                                <v-tooltip bottom v-if="user.can['edit shipments']">
+                                <v-tooltip bottom v-if="user.can['print waybill']">
                                     <v-btn icon class="mx-0" @click="printed(props.item)" slot="activator">
                                         <v-icon color="blue darken-2">block</v-icon>
                                     </v-btn>

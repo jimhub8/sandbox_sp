@@ -31,6 +31,11 @@ import VueChatScroll from 'vue-chat-scroll'
 //     key: 'c0a8d7b1122459cd74c9' //Add your pusher key here
 
 // });
+import ElementUI from 'element-ui';
+import locale from 'element-ui/lib/locale/lang/en'
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI, { locale });
+
 
 import VueCharts from 'vue-chartjs'
 import { Bar, Line } from 'vue-chartjs'
