@@ -87,8 +87,8 @@ export default {
                 doc.setFontSize(12);
                 doc.rect(18, 125, 170, 20);
                 doc.text(20, 132, "Sent By: SpeedBall Courier Services");
-                doc.text(120, 132, "Phone: +25420760877");
-                doc.text(20, 139, "Email: info@speedballcourier.com");
+                doc.text(120, 132, "Phone: +250788180143");
+                doc.text(20, 139, "Email: info.rw@speedballcourier.com");
                 // Client Details
                 doc.rect(18, 145, 170, 10);
                 doc.setFontSize(14);
@@ -132,7 +132,7 @@ export default {
                 doc.text(
                     20,
                     240,
-                    "Clients are requested to pay through M-PESA TILL NUMBER - 877838 "
+                    "Clients to pay the stated "
                 );
                 doc.text(
                     20,

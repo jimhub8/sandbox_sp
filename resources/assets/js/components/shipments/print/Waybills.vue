@@ -1,11 +1,11 @@
 <template>
-    <div>
-        {{ user.country_name }}
-        <Tzprint v-if="user.country_name === 'Tanzania'"></Tzprint>
-        <myPrintPdf v-if="user.country_name === 'Kenya'"></myPrintPdf>
-        <Ugprint v-if="user.country_name === 'Uganda'"></Ugprint>
-        <Rwprint v-if="user.country_name === 'Uganda'"></Rwprint>
-    </div>
+<div>
+    <Tzprint v-if="country === 'Tanzania'"></Tzprint>
+    <myPrintPdf v-if="country === 'Kenya'"></myPrintPdf>
+    <Ugprint v-if="country === 'Uganda'"></Ugprint>
+    <Rwprint v-if="country === 'Rwanda'"></Rwprint>
+    <Nprint v-if="country === 'Nigeria'"></Nprint>
+</div>
 </template>
 
 <script>
@@ -13,20 +13,34 @@ import myPrintPdf from './PrintPdf.vue';
 import Tzprint from './Tzprint';
 import Ugprint from './Ugprint';
 import Rwprint from './Rwprint';
+import Nprint from './nigeria/Nigeria'
 export default {
     components: {
-        Tzprint, myPrintPdf, Ugprint, Rwprint
+        Tzprint,
+        myPrintPdf,
+        Ugprint,
+        Rwprint,
+        Nprint
     },
     props: ['user'],
-data() {
-    return {
-        AllCountries: [],
-    }
-},
-mounted() {
-    axios.get('/getCountry')
+    data() {
+        return {
+            AllCountries: [],
+            country: '',
+        }
+    },
+    methods: {
+        country_name(data) {
+            data.forEach(element => {
+                this.country = element.country_name
+            });
+        }
+    },
+    mounted() {
+        axios.get('/getCountry')
             .then((response) => {
                 this.AllCountries = response.data
+                this.country_name(response.data)
             })
             .catch((error) => {
                 this.errors = error.response.data.errors

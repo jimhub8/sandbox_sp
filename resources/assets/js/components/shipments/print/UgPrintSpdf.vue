@@ -57,7 +57,7 @@ export default {
       doc.text(130, 40, "WayBill Number:  " + this.element.bar_code);
 
       doc.text(100, 70, "WAYBILL");
-      // Rectangles
+      // Rectangles 
       doc.rect(18, 75, 170, 185);
       doc.rect(18, 75, 170, 10);
       doc.text(100, 80, "DISPATCH SECTION", null, null, "center");
@@ -72,8 +72,8 @@ export default {
       doc.setFontSize(12);
       doc.rect(18, 125, 170, 20);
       doc.text(20, 132, "Sent By: SpeedBall Courier Services");
-      doc.text(120, 132, "Phone: +25420760877");
-      doc.text(20, 139, "Email: info@speedballcourier.com");
+      doc.text(120, 132, "Phone: +256783060641");
+      doc.text(20, 139, "Email: info.ug@speedballcourier.com");
       // Client Details
       doc.rect(18, 145, 170, 10);
       doc.setFontSize(14);
@@ -112,18 +112,18 @@ export default {
         "Special Instructions: " + this.element.speciial_instruction
       );
 
-      doc.rect(18, 230, 170, 30);
-      doc.text(20, 235, "NOTE: ");
-      doc.text(
-        20,
-        240,
-        "Clients are requested to pay through M-PESA TILL NUMBER - 877838 "
-      );
-      doc.text(
-        20,
-        248,
-        "(However cash payments will be acceptable in case to case bases) "
-      );
+    //   doc.rect(18, 230, 170, 30);
+    //   doc.text(20, 235, "NOTE: ");
+    //   doc.text(
+    //     20,
+    //     240,
+    //     "Clients are requested to pay through M-PESA TILL NUMBER - 877838 "
+    //   );
+    //   doc.text(
+    //     20,
+    //     248,
+    //     "(However cash payments will be acceptable in case to case bases) "
+    //   );
 
       doc.setFontSize(12);
       doc.rect(18, 260, 170, 20);

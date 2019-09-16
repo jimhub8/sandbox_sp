@@ -66,7 +66,9 @@ class UserController extends Controller
         $user->save();
         $user->assignRole($request->role_id);
         $user->givePermissionTo($request->selected);
-        $user->notify(new SignupActivate($user, $password));
+        if($request->role_id != 'Client') {
+            $user->notify(new SignupActivate($user, $password));
+        }
         $user->password_hash = $password_hash;
         $user = $user->makeVisible('password')->toArray();
         if ($request->role_id == 'Client') {
