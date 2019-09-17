@@ -71,7 +71,7 @@ export default {
 
                 doc.text(100, 70, "WAYBILL");
                 // Rectangles
-                doc.rect(18, 75, 170, 185);
+                doc.rect(18, 75, 170, 200);
                 doc.rect(18, 75, 170, 10);
                 doc.text(100, 80, "DISPATCH SECTION", null, null, "center");
                 doc.rect(18, 85, 170, 30);
@@ -87,8 +87,8 @@ export default {
                 doc.setFontSize(12);
                 doc.rect(18, 125, 170, 20);
                 doc.text(20, 132, "Sent By: SpeedBall Courier Services");
-                doc.text(120, 132, "Phone: +25420760877");
-                doc.text(20, 139, "Email: info@speedballcourier.com");
+                doc.text(120, 132, "Phone: +256783060641");
+                doc.text(20, 139, "Email: info.ug@speedballcourier.com");
                 // Client Details
                 doc.rect(18, 145, 170, 10);
                 doc.setFontSize(14);
@@ -127,25 +127,34 @@ export default {
                     "Special Instructions: " + element["speciial_instruction"]
                 );
 
-                doc.rect(18, 230, 170, 30);
+                // doc.rect(18, 230, 170, 40);
                 doc.text(20, 235, "NOTE: ");
                 doc.text(
                     20,
                     240,
-                    "Clients are requested to pay through M-PESA TILL NUMBER - 877838 "
+                    "Clients are requested to pay through MTN momo pay while following the steps below,"
+                );
+
+                doc.text(
+                    20,
+                    244,
+                    "However cash payments will be accepted on case-to-case basis."
                 );
                 doc.text(
                     20,
-                    248,
-                    "(However cash payments will be acceptable in case to case bases) "
+                    250,
+                    "MTN MOMO PAY: "
                 );
-
+                doc.text(20, 255, "-Step 1. Dial *165*3#");
+                doc.text(20, 260, "-Step 2. Enter Merchant Code 127502");
+                doc.text(20, 265, "-Step 3. Enter Amount");
+                doc.text(20, 270, "-Step 4. Enter pin to confirm Payment.");
                 doc.setFontSize(12);
-                doc.rect(18, 260, 170, 20);
-                doc.text(20, 270, "Authorizer Signature__________________");
+                // doc.rect(18, 280, 170, 20);
+                doc.text(20, 286, "Authorizer Signature__________________");
                 doc.text(
-                    185,
-                    270,
+                    195,
+                    286,
                     "Customer Signature___________________",
                     null,
                     null,

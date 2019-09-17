@@ -71,7 +71,7 @@ export default {
 
                 doc.text(100, 70, "WAYBILL");
                 // Rectangles
-                doc.rect(18, 75, 170, 185);
+                doc.rect(18, 75, 170, 205);
                 doc.rect(18, 75, 170, 10);
                 doc.text(100, 80, "DISPATCH SECTION", null, null, "center");
                 doc.rect(18, 85, 170, 30);
@@ -127,25 +127,35 @@ export default {
                     "Special Instructions: " + element["speciial_instruction"]
                 );
 
-                doc.rect(18, 230, 170, 30);
+                // doc.rect(18, 230, 170, 30);
                 doc.text(20, 235, "NOTE: ");
                 doc.text(
                     20,
                     240,
-                    "Clients to pay the stated "
+                    "Client to pay the stated amount before picking up the parcel."
                 );
                 doc.text(
                     20,
-                    248,
-                    "(However cash payments will be acceptable in case to case bases) "
+                    244,
+                    "The prices may change without prior notice to the consumer"
                 );
+                doc.text(
+                    20,
+                    249,
+                    "For Mobile Payment: "
+                );
+                doc.text(20, 255, "1.Dial *182*8#");
+                doc.text(20, 260, "2.Choose option 1");
+                doc.text(20, 265, "3.Enter Momo Code : 000074");
+                doc.text(20, 270, "4.Enter Amount");
+                doc.text(20, 275, "5.Enter your Pin.");
 
                 doc.setFontSize(12);
-                doc.rect(18, 260, 170, 20);
-                doc.text(20, 270, "Authorizer Signature__________________");
+                // doc.rect(18, 280, 170, 20);
+                doc.text(20, 290, "Authorizer Signature__________________");
                 doc.text(
-                    185,
-                    270,
+                    195,
+                    290,
                     "Customer Signature___________________",
                     null,
                     null,

@@ -87,7 +87,7 @@
             <v-icon dark right>check_circle</v-icon>
         </v-snackbar>
     </v-content>
-    <AddUser @closeRequest="close" :openAddRequest="dispAdd" @alertRequest="showAlert" :AllBranches="AllBranches" :AllRoles="AllRoles" :countryList="Allcountries"></AddUser>
+    <AddUser @closeRequest="close" :openAddRequest="dispAdd" @alertRequest="showAlert" :AllRoles="AllRoles" :countryList="Allcountries"></AddUser>
     <EditUser @closeRequest="close" :openEditRequest="dispEdit" @alertRequest="showAlert" :form="editedItem" :AllBranches="AllBranches" :AllRoles="AllRoles" :countryList="Allcountries"></EditUser>
     <PermUser @closeRequest="close" :openPermRequest="permEdit" :form="editedItem"></PermUser>
     <UserProfile @closeRequest="close" :openShowRequest="dispShow" :user="editedItem" :AllShips="AllShips"></UserProfile>

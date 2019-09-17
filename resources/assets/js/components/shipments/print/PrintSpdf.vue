@@ -72,8 +72,14 @@ export default {
       doc.setFontSize(12);
       doc.rect(18, 125, 170, 20);
       doc.text(20, 132, "Sent By: SpeedBall Courier Services");
-      doc.text(120, 132, "Phone: +25420760877");
-      doc.text(20, 139, "Email: info@speedballcourier.com");
+
+        if (this.element.sender_name == 'Pavel Shpolskiy') {
+            doc.text(20, 139, "Email: uct.help24@gmail.com");
+            doc.text(120, 139, "Help: +971 55 744 0815 (WHATSAPP ONLY)");
+        } else {
+            doc.text(20, 132, "Sent By: SpeedBall Courier Services");
+            doc.text(120, 132, "Phone: +25420760877");
+        }
       // Client Details
       doc.rect(18, 145, 170, 10);
       doc.setFontSize(14);

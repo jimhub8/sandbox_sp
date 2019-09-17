@@ -16,23 +16,23 @@
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.name" :rules="rules.name" color="purple darken-2" label="Full name" required></v-text-field>
+                                        <v-text-field v-model="form.name" color="purple darken-2" label="Full name" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.email" :rules="emailRules" color="blue darken-2" label="Email" required></v-text-field>
+                                        <v-text-field v-model="form.email" color="blue darken-2" label="Email" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.email">{{ errors.email[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.address" :rules="rules.name" color="blue darken-2" label="Address" required></v-text-field>
+                                        <v-text-field v-model="form.address" color="blue darken-2" label="Address" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.address">{{ errors.address[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.city" :rules="rules.name" color="blue darken-2" label="City" required></v-text-field>
+                                        <v-text-field v-model="form.city" color="blue darken-2" label="City" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.city">{{ errors.city[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.phone" :rules="rules.name" color="blue darken-2" label="Phone" required></v-text-field>
+                                        <v-text-field v-model="form.phone" color="blue darken-2" label="Phone" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.phone">{{ errors.phone[0] }}</small>
                                     </v-flex>
                                     <div class="form-group col-md-6">
@@ -43,18 +43,18 @@
                                         <small class="has-text-danger" v-if="errors.role_id">{{ errors.role_id[0] }}</small>
                                     </div>
                                     <div class="form-group col-md-6">
+                                        <label class="col-md-6 col-form-label text-md-right" for="">Country</label>
+                                        <select class="custom-select custom-select-md col-md-12" v-model="form.countryList" @change="country_branch">
+                                            <option v-for="country in countryList" :key="country.id" :value="country.id">{{ country.country_name }}</option>
+                                        </select>
+                                        <small class="has-text-danger" v-if="errors.countryList">{{ errors.countryList[0] }}</small>
+                                    </div>
+                                    <div class="form-group col-md-6">
                                         <label class="col-md-6 col-form-label text-md-right" for="">Branch</label>
                                         <select class="custom-select custom-select-md col-md-12" v-model="form.branch_id">
                                             <option v-for="branches in AllBranches" :key="branches.id" :value="branches.id">{{ branches.branch_name }}</option>
                                         </select>
                                         <small class="has-text-danger" v-if="errors.branch_id">{{ errors.branch_id[0] }}</small>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="col-md-6 col-form-label text-md-right" for="">Country</label>
-                                        <select class="custom-select custom-select-md col-md-12" v-model="form.countryList">
-                                            <option v-for="country in countryList" :key="country.id" :value="country.id">{{ country.country_name }}</option>
-                                        </select>
-                                        <small class="has-text-danger" v-if="errors.countryList">{{ errors.countryList[0] }}</small>
                                     </div>
                                 </v-layout>
                                 <v-layout wrap>
@@ -85,7 +85,7 @@
 
 <script>
 export default {
-    props: ['openAddRequest', 'AllBranches', 'AllRoles', 'countryList'],
+    props: ['openAddRequest', 'AllRoles', 'countryList'],
     data() {
         const defaultForm = Object.freeze({
             name: '',
@@ -101,20 +101,12 @@ export default {
             loading: false,
             errors: [],
             selected: [],
+            AllBranches: [],
             permissions: [],
             defaultForm,
             loader: false,
             e1: true,
             form: Object.assign({}, defaultForm),
-            emailRules: [
-                v => {
-                    return !!v || 'E-mail is required'
-                },
-                v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
-            ],
-            rules: {
-                name: [val => (val || '').length > 0 || 'This field is required']
-            },
         }
     },
     methods: {
@@ -131,7 +123,7 @@ export default {
                     this.$emit('alertRequest');
                 })
                 .catch((error) => {
-                        this.loading = false
+                    this.loading = false
                     // alert('error2')
                     if (error.response.status === 500) {
                         eventBus.$emit('errorEvent', error.response.statusText)
@@ -157,6 +149,13 @@ export default {
         },
         close() {
             this.$emit('closeRequest')
+        },
+        country_branch() {
+            this.countryList.forEach(element => {
+                if (parseInt(this.form.countryList) == parseInt(element.id)) {
+                    this.AllBranches = element.branches
+                }
+            });
         },
     },
     mounted() {

@@ -32,7 +32,9 @@ export default {
     methods: {
         country_name(data) {
             data.forEach(element => {
-                this.country = element.country_name
+                if (parseInt(this.user.country_id) === parseInt(element.id)) {
+                    this.country = element.country_name
+                }
             });
         }
     },

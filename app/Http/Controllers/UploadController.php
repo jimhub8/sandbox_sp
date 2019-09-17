@@ -86,7 +86,7 @@ class UploadController extends Controller
 
             $order_data->user_id = Auth::id();
             $order_data->status = 'Warehouse';
-            $order_data->save();
+            // $order_data->save();
 
             $order_data->client_email = $order['sender_mail'];
             $order_data->client_phone = $order['phone'];

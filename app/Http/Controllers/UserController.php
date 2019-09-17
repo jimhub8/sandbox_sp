@@ -66,18 +66,16 @@ class UserController extends Controller
         $user->save();
         $user->assignRole($request->role_id);
         $user->givePermissionTo($request->selected);
-        if($request->role_id != 'Client') {
-            $user->notify(new SignupActivate($user, $password));
-        }
+        $user->notify(new SignupActivate($user, $password));
         $user->password_hash = $password_hash;
         $user = $user->makeVisible('password')->toArray();
-        if ($request->role_id == 'Client') {
+        if ($request->role_id == 'Client' || $request->role_id == 'Rider') {
             $this->client_api($user);
         } else {
             $this->user_api($user);
         }
         // $user->splice('password_hash');
-        return $user->makeHidden('password')->toArray();
+        return $user->makeHidden('password_hash')->toArray();
     }
     public function generateRandomString($length = 10)
     {
@@ -190,7 +188,7 @@ class UserController extends Controller
 
     public function getDrivers()
     {
-        $users = User::all();
+        $users = User::where('country_id', Auth::user()->country_id)->get();
         $userArr = [];
         foreach ($users as $user) {
             if ($user->hasRole('Rider')) {
