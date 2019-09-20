@@ -191,7 +191,7 @@
             <!-- Data table -->
         </v-container>
     </v-content>
-    <!-- <AddShipment :addShipment="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers"></AddShipment>
+    <AddShipment :addShipment="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers"></AddShipment>
     <EditShipment :EditShipment="dialog1" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers" :form="editedItem"></EditShipment>
     <ShowShipment :element="element" @closeRequest="close" :customers="Allcustomers" :showItems="showItem"></ShowShipment>
     <TzShipment></TzShipment>
@@ -204,7 +204,7 @@
     <TrackShipment @refreshRequest="sortItem" :shipments="updateitedItem" :OpenTrackBranch="trackModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected" :user="user"></TrackShipment>
     <myCsvFile :OpenCsv="csvModel" @closeRequest="close"></myCsvFile>
     <mySCharges :mySCharges="chargeModal" @closeRequest="close" :updateCharges="shipment" @alertRequest="showalert"></mySCharges>
-    <myRows :myRows="RowModal" @closeRequest="close" :updateCharges="shipment"></myRows> -->
+    <myRows :myRows="RowModal" @closeRequest="close" :updateCharges="shipment"></myRows>
     <!-- <myPrintPod :PrintRequest="printModal" @closeRequest="close" :selected="selected"></myPrintPod> -->
     <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
         {{ message }}
@@ -214,41 +214,41 @@
 </template>
 
 <script>
-// import VueBarcode from "vue-barcode";
-// import AddShipment from "./Addshipment";
-// import EditShipment from "./EditShipment";
-// import ShowShipment from "./print/PrintSpdf";
-// import TzShipment from "./print/TzSprint";
-// import RwPrintSpdf from "./print/RwPrintSpdf";
-// import UgPrintSpdf from "./print/UgPrintSpdf";
-// import UpdateShipment from "./UpdateShipment";
-// import UpdateShipmentStatus from "./UpdateShipmentStatus";
-// import AssignDriver from "./AssignDriver";
-// import AssignBranch from "./AssignBranch";
-// import TrackShipment from "./TrackShipment";
-// import myCsvFile from "../csv/CsvFile";
-// import mySCharges from "./Charge";
-// import myPrintPod from './PrintPod)
-// import myRows from "./rows/Rows";
+import VueBarcode from "vue-barcode";
+import AddShipment from "./Addshipment";
+import EditShipment from "./EditShipment";
+import ShowShipment from "./print/PrintSpdf";
+import TzShipment from "./print/TzSprint";
+import RwPrintSpdf from "./print/RwPrintSpdf";
+import UgPrintSpdf from "./print/UgPrintSpdf";
+import UpdateShipment from "./UpdateShipment";
+import UpdateShipmentStatus from "./UpdateShipmentStatus";
+import AssignDriver from "./AssignDriver";
+import AssignBranch from "./AssignBranch";
+import TrackShipment from "./TrackShipment";
+import myCsvFile from "../csv/CsvFile";
+import mySCharges from "./Charge";
+// import myPrintPod from './PrintPod
+import myRows from "./rows/Rows";
 // import myPrintSPdf from './PrintSPdf.js';
 export default {
     props: ["user", "role"],
     components: {
-        // myRows,
-        // AddShipment,
-        // ShowShipment,
-        // EditShipment,
-        // barcode: VueBarcode,
-        // UpdateShipmentStatus,
-        // UpdateShipment,
-        // AssignDriver,
-        // AssignBranch,
-        // TrackShipment,
-        // myCsvFile,
-        // mySCharges,
-        // TzShipment,
-        // UgPrintSpdf,
-        // RwPrintSpdf
+        myRows,
+        AddShipment,
+        ShowShipment,
+        EditShipment,
+        barcode: VueBarcode,
+        UpdateShipmentStatus,
+        UpdateShipment,
+        AssignDriver,
+        AssignBranch,
+        TrackShipment,
+        myCsvFile,
+        mySCharges,
+        TzShipment,
+        UgPrintSpdf,
+        RwPrintSpdf
         // myPrintSPdf,
         // myPrintPod
     },
@@ -817,39 +817,39 @@ export default {
         clearInterval(this.timer);
     },
     mounted() {
-        // this.loader = true;
-        // this.getBranch();
-        // this.filterCount()
-        // axios
-        //     .get("/getCountry")
-        //     .then(response => {
-        //         this.AllCountries = response.data;
-        //         this.loader = false;
-        //     })
-        //     .catch(error => {
-        //         console.log(error);
-        //         this.errors = error.response.data.errors;
-        //         this.loader = false;
-        //     });
+        this.loader = true;
+        this.getBranch();
+        this.filterCount()
+        axios
+            .get("/getCountry")
+            .then(response => {
+                this.AllCountries = response.data;
+                this.loader = false;
+            })
+            .catch(error => {
+                console.log(error);
+                this.errors = error.response.data.errors;
+                this.loader = false;
+            });
 
-        // axios
-        //     .get("/getShipmentsCount")
-        //     .then(response => {
-        //         this.shipmentsCount = response.data;
-        //     })
-        //     .catch(error => {
-        //         this.errors = error.response.data.errors;
-        //     });
-        // axios
-        //     .get("/getStatuses")
-        //     .then(response => {
-        //         this.AllStatus = response.data;
-        //     })
-        //     .catch(error => {
-        //         this.errors = error.response.data.errors;
-        //     });
+        axios
+            .get("/getShipmentsCount")
+            .then(response => {
+                this.shipmentsCount = response.data;
+            })
+            .catch(error => {
+                this.errors = error.response.data.errors;
+            });
+        axios
+            .get("/getStatuses")
+            .then(response => {
+                this.AllStatus = response.data;
+            })
+            .catch(error => {
+                this.errors = error.response.data.errors;
+            });
         this.updateCancelled();
-        // this.sortItem();
+        this.sortItem();
     },
     // computed: {
     //     resetFilter() {

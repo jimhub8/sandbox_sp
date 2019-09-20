@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use GuzzleHttp\Client;
 use App\User;
 use App\Shipment;
+use App\Status;
 use Illuminate\Support\Facades\Auth;
 
 class UploadController extends Controller
@@ -41,15 +42,13 @@ class UploadController extends Controller
     }
     public function importShipments(Request $request)
     {
-        // dd($request->all());
         $orders = Excel::toArray(new ShipmentImport, request()->file('shipment'));
         $client_det = User::find($request->client);
-        // dd($client);
+        // dd($orders);
         // $orders_col = Excel::toCollection(new OrderImport, request()->file('orders'));
         $arr = $orders[0];
         $data = array('data' => $arr, 'client' => $client_det);
-        $this->update_status($data);
-        // dd($data);
+        // // dd($data);
         // try {
         //     $client = new Client();
         //     $request = $client->request('POST', env('API_URL') . '/api/importOrder', [
@@ -70,8 +69,9 @@ class UploadController extends Controller
         //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
         //     return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
         // }
+        $this->update_status($data);
         foreach ($arr as $key => $order) {
-            // dd($order);
+            // dd($order['delivery_date']);
             $order_data = new Shipment();
             $order_data->order_id = $order["order_id"];
             $order_data->airway_bill_no = $order["order_id"];
@@ -85,9 +85,42 @@ class UploadController extends Controller
             $order_data->cod_amount = $order["cod_amount"];
 
             $order_data->user_id = Auth::id();
-            $order_data->status = 'Warehouse';
-            // $order_data->save();
 
+
+            if (array_key_exists('status', $order)) {
+                if ($order['status'] == '' || $order['status'] == null) {
+                    $status = 'Warehouse';
+                } else {
+                    $status_lower = strtolower($order['status']);
+                    $product_det = Status::select('name')->whereRaw('LOWER(name) = ?', $status_lower)->first();
+                    if ($product_det) {
+                        $status = $product_det->name;
+                    } else {
+                        $status = $order['status'];
+                    }
+                }
+            $order_data->status = $status;
+            }
+
+            if (array_key_exists('delivery_date', $order)) {
+                // dd($order);
+                if ($order['delivery_date'] == '' || $order['delivery_date'] == null) {
+                    $delivery_date = null;
+                } else {
+                    $delivery_date = $order['delivery_date'];
+                }
+            $order_data->derivery_date = $delivery_date;
+            }
+
+            if (array_key_exists('instructions', $order)) {
+                // dd($order);
+                if ($order['instructions'] == '' || $order['instructions'] == null) {
+                    $instructions = null;
+                } else {
+                    $instructions = $order['instructions'];
+                }
+                $order_data->speciial_instruction = $instructions;
+            }
             $order_data->client_email = $order['sender_mail'];
             $order_data->client_phone = $order['phone'];
             $order_data->client_address = $order['address'];
@@ -95,7 +128,6 @@ class UploadController extends Controller
             $order_data->amount_ordered = $order['quantity'];
             $order_data->client_region = $order['region'];
             $order_data->user_id = Auth::id();
-            $order_data->status = 'Warehouse';
             $order_data->shipment_id = random_int(1000000, 9999999);
             $order_data->paid = 0;
             $order_data->printReceipt = 0;

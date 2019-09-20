@@ -64,14 +64,17 @@ class UserController extends Controller
         $user->country_id = $request->countryList;
         $user->activation_token = str_random(60);
         $user->save();
+        $create_user = $user;
         $user->assignRole($request->role_id);
         $user->givePermissionTo($request->selected);
-        $user->notify(new SignupActivate($user, $password));
         $user->password_hash = $password_hash;
         $user = $user->makeVisible('password')->toArray();
-        if ($request->role_id == 'Client' || $request->role_id == 'Rider') {
+        if ($request->role_id == 'Client') {
             $this->client_api($user);
+        } elseif ($request->role_id == 'Rider') {
+            return $user->makeHidden('password_hash')->toArray();
         } else {
+            $create_user->notify(new SignupActivate($create_user, $password));
             $this->user_api($user);
         }
         // $user->splice('password_hash');
