@@ -34,7 +34,7 @@ class ShipmentController extends Controller
         if (Auth::user()->hasRole('Client')) {
             return Shipment::where('client_id', Auth::id())->take(500)->orderBy('id', 'desc')->get();
         } else {
-            return Shipment::take(500)->where('country_id', Auth::user()->country_id)->orderBy('id', 'desc')->get();
+            return Shipment::take(500)->orderBy('id', 'desc')->get();
         }
     }
 
@@ -821,7 +821,7 @@ class ShipmentController extends Controller
         if (Auth::user()->hasRole('Client')) {
             return Shipment::latest()->where('client_id', Auth::id())->take(500)->skip($request->end)->get();
         } else {
-            return Shipment::latest()->take(500)->where('country_id', Auth::user()->country_id)->skip($start)->get();
+            return Shipment::latest()->take(500)->skip($start)->get();
         }
         // return Shipment::where('country_id', Auth::user()->country_id)->latest()->skip($request->end)->take(500)->get();
     }
@@ -881,7 +881,7 @@ class ShipmentController extends Controller
         if (Auth::user()->hasRole('Client')) {
             return Shipment::latest()->where('client_id', Auth::id())->take(500)->skip($request->end)->get();
         } else {
-            return Shipment::latest()->take(500)->where('country_id', Auth::user()->country_id)->skip($start)->get();
+            return Shipment::latest()->take(500)->skip($start)->get();
         }
     }
 

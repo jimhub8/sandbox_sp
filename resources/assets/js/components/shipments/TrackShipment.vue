@@ -3,7 +3,7 @@
     <v-dialog v-model="OpenTrackBranch" hide-overlay persistent width="1500">
         <v-card v-if="OpenTrackBranch">
             <!-- <v-card> -->
-            <v-card-text id="printMe">
+            <v-card-text id="print">
                 <ul class="list-group">
                     <li class="list-group-item active text-center">
                         <barcode v-bind:value="shipments.bar_code" style="margin-top: 5px !important;"></barcode>
@@ -162,11 +162,10 @@
 
             <v-card-actions>
                 <v-btn color="blue darken-1" flat @click="close">Close</v-btn>
-                <v-btn color="blue darken-1" flat @click="TrackEvent" v-if="user.can['update status']">Update status</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn v-print="'#printMe'" flat color="primary">Print</v-btn>
+                <v-btn color="blue darken-1" flat @click="TrackEvent" v-if="user.can['update status']">Update status</v-btn>
+                <!-- <v-btn flat color="primary" @click="printPage">Print</v-btn> -->
             </v-card-actions>
-            <v-divider></v-divider>
             <v-divider></v-divider>
         </v-card>
     </v-dialog>
@@ -214,6 +213,35 @@ export default {
                 .catch((error) => {
                     this.errors = error.response.data.errors
                 })
+        },
+
+        printPage() {
+            // Get HTML to print from element
+            const prtHtml = document.getElementById('print').innerHTML;
+
+            // Get all stylesheets HTML
+            let stylesHtml = '';
+            for (const node of [...document.querySelectorAll('link[rel="stylesheet"], style')]) {
+                stylesHtml += node.outerHTML;
+            }
+
+            // Open the print window
+            const WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+
+            WinPrint.document.write(`<!DOCTYPE html>
+
+            <html>
+            <head>
+                ${stylesHtml}
+            </head>
+            <body>
+                ${prtHtml}
+            </body>
+            </html>`);
+            WinPrint.document.close();
+            WinPrint.focus();
+            WinPrint.print();
+            WinPrint.close();
         },
     },
 

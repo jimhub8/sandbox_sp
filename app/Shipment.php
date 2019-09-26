@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\ShipmentScope;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -68,4 +69,12 @@ class Shipment extends Model
     // public  function scopeLike($query, $field, $value){
     //     return $query->where($field, 'LIKE', "%$value%");
     // }
+
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new ShipmentScope);
+    }
 }
+

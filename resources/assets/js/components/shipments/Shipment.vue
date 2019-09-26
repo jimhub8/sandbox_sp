@@ -12,7 +12,7 @@
                     <v-spacer></v-spacer>
                     <v-layout wrap>
                         <v-flex sm6>
-                            <v-tooltip bottom v-if="between.start >= 500">
+                            <!-- <v-tooltip bottom v-if="between.start >= 500">
                                 <v-btn icon class="mx-0" @click="previous" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
                                     <v-icon color="blue darken-2">chevron_left</v-icon>
                                 </v-btn>
@@ -24,7 +24,9 @@
                                 </v-btn>
                                 <span>Next results</span>
                             </v-tooltip>
-                            From {{ between.start }} to {{ between.end }}
+                            From {{ between.start }} to {{ between.end }} -->
+                            <v-pagination v-model="AllShipments.current_page" :length="AllShipments.last_page" total-visible="5" @input="next()" circle v-if="AllShipments.last_page > 1"></v-pagination>
+
                         </v-flex>
                         <v-flex sm6 id="input-cont">
                             <v-text-field v-model="glsearch.search" append-icon="search" label="Global Search" single-line hide-details @keyup.enter="itemSearch"></v-text-field>
@@ -58,7 +60,7 @@
                         </v-layout>
                     </v-card>
                     <v-card-title>
-                        <download-excel :data="AllShipments" :fields="json_fields">
+                        <download-excel :data="AllShipments.data" :fields="json_fields">
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
@@ -80,7 +82,7 @@
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
-                    <v-data-table :headers="headers" :items="AllShipments" :search="search" counter select-all class="elevation-1" v-model="selected" :loading="loading">
+                    <v-data-table :headers="headers" :items="AllShipments.data" :search="search" counter select-all class="elevation-1" v-model="selected" :loading="loading">
                         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
                         <template slot="items" slot-scope="props">
                             <td>
@@ -456,12 +458,12 @@ export default {
                 .catch(error => (this.errors = error.response.data.errors));
             console.log(this.coordinatesArr);
             this.updateitedItem = Object.assign({}, item);
-            this.updatedIndex = this.AllShipments.indexOf(item);
+            this.updatedIndex = this.AllShipments.data.indexOf(item);
             this.updateModal = true;
         },
         editItem(item) {
             this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
+            this.editedIndex = this.AllShipments.data.indexOf(item);
             // console.log(this.editedItem);
             this.dialog1 = true;
             this.getBranch();
@@ -482,13 +484,13 @@ export default {
         },
         ShipmentTrack(item) {
             this.updateitedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
+            this.editedIndex = this.AllShipments.data.indexOf(item);
             this.trackModel = true;
             eventBus.$emit('TrackShipEvent', item);
         },
         Shipcharges(item) {
             this.shipment = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
+            this.editedIndex = this.AllShipments.data.indexOf(item);
             this.chargeModal = true;
         },
         openRow() {
@@ -499,7 +501,7 @@ export default {
             this.getCustomer();
         },
         deleteItem(item) {
-            const index = this.AllShipments.indexOf(item);
+            const index = this.AllShipments.data.indexOf(item);
             if (confirm("Are you sure you want to delete this item?")) {
                 axios
                     .delete(`/shipment/${item.id}`)
@@ -515,7 +517,7 @@ export default {
         },
         notPrinted(item) {
             this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
+            this.editedIndex = this.AllShipments.data.indexOf(item);
             (this.loading = true),
             axios
                 .post(`/notprinted/${item.id}`)
@@ -533,7 +535,7 @@ export default {
         },
         printed(item) {
             this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
+            this.editedIndex = this.AllShipments.data.indexOf(item);
             (this.loading = true),
             axios
                 .post(`/printed/${item.id}`)
@@ -551,16 +553,16 @@ export default {
         },
         pending(item) {
             this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
+            this.editedIndex = this.AllShipments.data.indexOf(item);
             (this.mloading = true),
-            axios
+            axios 
                 .post(`/pending/${item.id}`)
                 .then(response => {
                     // this.printColor = 'blue'
                     (this.mloading = false), (this.message = "Pending");
                     this.color = "black";
                     this.snackbar = true;
-                    Object.assign(this.AllShipments[this.editedIndex], this.editedItem);
+                    Object.assign(this.AllShipments.data[this.editedIndex], this.editedItem);
                     // console.log(response);
                 })
                 .catch(error => (this.errors = error.response.data.errors));
@@ -661,10 +663,42 @@ export default {
                 });
         },
         next() {
+            // this.loading = true;
+            // this.between.start = parseInt(this.between.start) + 500;
+            // this.between.end = parseInt(this.between.end) + 500;
+            // this.sortItem()
             this.loading = true;
-            this.between.start = parseInt(this.between.start) + 500;
-            this.between.end = parseInt(this.between.end) + 500;
-            this.sortItem()
+            axios
+                .post(this.AllShipments.path + '?page=' + this.AllShipments.current_page, {
+                    select: this.select,
+                    no_btw: this.between,
+                    selectStatus: this.selectItem,
+                    form: this.form,
+                    selectCountry: this.selectCountry
+                })
+                .then(response => {
+                    this.loading = false;
+                    this.AllShipments = response.data;
+                    this.filterCount()
+
+                })
+                .catch(error => {
+                    if (error.response.status === 500) {
+                        eventBus.$emit('errorEvent', error.response.statusText)
+                        this.loading = false
+                        return
+                    } else if (error.response.status === 401 || error.response.status === 409) {
+                        this.loading = false
+                        eventBus.$emit('reloadRequest')
+                        return
+                    } else if (error.response.status === 422) {
+                        this.loading = false
+                        eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                        return
+                    }
+                    this.loading = false;
+                    this.errors = error.response.data.errors;
+                });
         },
         previous() {
             this.loading = true;
