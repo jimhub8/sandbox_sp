@@ -34,27 +34,33 @@
                             <v-toolbar-title class="white--text">Orders</v-toolbar-title>
                             <v-spacer></v-spacer>
                             <v-tooltip bottom>
-                                <v-btn slot="activator" color="info darken-2" class="mx-0">{{ shipFilter.length }}
-                                    <v-icon color="white darken-2" small>check_circle</v-icon>
-                                </v-btn>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn v-on="on" slot="activator" color="info darken-2" class="mx-0">{{ shipFilter.length }}
+                                        <v-icon color="white darken-2" small>check_circle</v-icon>
+                                    </v-btn>
+                                </template>
                                 <span>Orders</span>
                             </v-tooltip>
                             <v-divider vertical></v-divider>
                             <v-divider vertical></v-divider>
                             <v-divider vertical></v-divider>
                             <v-tooltip bottom>
-                                <v-btn slot="activator" color="green darken-2" class="mx-0">{{ AllDelShip }}
-                                    <v-icon color="white darken-2" small>check_circle</v-icon>
-                                </v-btn>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn v-on="on" slot="activator" color="green darken-2" class="mx-0">{{ AllDelShip }}
+                                        <v-icon color="white darken-2" small>check_circle</v-icon>
+                                    </v-btn>
+                                </template>
                                 <span>Delivered</span>
                             </v-tooltip>
                             <v-divider vertical></v-divider>
                             <v-divider vertical></v-divider>
                             <v-divider vertical></v-divider>
                             <v-tooltip bottom>
-                                <v-btn slot="activator" color="brown darken-2" class="mx-0">{{ AllPe }}
-                                    <v-icon color="white darken-2" small>block</v-icon>
-                                </v-btn>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn v-on="on" slot="activator" color="brown darken-2" class="mx-0">{{ AllPe }}
+                                        <v-icon color="white darken-2" small>block</v-icon>
+                                    </v-btn>
+                                </template>
                                 <span>Pending</span>
                             </v-tooltip>
                         </v-toolbar>
@@ -64,16 +70,16 @@
                                     Export
                                     <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                                 </download-excel>
-                                    <!-- <v-tooltip right>
+                                <!-- <v-tooltip right>
                                         <v-btn icon slot="activator" class="mx-0" @click="getShipBranch">
                                             <v-icon color="blue darken-2" small>refresh</v-icon>
                                         </v-btn>
                                         <span>Refresh</span>
                                     </v-tooltip> -->
-                                    <v-spacer></v-spacer>
-                                    <!-- <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field> -->
+                                <v-spacer></v-spacer>
+                                <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                             </v-card-title>
-                            <v-data-table :headers="headers" :items="shipFilter" select-all class="elevation-1" v-model="selected" :loading="loading">
+                            <v-data-table :headers="headers" :items="shipFilter" select-all class="elevation-1" v-model="selected" :loading="loading" :search="search">
                                 <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
                                 <template slot="items" slot-scope="props">
                                     <td>
@@ -88,7 +94,7 @@
                                     <td class="text-xs-right" v-else>{{ props.item.status }}</td>
                                     <td class="text-xs-right">{{ props.item.derivery_date }}</td>
                                     <td class="text-xs-right">{{ props.item.speciial_instruction }}</td>
-                                </template> 
+                                </template>
                                 <!-- <v-alert slot="no-results" :value="true" color="error" icon="warning">
                                 Your search for "{{ search }}" found no results.
                             </v-alert> -->
@@ -258,16 +264,16 @@ export default {
             this.UpdateShipmentModel = false;
         },
     },
-    
-  created() {
-    eventBus.$on("selectClear", data => {
-        this.snackbar = true
-        this.message = 'success'
-        this.color = 'black'
-        this.selected = [];
-        this.filterR()
-    });
-  },
+
+    created() {
+        eventBus.$on("selectClear", data => {
+            this.snackbar = true
+            this.message = 'success'
+            this.color = 'black'
+            this.selected = [];
+            this.filterR()
+        });
+    },
     mounted() {
         this.loader = true
         axios.get('/getDrivers')

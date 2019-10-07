@@ -30,7 +30,7 @@ class FilterController extends Controller
         if ($request->selectStatus['name'] != 'All') {
             $shipment_filter = Shipment::where('status', $request->selectStatus['name']);
         }
-        $shipment_filter = $shipment_filter->paginate(500);
+        $shipment_filter = $shipment_filter->paginate(13);
         return $shipment_filter;
     }
 

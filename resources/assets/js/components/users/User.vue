@@ -45,30 +45,30 @@
                             <td class="text-xs-right">{{ props.item.country }}</td>
                             <td class="text-xs-right">{{ props.item.status }}</td>
                             <td class="justify-center layout px-0">
-                                <v-tooltip bottom v-if="user.can['edit users']">
-                                    <v-btn icon class="mx-0" @click="openEdit(props.item)" slot="activator">
+                                <!-- <v-tooltip bottom> -->
+                                    <v-btn icon class="mx-0" @click="openEdit(props.item)" slot="activator" v-if="user.can['edit users']">
                                         <v-icon small color="blue darken-2">edit</v-icon>
                                     </v-btn>
-                                    <span>Edit</span>
-                                </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['view users']">
-                                    <v-btn icon class="mx-0" @click="openShow(props.item)" slot="activator">
+                                    <!-- <span>Edit</span> -->
+                                <!-- </v-tooltip> -->
+                                <v-tooltip bottom>
+                                    <v-btn icon class="mx-0" @click="openShow(props.item)" slot="activator" v-if="user.can['view users']">
                                         <v-icon small color="blue darken-2">visibility</v-icon>
                                     </v-btn>
                                     <span>View user</span>
                                 </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['edit users']">
-                                    <v-btn icon class="mx-0" @click="openPerm(props.item)" slot="activator">
+                                <!-- <v-tooltip bottom> -->
+                                    <v-btn icon class="mx-0" @click="openPerm(props.item)" slot="activator" v-if="user.can['edit users']">
                                         <v-icon small color="orange darken-2">dialpad</v-icon>
                                     </v-btn>
-                                    <span>Edit Permissions</span>
-                                </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['edit users']">
-                                    <v-btn icon class="mx-0" @click="deleteItem(props.item)" slot="activator">
+                                    <!-- <span>Edit Permissions</span> -->
+                                <!-- </v-tooltip> -->
+                                <!-- <v-tooltip bottom> -->
+                                    <v-btn icon class="mx-0" @click="deleteItem(props.item)" slot="activator" v-if="user.can['edit users']">
                                         <v-icon small color="pink darken-2">delete</v-icon>
                                     </v-btn>
-                                    <span>Delete</span>
-                                </v-tooltip>
+                                    <!-- <span>Delete</span> -->
+                                <!-- </v-tooltip> -->
                             </td>
                         </template>
                         <v-alert slot="no-results" :value="true" color="error" icon="warning">

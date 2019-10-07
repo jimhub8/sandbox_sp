@@ -92,20 +92,22 @@
                         </v-layout>
                     </v-card>
                     <v-card-title>
-                        <download-excel :data="AllShipments" :fields="json_fields">
+                        <download-excel :data="AllShipments.data" :fields="json_fields">
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
-                            <v-tooltip right>
-                                <v-btn icon slot="activator" class="mx-0" @click="sortItem">
+                        <v-tooltip right>
+                            <template v-slot:activator="{ on }">
+                                <v-btn icon v-on="on" slot="activator" class="mx-0" @click="sortItem">
                                     <v-icon color="blue darken-2" small>refresh</v-icon>
                                 </v-btn>
-                                <span>Refresh</span>
-                            </v-tooltip>
-                            <v-spacer></v-spacer>
-                            <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+                            </template>
+                            <span>Refresh</span>
+                        </v-tooltip>
+                        <v-spacer></v-spacer>
+                        <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
-                    <v-data-table :headers="headers" :items="AllShipments" :search="search" counter select-all class="elevation-1" v-model="selected" :loading="loading">
+                    <v-data-table :headers="headers" :items="AllShipments.data" :search="search" counter select-all class="elevation-1" v-model="selected" :loading="loading">
                         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
                         <template slot="items" slot-scope="props">
                             <td>
@@ -128,15 +130,19 @@
                             <td class="text-xs-right">{{ props.item.speciial_instruction }}</td>
                             <td class="justify-center layout px-0">
                                 <v-tooltip bottom v-if="user.can['update status']">
-                                    <v-btn icon class="mx-0" @click="UpdateItems(props.item)" slot="activator">
-                                        <v-icon color="blue darken-2" dark small>save</v-icon>
-                                    </v-btn>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="UpdateItems(props.item)" slot="activator">
+                                            <v-icon color="blue darken-2" dark small>save</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Update Status</span>
                                 </v-tooltip>
                                 <v-tooltip bottom v-if="user.can['shipment status']">
-                                    <v-btn icon class="mx-0" @click="ShipmentTrack(props.item)" slot="activator">
-                                        <v-icon color="teal darken-2" small>call_split</v-icon>
-                                    </v-btn>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="ShipmentTrack(props.item)" slot="activator">
+                                            <v-icon color="teal darken-2" small>call_split</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>View Status</span>
                                 </v-tooltip>
                             </td>
@@ -353,7 +359,7 @@ export default {
             this.getCustomer();
             this.getDrivers();
         },
-        
+
         itemSearch() {
             this.loading = true;
             axios.post("/glSearch", this.glsearch)
@@ -389,12 +395,12 @@ export default {
                 .catch(error => (this.errors = error.response.data.errors));
             console.log(this.coordinatesArr);
             this.updateitedItem = Object.assign({}, item);
-            this.updatedIndex = this.AllShipments.indexOf(item);
+            this.updatedIndex = this.AllShipments.data.indexOf(item);
             this.updateModal = true;
         },
         editItem(item) {
             this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
+            this.editedIndex = this.AllShipments.data.indexOf(item);
             // console.log(this.editedItem);
             this.dialog1 = true;
             this.getBranch();
@@ -406,13 +412,13 @@ export default {
         },
         ShipmentTrack(item) {
             this.updateitedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
+            this.editedIndex = this.AllShipments.data.indexOf(item);
             this.trackModel = true;
             eventBus.$emit('TrackShipEvent', item);
         },
         Shipcharges(item) {
             this.shipment = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
+            this.editedIndex = this.AllShipments.data.indexOf(item);
             this.chargeModal = true;
         },
         openRow() {
@@ -423,7 +429,7 @@ export default {
             this.getCustomer();
         },
         deleteItem(item) {
-            const index = this.AllShipments.indexOf(item);
+            const index = this.AllShipments.data.indexOf(item);
             if (confirm("Are you sure you want to delete this item?")) {
                 axios
                     .delete(`/shipment/${item.id}`)
@@ -439,7 +445,7 @@ export default {
         },
         notPrinted(item) {
             this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
+            this.editedIndex = this.AllShipments.data.indexOf(item);
             (this.loading = true),
             axios
                 .post(`/notprinted/${item.id}`)
@@ -457,7 +463,7 @@ export default {
         },
         printed(item) {
             this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
+            this.editedIndex = this.AllShipments.data.indexOf(item);
             (this.loading = true),
             axios
                 .post(`/printed/${item.id}`)
@@ -475,7 +481,7 @@ export default {
         },
         pending(item) {
             this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.indexOf(item);
+            this.editedIndex = this.AllShipments.data.indexOf(item);
             (this.mloading = true),
             axios
                 .post(`/pending/${item.id}`)
@@ -484,7 +490,7 @@ export default {
                     (this.mloading = false), (this.message = "Pending");
                     this.color = "black";
                     this.snackbar = true;
-                    Object.assign(this.AllShipments[this.editedIndex], this.editedItem);
+                    Object.assign(this.AllShipments.data[this.editedIndex], this.editedItem);
                     // console.log(response);
                 })
                 .catch(error => (this.errors = error.response.data.errors));

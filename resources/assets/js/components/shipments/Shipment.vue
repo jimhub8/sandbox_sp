@@ -60,18 +60,18 @@
                         </v-layout>
                     </v-card>
                     <v-card-title>
-                        <download-excel :data="AllShipments.data" :fields="json_fields">
+                        <download-excel :data="AllShipments" :fields="json_fields">
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
                         <v-btn color="primary" flat @click="openShipment" v-if="user.can['create shipments']">Add Shipment</v-btn>
                         <v-btn color="primary" flat @click="ShipmentCsv" v-if="user.can['upload excel']">Upload Excel</v-btn>
-                        <v-tooltip right>
-                            <v-btn icon slot="activator" class="mx-0" @click="sortItem">
-                                <v-icon color="blue darken-2" small>refresh</v-icon>
-                            </v-btn>
-                            <span>Refresh</span>
-                        </v-tooltip>
+                        <!-- <v-tooltip right> -->
+                        <v-btn icon slot="activator" class="mx-0" @click="sortItem">
+                            <v-icon color="blue darken-2" small>refresh</v-icon>
+                        </v-btn>
+                        <!-- <span>Refresh</span>
+                        </v-tooltip> -->
 
                         <!-- <v-tooltip right>
                             <v-btn icon slot="activator" class="mx-0" @click="updateCancelled">
@@ -107,75 +107,97 @@
                             <td class="text-xs-right">{{ props.item.derivery_date }}</td>
                             <td class="text-xs-right" v-if="props.item.printReceipt === '1' || props.item.printReceipt === 1" style="background: rgba(23, 193, 60, 0.76);">
                                 <!-- <v-btn color="white" flat @click="notPrinted(props.item)" :loading="nloading" :disabled="nloading">Mark Not Printed</v-btn> -->
-                                <v-tooltip bottom v-if="user.can['print waybill']">
-                                    <v-btn icon class="mx-0" @click="notPrinted(props.item)" slot="activator">
-                                        <v-icon color="white darken-2">check_circle</v-icon>
-                                    </v-btn>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="notPrinted(props.item)" slot="activator" v-if="user.can['print waybill']">
+                                            <v-icon color="white darken-2">check_circle</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Mark Not Printed</span>
                                 </v-tooltip>
                             </td>
                             <td class="text-xs-right" v-else>
                                 <!-- <v-btn color="info" flat @click="printed(props.item)" :loading="ploading" :disabled="ploading">Mark Printed </v-btn> -->
-                                <v-tooltip bottom v-if="user.can['print waybill']">
-                                    <v-btn icon class="mx-0" @click="printed(props.item)" slot="activator">
-                                        <v-icon color="blue darken-2">block</v-icon>
-                                    </v-btn>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="printed(props.item)" slot="activator" v-if="user.can['print waybill']">
+                                            <v-icon color="blue darken-2">block</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Mark Printed</span>
                                 </v-tooltip>
                             </td>
                             <td class="justify-center layout px-0">
-                                <v-tooltip bottom v-if="user.can['edit shipments']">
-                                    <v-btn icon class="mx-0" @click="editItem(props.item)" slot="activator">
-                                        <v-icon color="blue darken-2" small>edit</v-icon>
-                                    </v-btn>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="editItem(props.item)" slot="activator" v-if="user.can['edit shipments']">
+                                            <v-icon color="blue darken-2" small>edit</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Edit</span>
                                 </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['update status']">
-                                    <v-btn icon class="mx-0" @click="UpdateItems(props.item)" slot="activator">
-                                        <v-icon color="blue darken-2" dark small>save</v-icon>
-                                    </v-btn>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="UpdateItems(props.item)" slot="activator" v-if="user.can['update status']">
+                                            <v-icon color="blue darken-2" dark small>save</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Update Status</span>
                                 </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['delete shipments']">
-                                    <v-btn icon class="mx-0" @click="deleteItem(props.item)" slot="activator">
-                                        <v-icon color="pink darken-2" small>delete</v-icon>
-                                    </v-btn>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="deleteItem(props.item)" slot="activator" v-if="user.can['delete shipments']">
+                                            <v-icon color="pink darken-2" small>delete</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Delete</span>
                                 </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['single print'] && user.country_name === 'Tanzania'">
-                                    <v-btn icon class="mx-0" @click="TzshowDetails(props.item)" slot="activator">
-                                        <v-icon color="info darken-2" small>visibility</v-icon>
-                                    </v-btn>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="TzshowDetails(props.item)" slot="activator" v-if="user.can['single print'] && user.country_name === 'Tanzania'">
+                                            <v-icon color="info darken-2" small>visibility</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Print</span>
                                 </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['single print'] && user.country_name === 'Kenya'">
-                                    <v-btn icon class="mx-0" @click="showDetails(props.item)" slot="activator">
-                                        <v-icon color="info darken-2" small>visibility</v-icon>
-                                    </v-btn>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="showDetails(props.item)" slot="activator" v-if="user.can['single print'] && user.country_name === 'Kenya'">
+                                            <v-icon color="info darken-2" small>visibility</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Print</span>
                                 </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['single print'] && user.country_name === 'Uganda'">
-                                    <v-btn icon class="mx-0" @click="UgshowDetails(props.item)" slot="activator">
-                                        <v-icon color="info darken-2" small>visibility</v-icon>
-                                    </v-btn>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="UgshowDetails(props.item)" slot="activator" v-if="user.can['single print'] && user.country_name === 'Uganda'">
+                                            <v-icon color="info darken-2" small>visibility</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Print</span>
                                 </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['single print'] && user.country_name === 'Rwanda'">
-                                    <v-btn icon class="mx-0" @click="RwshowDetails(props.item)" slot="activator">
-                                        <v-icon color="info darken-2" small>visibility</v-icon>
-                                    </v-btn>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="RwshowDetails(props.item)" slot="activator" v-if="user.can['single print'] && user.country_name === 'Rwanda'">
+                                            <v-icon color="info darken-2" small>visibility</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Print</span>
                                 </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['shipment status']">
-                                    <v-btn icon class="mx-0" @click="ShipmentTrack(props.item)" slot="activator">
-                                        <v-icon color="teal darken-2" small>call_split</v-icon>
-                                    </v-btn>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="ShipmentTrack(props.item)" slot="activator" v-if="user.can['shipment status']">
+                                            <v-icon color="teal darken-2" small>call_split</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>View Status</span>
                                 </v-tooltip>
-                                <v-tooltip bottom v-if="user.can['update charges']">
-                                    <v-btn icon class="mx-0" @click="Shipcharges(props.item)" slot="activator">
-                                        <v-icon color="indigo darken-2" small>attach_money</v-icon>
-                                    </v-btn>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="Shipcharges(props.item)" slot="activator" v-if="user.can['update charges']">
+                                            <v-icon color="indigo darken-2" small>attach_money</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Charges</span>
                                 </v-tooltip>
                             </td>
@@ -509,7 +531,7 @@ export default {
                         this.message = "Deleted";
                         this.color = "black";
                         this.snackbar = true;
-                        this.AllShipments.splice(index, 1);
+                        this.AllShipments.data.splice(index, 1);
                         // console.log(response);
                     })
                     .catch(error => (this.errors = error.response.data.errors));
@@ -528,7 +550,7 @@ export default {
                     this.message = "Not Printed";
                     this.color = "black";
                     this.snackbar = true;
-                    // Object.assign(this.AllShipments[this.editedIndex], this.editedItem)
+                    // Object.assign(this.AllShipments.data[this.editedIndex], this.editedItem)
                     // console.log(response);
                 })
                 .catch(error => (this.errors = error.response.data.errors));
@@ -546,7 +568,7 @@ export default {
                     this.message = "Printed";
                     this.color = "black";
                     this.snackbar = true;
-                    // Object.assign(this.AllShipments[this.editedIndex], this.editedItem)
+                    // Object.assign(this.AllShipments.data[this.editedIndex], this.editedItem)
                     // console.log(response);
                 })
                 .catch(error => (this.errors = error.response.data.errors));
@@ -555,7 +577,7 @@ export default {
             this.editedItem = Object.assign({}, item);
             this.editedIndex = this.AllShipments.data.indexOf(item);
             (this.mloading = true),
-            axios 
+            axios
                 .post(`/pending/${item.id}`)
                 .then(response => {
                     // this.printColor = 'blue'

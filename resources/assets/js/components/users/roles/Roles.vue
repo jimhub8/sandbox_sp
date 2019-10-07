@@ -26,18 +26,18 @@
                             <td class="text-xs-right">{{ props.item.description }}</td>
                             <td class="text-xs-right">{{ props.item.created_at }}</td>
                             <td class="justify-center layout px-0">
-                                <v-tooltip bottom>
+                                <!-- <v-tooltip bottom> -->
                                     <v-btn slot="activator" icon class="mx-0" @click="openEdit(props.item)">
                                         <v-icon small color="blue darken-2">edit</v-icon>
                                     </v-btn>
-                                    <span>Edit</span>
-                                </v-tooltip>
-                                <v-tooltip bottom>
+                                    <!-- <span>Edit</span>
+                                </v-tooltip> -->
+                                <!-- <v-tooltip bottom> -->
                                     <v-btn slot="activator" icon class="mx-0" @click="deleteItem(props.item)">
                                         <v-icon small color="red darken-2">delete</v-icon>
                                     </v-btn>
-                                    <span>delete</span>
-                                </v-tooltip>
+                                    <!-- <span>delete</span>
+                                </v-tooltip> -->
                             </td>
                         </template>
                         <v-alert slot="no-results" :value="true" color="error" icon="warning">

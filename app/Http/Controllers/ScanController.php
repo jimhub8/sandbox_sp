@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Shipment;
 use App\ShipmentStatus;
-use App\Sms;
-use App\User;
 use Auth;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use GuzzleHttp\Client;
 
 // use Illuminate\Support\Carbon;
@@ -24,8 +21,9 @@ class ScanController extends Controller
     {
         // return $request->all();
         $bar_code = str_replace("-", "", $request->bar_code_out);
-        $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->first();
-        if ($barcode) {
+        $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->get();
+        // $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->first();
+        if (count($barcode) > 0) {
             return $barcode;
         } else {
             return response()->json(['errors' => 'errors']);

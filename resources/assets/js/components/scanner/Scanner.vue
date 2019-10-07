@@ -112,16 +112,19 @@
                 <v-card v-if="AllScanned.length > 0">
                     <v-card-title>
                         Shipments
-                        <!-- <v-spacer></v-spacer> -->
-                        <v-tooltip bottom>
-                            <v-btn slot="activator" icon class="mx-0" @click="resetForm">
-                                <v-icon small color="blue darken-2">refresh</v-icon>
-                            </v-btn>
-                            <span>Reset</span>
+
+                        <v-tooltip right>
+                            <template v-slot:activator="{ on }">
+                                <v-btn icon v-on="on" slot="activator" class="mx-0" @click="resetForm">
+                                    <v-icon color="blue darken-2" small>refresh</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Reset all</span>
                         </v-tooltip>
-                        <!-- <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field> -->
+                        <VSpacer/>
+                        <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
-                    <v-data-table :headers="headers" :items="AllScanned" class="elevation-1" :loading="loading">
+                    <v-data-table :headers="headers" :items="AllScanned" class="elevation-1" :loading="loading" :search="search">
                         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
                         <template slot="items" slot-scope="props">
                             <td>{{ props.item.bar_code }}</td>
@@ -131,14 +134,16 @@
                             <td class="text-xs-right">{{ props.item.client_phone }}</td>
                             <td class="text-xs-right">{{ props.item.derivery_date }}</td>
                             <td class="text-xs-right">{{ props.item.speciial_instruction }}</td>
-                            <!-- <td class="justify-center layout px-0">
+                            <td class="justify-center layout px-0">
                                 <v-tooltip bottom>
-                                    <v-btn slot="activator" icon class="mx-0" @click="assignDriver(props.item)">
-                                        <v-icon small color="blue darken-2">edit</v-icon>
-                                    </v-btn>
-                                    <span>Update</span>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" slot="activator" class="mx-0" @click="removeItem(props.item)">
+                                            <v-icon color="pink darken-2" small>delete</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Remove</span>
                                 </v-tooltip>
-                            </td> -->
+                            </td>
                         </template>
                         <v-alert slot="no-results" :value="true" color="error" icon="warning">
                             Your search for "{{ search }}" found no results.
@@ -168,6 +173,7 @@ export default {
         })
         return {
             errors: [],
+            search: '',
             message: 'test',
             AllShipments: {},
             form: Object.assign({}, defaultForm),
@@ -228,10 +234,10 @@ export default {
                     text: 'Special Instructions',
                     value: 'speciial_instruction'
                 },
-                // {
-                //     text: 'Actions',
-                //     sortable: false
-                // }
+                {
+                    text: 'Actions',
+                    sortable: false
+                }
             ],
         }
     },
@@ -254,7 +260,9 @@ export default {
                         this.icon = 'block'
                         this.color = 'red'
                     } else {
-                        this.AllScanned.push(response.data);
+                        response.data.forEach(element => {
+                            this.AllScanned.push(element);
+                        });
                         this.form_out.bar_code_out = ''
                     }
                 })
@@ -317,7 +325,7 @@ export default {
                 })
                 .then((response) => {
                     this.loading = false
-                    // this.resetForm()
+                    this.resetForm()
                     this.snackbar = true
                     this.message = 'successifully scanned'
                     this.icon = 'check_circle'
@@ -357,7 +365,7 @@ export default {
                     this.message = 'successifully scanned'
                     this.icon = 'check_circle'
                     this.color = 'indigo'
-                    // this.resetForm()
+                    this.resetForm()
                     // this.form_in.branch_id = ''
                     // this.form_in.bar_code_in = ''
                     // this.form_in.status_in = ''
@@ -381,6 +389,11 @@ export default {
                     this.errors = error.response.data.errors;
                 })
         },
+        removeItem(item) {
+            // this.loading = true;
+            const index = this.AllScanned.indexOf(item)
+            this.AllScanned.splice(index, 1)
+        }
     },
     mounted() {
         this.loader = true
@@ -410,7 +423,7 @@ export default {
                 } else if (error.response.status === 422) {
                     this.loading = false
                     eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                        return
+                    return
                 }
                 this.errors = error.response.data.errors
             })
@@ -420,19 +433,19 @@ export default {
                 this.branches = response.data
             })
             .catch((error) => {
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        this.loading = false
-                        return
-                    } else if (error.response.status === 401 || error.response.status === 409) {
-                        this.loading = false
-                        eventBus.$emit('reloadRequest')
-                        return
-                    } else if (error.response.status === 422) {
-                        this.loading = false
-                        eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                        return
-                    }
+                if (error.response.status === 500) {
+                    eventBus.$emit('errorEvent', error.response.statusText)
+                    this.loading = false
+                    return
+                } else if (error.response.status === 401 || error.response.status === 409) {
+                    this.loading = false
+                    eventBus.$emit('reloadRequest')
+                    return
+                } else if (error.response.status === 422) {
+                    this.loading = false
+                    eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                    return
+                }
                 this.errors = error.response.data.errors
                 this.loader = false
             })

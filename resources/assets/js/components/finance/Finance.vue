@@ -12,16 +12,18 @@
                     <v-spacer></v-spacer>
                     <v-flex sm6>
                         <v-tooltip bottom v-if="between.start >= 500">
-                            <v-btn icon class="mx-0" @click="previous" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
-                                <v-icon color="blue darken-2">chevron_left</v-icon>
-                            </v-btn>
-                            <span>Previous results</span>
+                            <template v-slot:activator="{ on }">
+                                <v-btn icon v-on="on" class="mx-0" @click="previous" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
+                                    <v-icon color="blue darken-2">chevron_left</v-icon>
+                                </v-btn>
+                            </template> <span>Previous results</span>
                         </v-tooltip>
                         <v-tooltip bottom v-if="shipmentsCount > between.end">
-                            <v-btn icon class="mx-0" @click="next" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
-                                <v-icon color="blue darken-2">chevron_right</v-icon>
-                            </v-btn>
-                            <span>Next results</span>
+                            <template v-slot:activator="{ on }">
+                                <v-btn icon v-on="on" class="mx-0" @click="next" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
+                                    <v-icon color="blue darken-2">chevron_right</v-icon>
+                                </v-btn>
+                            </template> <span>Next results</span>
                         </v-tooltip>
                         From {{ between.start }} to {{ between.end }}
                     </v-flex>
@@ -58,14 +60,16 @@
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
-                            <v-tooltip right>
-                                <v-btn icon slot="activator" class="mx-0" @click="getShipments">
+                        <v-tooltip right>
+                            <template v-slot:activator="{ on }">
+                                <v-btn icon v-on="on" slot="activator" class="mx-0" @click="getShipments">
                                     <v-icon color="blue darken-2" small>refresh</v-icon>
                                 </v-btn>
-                                <span>Refresh</span>
-                            </v-tooltip>
-                            <v-spacer></v-spacer>
-                            <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
+                            </template>
+                            <span>Refresh</span>
+                        </v-tooltip>
+                        <v-spacer></v-spacer>
+                        <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
                     <v-data-table :headers="headers" :items="AllShipments" :search="search" counter class="elevation-1" :loading="loading">
                         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
@@ -84,21 +88,27 @@
                             <td class="text-xs-right">{{ props.item.created_at }}</td>
                             <td class="justify-center layout px-0" v-if="user.can['update charges']">
                                 <v-tooltip bottom v-if="props.item.paid">
-                                    <v-btn icon class="mx-0" @click="paidOrNot(props.item)" slot="activator">
-                                        <v-icon color="blue darken-2" small>check_circle</v-icon>
-                                    </v-btn>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="paidOrNot(props.item)" slot="activator">
+                                            <v-icon color="blue darken-2" small>check_circle</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Mark as paid</span>
                                 </v-tooltip>
                                 <v-tooltip bottom v-else>
-                                    <v-btn icon class="mx-0" @click="paidOrNot(props.item)" slot="activator">
-                                        <v-icon color="blue darken-2" dark small>block</v-icon>
-                                    </v-btn>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="paidOrNot(props.item)" slot="activator">
+                                            <v-icon color="blue darken-2" dark small>block</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Mark not paid</span>
                                 </v-tooltip>
                                 <v-tooltip bottom>
-                                    <v-btn icon class="mx-0" @click="Shipcharges(props.item)" slot="activator">
-                                        <v-icon color="indigo darken-2" small>attach_money</v-icon>
-                                    </v-btn>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="Shipcharges(props.item)" slot="activator">
+                                            <v-icon color="indigo darken-2" small>attach_money</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Charges</span>
                                 </v-tooltip>
                             </td>
