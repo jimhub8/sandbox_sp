@@ -7,7 +7,7 @@
             </v-icon>
         </v-btn>
 
-        <v-card>  
+        <v-card>
             <v-list>
                 <v-list-tile avatar>
                     <v-list-tile-avatar>
@@ -18,7 +18,7 @@
 
                     <v-list-tile-content>
                         <v-list-tile-title>{{ user.name }}</v-list-tile-title>
-                    </v-list-tile-content> 
+                    </v-list-tile-content>
 
                     <!-- <v-list-tile-action v-if="notifications.length > 0">
                         <v-tooltip bottom>
@@ -48,9 +48,11 @@
                     <input type="hidden" name="_token" :value="csrf">
                     <!-- <v-btn flat color="primary" type="submit">Logout</v-btn>-->
                     <v-tooltip bottom>
-                        <v-btn flat slot="activator" color="primary" icon class="mx-0" type="submit">
+                        <template v-slot:activator="{ on }">
+                        <v-btn v-on="on" flat slot="activator" color="primary" icon class="mx-0" type="submit">
                             <i class="fa fa-user"></i>
                         </v-btn>
+                        </template>
                         <span>Logout from this devices</span>
                     </v-tooltip>
                 </form>
@@ -60,9 +62,11 @@
                     <!-- <v-btn flat color="orange" type="submit">Logout other devices out</v-btn> -->
 
                     <v-tooltip bottom>
-                        <v-btn flat slot="activator" color="orange" icon class="mx-0" type="submit">
+                        <template v-slot:activator="{ on }">
+                        <v-btn v-on="on" flat slot="activator" color="orange" icon class="mx-0" type="submit">
                             <i class="fa fa-users"></i>
                         </v-btn>
+                        </template>
                         <span>Logout other devices</span>
                     </v-tooltip>
                 </form>
