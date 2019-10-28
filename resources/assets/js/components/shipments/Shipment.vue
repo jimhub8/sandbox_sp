@@ -57,10 +57,10 @@
                             <v-flex xs4 sm1>
                                 <v-btn raised color="info" @click="filReset">Reset</v-btn>
                             </v-flex>
-                        </v-layout>
+                        </v-layout>                                                                                                                                                                                                                                 
                     </v-card>
                     <v-card-title>
-                        <download-excel :data="AllShipments" :fields="json_fields">
+                        <download-excel :data="AllShipments.data    " :fields="json_fields">
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
@@ -652,6 +652,10 @@ export default {
         },
         sortItem() {
             this.loading = true;
+            if (this.AllShipments.current_page > 1) {
+                this.next()
+                return
+            }
             axios
                 .post("/filterShipment", {
                     select: this.select,

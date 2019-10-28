@@ -15,43 +15,47 @@ class FilterController extends Controller
         // return $request->all();
         $shipment_filter = new Shipment;
         // $start = $request->no_btw['start'] - 1;
-        $shipment_filter = Shipment::latest();
+        $shipment_filter = $shipment_filter->latest();
         if (Auth::user()->hasRole('Admin') || Auth::user()->hasPermissionTo('filter by country')) {
             if ($request->selectCountry['id'] != 'all') {
-                $shipment_filter = Shipment::withoutGlobalScope(ShipmentScope::class);
+                $shipment_filter = $shipment_filter->withoutGlobalScope(ShipmentScope::class)->where('country_id', $request->selectCountry['id']);
             }
         }
-        if ($request->selectCountry['id'] != 'all') {
-            $shipment_filter = Shipment::withoutGlobalScope(ShipmentScope::class);
-        }
+        // if ($request->selectCountry['id'] != 'all') {
+        //     $shipment_filter = $shipment_filter->withoutGlobalScope(ShipmentScope::class)->where('country_id', $request->selectCountry['id']);
+        // }
         if ($request->form['start_date'] && $request->form['end_date']) {
-            $shipment_filter = Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']]);
+            $date_b = [
+                'start_date' => $request->form['start_date'],
+                'end_date' => $request->form['end_date']
+            ];
+            $shipment_filter = $shipment_filter->whereBetween('created_at', $date_b);
         }
         if ($request->selectStatus['name'] != 'All') {
-            $shipment_filter = Shipment::where('status', $request->selectStatus['name']);
+            $shipment_filter = $shipment_filter->where('status', $request->selectStatus['name']);
         }
-        $shipment_filter = $shipment_filter->paginate(13);
+        $shipment_filter = $shipment_filter->paginate(3);
         return $shipment_filter;
     }
 
     public function filterCount(Request $request)
     {
-         // return $request->all();
+        //  return $request->all();
          $shipment_filter = new Shipment;
          // $start = $request->no_btw['start'] - 1;
          if (Auth::user()->hasRole('Admin') || Auth::user()->hasPermissionTo('filter by country')) {
              if ($request->selectCountry['id'] != 'all') {
-                 $shipment_filter = Shipment::withoutGlobalScope(ShipmentScope::class);
+                 $shipment_filter = $shipment_filter->withoutGlobalScope(ShipmentScope::class);
              }
          }
          if ($request->selectCountry['id'] != 'all') {
-             $shipment_filter = Shipment::withoutGlobalScope(ShipmentScope::class);
+             $shipment_filter = $shipment_filter->withoutGlobalScope(ShipmentScope::class);
          }
          if ($request->form['start_date'] && $request->form['end_date']) {
-             $shipment_filter = Shipment::whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']]);
+             $shipment_filter = $shipment_filter->whereBetween('created_at', [$request->form['start_date'], $request->form['end_date']]);
          }
          if ($request->selectStatus['name'] != 'All') {
-             $shipment_filter = Shipment::where('status', $request->selectStatus['name']);
+             $shipment_filter = $shipment_filter->where('status', $request->selectStatus['name']);
          }
          $shipment_filter = $shipment_filter->count();
          return $shipment_filter;

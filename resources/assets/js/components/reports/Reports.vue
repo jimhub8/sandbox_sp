@@ -239,6 +239,9 @@
                         </v-snackbar>
                     </v-card>
                 </v-flex>
+                <v-flex sm4>
+                    <mySReport :statuses="statuses"></mySReport>
+                </v-flex>
             </v-layout>
         </v-layout>
 
@@ -248,7 +251,11 @@
 </template>
 
 <script>
+import mySReport from './status_report'
 export default {
+    components: {
+        mySReport,
+    },
     data() {
         return {
             AllProd: [],

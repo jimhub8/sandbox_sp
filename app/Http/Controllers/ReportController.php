@@ -3,18 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Shipment;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
-use PdfReport;
-use ExcelReport;
-use Illuminate\Support\Carbon;
-use App\Exports\Reports;
 // use Maatwebsite\Excel\Exporter;
 // use Maatwebsite\Excel\Facades\Excel;
-use PDF;
-use App\Mail\ReportMail;
 
 class ReportController extends Controller
 {
@@ -28,7 +20,7 @@ class ReportController extends Controller
 		if ($request->branch_status != [] && $request->branch == []) {
 		$status = $request->branch_status['status'];
 			return Shipment::where('country_id', Auth::user()->country_id)->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->where('status', $status)->take(15000)->latest()->get();
-			
+
 		} elseif($request->branch_status == [] && $request->branch != []) {
 			$branch_id = $request->branch['branch_id'];
 			$branch_id = $request->branch_status['branch_id'];
@@ -40,7 +32,7 @@ class ReportController extends Controller
 		} else {
 			return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(15000)->where('branch_id', $request->branch['branch_id'])->where('status', $status)->get();
 		}
-		
+
 		// return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('created_at', [$date_array])->take(15000)->where('branch_id', $request->branch['branch_id'])->where('status', $status)->get();
 	}
 
@@ -173,5 +165,22 @@ class ReportController extends Controller
 			'end_date' => $end_date,
 		);
 			return Shipment::where('country_id', $request->country_id)->latest()->setEagerLoads([])->whereBetween('created_at', [$date_array])->get();
-	}
+    }
+
+	public function status_report(Request $request)
+	{
+		// return $request->all();
+		$start_date = $request->start_date;
+		$end_date = $request->end_date;
+
+		$date_array = array(
+			'start_date' => $start_date,
+			'end_date' => $end_date,
+        );
+        $shipments = new Shipment;
+        $shipments = $shipments->whereIn('status', $request->status);
+        $shipments = $shipments->whereBetween('created_at', $date_array);
+        $shipments = $shipments->get();
+        return $shipments;
+    }
 }

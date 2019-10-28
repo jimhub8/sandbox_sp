@@ -48,7 +48,6 @@ class UploadController extends Controller
         // $orders_col = Excel::toCollection(new OrderImport, request()->file('orders'));
         $arr = $orders[0];
         $data = array('data' => $arr, 'client' => $client_det);
-        // // dd($data);
         // try {
         //     $client = new Client();
         //     $request = $client->request('POST', env('API_URL') . '/api/importOrder', [

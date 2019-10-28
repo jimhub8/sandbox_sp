@@ -178,6 +178,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getLogoOnly', 'CompanyController@getLogoOnly')->name('getLogoOnly');
 
 	// Reports
+	Route::post('status_report', 'ReportController@status_report')->name('status_report');
 	Route::post('shipmentExpo', 'ReportController@shipmentExpo')->name('shipmentExpo');
 	Route::post('userExpo', 'ReportController@userExpo')->name('userExpo');
 	Route::post('deriverdExpo', 'ReportController@deriverdExpo')->name('deriverdExpo');

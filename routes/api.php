@@ -42,6 +42,7 @@ Route::group([
 	Route::resource('status', 'StatusController');
 
 	Route::post('glSearch', 'api\ShipmentController@glSearch')->name('glSearch');
+	Route::post('shopify_orders', 'api\ShopifyController@shopify_orders')->name('shopify_orders');
 
     Route::post('updateStatus/{id}', 'ShipmentController@updateStatus')->name('updateStatus');
     Route::post('barcodeUpdate/{bar_code}', 'ShipmentController@barcodeUpdate')->name('barcodeUpdate');

@@ -419,6 +419,7 @@ class ShipmentController extends Controller
             if ($code == 401) {
                 abort(401);
             }
+            return;
             // $arrayName = array('error' => 'Error', 'message' => $message);
             // dd($message);
             abort(422, $message);
@@ -445,14 +446,18 @@ class ShipmentController extends Controller
         // } catch (\Exception $e) {
         //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
         //     // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        //     // return $e->getMessage();
+        //     $message = $e->getResponse()->getBody();
         //     $code = $e->getResponse()->getStatusCode();
         //     if ($code == 401) {
         //         abort(401);
         //     }
-        //     $message = $e->getResponse()->getBody();
+        //     // return;
+        //     // $arrayName = array('error' => 'Error', 'message' => $message);
+        //     // dd($message);
         //     abort(422, $message);
+        //     // return $e->getMessage();
         // }
-        // return $request->all();
         $this->update_status($request->formobg);
         $no = $request->formobg['client_phone'];
         $no_A = explode(' ', $no);
