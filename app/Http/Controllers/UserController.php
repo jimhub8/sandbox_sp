@@ -78,7 +78,7 @@ class UserController extends Controller
             $this->user_api($user);
         }
         // $user->splice('password_hash');
-        return $user->makeHidden('password_hash')->toArray();
+        // return $user->makeHidden('password_hash')->toArray();
     }
     public function generateRandomString($length = 10)
     {

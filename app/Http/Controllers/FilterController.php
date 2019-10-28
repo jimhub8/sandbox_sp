@@ -34,7 +34,7 @@ class FilterController extends Controller
         if ($request->selectStatus['name'] != 'All') {
             $shipment_filter = $shipment_filter->where('status', $request->selectStatus['name']);
         }
-        $shipment_filter = $shipment_filter->paginate(3);
+        $shipment_filter = $shipment_filter->paginate(500);
         return $shipment_filter;
     }
 

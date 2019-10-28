@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
+use App\Cancelled;
 use App\Notifications\ShipmentNoty;
 use App\Product;
 use App\ScheduleLogs;
@@ -48,7 +49,7 @@ class ShipmentController extends Controller
         // $tomorrow = Carbon::tomorrow();
         $yest = Carbon::now()->subDays(1);
         $prev_month = $today->subMonth();
-        $refused = Shipment::select('id')->setEagerLoads([])
+        $refused = Shipment::select('id', 'bar_code')->setEagerLoads([])
             ->where(function ($query) {
                 $query->where('status', 'Returned');
                 $query->orWhere('status', 'Scheduled');
@@ -59,17 +60,20 @@ class ShipmentController extends Controller
             ->whereDate('created_at', '<=', $prev_month)
             ->get('id')->toArray();
         $cancell_status = ['Returned', 'Scheduled', 'Dispatched', 'Delivered', 'Warehouse', 'Cancelled', 'Refused'];
-        $cancelled = Shipment::select('id')->setEagerLoads([])
+        $cancelled = Shipment::select('id', 'bar_code')->setEagerLoads([])
             ->whereNotIn('status', $cancell_status)
             ->orderBy('created_at')
             ->whereDate('created_at', '<=', $prev_month)
             ->get('id')->toArray();
 
 
+
         $id_ref = array_flatten($refused);
         $id_can = array_flatten($cancelled);
         // enabling the event dispatcher
         // dd($cancelled, $refused);
+        $update_s = new Cancelled;
+        $update_s->update_status($refused);
         Shipment::whereIn('id', $id_ref)->update(['status' => 'Refused']);
         Shipment::whereIn('id', $id_can)->update(['status' => 'Cancelled']);
         Shipment::setEventDispatcher($dispatcher);
