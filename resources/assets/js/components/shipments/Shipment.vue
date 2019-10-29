@@ -57,7 +57,7 @@
                             <v-flex xs4 sm1>
                                 <v-btn raised color="info" @click="filReset">Reset</v-btn>
                             </v-flex>
-                        </v-layout>                                                                                                                                                                                                                                 
+                        </v-layout>
                     </v-card>
                     <v-card-title>
                         <download-excel :data="AllShipments.data    " :fields="json_fields">
@@ -66,19 +66,24 @@
                         </download-excel>
                         <v-btn color="primary" flat @click="openShipment" v-if="user.can['create shipments']">Add Shipment</v-btn>
                         <v-btn color="primary" flat @click="ShipmentCsv" v-if="user.can['upload excel']">Upload Excel</v-btn>
-                        <!-- <v-tooltip right> -->
-                        <v-btn icon slot="activator" class="mx-0" @click="sortItem">
-                            <v-icon color="blue darken-2" small>refresh</v-icon>
-                        </v-btn>
-                        <!-- <span>Refresh</span>
-                        </v-tooltip> -->
-
-                        <!-- <v-tooltip right>
-                            <v-btn icon slot="activator" class="mx-0" @click="updateCancelled">
-                                <v-icon color="red darken-2" small>refresh</v-icon>
-                            </v-btn>
+                        <v-tooltip right>
+                            <template v-slot:activator="{ on }">
+                                <v-btn icon v-on="on" slot="activator" class="mx-0" @click="sortItem">
+                                    <v-icon color="blue darken-2" small>refresh</v-icon>
+                                </v-btn>
+                            </template>
                             <span>Refresh</span>
-                        </v-tooltip> -->
+                        </v-tooltip>
+
+                        <v-tooltip right>
+                            <template v-slot:activator="{ on }">
+                                <v-btn icon v-on="on" slot="activator" class="mx-0" @click="updateCancelled">
+                                    <v-icon color="orange darken-2" small>refresh</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Refresh</span>
+                        </v-tooltip>
+
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>

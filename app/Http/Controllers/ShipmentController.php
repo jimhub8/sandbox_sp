@@ -60,8 +60,9 @@ class ShipmentController extends Controller
             ->whereDate('created_at', '<=', $prev_month)
             ->get('id')->toArray();
         $cancell_status = ['Returned', 'Scheduled', 'Dispatched', 'Delivered', 'Warehouse', 'Cancelled', 'Refused'];
-        $cancelled = Shipment::select('id', 'bar_code')->setEagerLoads([])
+        $cancelled = Shipment::select('id')->setEagerLoads([])
             ->whereNotIn('status', $cancell_status)
+            ->orWhere('status', null)
             ->orderBy('created_at')
             ->whereDate('created_at', '<=', $prev_month)
             ->get('id')->toArray();
@@ -70,12 +71,15 @@ class ShipmentController extends Controller
 
         $id_ref = array_flatten($refused);
         $id_can = array_flatten($cancelled);
+
         // enabling the event dispatcher
         // dd($cancelled, $refused);
-        $update_s = new Cancelled;
-        $update_s->update_status($refused);
+        $bar_code = Shipment::select('bar_code')->setEagerLoads([])->whereIn('id', $id_can)->get()->toArray();
+        $bar_code_ = array_flatten($bar_code);
         Shipment::whereIn('id', $id_ref)->update(['status' => 'Refused']);
         Shipment::whereIn('id', $id_can)->update(['status' => 'Cancelled']);
+        $update_s = new Cancelled;
+        $update_s->update_status($bar_code_);
         Shipment::setEventDispatcher($dispatcher);
         return;
     }

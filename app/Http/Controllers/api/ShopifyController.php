@@ -28,9 +28,18 @@ class ShopifyController extends Controller
             $order_data->user_id = (array_key_exists('user_id', $order)) ? $order['user_id'] : null;
             $order_data->speciial_instruction = (array_key_exists('notes', $order)) ? $order['notes'] : null;
             $order_data->amount_ordered = (array_key_exists('quantity', $order)) ? $order['quantity'] : null;
+            $order_data->client_id = 194;
             //    $order_data->client_email = (array_key_exists('sender_email', $order)) ? $order['sender_email'] : null;
             $order_data->country_id = 1;
             $order_data->printed = 0;
+            $client_det = User::find(194);
+
+
+            $order_data->sender_name = $client_det->name;
+            $order_data->sender_email = $client_det->email;
+            $order_data->sender_phone = $client_det->phone;
+            $order_data->sender_address = $client_det->address;
+            $order_data->sender_city = $client_det->city;
 
             $order_data->save();
         }

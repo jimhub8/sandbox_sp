@@ -2,14 +2,20 @@
 
 namespace App;
 
+use GuzzleHttp\Client;
+
 class Cancelled
 {
+    public function token_f()
+    {
+        return session()->get('token.access_token');
+    }
     public function update_status($data)
     {
-        dd($data);
-        // dd($request);
+
         try {
-            $client = new Client;
+            // return ($bar_code_);
+            $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/updateCancelled', [
                 'headers' => [
                     'Content-type' => 'application/json',
@@ -31,6 +37,7 @@ class Cancelled
             if ($code == 401) {
                 abort(401);
             }
+            // dd($message);
             return;
             abort(422, $message);
             // return $e->getMessage();
