@@ -66,6 +66,8 @@
                         </download-excel>
                         <v-btn color="primary" flat @click="openShipment" v-if="user.can['create shipments']">Add Shipment</v-btn>
                         <v-btn color="primary" flat @click="ShipmentCsv" v-if="user.can['upload excel']">Upload Excel</v-btn>
+                        <!-- <v-btn color="primary" flat @click="send_sms">Send Sms</v-btn> -->
+                        <!-- <v-btn color="primary" flat @click="send_sms" v-if="user.can['send sms']">Upload Excel</v-btn> -->
                         <v-tooltip right>
                             <template v-slot:activator="{ on }">
                                 <v-btn icon v-on="on" slot="activator" class="mx-0" @click="sortItem">
@@ -235,6 +237,7 @@
     <mySCharges :mySCharges="chargeModal" @closeRequest="close" :updateCharges="shipment" @alertRequest="showalert"></mySCharges>
     <myRows :myRows="RowModal" @closeRequest="close" :updateCharges="shipment"></myRows>
     <!-- <myPrintPod :PrintRequest="printModal" @closeRequest="close" :selected="selected"></myPrintPod> -->
+    <mySms></mySms>
     <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
         {{ message }}
         <v-icon dark right>check_circle</v-icon>
@@ -259,6 +262,7 @@ import myCsvFile from "../csv/CsvFile";
 import mySCharges from "./Charge";
 // import myPrintPod from './PrintPod
 import myRows from "./rows/Rows";
+import mySms from './sms/Sms'
 // import myPrintSPdf from './PrintSPdf.js';
 export default {
     props: ["user", "role"],
@@ -277,8 +281,8 @@ export default {
         mySCharges,
         TzShipment,
         UgPrintSpdf,
-        RwPrintSpdf
-        // myPrintSPdf,
+        RwPrintSpdf,
+        mySms,
         // myPrintPod
     },
     data() {
@@ -426,6 +430,9 @@ export default {
         };
     },
     methods: {
+        send_sms() {
+            eventBus.$emit('sendSmsEvent', this.AllShipments.data)
+        },
         UpdateStatus() {
             // alert(this.updateitedItem.id);
             axios

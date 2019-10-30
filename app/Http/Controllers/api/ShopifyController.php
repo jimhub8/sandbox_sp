@@ -5,13 +5,14 @@ namespace App\Http\Controllers\api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Shipment;
-
+use App\User;
+   
 class ShopifyController extends Controller
 {
     public function shopify_orders(Request $request)
     {
-        // dd($request->data);
         $orders = $request->data;
+        // dd($orders);
         foreach ($orders as $order) {
             // dd($order['order_no']);
             $order_data = new Shipment();
@@ -32,7 +33,8 @@ class ShopifyController extends Controller
             //    $order_data->client_email = (array_key_exists('sender_email', $order)) ? $order['sender_email'] : null;
             $order_data->country_id = 1;
             $order_data->printed = 0;
-            $client_det = User::find(194);
+            $client_det = User::find(1);
+            // dd($client_det);
 
 
             $order_data->sender_name = $client_det->name;
@@ -43,6 +45,6 @@ class ShopifyController extends Controller
 
             $order_data->save();
         }
-        return 'success';
+        return 'sccess';
     }
 }

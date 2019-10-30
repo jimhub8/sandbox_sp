@@ -363,6 +363,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getUserConvById/{id}', 'ChattyController@getUserConvById')->name('getUserConvById');
 	Route::post('saveUserChat/{id}', 'ChattyController@saveUserChat')->name('saveUserChat');
 
+	Route::post('send_sms', 'SmsController@send_sms')->name('send_sms');
 	Route::get('send_sms', 'ShipmentController@send_sms')->name('send_sms');
 
 	// Route::post('/chat','ChattyController@sendMessage');
