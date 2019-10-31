@@ -13,7 +13,7 @@ import Vuetify from 'vuetify'
 import Print from 'vue-print-nb'
 // import * as VueGoogleMaps from 'vue2-google-maps'
 // import VueChartkick from 'vue-chartkick'
-import Chart from 'chart.js'
+// import Chart from 'chart.js'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@fortawesome/fontawesome-free/css/all.css' // Ensure you are using css-loader
 import 'vuetify/dist/vuetify.min.css'
@@ -36,15 +36,14 @@ import locale from 'element-ui/lib/locale/lang/en'
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI, { locale });
 
-
-import VueCharts from 'vue-chartjs'
-import { Bar, Line } from 'vue-chartjs'
+// import VueCharts from 'vue-chartjs'
+// import { Bar, Line } from 'vue-chartjs'
 window.eventBus = new Vue()
-import Pusher from 'pusher-js';
+// import Pusher from 'pusher-js';
 
-import Toaster from 'v-toaster'
-import 'v-toaster/dist/v-toaster.css'
-Vue.use(Toaster, { timeout: 5000 })
+// import Toaster from 'v-toaster'
+// import 'v-toaster/dist/v-toaster.css'
+// Vue.use(Toaster, { timeout: 5000 })
 // import jsPDF from 'jsPDF'
 // vue.use(Vuetify, {
 //     iconfont: 'mdi'

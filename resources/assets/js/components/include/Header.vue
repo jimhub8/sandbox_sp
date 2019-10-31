@@ -35,7 +35,7 @@
                                     My Shipments
                                 </div>
                             </div>
-              </router-link>-->
+                        </router-link>-->
                         <router-link to="/rinders" class="v-list__tile v-list__tile--link" v-for="roleR in user.roles" :key="roleR.id" v-if="roleR.name === 'Rider'">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">local_shipping</i>

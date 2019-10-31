@@ -78,8 +78,8 @@ class ShipmentController extends Controller
         $bar_code_ = array_flatten($bar_code);
         Shipment::whereIn('id', $id_ref)->update(['status' => 'Refused']);
         Shipment::whereIn('id', $id_can)->update(['status' => 'Cancelled']);
-        $update_s = new Cancelled;
-        $update_s->update_status($bar_code_);
+        // $update_s = new Cancelled;
+        // $update_s->update_status($bar_code_);
         Shipment::setEventDispatcher($dispatcher);
         return;
     }
@@ -932,12 +932,14 @@ class ShipmentController extends Controller
         //     $status->user_name = '$status->user_id';
         //     return $status;
         // });
-        $statuses->transform(function ($status, $key) {
-            $user = User::setEagerLoads([])->find($status->user_id);
-            // dd($user);
-            $status->user_id = $user->name;
-            return $status;
-        });
+        if ($statuses) {
+            $statuses->transform(function ($status, $key) {
+                $user = User::withTrashed()->setEagerLoads([])->find($status->user_id);
+                // dd($user);
+                $status->user_id = $user->name;
+                return $status;
+            });
+        }
         return $statuses;
     }
     public function register()

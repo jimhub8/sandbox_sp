@@ -7,9 +7,9 @@
                 <download-excel :data="AllDelusers" :fields="json_fields">
                     Export
                     <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
-                        </download-excel>
-                    <v-spacer></v-spacer>
-                    <v-text-field v-model="search" append-icon="search" label="Search" single-line></v-text-field>
+                </download-excel>
+                <v-spacer></v-spacer>
+                <v-text-field v-model="search" append-icon="search" label="Search" single-line></v-text-field>
             </v-card-title>
             <v-data-table :headers="headers" :items="AllDelusers" class="elevation-1" :loading="loading" :search="search">
                 <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
@@ -23,10 +23,12 @@
                     <td class="text-xs-right">{{ props.item.deleted_at }}</td>
                     <td class="justify-center layout px-0">
                         <v-tooltip bottom>
-                            <v-btn icon class="mx-0" @click="refresh(props.item)" slot="activator">
-                                <v-icon small color="blue darken-2">edit</v-icon>
-                            </v-btn>
-                            <span>Edit</span>
+                            <template v-slot:activator="{ on }">
+                                <v-btn v-on="on" icon class="mx-0" @click="refresh(props.item)" slot="activator">
+                                    <v-icon small color="blue darken-2">refresh</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Restore</span>
                         </v-tooltip>
                     </td>
                 </template>
