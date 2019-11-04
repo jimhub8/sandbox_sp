@@ -9,19 +9,24 @@ class SmsController extends Controller
 
     public function send_sms(Request $request)
     {
+        $request->validate([
+            'status' => 'required',
+        ]);
+        $status = $request->status;
         // return ($request->all());
-        $message = $request->message;
+        // $message = $request->message;
         $shipments = $request->shipments;
-        // return $phone;
-        // // dd($phone . '   ' . $message);
-        // // $phone = '254778301465';
         foreach ($shipments as $shipment) {
-            // $phone = $shipment['client_phone'];
-            // $phone = preg_replace('/[^A-Za-z0-9\-]/', '', $phone); // Removes special chars.
-            // dd($phone);
-            $phone = '254731090832';
-            // $phone = '254706920275';
-            $sms = 'Dear '. $shipment['client_name'] . ' ' . $message;
+            // $phone = '254731090832';
+            $phone = '254743895505';
+            if ($status == 'Returns') {
+                $sms = 'Dear ' . $shipment['client_name'] . ' we made an attempt to deliver your parcel for ' .  $shipment['client_email'] . ' but the delivery was not successful. We would loke to make another delivery attempt. Kindly call or text us 0799870144/0799869844 or text 0778301465 to schedule for delivery ' .
+                    ' regards. ';
+            } else {
+                $sms = 'Dear ' . $shipment['client_name'] . ' we have received your parcel for ' .  $shipment['client_email'] . ' that you ordered online. Kindly call 0799870144/0799869844 to let us know when to make the delivery' . "\n" .
+                    ' regards. ' . "\n" . ' ';
+            }
+            // return $sms;
             $senderID = 'SPEEDBALL';
             $login = 'SPEEDBALL';
             $password = 'sp33dbal';
@@ -52,7 +57,8 @@ class SmsController extends Controller
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $output = curl_exec($ch);
             curl_close($ch);
-            return $output;
+            // return $output;
         }
+        return;
     }
 }

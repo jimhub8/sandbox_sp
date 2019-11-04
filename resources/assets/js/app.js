@@ -129,7 +129,7 @@ const routes = [
     // {path: '/containers', component: myContainer },
     { path: '/branches', component: myBranch },
     { path: '/profile', component: myProfile },
-    { path: '/companies', component: myCompany },
+    { path: '/company', component: myCompany },
     // { path: '/subscribers', component: mysubsicriber },
     { path: '/customers', component: myCustomer },
     // { path: '/invoices', component: myInvice },

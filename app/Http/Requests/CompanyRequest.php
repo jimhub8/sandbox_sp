@@ -25,13 +25,7 @@ class CompanyRequest extends FormRequest
     public function rules(Request $request)
     {
         return [
-            'location' => 'required',
-            'company_name' => 'required|date',
-            'email' => 'required|email',
-            'phone' => 'required|numeric',
-            'address' => 'required',
-            'admin' => 'required',
-            'user_id' => 'required|numeric',
+            'company_name' => 'required',
         ];
     }
 }

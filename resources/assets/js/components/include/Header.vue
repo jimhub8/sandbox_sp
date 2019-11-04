@@ -411,6 +411,9 @@ export default {
         reload_page() {
             window.location.href = "/apilogin";
         },
+        reload_app_page() {
+            window.location.href = "/login";
+        }
     },
     created() {
         eventBus.$on("progressEvent", data => {
@@ -424,6 +427,9 @@ export default {
         });
         eventBus.$on("reloadRequest", data => {
             this.reload_page()
+        });
+        eventBus.$on("reloadAppRequest", data => {
+            this.reload_app_page()
         });
         eventBus.$on("errorEvent", data => {
             this.errorAlert(data)

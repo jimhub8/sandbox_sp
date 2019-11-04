@@ -1,7 +1,7 @@
 <template>
 <div>
     <Tzprint v-if="country === 'Tanzania'"></Tzprint>
-    <myPrintPdf v-if="country === 'Kenya'"></myPrintPdf>
+    <myKenPrint v-if="country === 'Kenya'"></myKenPrint>
     <Ugprint v-if="country === 'Uganda'"></Ugprint>
     <Rwprint v-if="country === 'Rwanda'"></Rwprint>
     <Nprint v-if="country === 'Nigeria'"></Nprint>
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import myPrintPdf from './PrintPdf.vue';
+import myKenPrint from './KPrintPdf.vue';
 import Tzprint from './Tzprint';
 import Ugprint from './Ugprint';
 import Rwprint from './Rwprint';
@@ -17,7 +17,7 @@ import Nprint from './nigeria/Nigeria'
 export default {
     components: {
         Tzprint,
-        myPrintPdf,
+        myKenPrint,
         Ugprint,
         Rwprint,
         Nprint

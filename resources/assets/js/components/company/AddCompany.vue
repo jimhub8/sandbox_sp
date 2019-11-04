@@ -12,23 +12,23 @@
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.company_name" :rules="rules.name" color="blue darken-2" label="Company name" required></v-text-field>
+                                        <v-text-field v-model="form.company_name" color="blue darken-2" label="Company name" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.company_name">{{ errors.company_name[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.address" :rules="rules.name" color="blue darken-2" label="Company Address" required></v-text-field>
+                                        <v-text-field v-model="form.address" color="blue darken-2" label="Company Address" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.address">{{ errors.address[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.phone" :rules="rules.name" color="blue darken-2" label="Telephone Number" required></v-text-field>
+                                        <v-text-field v-model="form.phone" color="blue darken-2" label="Telephone Number" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.phone">{{ errors.phone[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.email" :rules="rules.name" color="blue darken-2" label="Company Email" required></v-text-field>
+                                        <v-text-field v-model="form.email" color="blue darken-2" label="Company Email" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.email">{{ errors.email[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.website" :rules="rules.name" color="blue darken-2" label="Company Website" required></v-text-field>
+                                        <v-text-field v-model="form.website" color="blue darken-2" label="Company Website" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.website">{{ errors.website[0] }}</small>
                                     </v-flex>
                                 </v-layout>
@@ -75,7 +75,7 @@ export default {
             axios.post('/companies', this.$data.form).
             then((response) => {
                     console.log(response);
-                    // this.$parent.AllCompanies.push(response.data) 
+                    // this.$parent.AllCompanies.push(response.data)
                     // this.close;
                     // this.resetForm();
                     // this.$emit('closeRequest');

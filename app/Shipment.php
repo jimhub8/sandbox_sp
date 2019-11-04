@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\ClientScope;
 use App\Scopes\ShipmentScope;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
@@ -75,6 +76,7 @@ class Shipment extends Model
     {
         parent::boot();
         static::addGlobalScope(new ShipmentScope);
+        static::addGlobalScope(new ClientScope);
     }
 }
 

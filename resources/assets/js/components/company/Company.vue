@@ -14,10 +14,9 @@
                 <!-- <v-btn @click="openAdd" color="primary">Add A Branch</v-btn> -->
                 <div v-show="!loader">
                     <v-card-title>
-                        Companies
-                        <v-btn color="primary" raised @click="openAdd">Add Company</v-btn>
-
-                        <v-btn icon class="mx-0" @click="getCompany()">
+                        Companies {{ AllCompanies.length }}
+                        <v-btn color="primary" raised @click="openAdd" v-if="AllCompanies.length < 1">Add Company</v-btn>
+                        <v-btn small icon class="mx-0" @click="getCompany()">
                             <v-icon color="blue darken-2">refresh</v-icon>
                         </v-btn>
                         <v-spacer></v-spacer>
@@ -31,16 +30,31 @@
                             <td class="text-xs-right">{{ props.item.address }}</td>
                             <td class="text-xs-right">{{ props.item.website }}</td>
                             <td class="justify-center layout px-0">
-                                <v-btn icon class="mx-0" @click="editItem(props.item)">
-                                    <v-icon color="blue darken-2">edit</v-icon>
-                                </v-btn>
-                                <v-btn icon class="mx-0" @click="imageUpload(props.item)">
-                                    <v-icon color="blue darken-2">image</v-icon>
-                                </v-btn>
-                                <v-btn icon class="mx-0" @click="deleteItem(props.item)">
-                                    <v-icon color="pink darken-2">delete</v-icon>
-                                </v-btn>
 
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="editItem(props.item)" slot="activator">
+                                            <v-icon color="blue darken-2">edit</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Edit</span>
+                                </v-tooltip>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="imageUpload(props.item)" slot="activator">
+                                            <v-icon color="blue darken-2">image</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Logo</span>
+                                </v-tooltip>
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn icon v-on="on" class="mx-0" @click="deleteItem(props.item)" slot="activator">
+                                            <v-icon color="pink darken-2">delete</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Logo</span>
+                                </v-tooltip>
                             </td>
                         </template>
                         <v-alert slot="no-results" :value="true" color="error" icon="warning">
@@ -129,15 +143,6 @@ export default {
             imageItem: {},
             address: '',
             editedItem: {},
-            emailRules: [
-                v => {
-                    return !!v || 'E-mail is required'
-                },
-                v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
-            ],
-            rules: {
-                name: [val => (val || '').length > 0 || 'This field is required']
-            },
         }
     },
 

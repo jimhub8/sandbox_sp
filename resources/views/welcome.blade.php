@@ -1,7 +1,7 @@
-@extends('layouts.app') 
+@extends('layouts.app')
 @section('title') Courier
 @endsection
- 
+
 @section('content')
 <my-header :user="{{ json_encode($auth_user) }}"></my-header>
 {{--

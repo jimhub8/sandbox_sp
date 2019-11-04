@@ -62,9 +62,9 @@ class HomeController extends Controller
 
     /**
      * Load homepage
-     * 
-     * @param  Request $request 
-     * @return view           
+     *
+     * @param  Request $request
+     * @return view
      */
     public function index(Request $request)
     {
@@ -77,9 +77,9 @@ class HomeController extends Controller
 
     /**
      * Delete an attachment
-     * 
-     * @param  Request $request 
-     * @return Response           
+     *
+     * @param  Request $request
+     * @return Response
      */
     public function deleteAttachment(Request $request)
     {
@@ -116,9 +116,9 @@ class HomeController extends Controller
 
     /**
      * Pull all the attachments for the logged in user
-     * 
-     * @param  Request $request 
-     * @return Response           
+     *
+     * @param  Request $request
+     * @return Response
      */
     public function pullAttachments(Request $request)
     {
@@ -151,9 +151,9 @@ class HomeController extends Controller
 
     /**
      * Store files locally
-     * 
-     * @param  Request $request 
-     * @return Response           
+     *
+     * @param  Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
@@ -183,9 +183,9 @@ class HomeController extends Controller
     /**
      * We are categorizing uploaded files. Since we can't attach data to immutable javascript file objects, we have to
      * send a nested array where the second array (with key = 1) will hold custom data, such as category ID of that file
-     * 
-     * @param  Request $request 
-     * @return array          
+     *
+     * @param  Request $request
+     * @return array
      */
     public function processAttachments($request)
     {
@@ -206,9 +206,9 @@ class HomeController extends Controller
 
     /**
      * Retrieve a full list of categories
-     * 
-     * @param  Request $request 
-     * @return Response           
+     *
+     * @param  Request $request
+     * @return Response
      */
     public function getCategories(Request $request)
     {

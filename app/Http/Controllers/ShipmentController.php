@@ -20,6 +20,7 @@ use Notification;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Response;
+use Milon\Barcode\DNS1D;
 
 // use App\Observers\BaseObserver;
 
@@ -841,7 +842,20 @@ class ShipmentController extends Controller
 
     public function getShipSingle($id)
     {
-        return Shipment::find($id);
+        $bar_code = DNS1D::getBarcodePNGPath("4445645656", "PHARMA2T");
+        // return $bar_code;
+        // return $bar_code = '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG("4", "C39+") . '" alt="barcode"   />';
+        // dd((DNS1D::getBarcodePNG("4", "C39+")));
+        $bar_code ='data:image/png;base64,' .  base64_encode(DNS1D::getBarcodePNG("4", "C39+"));
+        // $d = new DNS1D();
+        // $d->setStorPath(__DIR__ . "/cache/");
+        // $bar_code = $d->getBarcodeHTML("9780691147727", "EAN13");
+        $shipments = Shipment::where('id', $id)->get();
+        $shipments->transform(function($shipment) use($bar_code) {
+            $shipment->barcode = $bar_code;
+            return $shipment;
+        });
+        return $shipments;
     }
 
     public function send_sms($phone, $message)

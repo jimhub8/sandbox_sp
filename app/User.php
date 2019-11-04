@@ -18,6 +18,7 @@ class User extends Authenticatable
 	use HasRoles, HasApiTokens;
 	public $with = ['roles'];
 	protected $guard_name = 'web';
+    protected $appends = ['is_client', 'is_admin'];
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -79,7 +80,7 @@ class User extends Authenticatable
  {
    return $this->hasMany(Message::class);
  }
- 
+
 	/**
 	 * Get all user permissions.
 	 *
@@ -88,5 +89,33 @@ class User extends Authenticatable
 	public function getAllPermissionsAttribute()
 	{
 		return $this->getAllPermissions();
-	}
+    }
+
+    public function getIsClientAttribute()
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->hasRole('Client')) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function getIsAdminAttribute()
+    {
+        if (Auth::check()) {
+            $user = Auth::user();
+            if ($user->hasRole('Admin')) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }

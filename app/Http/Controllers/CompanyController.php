@@ -19,34 +19,11 @@ class CompanyController extends Controller {
 	public function store(CompanyRequest $request) {
 		// return $request->all();
 		$company = new Company;
-		if ($request->location) {
-			$location = serialize($request->location);
-			// Location
-			$loc = $request->location;
-			$longitude = $loc['longitude'];
-			$latitude = $loc['latitude'];
-			$country = $loc['country'];
-
-			if (in_array('administrative_area_level_1', $loc)) {
-				$locality = $loc['administrative_area_level_1'];
-			} elseif (in_array('locality', $loc)) {
-				$locality = $loc['locality'];
-			} else {
-				$locality = '';
-			}
-
-			$company->longitude = $longitude;
-			$company->latitude = $latitude;
-			$company->country = $country;
-			$company->locality = $locality;
-			$company->location = $location;
-		}
 		// Location
-		$company->company_name = $request->data['company_name'];
-		$company->email = $request->data['email'];
-		$company->phone = $request->data['phone'];
-		$company->address = $request->data['address'];
-		$company->admin = $request->data['admin']['id'];
+		$company->company_name = $request->company_name;
+		$company->email = $request->email;
+		$company->phone = $request->phone;
+		$company->address = $request->address;
 		$company->user_id = Auth::id();
 		$company->save();
 		return $company;
@@ -86,7 +63,7 @@ class CompanyController extends Controller {
 		// Location
 		if ($request->data['admin']) {
 			$admin = $request->data['admin'];
-		}		
+		}
 		$company->company_name = $request->data['company_name'];
 		$company->email = $request->data['email'];
 		$company->phone = $request->data['phone'];
