@@ -43,7 +43,9 @@ class CreateShipmentsTable extends Migration {
 			$table->string('to')->nullable();
 			$table->string('charges')->nullable();
 			$table->date('booking_date')->nullable();
+			$table->dateTime('printed_at')->nullable();
 			$table->date('derivery_date')->nullable();
+			$table->dateTime('delivered_on')->nullable();
 			$table->time('derivery_time')->nullable();
 			$table->text('remark')->nullable();
 			$table->integer('branch_id')->nullable();

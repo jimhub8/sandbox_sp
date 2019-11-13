@@ -172,6 +172,24 @@
                             </router-link>
                         </v-list-group>
 
+                        <v-list-group prepend-icon="account_circle" v-if="user.can['view users']">
+                            <v-list-tile slot="activator">
+                                <v-list-tile-title>Clients</v-list-tile-title>
+                            </v-list-tile>
+                            <router-link to="/clients" class="v-list__tile theme--light" style="text-decoration: none" id="link-router">
+                                <v-list-tile-action>
+                                    <v-icon>people_outline</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Manage Clients</v-list-tile-title>
+                            </router-link>
+                            <router-link to="/groups" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>gavel</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Client Group</v-list-tile-title>
+                            </router-link>
+                        </v-list-group>
+
                         <v-list-group prepend-icon="insert_drive_file" v-if="user.can['view branches']">
                             <v-list-tile slot="activator">
                                 <v-list-tile-title>Branches$Countries</v-list-tile-title>

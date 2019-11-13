@@ -104,6 +104,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::resource('country', 'CountryController');
 	Route::resource('calls', 'CallController');
 	Route::resource('delStatus', 'DelStatusController');
+	Route::resource('clients', 'ClientController');
 
 	Route::post('updateStatus/{id}', 'ShipmentController@updateStatus')->name('updateStatus');
 	Route::get('getAdmin', 'ShipmentController@getAdmin')->name('getAdmin');

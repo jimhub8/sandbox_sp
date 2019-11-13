@@ -82,6 +82,7 @@ Vue.component('message', require('./components/message.vue'));
 Vue.component('message', require('./components/chat/Message.vue'));
 import myHeader from './components/include/Header.vue';
 import myUser from './components/users/User.vue';
+import myClients from './components/users/clients';
 import myShipment from './components/shipments/Shipment.vue';
 import myScanner from './components/scanner/Scanner.vue';
 // import myContainer from './components/containers/Container.vue';
@@ -124,6 +125,7 @@ import mySc from './components/splogs/Schedule.vue';
 const routes = [
     // {path: '/', component: dashboard },
     { path: '/users', component: myUser },
+    { path: '/clients', component: myClients },
     { path: '/shipments', component: myShipment },
     { path: '/scanner', component: myScanner },
     // {path: '/containers', component: myContainer },
@@ -178,7 +180,9 @@ const app = new Vue({
         myBranch, myProfile, myCompany, myCustomer,
         myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
         myTown, myWaybill, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash,
-        myunauth, myDash, myFilter, myChatty, myFinance, myFinClient, mySticker, myDStatus, myLogs, mySc
+        myunauth, myDash, myFilter, myChatty, myFinance, myFinClient, mySticker, myDStatus, myLogs, mySc,
+
+        myClients
         // myContainer
     },
     // data: {

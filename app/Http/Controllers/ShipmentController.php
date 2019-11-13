@@ -376,9 +376,33 @@ class ShipmentController extends Controller
      * @param  \App\Shipment  $shipment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Shipment $shipment)
+    public function destroy($id)
     {
-        Shipment::find($shipment->id)->delete();
+        $shipment = Shipment::find($id);
+        try {
+            $client = new Client;
+            $request = $client->request('DELETE', env('API_URL') . '/api/order_delete' . $shipment->bar_code, [
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->token_f(),
+                ],
+            ]);
+        Shipment::find($id)->delete();
+
+            return $response = $request->getBody()->getContents();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+            $message = $e->getResponse()->getBody();
+            $code = $e->getResponse()->getStatusCode();
+            abort(422, $message);
+            if ($code == 401) {
+                abort(401);
+            }
+            return;
+        }
+
+
     }
 
     public function getAdmin()
@@ -855,6 +879,9 @@ class ShipmentController extends Controller
             $shipment->barcode = $bar_code;
             return $shipment;
         });
+        $s_update = Shipment::find($id);
+        $s_update->printed_at = now();
+        $s_update->save();
         return $shipments;
     }
 

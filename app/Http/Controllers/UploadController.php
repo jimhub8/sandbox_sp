@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Client as AppClient;
 use Illuminate\Http\Request;
 use App\Imports\ShipmentImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -43,7 +44,7 @@ class UploadController extends Controller
     public function importShipments(Request $request)
     {
         $orders = Excel::toArray(new ShipmentImport, request()->file('shipment'));
-        $client_det = User::find($request->client);
+        $client_det = AppClient::find($request->client);
         // dd($orders);
         // $orders_col = Excel::toCollection(new OrderImport, request()->file('orders'));
         $arr = $orders[0];

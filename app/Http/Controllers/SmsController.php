@@ -17,8 +17,24 @@ class SmsController extends Controller
         // $message = $request->message;
         $shipments = $request->shipments;
         foreach ($shipments as $shipment) {
+            $phone = $shipment['client_phone'];
+            // $phone = str_replace(' ', '', $phone);
+
+            $phone = preg_replace('/[^A-Za-z0-9\-]/', '', $phone);
+             $start_no = ((substr($phone, 0, 1)));
+             if ($start_no == 2) {
+                $phone = ((substr($phone, 0, 11)));
+             } elseif($start_no == 0) {
+                $phone = ((substr($phone, 0, 10)));
+             } elseif($start_no == 7) {
+                $phone = ((substr($phone, 0, 9)));
+             } else {
+                $phone = $phone;
+             }
+            //  return $phone;
             // $phone = '254731090832';
-            $phone = '254743895505';
+            // $phone = '254743895505';
+            // return ;
             if ($status == 'Returns') {
                 $sms = 'Dear ' . $shipment['client_name'] . ' we made an attempt to deliver your parcel for ' .  $shipment['client_email'] . ' but the delivery was not successful. We would loke to make another delivery attempt. Kindly call or text us 0799870144/0799869844 or text 0778301465 to schedule for delivery ' .
                     ' regards. ';

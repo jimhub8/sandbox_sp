@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Branch;
+use App\Client as AppClient;
 use App\Country;
 use GuzzleHttp\Client;
 
@@ -46,7 +47,6 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email',
             'phone' => 'required|numeric',
-            'branch_id' => 'required',
             'countryList' => 'required',
             'role_id' => 'required',
         ]);
@@ -203,14 +203,14 @@ class UserController extends Controller
 
     public function getCustomer()
     {
-        $users = User::all();
-        $userArr = [];
-        foreach ($users as $user) {
-            if ($user->hasRole('Client')) {
-                $userArr[] = $user;
-            }
-        }
-        return $userArr;
+        return $users = AppClient::all();
+        // $userArr = [];
+        // foreach ($users as $user) {
+        //     if ($user->hasRole('Client')) {
+        //         $userArr[] = $user;
+        //     }
+        // }
+        // return $userArr;
     }
 
     public function getSorted(Request $request)
