@@ -121,6 +121,9 @@ import myFinClient from './components/finance/Clients.vue';
 import myLogs from './components/splogs/Log.vue';
 import mySc from './components/splogs/Schedule.vue';
 
+import myScreen from './components/screen';
+
+
 
 const routes = [
     // {path: '/', component: dashboard },
@@ -166,6 +169,7 @@ const routes = [
     { path: '/logs', component: myLogs },
     { path: '/schedulelogs', component: mySc },
 
+    { path: '/screen', component: myScreen },
 ]
 const router = new VueRouter({
     // mode: 'history',
@@ -182,7 +186,7 @@ const app = new Vue({
         myTown, myWaybill, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash,
         myunauth, myDash, myFilter, myChatty, myFinance, myFinClient, mySticker, myDStatus, myLogs, mySc,
 
-        myClients
+        myClients, myScreen
         // myContainer
     },
     // data: {

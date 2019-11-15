@@ -407,6 +407,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('importShipments', 'UploadController@importShipments')->name('importShipments');
 
+
+    Route::any('delivery_count', 'ScreenController@delivery_count')->name('delivery_count');
+
+
 });
 Route::any('/failsafe', 'ShipmentController@failsafe')->name('failsafe');
 

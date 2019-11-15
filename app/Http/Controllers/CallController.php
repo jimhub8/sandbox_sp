@@ -15,7 +15,7 @@ class CallController extends Controller
      */
     public function index()
     {
-        $calls = Call::take(200)->latest()->get();
+        $calls = Call::latest()->paginate(200);
         $calls->transform(function ($call, $key) {
             // dd($call->shipment);
             $call->shipment = unserialize($call->shipment);
