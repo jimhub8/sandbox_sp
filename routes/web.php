@@ -81,7 +81,11 @@ Route::group(['middleware' => ['auth']], function () {
 		$today = Carbon::today();
 		$shipments = (Shipment::whereBetween('created_at', [$today->subMonth(1), $today->addMonth(1)])->get());
 		return view('home', compact('shipments'));
-	});
+    });
+
+	Route::get('/screen', 'ScreenController@screen')->name('screen');
+	Route::get('/screen_chart', 'ScreenController@screen_chart')->name('screen_chart');
+
 
     Route::get('/logoutOther', 'UserController@logoutOther')->name('logoutOther');
     Route::post('/logOtherDevices', 'UserController@logOtherDevices')->name('logOtherDevices');
@@ -408,7 +412,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('importShipments', 'UploadController@importShipments')->name('importShipments');
 
 
-    Route::any('delivery_count', 'ScreenController@delivery_count')->name('delivery_count');
 
 
 });

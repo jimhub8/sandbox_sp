@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Observers;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use App\Call;

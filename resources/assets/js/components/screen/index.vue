@@ -13,7 +13,7 @@
                                             <div class="icon icon-primary">
                                                 <v-icon color="green">local_shipping</v-icon>
                                             </div>
-                                            <h3 class="info-title"><span><b>{{ country_count }}</b></span></h3>
+                                            <h3 class="info-title"><span><b>{{ total }}</b></span></h3>
                                             <h6 class="stats-title"><strong>Total Shipments</strong></h6>
                                         </div>
                                     </div>
@@ -23,9 +23,9 @@
                                     <div class="statistics">
                                         <div class="">
                                             <div class="icon icon-success">
-                                                <v-icon color="purple">account_circle</v-icon>
+                                                <v-icon color="purple">shopping_cart</v-icon>
                                             </div>
-                                            <h3 class="info-title"><span><b>{{ Allusers }}</b></span></h3>
+                                            <h3 class="info-title"><span><b>{{ delivered }}</b></span></h3>
                                             <h6 class="stats-title"><strong>Delivered</strong></h6>
                                         </div>
                                     </div>
@@ -37,7 +37,7 @@
                                             <div class="icon icon-info">
                                                 <v-icon color="indigo">map</v-icon>
                                             </div>
-                                            <h3 class="info-title"><span><b>{{ countryC.length }}</b></span></h3>
+                                            <h3 class="info-title"><span><b>{{ delivered_perc }}%</b></span></h3>
                                             <h6 class="stats-title"><strong>Delivery percentage</strong></h6>
                                         </div>
                                     </div>
@@ -49,7 +49,7 @@
                                             <div class="icon icon-danger">
                                                 <v-icon color="red">check_circle</v-icon>
                                             </div>
-                                            <h3 class="info-title"><span><b>{{ branchC.length }}</b></span></h3>
+                                            <h3 class="info-title"><span><b>60%</b></span></h3>
                                             <h6 class="stats-title"><strong> Target</strong></h6>
                                         </div>
                                     </div>
@@ -59,63 +59,8 @@
                     </div>
                 </div>
                 <!-- </div> -->
-                <div class="col-md-12" style="margin-top: 40px;">
-                    <div class="card card-stats card-raised">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="statistics">
-                                        <div class="">
-                                            <div class="icon icon-danger">
-                                                <v-icon color="danger">cloud</v-icon>
-                                            </div>
-                                            <h3 class="info-title"><span><b>{{ AllScheduled }}</b></span></h3>
-                                            <h6 class="stats-title"><strong> Current</strong></h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <v-divider vertical></v-divider>
-                                <div class="col-md-3">
-                                    <div class="statistics">
-                                        <div class="">
-                                            <div class="icon icon-primary">
-                                                <v-icon color="pink">check_circle</v-icon>
-                                            </div>
-                                            <h3 class="info-title"><span><b>{{ AllDelivered }}</b></span></h3>
-                                            <h6 class="stats-title"><strong>Delivered</strong></h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <v-divider vertical></v-divider>
-                                <div class="col-md-3">
-                                    <div class="statistics">
-                                        <div class="">
-                                            <div class="icon icon-success">
-                                                <v-icon color="orange">cloud</v-icon>
-                                            </div>
-                                            <h3 class="info-title"><span><b>{{ AllPending }}</b></span></h3>
-                                            <h6 class="stats-title"><strong>Pending</strong></h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <v-divider vertical></v-divider>
-                                <div class="col-md-2">
-                                    <div class="statistics">
-                                        <div class="">
-                                            <div class="icon icon-info">
-                                                <v-icon color="info">block</v-icon>
-                                            </div>
-                                            <h3 class="info-title"><span><b>{{ AllCanceled }}</b></span></h3>
-                                            <h6 class="stats-title"><strong>Cancelled</strong></h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <v-divider></v-divider>
-
+    <myChart></myChart>
                 <!-- <v-btn @click="getBranchCount" flat color="primary">Count</v-btn> -->
             </v-flex>
         </v-layout>
@@ -124,8 +69,12 @@
 </template>
 
 <script>
+import myChart from '../charts/Screen'
 export default {
-    props: ["user"],
+    props: ['total', 'delivered', 'client'],
+    components: {
+        myChart,
+    },
     data() {
         return {
 
@@ -133,7 +82,13 @@ export default {
     },
     methods: {
 
-    }
+    },
+    computed: {
+        delivered_perc() {
+            return ((parseInt(this.delivered) * parseInt(this.total)) / 100)
+        }
+    },
+
 }
 </script>
 

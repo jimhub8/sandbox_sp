@@ -10,28 +10,35 @@
                 <div v-show="!loader">
                     <v-layout wrap>
                         <v-flex sm6>
-                            <v-tooltip bottom v-if="between.start >= 500">
-                                <v-btn icon class="mx-0" @click="previous" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
-                                    <v-icon color="blue darken-2">chevron_left</v-icon>
-                                </v-btn>
+                            <v-pagination v-model="AllCalls.current_page" :length="AllCalls.last_page" total-visible="5" @input="next()" circle v-if="AllCalls.last_page > 1"></v-pagination>
+
+                            <!-- <v-tooltip bottom v-if="between.start >= 500">
+                                <template v-slot:activator="{ on }">
+                                    <v-btn v-on="on" icon class="mx-0" @click="previous" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
+                                        <v-icon color="blue darken-2">chevron_left</v-icon>
+                                    </v-btn>
+                                </template>
                                 <span>Previous results</span>
                             </v-tooltip>
                             <v-tooltip bottom v-if="callCount > between.end">
-                                <v-btn icon class="mx-0" @click="next" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
-                                    <v-icon color="blue darken-2">chevron_right</v-icon>
-                                </v-btn>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn v-on="on" icon class="mx-0" @click="next" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
+                                        <v-icon color="blue darken-2">chevron_right</v-icon>
+                                    </v-btn>
+                                </template>
                                 <span>Next results</span>
                             </v-tooltip>
-                            From {{ between.start }} to {{ between.end }}
+                            From {{ between.start }} to {{ between.end }} -->
                         </v-flex>
-                    </v-layout> 
+                    </v-layout>
                     <v-card-title>
                         Logs
                         <v-tooltip right>
-                            <v-btn icon slot="activator" class="mx-0" @click="getCalls">
-                                <v-icon color="blue darken-2" small>refresh</v-icon>
-                            </v-btn>
-                            <span>Refresh</span>
+                            <template v-slot:activator="{ on }">
+                                <v-btn v-on="on" icon slot="activator" class="mx-0" @click="getCalls">
+                                    <v-icon color="blue darken-2" small>refresh</v-icon>
+                                </v-btn>
+                            </template> <span>Refresh</span>
                         </v-tooltip>
                         <!-- <v-btn color="primary" raised @click="getCalls">Calls</v-btn> -->
                         <v-flex xs4 sm3>
@@ -51,7 +58,7 @@
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
-                    <v-data-table :headers="headers" :items="AllCalls" :search="search" counter class="elevation-1">
+                    <v-data-table :headers="headers" :items="AllCalls.data" :search="search" counter class="elevation-1">
                         <template slot="items" slot-scope="props">
                             <td>{{ props.item.user_id }}</td>
                             <td class="text-xs-right">{{ props.item.user_name }}</td>
@@ -60,9 +67,11 @@
                             <td class="text-xs-right">{{ props.item.shipment.updated_at }}</td>
                             <td class="justify-center layout px-0">
                                 <v-tooltip bottom>
-                                    <v-btn icon class="mx-0" @click="details(props.item)" slot="activator">
-                                        <v-icon color="info darken-2" small>visibility</v-icon>
-                                    </v-btn>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn v-on="on" icon class="mx-0" @click="details(props.item)" slot="activator">
+                                            <v-icon color="info darken-2" small>visibility</v-icon>
+                                        </v-btn>
+                                    </template>
                                     <span>Details</span>
                                 </v-tooltip>
                             </td>
@@ -228,12 +237,12 @@ export default {
             this.getCalls()
         },
 
-        next() {
-            this.loading = true;
-            this.between.start = parseInt(this.between.start) + 500;
-            this.between.end = parseInt(this.between.end) + 500;
-            this.filter()
-        },
+        // next() {
+        //     this.loading = true;
+        //     this.between.start = parseInt(this.between.start) + 500;
+        //     this.between.end = parseInt(this.between.end) + 500;
+        //     this.filter()
+        // },
         previous() {
             this.loading = true;
             if (this.between.start >= 500) {
@@ -245,6 +254,49 @@ export default {
                 return;
                 this.loading = false;
             }
+        },
+
+        next() {
+            // this.loading = true;
+            // this.between.start = parseInt(this.between.start) + 500;
+            // this.between.end = parseInt(this.between.end) + 500;
+            // this.sortItem()
+            this.loading = true;
+            axios
+                .post(this.AllCalls.path + '?page=' + this.AllCalls.current_page, {
+                    select: this.select,
+                    no_btw: this.between,
+                    selectStatus: this.selectItem,
+                    form: this.form,
+                    selectCountry: this.selectCountry
+                })
+                .then(response => {
+                    this.loading = false;
+                    this.AllCalls = response.data;
+                    this.filterCount()
+
+                })
+                .catch(error => {
+                    if (error.response.status === 500) {
+                        eventBus.$emit('errorEvent', error.response.statusText)
+                        this.loading = false
+                        return
+                    } else if (error.response.status === 401 || error.response.status === 409) {
+                        this.loading = false
+                        if (!user.is_client) {
+                            eventBus.$emit('reloadRequest')
+                        } else {
+                            eventBus.$emit('reloadAppRequest')
+                        }
+                        return
+                    } else if (error.response.status === 422) {
+                        this.loading = false
+                        eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                        return
+                    }
+                    this.loading = false;
+                    this.errors = error.response.data.errors;
+                });
         },
     },
     mounted() {
