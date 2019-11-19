@@ -64,7 +64,7 @@
                             <td class="text-xs-right">{{ props.item.user_name }}</td>
                             <td class="text-xs-right">{{ props.item.event }}</td>
                             <td class="text-xs-right">{{ props.item.shipment.airway_bill_no }}</td>
-                            <td class="text-xs-right">{{ props.item.shipment.updated_at }}</td>
+                            <td class="text-xs-right">{{ props.item.created_at }}</td>
                             <td class="justify-center layout px-0">
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
@@ -157,7 +157,7 @@ export default {
                 },
                 {
                     text: 'Updated at',
-                    value: 'updated_at'
+                    value: 'created_at'
                 },
                 {
                     text: 'Action',
@@ -214,12 +214,9 @@ export default {
         },
         filter() {
             eventBus.$emit("progressEvent");
+            this.form.client_id = this.select.id
             axios
-                .post("/Filterlogs", {
-                    select: this.select,
-                    no_btw: this.between,
-                    form: this.form,
-                })
+                .post("/Filterlogs", this.form)
                 .then(response => {
                     eventBus.$emit("StoprogEvent");
                     this.AllCalls = response.data;
@@ -262,8 +259,7 @@ export default {
             // this.between.end = parseInt(this.between.end) + 500;
             // this.sortItem()
             this.loading = true;
-            axios
-                .post(this.AllCalls.path + '?page=' + this.AllCalls.current_page, {
+            axios.get(this.AllCalls.path + '?page=' + this.AllCalls.current_page, {
                     select: this.select,
                     no_btw: this.between,
                     selectStatus: this.selectItem,

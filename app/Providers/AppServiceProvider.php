@@ -2,29 +2,12 @@
 
 namespace App\Providers;
 
+use App\Observers\ShipmentObserver;
+use App\Shipment;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Auth;
-// use App/Call;
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        Schema::defaultStringLength(191);
-        // \App\Call::creating(function ($call) {
-        //     // $call = new Call;
-        //     // dd($call);
-        //     $call->user_id = Auth::id();
-        //     $call->shipment_id = $call->id;
-        //     // $call->save();
-        // });
-    }
-
     /**
      * Register any application services.
      *
@@ -32,6 +15,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        Schema::defaultStringLength(191);
+    }
+    
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        Shipment::observe(ShipmentObserver::class);
     }
 }

@@ -3,5 +3,5 @@
 @endsection
 
 @section('content')
-<my-screen :total="{{ json_encode($total) }}" :client="{{ json_encode($client) }}" :delivered="{{ json_encode($delivered) }}"></my-screen>
+<my-screen></my-screen>
 @endsection

@@ -69,7 +69,7 @@ class UploadController extends Controller
         //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
         //     return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
         // }
-        $this->update_status($data);
+        // $this->update_status($data);
         foreach ($arr as $key => $order) {
             // dd($order['delivery_date']);
             $order_data = new Shipment();
@@ -86,7 +86,6 @@ class UploadController extends Controller
 
             $order_data->user_id = Auth::id();
 
-
             if (array_key_exists('status', $order)) {
                 if ($order['status'] == '' || $order['status'] == null) {
                     $status = 'Warehouse';
@@ -101,6 +100,8 @@ class UploadController extends Controller
                 }
             $order_data->status = $status;
             }
+            // dd($order_data->status);
+
 
             if (array_key_exists('delivery_date', $order)) {
                 // dd($order);
@@ -124,9 +125,9 @@ class UploadController extends Controller
             $order_data->client_email = $order['sender_mail'];
             $order_data->client_phone = $order['phone'];
             $order_data->client_address = $order['address'];
-            $order_data->client_city = $order['city'];
+            $order_data->client_city = (array_key_exists('city', $order)) ? $order['city'] : null;
             $order_data->amount_ordered = $order['quantity'];
-            $order_data->client_region = $order['region'];
+            $order_data->client_region = (array_key_exists('region', $order)) ? $order['region'] : null;
             $order_data->user_id = Auth::id();
             $order_data->shipment_id = random_int(1000000, 9999999);
             $order_data->paid = 0;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Charge;
 use App\Shipment;
+use App\Town;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -18,7 +19,7 @@ class ChargeController extends Controller
     public function store(Request $request)
     {
         // return $request->all();
-        
+
 		// $this->Validate($request, [
 		// 	'form.charges' => 'required',
 		// 	'form.town_name' => 'required',
@@ -45,12 +46,15 @@ class ChargeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // return $request->all();
         $charge = Charge::find($id);
-        $charge->town = $request->schedule['town_name'];
-        $charge->town_id = $request->schedule['id'];
-        $charge->charge = $request->form['charge'];
-        $charge->total = $request->form['total'];
-        $charge->vat = $request->form['vat'];
+        $town_name = Town::find($request->town_id);
+        // dd($town_name);
+        $charge->town = $town_name->town_name;
+        $charge->town_id = $request->id;
+        $charge->charge = $request->charge;
+        $charge->total = $request->total;
+        $charge->vat = $request->vat;
         $charge->user_id = Auth::id();
         $charge->save();
         return $charge;
@@ -89,12 +93,12 @@ class ChargeController extends Controller
                 $charge = (($distance - 5) * 25) + 200;
                 // $vat = $charge * 0.16
             }
-            
+
             $shipment->charges = $charge;
         }
         // return $charge;
         $shipment->save();
-        
+
         return $shipment;
     }
 

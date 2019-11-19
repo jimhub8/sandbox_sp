@@ -81,19 +81,27 @@ class RowsController extends Controller
 
 	public function notprinted(Request $request, $id)
 	{
+        $dispatcher = Shipment::getEventDispatcher();
+        // disabling the events
+        Shipment::unsetEventDispatcher();
 		$shipment = Shipment::find($id);
 		$shipment->printReceipt = 0;
 		$shipment->printed = 0;
 		$shipment->save();
+        Shipment::setEventDispatcher($dispatcher);
 		return $shipment;
 	}
 	public function printed(Request $request, $id)
 	{
 		// return redirect('/test');
+        $dispatcher = Shipment::getEventDispatcher();
+        // disabling the events
+        Shipment::unsetEventDispatcher();
 		$shipment = Shipment::find($id);
 		$shipment->printReceipt = 1;
 		$shipment->printed = 1;
 		$shipment->save();
+        Shipment::setEventDispatcher($dispatcher);
 		return $shipment;
 	}
 }

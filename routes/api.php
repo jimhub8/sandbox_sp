@@ -122,15 +122,15 @@ Route::group([
 
 
 
-	Route::post('btwSTdate', 'Api\FilterController@btwSTdate')->name('btwSTdate');
-	Route::post('filterShipment', 'Api\FilterController@filterShipment')->name('filterShipment');
-	Route::post('filterCount', 'Api\FilterController@filterCount')->name('filterCount');
-	Route::post('getDeriveredS', 'Api\FilterController@getDeriveredS')->name('getDeriveredS');
-	Route::post('getOrdersS', 'Api\FilterController@getOrdersS')->name('getOrdersS');
-	Route::post('getreturned', 'Api\FilterController@getreturned')->name('getreturned');
-	Route::post('getPendingS', 'Api\FilterController@getPendingS')->name('getPendingS');
-	Route::post('filterPayment', 'Api\FilterController@filterPayment')->name('filterPayment');
-	Route::post('glSearch', 'Api\FilterController@glSearch')->name('glSearch');
+	// Route::post('btwSTdate', 'Api\FilterController@btwSTdate')->name('btwSTdate');
+	// Route::post('filterShipment', 'Api\FilterController@filterShipment')->name('filterShipment');
+	// Route::post('filterCount', 'Api\FilterController@filterCount')->name('filterCount');
+	// Route::post('getDeriveredS', 'Api\FilterController@getDeriveredS')->name('getDeriveredS');
+	// Route::post('getOrdersS', 'Api\FilterController@getOrdersS')->name('getOrdersS');
+	// Route::post('getreturned', 'Api\FilterController@getreturned')->name('getreturned');
+	// Route::post('getPendingS', 'Api\FilterController@getPendingS')->name('getPendingS');
+	// Route::post('filterPayment', 'Api\FilterController@filterPayment')->name('filterPayment');
+	// Route::post('glSearch', 'Api\FilterController@glSearch')->name('glSearch');
 
 });
 

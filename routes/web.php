@@ -85,6 +85,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 	Route::get('/screen', 'ScreenController@screen')->name('screen');
 	Route::get('/screen_chart', 'ScreenController@screen_chart')->name('screen_chart');
+	Route::get('/get_data', 'ScreenController@get_data')->name('get_data');
 
 
     Route::get('/logoutOther', 'UserController@logoutOther')->name('logoutOther');

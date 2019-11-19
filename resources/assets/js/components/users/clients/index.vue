@@ -32,7 +32,6 @@
                             <td class="text-xs-right">{{ props.item.address }}</td>
                             <td class="text-xs-right">{{ props.item.phone }}</td>
                             <td class="text-xs-right">{{ props.item.city }}</td>
-                            <td class="text-xs-right">{{ props.item.branch }}</td>
                             <td class="text-xs-right">{{ props.item.country }}</td>
                             <td class="text-xs-right">{{ props.item.status }}</td>
                             <td class="justify-center layout px-0">
@@ -42,16 +41,16 @@
                                 </v-btn>
                                 <!-- <span>Edit</span> -->
                                 <!-- </v-tooltip> -->
-                                <v-tooltip bottom>
+                                <!-- <v-tooltip bottom>
                                     <v-btn icon class="mx-0" @click="openShow(props.item)" slot="activator" v-if="user.can['view users']">
                                         <v-icon small color="blue darken-2">visibility</v-icon>
                                     </v-btn>
                                     <span>View user</span>
-                                </v-tooltip>
+                                </v-tooltip> -->
                                 <!-- <v-tooltip bottom> -->
-                                <v-btn icon class="mx-0" @click="openPerm(props.item)" slot="activator" v-if="user.can['edit users']">
+                                <!-- <v-btn icon class="mx-0" @click="openPerm(props.item)" slot="activator" v-if="user.can['edit users']">
                                     <v-icon small color="orange darken-2">dialpad</v-icon>
-                                </v-btn>
+                                </v-btn> -->
                                 <!-- <span>Edit Permissions</span> -->
                                 <!-- </v-tooltip> -->
                                 <!-- <v-tooltip bottom> -->
@@ -87,10 +86,8 @@
 </template>
 
 <script>
-let AddUser = require("./AddUser.vue");
-// let PermUser = require('./Permission.vue')
-// let DeletedUsers = require('./DeletedUsers.vue')
-let EditUser = require("./EditUser.vue");
+import AddUser from "./AddUser.vue";
+import EditUser from "./EditUser.vue";
 export default {
     props: ["user", "role"],
     components: {
@@ -125,16 +122,8 @@ export default {
                     value: "phone"
                 },
                 {
-                    text: "City",
-                    value: "city"
-                },
-                {
                     text: "Country",
                     value: "country"
-                },
-                {
-                    text: "Status",
-                    value: "status"
                 },
                 {
                     text: "Actions",
@@ -205,17 +194,7 @@ export default {
         },
         openEdit(item) {
             this.getCountry();
-            this.editedIndex = this.Allusers.indexOf(item);
-            this.editedItem = Object.assign({}, item);
-            axios
-                .post(`/getUserPerm/${item.id}`)
-                .then(response => {
-                    eventBus.$emit("permEvent", response.data);
-                })
-                .catch(error => {
-                    this.errors = error.response.data.errors;
-                });
-            this.dispEdit = true;
+            eventBus.$emit('openClientEvent', item)
         },
         openPerm(item) {
             this.editedIndex = this.Allusers.indexOf(item)

@@ -48,7 +48,7 @@ class ShipmentController extends Controller
         Shipment::unsetEventDispatcher();
         $today = Carbon::today();
         // $tomorrow = Carbon::tomorrow();
-        $yest = Carbon::now()->subDays(1);
+        $yest = Carbon::now()->subDays(30);
         $prev_month = $today->subMonth();
         $refused = Shipment::select('id', 'bar_code')->setEagerLoads([])
             ->where(function ($query) {
@@ -68,19 +68,17 @@ class ShipmentController extends Controller
             ->whereDate('created_at', '<=', $prev_month)
             ->get('id')->toArray();
 
-
-
         $id_ref = array_flatten($refused);
         $id_can = array_flatten($cancelled);
 
         // enabling the event dispatcher
         // dd($cancelled, $refused);
-        $bar_code = Shipment::select('bar_code')->setEagerLoads([])->whereIn('id', $id_can)->get()->toArray();
-        $bar_code_ = array_flatten($bar_code);
-        Shipment::whereIn('id', $id_ref)->update(['status' => 'Refused']);
-        Shipment::whereIn('id', $id_can)->update(['status' => 'Cancelled']);
+        // $bar_code = Shipment::select('bar_code')->setEagerLoads([])->whereIn('id', $id_can)->get()->toArray();
+        // $bar_code_ = array_flatten($bar_code);
+        // Shipment::whereIn('id', $id_ref)->update(['status' => 'Refused']);
+        // Shipment::whereIn('id', $id_can)->update(['status' => 'Cancelled']);
         // $update_s = new Cancelled;
-        // $update_s->update_status($bar_code_);
+        // $this->update_status($bar_code_);
         Shipment::setEventDispatcher($dispatcher);
         return;
     }
@@ -388,7 +386,7 @@ class ShipmentController extends Controller
                     'Authorization' => 'Bearer ' . $this->token_f(),
                 ],
             ]);
-        Shipment::find($id)->delete();
+            Shipment::find($id)->delete();
 
             return $response = $request->getBody()->getContents();
         } catch (\Exception $e) {
@@ -401,8 +399,6 @@ class ShipmentController extends Controller
             }
             return;
         }
-
-
     }
 
     public function getAdmin()
@@ -508,6 +504,7 @@ class ShipmentController extends Controller
             $shipment->derivery_time = $request->formobg['derivery_time'];
         } elseif ($request->formobg['status'] == 'Delivered') {
             $shipment->derivery_date = $request->formobg['derivery_date'];
+            $shipment->delivered_on     = now();
             $shipment->derivery_time = $request->formobg['derivery_time'];
             // $shipment->receiver_id = ($request->formobg['receiver_id']) ? $request->formobg['receiver_id'] : null;
             $shipment->receiver_name = $request->formobg['receiver_name'];
@@ -678,6 +675,7 @@ class ShipmentController extends Controller
                     // $shipment = Shipment::setEagerLoads([])->find($value)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
 
                     $shipment = Shipment::find($value);
+                    $shipment->delivered_on     = now();
                     $shipment->derivery_date = $derivery_date;
                     $shipment->status = $status;
                     $shipment->derivery_status = $status;
@@ -866,23 +864,27 @@ class ShipmentController extends Controller
 
     public function getShipSingle($id)
     {
+        $dispatcher = Shipment::getEventDispatcher();
+        // disabling the events
+        Shipment::unsetEventDispatcher();
         $bar_code = DNS1D::getBarcodePNGPath("4445645656", "PHARMA2T");
         // return $bar_code;
         // return $bar_code = '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG("4", "C39+") . '" alt="barcode"   />';
         // dd((DNS1D::getBarcodePNG("4", "C39+")));
-        $bar_code ='data:image/png;base64,' .  base64_encode(DNS1D::getBarcodePNG("4", "C39+"));
+        $bar_code = 'data:image/png;base64,' .  base64_encode(DNS1D::getBarcodePNG("4", "C39+"));
         // $d = new DNS1D();
         // $d->setStorPath(__DIR__ . "/cache/");
         // $bar_code = $d->getBarcodeHTML("9780691147727", "EAN13");
         $shipments = Shipment::where('id', $id)->get();
-        $shipments->transform(function($shipment) use($bar_code) {
+        $shipments->transform(function ($shipment) use ($bar_code) {
             $shipment->barcode = $bar_code;
             return $shipment;
         });
         $s_update = Shipment::find($id);
         $s_update->printed_at = now();
         $s_update->save();
-        return $shipments;
+        Shipment::setEventDispatcher($dispatcher);
+        return $shipments[0];
     }
 
     public function send_sms($phone, $message)

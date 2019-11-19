@@ -105,6 +105,9 @@ class StatusController extends Controller
 
     public function getScheduled(Request $request)
     {
+        $dispatcher = Shipment::getEventDispatcher();
+        // disabling the events
+        Shipment::unsetEventDispatcher();
         // return $request->all();
         $print_shipment = Shipment::where('status', 'Scheduled')->whereBetween('derivery_date', [$request->start_date, $request->end_date])->where('printed', 0)->where('country_id', Auth::user()->country_id)->take(500)->latest()->get();
         $id = [];
@@ -116,8 +119,10 @@ class StatusController extends Controller
         // $remark = $request->form['remark'];
         // $derivery_date = $request->form['scheduled_date'];
         $shipment = Shipment::whereIn('id', $id)->update(['printed' => 1, 'printReceipt' => 1, 'printed_at' => now()]);
+        Shipment::setEventDispatcher($dispatcher);
         return $print_shipment;
     }
+    
     public function getStickers(Request $request)
     {
         // return $request->all();

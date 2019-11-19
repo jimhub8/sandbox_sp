@@ -15,10 +15,10 @@ class CallController extends Controller
      */
     public function index()
     {
-        $calls = Call::latest()->paginate(1);
+        $calls = Call::with('shipment')->latest()->paginate(200);
         $calls->transform(function ($call, $key) {
             // dd($call->shipment);
-            $call->shipment = unserialize($call->shipment);
+            // $call->shipment = unserialize($call->shipment);
             $user = User::find($call->user_id);
             if (empty($user)) {
                 // dd($call);
@@ -36,14 +36,25 @@ class CallController extends Controller
         // return $request->all();
         $end_date = $request->form['end_date'];
         $start_date = $request->form['start_date'];
-        $user_id = $request->select['id'];
-        $start = $request->no_btw['start'];
-        $calls = Call::whereBetween('created_at', [$start_date, $end_date])->where('user_id', $user_id)->skip($start - 1)->take(200)->latest()->get();
+        $calls = Call::with('shipment');
+        if ($end_date & $start_date) {
+            $calls = $calls->whereBetween('created_at', [$start_date, $end_date]);
+        }
+        if ($request->client_id) {
+            $calls = $calls->where('user_id', $request->client_id);
+        }
+        // $calls = Call::whereBetween('created_at', [$start_date, $end_date])->where('user_id', $user_id)->skip($start - 1)->take(200)->latest()->get();
+        $calls = $calls->paginate(200);
         $calls->transform(function ($call, $key) {
             // dd($call->shipment);
-            $call->shipment = unserialize($call->shipment);
+            // $call->shipment = unserialize($call->shipment);
             $user = User::find($call->user_id);
-            $call->user_name = $user->name;
+            if (empty($user)) {
+                // dd($call);
+            } else {
+                $call->user_name = $user->name;
+                // dd($call->user_id);
+            }
             return $call;
         });
         return $calls;

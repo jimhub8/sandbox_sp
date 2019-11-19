@@ -5,7 +5,9 @@
             <v-card-title fixed>
                 <span class="headline">Edit Charges</span>
                 <v-spacer></v-spacer>
-                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
+                <v-btn icon dark @click="close">
+                    <v-icon color="black">close</v-icon>
+                </v-btn>
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>
@@ -14,7 +16,7 @@
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
                                     <v-flex xs12 sm6>
-                                        <v-select :items="AllTowns" v-model="schedule" label="Select Town" single-line item-text="town_name" item-value="id" return-object persistent-hint></v-select>
+                                        <v-select :items="AllTowns" v-model="charges.town_id" label="Select Town" single-line item-text="town_name" item-value="id" persistent-hint></v-select>
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="charges.charge" :rules="rules.name" color="blue darken-2" label="Charges" required></v-text-field>
@@ -68,10 +70,7 @@ export default {
     methods: {
         save() {
             this.loading = true
-            axios.patch(`/charges/${this.charges.id}`, {
-                form: this.charges,
-                schedule: this.$data.schedule
-                }).
+            axios.patch(`/charges/${this.charges.id}`, this.charges).
             then((response) => {
                     this.loading = false
                     console.log(response);

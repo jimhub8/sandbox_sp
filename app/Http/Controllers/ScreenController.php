@@ -26,7 +26,8 @@ class ScreenController extends Controller
                 $end_day_ = $today->modify("next " . $client->end_day);
             } else {
                 $start_day_ = Carbon::today()->modify("last " . $client->start_day);
-                $end_day_ = Carbon::today()->modify("next " . $client->end_day);
+                $end_day_ = Carbon::today();
+                // $end_day_ = Carbon::today()->modify("next " . $client->end_day);
             }
             // dd($start_day_);
         } else {
@@ -55,7 +56,12 @@ class ScreenController extends Controller
     }
     public function screen()
     {
-        DB::enableQueryLog(); // Enable query log
+        return view('screen.screen');
+    }
+
+    public function get_data()
+    {
+        // DB::enableQueryLog(); // Enable query log
         $details_fun = $this->details_fun();
         $client = $details_fun['client'];
         $date_arr = $details_fun['date_arr'];
@@ -65,9 +71,10 @@ class ScreenController extends Controller
         // Your Eloquent query
 
         $total = Shipment::whereBetween('created_at', $date_arr)->where('client_id', $client->id)->count();
-        $delivered = Shipment::whereBetween('created_at', $date_arr)->where('status', 'Delivered')->where('client_id', $client->id)->count();
+        $delivered = Shipment::whereBetween('derivery_date', $date_arr)->where('status', 'Delivered')->where('client_id', $client->id)->count();
+        $data = array('total' => $total, 'delivered' => $delivered, 'client' => $client);
         // dd(DB::getQueryLog()); // Show results of log
-        return view('screen.screen', compact('delivered', 'client', 'total'));
+        return $data;
     }
 
     public function screen_chart()
@@ -75,17 +82,16 @@ class ScreenController extends Controller
         $details_fun = $this->details_fun();
         $client = $details_fun['client'];
         $date_arr = $details_fun['date_arr'];
-        $shipments = Shipment::select(DB::raw('count(id) as count, date_format(created_at, "%W") as date'))
-                ->orderBy('id', 'asc')
+        // dd($date_arr);
+        $shipments = Shipment::select(DB::raw('count(id) as count, date_format(derivery_date, "%W") as date'))
+                ->orderBy('derivery_date', 'asc')
                 ->groupBy('date')
+                ->where('status', 'Delivered')
                 ->where('client_id', $client->id)
-                ->whereBetween('created_at', $date_arr)
-                // ->where('branch_id', Auth::id())
+                ->whereBetween('derivery_date', $date_arr)
                 ->get();
-
         $lables = [];
         $rows = [];
-        // dd($shipments);
         foreach ($shipments as $key => $shipment) {
             $lables[] = $shipment->date;
             $rows[] = $shipment->count;
@@ -96,6 +102,4 @@ class ScreenController extends Controller
         );
         return response()->json(['data' => $data]);
     }
-
-
 }

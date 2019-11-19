@@ -1,6 +1,6 @@
 <template>
 <v-layout row justify-center>
-    <v-dialog v-model="openEditRequest" persistent max-width="700px">
+    <v-dialog v-model="dialog" persistent max-width="700px">
         <v-card>
             <v-card-title fixed>
                 <span class="headline">Add User</span>
@@ -11,80 +11,68 @@
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>
-                    <v-layout wrap v-show="!loader">
-                        <v-form ref="form" @submit.prevent="submit">
+                    <v-layout wrap>
+                        <v-form ref="form" @submit.prevent>
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.name" :rules="rules.name" color="purple darken-2" label="Full name" required></v-text-field>
+                                        <v-text-field v-model="form.name" color="purple darken-2" label="Full name" required></v-text-field>
+                                        <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.email" :rules="emailRules" color="blue darken-2" label="Email" required></v-text-field>
+                                        <v-text-field v-model="form.email" color="blue darken-2" label="Email" required></v-text-field>
+                                        <small class="has-text-danger" v-if="errors.email">{{ errors.email[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.address" :rules="rules.name" color="blue darken-2" label="Address" required></v-text-field>
+                                        <v-text-field v-model="form.address" color="blue darken-2" label="Address" required></v-text-field>
+                                        <small class="has-text-danger" v-if="errors.address">{{ errors.address[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.city" :rules="rules.name" color="blue darken-2" label="City" required></v-text-field>
+                                        <v-text-field v-model="form.city" color="blue darken-2" label="City" required></v-text-field>
+                                        <small class="has-text-danger" v-if="errors.city">{{ errors.city[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.country" :rules="rules.name" color="blue darken-2" label="Country" required></v-text-field>
+                                        <v-text-field v-model="form.phone" color="blue darken-2" label="Phone" required></v-text-field>
+                                        <small class="has-text-danger" v-if="errors.phone">{{ errors.phone[0] }}</small>
                                     </v-flex>
-                                    <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.phone" :rules="rules.name" color="blue darken-2" label="Phone" required></v-text-field>
-                                    </v-flex>
-
                                     <div class="form-group col-md-6">
-                                        <label class="col-md-6 col-form-label text-md-right" for="">Role</label>
-                                        <select class="custom-select custom-select-md col-md-12" v-for="role in form.roles" :key="role.id" v-model="role.name">
-                                            <option v-for="roles in AllRoles" :key="roles.id" :value="roles.name">{{ roles.name }}</option>
-                                    </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="col-md-6 col-form-label text-md-right" for="">Branch</label>
-                                        <select class="custom-select custom-select-md col-md-12" v-model="form.branch_id">
-                                            <option v-for="branches in AllBranches" :key="branches.id" :value="branches.id">{{ branches.branch_name }}</option>
-                                    </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label class="col-md-6 col-form-label text-md-right" for="">Country</label>
-                                        <select class="custom-select custom-select-md col-md-12" v-model="form.country_id">
+                                        <label for="">Country</label>
+                                        <select class="custom-select custom-select-md col-md-12" v-model="form.countryList" @change="country_branch">
                                             <option v-for="country in countryList" :key="country.id" :value="country.id">{{ country.country_name }}</option>
-                                    </select>
-                                        <!-- <small class="has-text-danger" v-if="errors.branch_id">{{ errors.branch_id[0] }}</small> -->
+                                        </select>
+                                        <small class="has-text-danger" v-if="errors.countryList">{{ errors.countryList[0] }}</small>
                                     </div>
-                                    <v-flex xs12>
-                                        <v-expansion-panel inset>
-                                            <v-expansion-panel-content>
-                                                <div slot="header">Permissions</div>
-                                                <v-card>
-                                                    <v-card-text>
-                                                        <v-layout wrap>
-                                                            <div v-for="perm in permissions" :key="perm.id">
-                                                                <v-flex xs12 sm12>
-                                                                    <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
-                                                                </v-flex>
-                                                            </div>
-                                                        </v-layout>
-                                                    </v-card-text>
-                                                </v-card>
-                                            </v-expansion-panel-content>
-                                        </v-expansion-panel>
-                                    </v-flex>
-
+                                    <div class="form-group col-md-6">
+                                        <label for=""> Report start day</label>
+                                        <el-select v-model="form.start_day" placeholder="Select a day" style="width:100%">
+                                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="">Report end day</label>
+                                        <el-select v-model="form.end_day" placeholder="Select a day" style="width:100%">
+                                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="">Report Display</label>
+                                        <el-select v-model="form.show_on" placeholder="Select a day" style="width:100%">
+                                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </div>
                                 </v-layout>
                             </v-container>
                             <v-card-actions>
                                 <v-btn flat @click="resetForm">reset</v-btn>
                                 <v-btn flat @click="close">Close</v-btn>
                                 <v-spacer></v-spacer>
-                                <v-btn :disabled="loading" flat color="primary" @click="update" :loading="loading">Submit</v-btn>
+                                <v-btn :disabled="loading" flat color="primary" @click="save" :loading="loading">Submit</v-btn>
                             </v-card-actions>
                         </v-form>
                     </v-layout>
-                    <div v-show="loader" style="text-align: center">
-                        <v-progress-circular :width="3" indeterminate color="red" style="margin: 1rem"></v-progress-circular>
-                    </div>
                 </v-container>
             </v-card-text>
         </v-card>
@@ -94,43 +82,68 @@
 
 <script>
 export default {
-    props: ['openEditRequest', 'form', 'AllBranches', 'AllRoles', 'countryList'],
+    props: ['countryList'],
     data() {
         return {
-            e1: true,
-            loader: false,
+            dialog: false,
+            options: [{
+                value: 'Monday',
+                label: 'Monday'
+            }, {
+                value: 'Tuesday',
+                label: 'Tuesday'
+            }, {
+                value: 'Wednesday',
+                label: 'Wednesday'
+            }, {
+                value: 'Thursday',
+                label: 'Thursday'
+            }, {
+                value: 'Friday',
+                label: 'Friday'
+            }],
             loading: false,
-            list: {},
+            errors: [],
             selected: [],
+            AllBranches: [],
             permissions: [],
-            emailRules: [
-                v => {
-                    return !!v || 'E-mail is required'
-                },
-                v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
-            ],
-            rules: {
-                name: [val => (val || '').length > 0 || 'This field is required']
-            },
+            loader: false,
+            e1: true,
+            form: {},
         }
     },
     methods: {
-        update() {
+        save() {
             this.loading = true
-            axios.patch(`/users/${this.form.id}`, {
-                form: this.form,
-                selected: this.selected
-            }).
+            axios.patch(`/clients/${this.form.id}`, this.form).
             then((response) => {
-                    // console.log(response);
+                    // alert('error1')
                     this.loading = false
+                    // console.log(response);
+                    // this.$parent.Allusers.push(response.data)
+                    // this.close();
+                    // this.resetForm();
                     this.$emit('alertRequest');
-                    this.close();
-                    Object.assign(this.$parent.Allusers[this.$parent.editedIndex], this.$parent.editedItem)
                 })
                 .catch((error) => {
-                    this.errors = error.response.data.errors
                     this.loading = false
+                    // alert('error2')
+                    if (error.response.status === 500 || error.response.status === 405 ) {
+                        eventBus.$emit('errorEvent', error.response.statusText)
+                        this.loading = false
+                        return
+                    } else if (error.response.status === 401 || error.response.status === 409) {
+                        this.loading = false
+                        eventBus.$emit('reloadRequest')
+                        return
+                    } else if (error.response.status === 422) {
+                        this.loading = false
+                        eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                        return
+                    }
+                    this.loading = false
+                    console.log(error)
+                    this.errors = error.response.data.errors
                 })
         },
         resetForm() {
@@ -138,13 +151,15 @@ export default {
             this.$refs.form.reset()
         },
         close() {
-            this.$emit('closeRequest')
+            this.dialog = false
         },
-    },
-    created() {
-        eventBus.$on('permEvent', data => {
-            this.selected = data;
-        });
+        country_branch() {
+            this.countryList.forEach(element => {
+                if (parseInt(this.form.countryList) == parseInt(element.id)) {
+                    this.AllBranches = element.branches
+                }
+            });
+        },
     },
     computed: {
         formIsValid() {
@@ -152,23 +167,17 @@ export default {
                 this.form.name &&
                 this.form.email &&
                 this.form.phone &&
-                this.form.password &&
-                this.form.branch &&
+                // this.form.zipcode &&
                 this.form.address &&
-                this.form.city &&
-                this.form.country
+                this.form.city
             )
         },
     },
-    mounted() {
-
-        axios.get('/getPermissions')
-            .then((response) => {
-                this.permissions = response.data
-            })
-            .catch((errors) => {
-                this.errors = error.response.data.errors
-            })
-    }
+    created () {
+        eventBus.$on('openClientEvent', data => {
+            this.dialog = true
+            this.form = data
+        });
+    },
 }
 </script>

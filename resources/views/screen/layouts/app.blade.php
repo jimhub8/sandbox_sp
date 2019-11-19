@@ -11,6 +11,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <link rel="icon" href="/storage/logo.png">
 
     <!-- Fonts -->
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">

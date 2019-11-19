@@ -13,9 +13,12 @@
                             <v-btn @click="openAdd" flat color="primary">Add Charges</v-btn>
                             <!-- <v-spacer></v-spacer> -->
                             <v-tooltip bottom>
-                                <v-btn slot="activator" icon class="mx-0" @click="getCharges">
-                                    <v-icon small color="blue darken-2">refresh</v-icon>
-                                </v-btn>
+                                <template v-slot:activator="{ on }">
+
+                                    <v-btn v-on="on" slot="activator" icon class="mx-0" @click="getCharges">
+                                        <v-icon small color="blue darken-2">refresh</v-icon>
+                                    </v-btn>
+                                </template>
                                 <span>Refresh</span>
                             </v-tooltip>
                             <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
@@ -29,9 +32,12 @@
                                 <td class="text-xs-right">{{ props.item.total }}</td>
                                 <td class="justify-center layout px-0">
                                     <v-tooltip bottom>
-                                        <v-btn slot="activator" icon class="mx-0" @click="taskEdit(props.item)">
-                                            <v-icon small color="blue darken-2">edit</v-icon>
-                                        </v-btn>
+                                        <template v-slot:activator="{ on }">
+
+                                            <v-btn v-on="on" slot="activator" icon class="mx-0" @click="taskEdit(props.item)">
+                                                <v-icon small color="blue darken-2">edit</v-icon>
+                                            </v-btn>
+                                        </template>
                                         <span>Edit</span>
                                     </v-tooltip>
                                 </td>
@@ -62,88 +68,89 @@ let EditCharge = require("./EditCharge");
 // let ShowTask = require('./ShowTask');
 
 export default {
-  components: {
-    AddCharge,
-    EditCharge
-    // ShowTask,
-  },
+    components: {
+        AddCharge,
+        EditCharge
+        // ShowTask,
+    },
 
-  data() {
-    return {
-      search: "",
-      loading: false,
-      dispAdd: false,
-      dispShow: false,
-      dispEdit: false,
-      AllCharges: [],
-      editCharge: [],
-      loader: false,
-      snackbar: false,
-      timeout: 5000,
-      color: "",
-      message: "",
-      headers: [
-        {
-          text: "Town",
-          align: "left",
-          value: "town"
-        },
-        {
-          text: "Charges",
-          value: "charge"
-        },
-        {
-          text: "16%VAT",
-          value: "vat"
-        },
-        {
-          text: "Total",
-          value: "total"
-        },
-        {
-          text: "Actions",
-          value: "name",
-          sortable: false
+    data() {
+        return {
+            search: "",
+            loading: false,
+            dispAdd: false,
+            dispShow: false,
+            dispEdit: false,
+            AllCharges: [],
+            editCharge: [],
+            loader: false,
+            snackbar: false,
+            timeout: 5000,
+            color: "",
+            message: "",
+            headers: [{
+                    text: "Town",
+                    align: "left",
+                    value: "town"
+                },
+                {
+                    text: "Charges",
+                    value: "charge"
+                },
+                {
+                    text: "16%VAT",
+                    value: "vat"
+                },
+                {
+                    text: "Total",
+                    value: "total"
+                },
+                {
+                    text: "Actions",
+                    value: "name",
+                    sortable: false
+                }
+            ]
         }
-      ]
-    }
-  },
-
-  methods: {
-    openAdd() {
-      this.dispAdd = true;
-    },
-    close() {
-      this.dispAdd = this.dispShow = this.dispEdit = this.dispMail = false;
-    },
-    showAlert() {
-      this.message = "Successifully Added";
-      this.snackbar = true;
-      this.color = "indigo";
     },
 
-    taskEdit(task) {
-      this.editCharge = Object.assign({}, task);
-      this.editedIndex = this.AllCharges.indexOf(task);
-      this.dispEdit = true;
+    methods: {
+        openAdd() {
+            this.dispAdd = true;
+        },
+        close() {
+            this.dispAdd = this.dispShow = this.dispEdit = this.dispMail = false;
+        },
+        showAlert() {
+            this.message = "Successifully Added";
+            this.snackbar = true;
+            this.color = "indigo";
+        },
+
+        taskEdit(task) {
+            this.editCharge = Object.assign({}, task);
+            this.editedIndex = this.AllCharges.indexOf(task);
+            this.dispEdit = true;
+        },
+        getCharges() {
+            this.loading = true;
+            axios
+                .get("/getCharges")
+                .then(response => {
+                    this.loading = false;
+                    this.loader = false;
+                    this.AllCharges = response.data;
+                })
+                .catch(error => {
+                    this.loading = false;
+                    this.loader = false;
+                    this.errors = error.response.data.errors;
+                });
+        }
     },
-    getCharges() {
-      this.loader = true;
-      axios
-        .get("/getCharges")
-        .then(response => {
-          this.loader = false;
-          this.AllCharges = response.data;
-        })
-        .catch(error => {
-          this.loader = false;
-          this.errors = error.response.data.errors;
-        });
+    mounted() {
+        this.loader = true;
+        this.getCharges();
     }
-  },
-  mounted() {
-    this.loader = true;
-    this.getCharges();
-  }
 };
 </script>

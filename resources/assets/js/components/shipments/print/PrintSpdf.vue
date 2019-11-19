@@ -6,7 +6,7 @@ import VueBarcode from "vue-barcode";
 
 export default {
   props: ["showItems"],
-  name: "print",
+  name: "Kenyaprint",
   components: {
     barcode: VueBarcode
   },

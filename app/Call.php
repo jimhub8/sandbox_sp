@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Call extends Model
@@ -10,8 +11,17 @@ class Call extends Model
     {
         return $this->hasMany('App\User', 'user_id');
     }
-    public function shipments()
+    public function shipment()
     {
-        return $this->hasMany('App\Shipment', 'user_id');
+        return $this->belongsTo('App\Shipment', 'shipment_id');
+    }
+
+    public function getUpdatedAtAttribute($date)
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('D d M Y ');
+    }
+    public function getCreatedAtAttribute($date)
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('D d M Y ');
     }
 }

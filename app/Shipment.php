@@ -39,38 +39,17 @@ class Shipment extends Model
         return $this->hasMany('App\ShipmentStatus', 'shipment_id');
     }
 
+    public function calls()
+    {
+        return $this->hasMany('App\Call', 'shipment_id');
+    }
+
     public $fillable = [
         'client_name', 'client_phone', 'client_email', 'client_address', 'client_city',
         'assign_staff', 'airway_bill_no', 'shipment_type', 'payment', 'insuarance_status',
         'booking_date', 'derivery_date', 'bar_code', 'derivery_time', 'sender_name',
         'sender_phone', 'sender_address', 'sender_city', 'total_freight',
     ];
-
-    // public static function boot() {
-
-    //     parent::boot();
-
-    //     static::created(function($shipment) {
-    //         Event::fire('shipment.created', $shipment);
-    //     });
-
-    //     static::updated(function($shipment) {
-    //         Event::fire('shipment.updated', $shipment);
-    //     });
-
-    //     static::deleted(function($shipment) {
-    //         Event::fire('shipment.deleted', $shipment);
-    //     });
-
-    //     static::creating(function($shipment) {
-    //         Event::fire('shipment.creating', $shipment);
-    //     });
-    // }
-
-    // public  function scopeLike($query, $field, $value){
-    //     return $query->where($field, 'LIKE', "%$value%");
-    // }
-
 
     protected static function boot()
     {

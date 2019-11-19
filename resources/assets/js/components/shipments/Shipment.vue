@@ -12,19 +12,6 @@
                     <v-spacer></v-spacer>
                     <v-layout wrap>
                         <v-flex sm6>
-                            <!-- <v-tooltip bottom v-if="between.start >= 500">
-                                <v-btn icon class="mx-0" @click="previous" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
-                                    <v-icon color="blue darken-2">chevron_left</v-icon>
-                                </v-btn>
-                                <span>Previous results</span>
-                            </v-tooltip>
-                            <v-tooltip bottom v-if="shipmentsCount > between.end">
-                                <v-btn icon class="mx-0" @click="next" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
-                                    <v-icon color="blue darken-2">chevron_right</v-icon>
-                                </v-btn>
-                                <span>Next results</span>
-                            </v-tooltip>
-                            From {{ between.start }} to {{ between.end }} -->
                             <v-pagination v-model="AllShipments.current_page" :length="AllShipments.last_page" total-visible="5" @input="next()" circle v-if="AllShipments.last_page > 1"></v-pagination>
 
                         </v-flex>
@@ -32,16 +19,29 @@
                             <v-text-field v-model="glsearch.search" append-icon="search" label="Global Search" single-line hide-details @keyup.enter="itemSearch"></v-text-field>
                         </v-flex>
                     </v-layout>
-                    <v-card style="background: rgba(5, 117, 230, 0.16);">
+                    <v-card style="background: rgba(5, 117, 230, 0.16); padding: 10px 0;">
                         <v-layout wrap>
                             <v-flex xs4 sm2 v-if="user.can['filter by country']">
-                                <v-select :items="AllCountries" v-model="selectCountry" hint="COUNTRY" label="Filter By country" single-line item-text="country_name" item-value="id" return-object persistent-hint @change="changeCat(selectCountry)"></v-select>
+                                <el-select v-model="form.country_id" clearable filterable placeholder="Select Country" @change="changeCat">
+                                    <el-option v-for="item in AllCountries" :key="item.id" :label="item.country_name" :value="item.id">
+                                    </el-option>
+                                </el-select>
+                                <!-- <v-select :items="AllCountries" v-model="selectCountry" hint="COUNTRY" label="Filter By country" single-line item-text="country_name" item-value="id" return-object persistent-hint @change="changeCat(selectCountry)"></v-select> -->
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
-                                <v-select :items="AllBranches" v-model="select" hint="BRANCHES" label="Filter By Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select>
+                                <el-select v-model="form.branch_id" clearable filterable placeholder="Select">
+                                    <el-option v-for="item in AllBranches" :key="item.id" :label="item.branch_name" :value="item.id">
+                                    </el-option>
+                                </el-select>
+                                <!-- <v-select :items="AllBranches" v-model="select" hint="BRANCHES" label="Filter By Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select> -->
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
-                                <v-select :items="AllStatus" v-model="selectItem" hint="STATUS" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint @blur="close_select"></v-select>
+
+                                <el-select v-model="form.status" clearable filterable placeholder="Select">
+                                    <el-option v-for="item in AllStatus" :key="item.name" :label="item.name" :value="item.name">
+                                    </el-option>
+                                </el-select>
+                                <!-- <v-select :items="AllStatus" v-model="selectItem" hint="STATUS" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint @blur="close_select"></v-select> -->
                             </v-flex>
                             <!-- <v-spacer></v-spacer> -->
                             <v-flex xs12 sm2 offset-sm1>
@@ -76,16 +76,6 @@
                             </template>
                             <span>Refresh</span>
                         </v-tooltip>
-
-                        <!-- <v-tooltip right>
-                            <template v-slot:activator="{ on }">
-                                <v-btn icon v-on="on" slot="activator" class="mx-0" @click="updateCancelled">
-                                    <v-icon color="orange darken-2" small>refresh</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Refresh</span>
-                        </v-tooltip> -->
-
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
@@ -99,11 +89,6 @@
                             <td>
                                 {{ props.item.bar_code }}
                             </td>
-                            <!-- <td class="text-xs-right">
-                                <barcode v-bind:value="props.item.bar_code" style="height: 10px;">
-                                    No barcode
-                                </barcode>
-                            </td> -->
                             <td class="text-xs-right">{{ props.item.client_name }}</td>
                             <td class="text-xs-right">{{ props.item.client_phone }}</td>
                             <td class="text-xs-right">{{ props.item.client_email }}</td>
@@ -113,7 +98,6 @@
                             <td class="text-xs-right">{{ props.item.status }}</td>
                             <td class="text-xs-right">{{ props.item.derivery_date }}</td>
                             <td class="text-xs-right" v-if="props.item.printReceipt === '1' || props.item.printReceipt === 1" style="background: rgba(23, 193, 60, 0.76);">
-                                <!-- <v-btn color="white" flat @click="notPrinted(props.item)" :loading="nloading" :disabled="nloading">Mark Not Printed</v-btn> -->
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
                                         <v-btn icon v-on="on" class="mx-0" @click="notPrinted(props.item)" slot="activator" v-if="user.can['print waybill']">
@@ -124,7 +108,6 @@
                                 </v-tooltip>
                             </td>
                             <td class="text-xs-right" v-else>
-                                <!-- <v-btn color="info" flat @click="printed(props.item)" :loading="ploading" :disabled="ploading">Mark Printed </v-btn> -->
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
                                         <v-btn icon v-on="on" class="mx-0" @click="printed(props.item)" slot="activator" v-if="user.can['print waybill']">
@@ -874,11 +857,21 @@ export default {
                 });
         },
         changeCat(item) {
-            this.select = {
-                branch_name: "All",
-                id: "all"
-            };
-            this.AllBranches = item.branches;
+            console.log(item);
+            axios.get(`/country_branch/${item}`)
+                .then(response => {
+                    this.AllBranches = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.errors = error.response.data.errors;
+                });
+
+            // this.select = {
+            //     branch_name: "All",
+            //     id: "all"
+            // };
+            // this.AllBranches = item.branches;
         },
     },
     created() {
