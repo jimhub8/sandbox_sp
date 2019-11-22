@@ -4,31 +4,12 @@
         <div v-show="loader" style="text-align: center; width: 100%;">
             <v-progress-circular :width="3" indeterminate color="red" style="margin: 1rem"></v-progress-circular>
         </div>
-
         <v-container fluid fill-height v-show="!loader">
             <v-layout justify-center align-center>
                 <div v-show="!loader">
                     <v-layout wrap>
                         <v-flex sm6>
                             <v-pagination v-model="AllCalls.current_page" :length="AllCalls.last_page" total-visible="5" @input="next()" circle v-if="AllCalls.last_page > 1"></v-pagination>
-
-                            <!-- <v-tooltip bottom v-if="between.start >= 500">
-                                <template v-slot:activator="{ on }">
-                                    <v-btn v-on="on" icon class="mx-0" @click="previous" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
-                                        <v-icon color="blue darken-2">chevron_left</v-icon>
-                                    </v-btn>
-                                </template>
-                                <span>Previous results</span>
-                            </v-tooltip>
-                            <v-tooltip bottom v-if="callCount > between.end">
-                                <template v-slot:activator="{ on }">
-                                    <v-btn v-on="on" icon class="mx-0" @click="next" slot="activator" style="background: hsla(122, 23%, 60%, 0.31);">
-                                        <v-icon color="blue darken-2">chevron_right</v-icon>
-                                    </v-btn>
-                                </template>
-                                <span>Next results</span>
-                            </v-tooltip>
-                            From {{ between.start }} to {{ between.end }} -->
                         </v-flex>
                     </v-layout>
                     <v-card-title>
@@ -40,27 +21,44 @@
                                 </v-btn>
                             </template> <span>Refresh</span>
                         </v-tooltip>
-                        <!-- <v-btn color="primary" raised @click="getCalls">Calls</v-btn> -->
                         <v-flex xs4 sm3>
-                            <v-select :items="Allusers" v-model="select" label="Select User" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
+                                <el-select v-model="form.client_id" clearable filterable placeholder="Select User" @change="changeCat">
+                                    <el-option v-for="item in Allusers" :key="item.id" :label="item.name" :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            <!-- <v-select :items="Allusers" v-model="select" label="Select User" single-line item-text="name" item-value="name" return-object persistent-hint></v-select> -->
                         </v-flex>
-                        <!-- <v-spacer></v-spacer> -->
                         <v-flex xs12 sm2 offset-sm1>
                             <v-text-field label="Start Date" v-model="form.start_date" color="blue darken-2" type="date" required></v-text-field>
                         </v-flex>
                         <v-flex xs12 sm2>
                             <v-text-field label="End Date" v-model="form.end_date" color="blue darken-2" type="date" required></v-text-field>
                         </v-flex>
-                        <v-flex xs4 sm1>
-                            <v-btn flat color="info" @click="filReset">Reset</v-btn>
+                        <v-flex sm1>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn v-on="on" icon class="mx-0" @click="filter" slot="activator">
+                                        <v-icon color="info darken-2" small>search</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Filter</span>
+                            </v-tooltip>
                         </v-flex>
-                        <v-btn color="orange" flat @click="filter">Filter</v-btn>
+                        <v-flex sm1>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn v-on="on" icon class="mx-0" @click="filReset" slot="activator">
+                                        <v-icon color="info darken-2" small>settings_backup_restore</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Reset</span>
+                            </v-tooltip>
+                        </v-flex>
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
                     <v-data-table :headers="headers" :items="AllCalls.data" :search="search" counter class="elevation-1">
                         <template slot="items" slot-scope="props">
-                            <td>{{ props.item.user_id }}</td>
                             <td class="text-xs-right">{{ props.item.user_name }}</td>
                             <td class="text-xs-right">{{ props.item.event }}</td>
                             <td class="text-xs-right">{{ props.item.shipment.airway_bill_no }}</td>
@@ -80,34 +78,8 @@
                             Your search for "{{ search }}" found no results.
                         </v-alert>
                     </v-data-table>
-
-                    <!-- <v-layout wrap>
-
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <v-tooltip right>
-                                <v-btn icon slot="activator" class="mx-0" @click="schedulepct">
-                                    <v-icon color="blue darken-2" small>refresh</v-icon>
-                                </v-btn>
-                                <span>Refresh</span>
-                            </v-tooltip>
-                            <div class="card card-chart">
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                    </div>
-                                    <div class="progress-Ship">
-                                        <div v-for="userC in AllSc" :key="userC.id">
-                                            {{ userC.name }}: {{ userC.count }} %
-                                            <v-progress-linear color="indigo" height="2" :value="userC.count"></v-progress-linear>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </v-layout> -->
                 </div>
             </v-layout>
-
-            <!-- </v-layou/t> -->
         </v-container>
     </v-content>
     <show></show>
@@ -137,11 +109,7 @@ export default {
                 start: 1,
                 end: 500
             },
-            headers: [{
-                    text: 'User Id',
-                    align: 'left',
-                    value: 'user_id'
-                },
+            headers: [
                 {
                     text: 'User Name',
                     align: 'left',
@@ -167,22 +135,6 @@ export default {
         }
     },
     methods: {
-        schedulepct() {
-            eventBus.$emit("progressEvent");
-            // this.loader = true;
-            axios
-                .get("/allLogs")
-                .then(response => {
-                    eventBus.$emit("StoprogEvent");
-                    this.AllSc = response.data;
-                    this.loader = false;
-                })
-                .catch(error => {
-                    eventBus.$emit("StoprogEvent");
-                    this.loader = false;
-                    this.errors = error.response.data.errors;
-                });
-        },
         getUsers() {
             this.loading = true
             axios.get('/getUsers')
@@ -214,7 +166,7 @@ export default {
         },
         filter() {
             eventBus.$emit("progressEvent");
-            this.form.client_id = this.select.id
+            // this.form.client_id = this.select.id
             axios
                 .post("/Filterlogs", this.form)
                 .then(response => {
@@ -298,7 +250,7 @@ export default {
     mounted() {
         this.loader = true
         this.getUsers()
-        this.schedulepct()
+        // this.schedulepct()
         this.getCalls()
         axios
             .get("/callcount")

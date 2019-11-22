@@ -8,6 +8,7 @@ use App\Status;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Milon\Barcode\DNS1D;
 
 class StatusController extends Controller
 {
@@ -119,10 +120,17 @@ class StatusController extends Controller
         // $remark = $request->form['remark'];
         // $derivery_date = $request->form['scheduled_date'];
         $shipment = Shipment::whereIn('id', $id)->update(['printed' => 1, 'printReceipt' => 1, 'printed_at' => now()]);
+        $print_shipment->transform(function ($shipment) {
+            // dd(DNS1D::getBarcodeSVG("4445645656", "C39"));
+            $bar_code = 'data:image/png;base64,' . DNS1D::getBarcodePNG($shipment->bar_code, "C39");
+            $shipment->barcode = $bar_code;
+            // $shipment->country_logo = $country_logo;
+            return $shipment;
+        });
         Shipment::setEventDispatcher($dispatcher);
         return $print_shipment;
     }
-    
+
     public function getStickers(Request $request)
     {
         // return $request->all();

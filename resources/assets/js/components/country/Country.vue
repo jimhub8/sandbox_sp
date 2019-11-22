@@ -58,6 +58,9 @@
                                 <v-btn icon class="mx-0" @click="deleteItem(props.item)">
                                     <v-icon color="pink darken-2" small>delete</v-icon>
                                 </v-btn>
+                                <v-btn icon class="mx-0" @click="openImage(props.item)">
+                                    <v-icon color="blue darken-2" small>image</v-icon>
+                                </v-btn>
 
                             </td>
                         </template>
@@ -69,6 +72,7 @@
             </v-layout>
         </v-container>
     </v-content>
+    <myImage></myImage>
     <AddCountry :openAddRequest="OpenAdd" @closeRequest="close" @alertRequest="alert"></AddCountry>
     <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
         {{ message }}
@@ -78,11 +82,12 @@
 </template>
 
 <script>
-let AddCountry = require('./AddCountry')
+import AddCountry from './AddCountry'
+import myImage from './image'
 export default {
     props: ['user'],
     components: {
-        AddCountry
+        AddCountry, myImage
     },
     data() {
         return {
@@ -124,6 +129,9 @@ export default {
     },
 
     methods: {
+        openImage(data) {
+            eventBus.$emit('openCountryImage', data)
+        },
         editItem(item) {
             this.editModal = true
             this.editedIndex = this.AllCountries.indexOf(item)
@@ -192,7 +200,7 @@ export default {
         // test: function () {
         //     var vm = this;
         //     return function (item) {
-        //         return 'country/1';  
+        //         return 'country/1';
         //     };
         // },
         formIsValid() {

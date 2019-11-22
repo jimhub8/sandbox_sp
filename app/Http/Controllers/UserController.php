@@ -13,20 +13,25 @@ use Illuminate\Support\Facades\Storage;
 use App\Branch;
 use App\Client as AppClient;
 use App\Country;
+use App\models\Rider;
 use GuzzleHttp\Client;
 
 class UserController extends Controller
 {
     public function getUsers(Request $request)
     {
+        // return User::find(1)->country;
         // return $request->all();
         // return User::with(['roles'])->get();
-        $users = User::orderBy('name')->get();
-        $users->transform(function ($user, $key) {
-            $branch_name = Branch::find($user->branch_id);
-            $country_name = Country::find($user->country_id);
-            $user->branch = $branch_name->branch_name;
-            $user->country = $country_name->country_name;
+        $users = User::with('branch', 'country_')->orderBy('name')->get();
+        $users->transform(function ($user) {
+            // dd($user->country);
+            // dd($user);
+            // $branch_name = Branch::find($user->branch_id);
+            // dd($user);
+            // $country_name = Country::find($user->country_id);
+            // $user->branch = ($user->branch) ? $user->branch->branch_name : null;
+            $user->country_name = ($user->country) ? $user->country : 'null';
             $user->status = 'active';
             return $user;
         });
@@ -116,7 +121,7 @@ class UserController extends Controller
         $user->branch_id = $request->form['branch_id'];
         $user->address = $request->form['address'];
         $user->city = $request->form['city'];
-        $user->country = $request->form['country'];
+        // $user->country = $request->form['country_name'];
         $user->country_id = $request->form['country_id'];
         $user->save();
         foreach ($request->form['roles'] as $role) {
@@ -178,7 +183,6 @@ class UserController extends Controller
                 File::delete($image_path);
                 $imagename = Storage::disk('public')->put('profile', $img);
             }
-
             // return('noop');
             $imgArr = explode('/', $imagename);
             $image_name = $imgArr[1];
@@ -191,14 +195,14 @@ class UserController extends Controller
 
     public function getDrivers()
     {
-        $users = User::where('country_id', Auth::user()->country_id)->get();
-        $userArr = [];
-        foreach ($users as $user) {
-            if ($user->hasRole('Rider')) {
-                $userArr[] = $user;
-            }
-        }
-        return $userArr;
+        return Rider::where('country_id', Auth::user()->country_id)->orderBy('name')->get();
+        // $userArr = [];
+        // foreach ($users as $user) {
+        //     if ($user->hasRole('Rider')) {
+        //         $userArr[] = $user;
+        //     }
+        // }
+        // return $userArr;
     }
 
     public function getCustomer()

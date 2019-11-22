@@ -83,6 +83,7 @@ Vue.component('message', require('./components/chat/Message.vue'));
 import myHeader from './components/include/Header.vue';
 import myUser from './components/users/User.vue';
 import myClients from './components/users/clients';
+import myRiders from './components/users/rider';
 import myShipment from './components/shipments/Shipment.vue';
 import myScanner from './components/scanner/Scanner.vue';
 // import myContainer from './components/containers/Container.vue';
@@ -123,12 +124,13 @@ import mySc from './components/splogs/Schedule.vue';
 
 import myScreen from './components/screen';
 
-
+import myDispatch from './components/scanner/dispatch'
 
 const routes = [
     // {path: '/', component: dashboard },
     { path: '/users', component: myUser },
     { path: '/clients', component: myClients },
+    { path: '/riders', component: myRiders },
     { path: '/shipments', component: myShipment },
     { path: '/scanner', component: myScanner },
     // {path: '/containers', component: myContainer },
@@ -170,6 +172,9 @@ const routes = [
     { path: '/schedulelogs', component: mySc },
 
     { path: '/screen', component: myScreen },
+
+    { path: '/dispatch', component: myDispatch },
+
 ]
 const router = new VueRouter({
     // mode: 'history',
@@ -186,7 +191,7 @@ const app = new Vue({
         myTown, myWaybill, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash,
         myunauth, myDash, myFilter, myChatty, myFinance, myFinClient, mySticker, myDStatus, myLogs, mySc,
 
-        myClients, myScreen
+        myClients, myScreen, myRiders, myDispatch
         // myContainer
     },
     // data: {

@@ -9,9 +9,9 @@ class Country extends Model
 {
 	use SoftDeletes;
 
-	public function users()
+	public function user()
 	{
-		return $this->hasMany('App\User', 'branch_id');
+		return $this->hasOne('App\User', 'country_id');
 	}
 	public function shipments()
 	{

@@ -43,8 +43,8 @@
                             <td class="text-xs-right">{{ props.item.address }}</td>
                             <td class="text-xs-right">{{ props.item.phone }}</td>
                             <td class="text-xs-right">{{ props.item.city }}</td>
-                            <td class="text-xs-right">{{ props.item.branch }}</td>
-                            <td class="text-xs-right">{{ props.item.country }}</td>
+                            <!-- <td class="text-xs-right">{{ props.item.branch }}</td> -->
+                            <!-- <td class="text-xs-right">{{ props.item.country }}</td> -->
                             <td class="text-xs-right">{{ props.item.status }}</td>
                             <td class="justify-center layout px-0">
                                 <!-- <v-tooltip bottom> -->
@@ -141,14 +141,14 @@ export default {
                     text: "City",
                     value: "city"
                 },
-                {
-                    text: "Branch",
-                    value: "branch"
-                },
-                {
-                    text: "Country",
-                    value: "country"
-                },
+                // {
+                //     text: "Branch",
+                //     value: "branch"
+                // },
+                // {
+                //     text: "Country",
+                //     value: "country"
+                // },
                 {
                     text: "Status",
                     value: "status"

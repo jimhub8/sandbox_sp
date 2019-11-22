@@ -44,21 +44,21 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for=""> Report start day</label>
-                                        <el-select v-model="form.start_day" placeholder="Select a day" style="width:100%">
+                                        <el-select v-model="form.start_day" filterable clearable placeholder="Select a day" style="width:100%">
                                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                                             </el-option>
                                         </el-select>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="">Report end day</label>
-                                        <el-select v-model="form.end_day" placeholder="Select a day" style="width:100%">
+                                        <el-select v-model="form.end_day" filterable   clearable placeholder="Select a day" style="width:100%">
                                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                                             </el-option>
                                         </el-select>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="">Report Display</label>
-                                        <el-select v-model="form.show_on" placeholder="Select a day" style="width:100%">
+                                        <el-select v-model="form.show_on" filterable   clearable placeholder="Select a day" style="width:100%">
                                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                                             </el-option>
                                         </el-select>
@@ -101,6 +101,12 @@ export default {
             }, {
                 value: 'Friday',
                 label: 'Friday'
+            }, {
+                value: 'Saturday',
+                label: 'Saturday'
+            }, {
+                value: 'Sunday',
+                label: 'Sunday'
             }],
             loading: false,
             errors: [],

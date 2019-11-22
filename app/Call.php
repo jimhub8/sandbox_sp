@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Call extends Model
 {
-    public function users()
+    public function user()
     {
-        return $this->hasMany('App\User', 'user_id');
+        return $this->belongsTo('App\User', 'user_id');
     }
     public function shipment()
     {

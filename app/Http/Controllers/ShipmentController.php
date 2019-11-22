@@ -20,6 +20,7 @@ use Notification;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Milon\Barcode\DNS1D;
 
 // use App\Observers\BaseObserver;
@@ -509,6 +510,7 @@ class ShipmentController extends Controller
             // $shipment->receiver_id = ($request->formobg['receiver_id']) ? $request->formobg['receiver_id'] : null;
             $shipment->receiver_name = $request->formobg['receiver_name'];
         } elseif ($request->formobg['status'] == 'Returned') {
+            $shipment->return_date = now();
             // $shipment->driver = null;
         } elseif ($request->formobg['status'] == 'Dispatched') {
             $shipment->dispatch_date = now();
@@ -652,6 +654,7 @@ class ShipmentController extends Controller
                     // $shipment->speciial_instruction = $remark;
                     // $shipment->remark = $remark;
                     $shipment->derivery_status = $status;
+                    $shipment->return_date = now();
                     $shipment->save();
                 }
             } else {
@@ -864,20 +867,20 @@ class ShipmentController extends Controller
 
     public function getShipSingle($id)
     {
+        // $country = Auth::user()->country_;
+        // $country_logo = $country->image;
+        // $path = Storage::disk('public')->path($country->image);
+        // $country_logo = 'data:image/png;base64,' . base64_encode(file_get_contents($path));
+        // dd('data:image/png;base64,' . DNS1D::getBarcodePNG("4", "C39+",3,33,array(1,1,1)));
         $dispatcher = Shipment::getEventDispatcher();
         // disabling the events
         Shipment::unsetEventDispatcher();
-        $bar_code = DNS1D::getBarcodePNGPath("4445645656", "PHARMA2T");
-        // return $bar_code;
-        // return $bar_code = '<img src="data:image/png;base64,' . DNS1D::getBarcodePNG("4", "C39+") . '" alt="barcode"   />';
-        // dd((DNS1D::getBarcodePNG("4", "C39+")));
-        $bar_code = 'data:image/png;base64,' .  base64_encode(DNS1D::getBarcodePNG("4", "C39+"));
-        // $d = new DNS1D();
-        // $d->setStorPath(__DIR__ . "/cache/");
-        // $bar_code = $d->getBarcodeHTML("9780691147727", "EAN13");
         $shipments = Shipment::where('id', $id)->get();
-        $shipments->transform(function ($shipment) use ($bar_code) {
+        $shipments->transform(function ($shipment) {
+            // dd(DNS1D::getBarcodeSVG("4445645656", "C39"));
+            $bar_code = 'data:image/png;base64,' . DNS1D::getBarcodePNG($shipment->bar_code, "C39");
             $shipment->barcode = $bar_code;
+            // $shipment->country_logo = $country_logo;
             return $shipment;
         });
         $s_update = Shipment::find($id);

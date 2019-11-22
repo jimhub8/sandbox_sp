@@ -106,7 +106,6 @@ class ClientController extends Controller
         $user->end_day = $request->end_day;
         $user->start_day = $request->start_day;
         $user->show_on = $request->show_on;
-        $user->activation_token = str_random(60);
         $user->save();
         // $create_user = $user;
         // $user->assignRole('Client');
@@ -134,7 +133,7 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Client::find($id)->delete();
     }
 
     public function generateRandomString($length = 10)
@@ -193,7 +192,6 @@ class ClientController extends Controller
             return $response = $request->getBody()->getContents();
         } catch (\Exception $e) {
             \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
-
             $message = $e->getResponse()->getBody();
             $code = $e->getResponse()->getStatusCode();
             if ($code == 401) {

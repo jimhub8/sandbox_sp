@@ -16,41 +16,38 @@
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.name" :rules="rules.name" color="purple darken-2" label="Full name" required></v-text-field>
+                                        <v-text-field v-model="form.name" color="blue darken-2" label="Full name" required></v-text-field>
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.email" :rules="emailRules" color="blue darken-2" label="Email" required></v-text-field>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.address" :rules="rules.name" color="blue darken-2" label="Address" required></v-text-field>
+                                        <v-text-field v-model="form.address" color="blue darken-2" label="Address" required></v-text-field>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.city" :rules="rules.name" color="blue darken-2" label="City" required></v-text-field>
+                                        <v-text-field v-model="form.city" color="blue darken-2" label="City" required></v-text-field>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.country" :rules="rules.name" color="blue darken-2" label="Country" required></v-text-field>
-                                    </v-flex>
-                                    <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.phone" :rules="rules.name" color="blue darken-2" label="Phone" required></v-text-field>
+                                        <v-text-field v-model="form.phone" color="blue darken-2" label="Phone" required></v-text-field>
                                     </v-flex>
 
                                     <div class="form-group col-md-6">
                                         <label class="col-md-6 col-form-label text-md-right" for="">Role</label>
                                         <select class="custom-select custom-select-md col-md-12" v-for="role in form.roles" :key="role.id" v-model="role.name">
                                             <option v-for="roles in AllRoles" :key="roles.id" :value="roles.name">{{ roles.name }}</option>
-                                    </select>
+                                        </select>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="col-md-6 col-form-label text-md-right" for="">Branch</label>
                                         <select class="custom-select custom-select-md col-md-12" v-model="form.branch_id">
                                             <option v-for="branches in AllBranches" :key="branches.id" :value="branches.id">{{ branches.branch_name }}</option>
-                                    </select>
+                                        </select>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label class="col-md-6 col-form-label text-md-right" for="">Country</label>
                                         <select class="custom-select custom-select-md col-md-12" v-model="form.country_id">
                                             <option v-for="country in countryList" :key="country.id" :value="country.id">{{ country.country_name }}</option>
-                                    </select>
+                                        </select>
                                         <!-- <small class="has-text-danger" v-if="errors.branch_id">{{ errors.branch_id[0] }}</small> -->
                                     </div>
                                     <v-flex xs12>
@@ -117,6 +114,7 @@ export default {
     methods: {
         update() {
             this.loading = true
+            this.form.country_name = this.form.country.country_name
             axios.patch(`/users/${this.form.id}`, {
                 form: this.form,
                 selected: this.selected

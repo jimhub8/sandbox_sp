@@ -11,9 +11,9 @@
             <v-list>
                 <v-list-tile avatar>
                     <v-list-tile-avatar>
-                        <!-- <avatar :username="user.name" style="font-size: 40px;margin: auto;padding: 50px;"></avatar> -->
+                        <avatar :username="user.name" style="font-size: 40px;margin: auto;padding: 10px;"></avatar>
                         <!-- <avatar :username="user.name" style="font-size: 20px;margin: auto;padding: 0px;"></avatar> -->
-                        <img :src="user.profile" alt="John">
+                        <!-- <img :src="user.profile" alt="John"> -->
                     </v-list-tile-avatar>
 
                     <v-list-tile-content>
@@ -79,11 +79,11 @@
 </template>
 
 <script>
-// import Avatar from 'vue-avatar'
+import Avatar from 'vue-avatar'
 export default {
     props: ['user'],
-    computed: {
-        // Avatar
+    components: {
+        Avatar
     },
     data() {
         return {

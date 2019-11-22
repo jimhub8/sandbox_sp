@@ -5,7 +5,9 @@
             <v-card-title fixed>
                 <span class="headline">Add Country</span>
                 <v-spacer></v-spacer>
-                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
+                <v-btn icon dark @click="close">
+                    <v-icon color="black">close</v-icon>
+                </v-btn>
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>
@@ -16,7 +18,20 @@
                                     <v-flex xs12 sm12>
                                         <v-text-field v-model="form.country_name" :rules="rules.name" color="blue darken-2" label="Country name" required>
                                         </v-text-field>
-                                        <!-- <small class="has-text-danger" v-if="errors.country_name">{{ errors.country_name[0] }}</small> -->
+                                        <small class="has-text-danger" v-if="errors.country_name">{{ errors.country_name[0] }}</small>
+                                    </v-flex>
+                                    <v-flex xs12 sm12>
+                                        <v-text-field v-model="form.company_name" :rules="rules.name" color="blue darken-2" label="Company name" required>
+                                        </v-text-field>
+                                        <small class="has-text-danger" v-if="errors.company_name">{{ errors.company_name[0] }}</small>
+                                    </v-flex>
+                                    <v-flex xs12 sm12>
+                                        <v-textarea v-model="form.notes" color="blue">
+                                            <div slot="label">
+                                                Note
+                                            </div>
+                                        </v-textarea>
+                                        <small class="has-text-danger" v-if="errors.notes">{{ errors.notes[0] }}</small>
                                     </v-flex>
                                 </v-layout>
                             </v-container>
@@ -68,7 +83,7 @@ export default {
                 .catch((error) => {
                     this.loading = false
                     this.errors = error.response.data.errors
-                    })
+                })
         },
         resetForm() {
             this.form = Object.assign({}, this.defaultForm)
@@ -84,7 +99,7 @@ export default {
     computed: {
         formIsValid() {
             return (
-                this.form.country_name 
+                this.form.country_name
             )
         },
     },

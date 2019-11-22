@@ -155,7 +155,7 @@
 
                         <v-list-group prepend-icon="account_circle" v-if="user.can['view users']">
                             <v-list-tile slot="activator">
-                                <v-list-tile-title>User&Roles</v-list-tile-title>
+                                <v-list-tile-title>User & Roles</v-list-tile-title>
                             </v-list-tile>
 
                             <router-link to="/users" class="v-list__tile theme--light" style="text-decoration: none" id="link-router">
@@ -174,7 +174,7 @@
 
                         <v-list-group prepend-icon="account_circle" v-if="user.can['view users']">
                             <v-list-tile slot="activator">
-                                <v-list-tile-title>Clients</v-list-tile-title>
+                                <v-list-tile-title>Clients & Riders</v-list-tile-title>
                             </v-list-tile>
                             <router-link to="/clients" class="v-list__tile theme--light" style="text-decoration: none" id="link-router">
                                 <v-list-tile-action>
@@ -188,11 +188,17 @@
                                 </v-list-tile-action>
                                 <v-list-tile-title>Client Group</v-list-tile-title>
                             </router-link>
+                            <router-link to="/riders" class="v-list__tile theme--light" style="text-decoration: none">
+                                <v-list-tile-action>
+                                    <v-icon>accessible</v-icon>
+                                </v-list-tile-action>
+                                <v-list-tile-title>Riders</v-list-tile-title>
+                            </router-link>
                         </v-list-group>
 
                         <v-list-group prepend-icon="insert_drive_file" v-if="user.can['view branches']">
                             <v-list-tile slot="activator">
-                                <v-list-tile-title>Branches$Countries</v-list-tile-title>
+                                <v-list-tile-title>Branches & Countries</v-list-tile-title>
                             </v-list-tile>
 
                             <router-link to="/branches" class="v-list__tile theme--light" style="text-decoration: none">
@@ -242,13 +248,13 @@
 
                         <v-list-group prepend-icon="attach_money" v-if="user.can['view finance']">
                             <v-list-tile slot="activator">
-                                <v-list-tile-title>Finance</v-list-tile-title>
+                                <v-list-tile-title>Accounts</v-list-tile-title>
                             </v-list-tile>
                             <router-link to="/finance" class="v-list__tile theme--light" style="text-decoration: none">
                                 <v-list-tile-action>
                                     <v-icon>business</v-icon>
                                 </v-list-tile-action>
-                                <v-list-tile-title>Finace</v-list-tile-title>
+                                <v-list-tile-title>Finance</v-list-tile-title>
                             </router-link>
                             <router-link to="/charges" class="v-list__tile theme--light" style="text-decoration: none" v-if="user.can['update charges']">
                                 <v-list-tile-action>
@@ -260,7 +266,7 @@
 
                         <v-list-group prepend-icon="book" v-if="user.can['view logs']">
                             <v-list-tile slot="activator">
-                                <v-list-tile-title>Logs</v-list-tile-title>
+                                <v-list-tile-title>User Logs</v-list-tile-title>
                             </v-list-tile>
                             <router-link to="/logs" class="v-list__tile theme--light" style="text-decoration: none">
                                 <v-list-tile-action>
@@ -276,15 +282,15 @@
                             </router-link> -->
                         </v-list-group>
 
-                        <!-- <router-link to="/schedulelogs" class="v-list__tile v-list__tile--link" v-if="user.can['view logs']">
+                       <router-link to="/dispatch" class="v-list__tile v-list__tile--link">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
-                                    User Logs
+                                    Dispatch Sheet
                                 </div>
                             </div>
                         </router-link>
-                        <router-link to="/schedulelogs" class="v-list__tile v-list__tile--link" v-if="user.can['view logs']">
+                        <!--  <router-link to="/schedulelogs" class="v-list__tile v-list__tile--link" v-if="user.can['view logs']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">

@@ -41,9 +41,9 @@ class User extends Authenticatable
 	/**
 	 * The roles that belong to the user.
 	 */
-	public function country()
+	public function country_()
 	{
-		return $this->belongsToMany('App\Country');
+		return $this->belongsTo('App\Country', 'country_id');
 	}
 
 	public function branch()
@@ -64,6 +64,11 @@ class User extends Authenticatable
 	public function documents()
 	{
 		return $this->hasMany('App\Attachment', 'client_id');
+    }
+
+	public function calls()
+	{
+		return $this->hasMany('App\Call');
 	}
 
 	public function shipStatus()

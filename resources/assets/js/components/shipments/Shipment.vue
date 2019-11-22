@@ -29,7 +29,7 @@
                                 <!-- <v-select :items="AllCountries" v-model="selectCountry" hint="COUNTRY" label="Filter By country" single-line item-text="country_name" item-value="id" return-object persistent-hint @change="changeCat(selectCountry)"></v-select> -->
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
-                                <el-select v-model="form.branch_id" clearable filterable placeholder="Select">
+                                <el-select v-model="form.branch_id" clearable filterable placeholder="Select Branch">
                                     <el-option v-for="item in AllBranches" :key="item.id" :label="item.branch_name" :value="item.id">
                                     </el-option>
                                 </el-select>
@@ -37,17 +37,23 @@
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
 
-                                <el-select v-model="form.status" clearable filterable placeholder="Select">
+                                <el-select v-model="form.status" clearable filterable placeholder="Select Status">
                                     <el-option v-for="item in AllStatus" :key="item.name" :label="item.name" :value="item.name">
                                     </el-option>
                                 </el-select>
                                 <!-- <v-select :items="AllStatus" v-model="selectItem" hint="STATUS" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint @blur="close_select"></v-select> -->
                             </v-flex>
+                            <v-flex xs4 sm2 offset-sm1>
+                                <el-select v-model="form.client_id" clearable filterable placeholder="Select Client">
+                                    <el-option v-for="item in Allcustomers" :key="item.id" :label="item.name" :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </v-flex>
                             <!-- <v-spacer></v-spacer> -->
-                            <v-flex xs12 sm2 offset-sm1>
+                            <v-flex xs12 sm2>
                                 <v-text-field label="Start Date" v-model="form.start_date" color="blue darken-2" type="date" required></v-text-field>
                             </v-flex>
-                            <v-flex xs12 sm2>
+                            <v-flex xs12 sm2 offset-sm1>
                                 <v-text-field label="End Date" v-model="form.end_date" color="blue darken-2" type="date" required></v-text-field>
                             </v-flex>
                             <!-- <v-spacer></v-spacer> -->
@@ -60,7 +66,7 @@
                         </v-layout>
                     </v-card>
                     <v-card-title>
-                        <download-excel :data="AllShipments.data    " :fields="json_fields">
+                        <download-excel :data="AllShipments.data" :fields="json_fields">
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
@@ -350,7 +356,10 @@ export default {
             },
             form: {
                 start_date: "",
-                end_date: ""
+                end_date: "",
+                status: null,
+                country_id: null,
+                branch_id: null,
             },
             headers: [{
                     text: "Waybill Date",
@@ -652,17 +661,11 @@ export default {
                 return
             }
             axios
-                .post("/filterShipment", {
-                    select: this.select,
-                    no_btw: this.between,
-                    selectStatus: this.selectItem,
-                    form: this.form,
-                    selectCountry: this.selectCountry
-                })
+                .post("/filterShipment", this.form)
                 .then(response => {
                     this.loading = false;
                     this.AllShipments = response.data;
-                    this.filterCount()
+                    // this.filterCount()
 
                 })
                 .catch(error => {
@@ -705,7 +708,7 @@ export default {
                 .then(response => {
                     this.loading = false;
                     this.AllShipments = response.data;
-                    this.filterCount()
+                    // this.filterCount()
 
                 })
                 .catch(error => {
@@ -840,22 +843,22 @@ export default {
                     this.errors = error.response.data.errors;
                 });
         },
-        filterCount() {
-            axios
-                .post("/filterCount", {
-                    select: this.select,
-                    no_btw: this.between,
-                    selectStatus: this.selectItem,
-                    form: this.form,
-                    selectCountry: this.selectCountry
-                })
-                .then(response => {
-                    this.shipmentsCount = response.data;
-                })
-                .catch(error => {
-                    this.errors = error.response.data.errors;
-                });
-        },
+        // filterCount() {
+        //     axios
+        //         .post("/filterCount", {
+        //             select: this.select,
+        //             no_btw: this.between,
+        //             selectStatus: this.selectItem,
+        //             form: this.form,
+        //             selectCountry: this.selectCountry
+        //         })
+        //         .then(response => {
+        //             this.shipmentsCount = response.data;
+        //         })
+        //         .catch(error => {
+        //             this.errors = error.response.data.errors;
+        //         });
+        // },
         changeCat(item) {
             console.log(item);
             axios.get(`/country_branch/${item}`)
@@ -892,8 +895,9 @@ export default {
     },
     mounted() {
         this.loader = true;
+        this.getCustomer();
         this.getBranch();
-        this.filterCount()
+        // this.filterCount()
         axios
             .get("/getCountry")
             .then(response => {

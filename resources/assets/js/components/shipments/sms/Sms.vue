@@ -36,6 +36,7 @@ export default {
     data() {
         return {
             shipments: [],
+            loading: false,
             dialog: false,
             form: {
                 shipments: [],
@@ -54,6 +55,7 @@ export default {
     },
     methods: {
         sendSms() {
+            this.dialog = false
             // alert(this.updateitedItem.id);
             this.loading = true;
             axios

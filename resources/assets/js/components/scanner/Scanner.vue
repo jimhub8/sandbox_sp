@@ -2,7 +2,7 @@
 <v-content>
     <v-container fluid fill-height v-show="!loader">
         <v-layout justify-center align-center>
-            <v-snackbar v-model="snackbar" absolute bottom left dark :color="color">
+            <v-snackbar v-model="snackbar" absolute top center dark :color="color">
                 <span>{{message}}</span>
                 <v-icon dark>{{ icon }}</v-icon>
             </v-snackbar>
@@ -121,7 +121,7 @@
                             </template>
                             <span>Reset all</span>
                         </v-tooltip>
-                        <VSpacer/>
+                        <VSpacer />
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
                     <v-data-table :headers="headers" :items="AllScanned" class="elevation-1" :loading="loading" :search="search">
@@ -254,11 +254,28 @@ export default {
             axios.post(`/barcodeUpdate/${this.form_out.bar_code_out}`, this.$data.form_out)
                 .then((response) => {
                     this.loading = false
+                    console.log(response.data.length);
+                    if (response.data.length > 1) {
+
+                        this.$message({
+                            type: 'error',
+                            message: response.data.length + ' shipment found'
+                        });
+                        // this.snackbar = true
+                        // this.message = response.data.length + 'shipment found'
+                        // this.icon = 'block'
+                        // this.color = 'error'
+                    }
                     if (response.data.errors === 'errors') {
-                        this.snackbar = true
-                        this.message = 'shipment Not found'
-                        this.icon = 'block'
-                        this.color = 'red'
+                        // this.snackbar = true
+                        // this.message = 'shipment Not found'
+                        // this.icon = 'block'
+                        // this.color = 'error'
+
+                        this.$message({
+                            type: 'error',
+                            message: 'Order Not found'
+                        });
                     } else {
                         response.data.forEach(element => {
                             this.AllScanned.push(element);
@@ -283,18 +300,28 @@ export default {
                     this.errors = error.response.data.errors;
                 })
         },
-        // },
         Inscan() {
             this.loading_in = true
             axios.post(`/barcodeIn/${this.form_in.bar_code_in}`, this.$data.form_in)
                 .then((response) => {
                     this.loading_in = false
+                    console.log(response.data.length);
+                    if (response.data.length > 1) {
+                        this.$message({
+                            type: 'error',
+                            message: response.data.length + ' shipment found'
+                        });
+                        // eventBus.$emit('errorRequest', response.data.length + ' shipment found')
+                        // this.message = response.data.length + 'shipment found'
+                        // this.icon = 'block'
+                        // this.color = 'error'
+                    }
                     if (response.data.errors === 'errors') {
                         // if (response.errors) {
                         this.snackbar = true
                         this.message = 'shipment Not found'
                         this.icon = 'block'
-                        this.color = 'red'
+                        this.color = 'error'
                     } else {
                         this.AllScanned.push(response.data);
                         this.form_in.bar_code_in = ''
@@ -319,75 +346,91 @@ export default {
 
         OutscanSub() {
             this.loading = true
-            axios.post('/statusUpdateIn', {
-                    scan: this.$data.AllScanned,
-                    form: this.$data.form_out
-                })
-                .then((response) => {
-                    this.loading = false
-                    this.resetForm()
-                    this.snackbar = true
-                    this.message = 'successifully scanned'
-                    this.icon = 'check_circle'
-                    this.color = 'indigo'
-                    // this.form_out.rider_out = ''
-                    // this.form_out.bar_code_out = ''
-                    // this.form_out.status_out = ''
-                    // this.form_out.scan_date_out = ''
-                    // this.form_out.remarks_out = ''
-                    // this.form_out.location_out = ''
-                })
-                .catch((error) => {
-                    this.loading = false;
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        return
-                    } else if (error.response.status === 401 || error.response.status === 409) {
-                        // window.location.href = "/apilogin";
-                        eventBus.$emit('reloadRequest')
-                        return
-                    } else if (error.response.status === 422) {
-                        eventBus.$emit('errorEvent', error.response.data.message)
-                        return
-                    }
-                    this.errors = error.response.data.errors;
-                })
+            this.$confirm(this.AllScanned.length + ' orders will be scanned' + '. Continue?', 'Warning', {
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Cancel',
+                type: 'warning',
+                center: true
+            }).then(() => {
+                axios.post('/statusUpdateIn', {
+                        scan: this.$data.AllScanned,
+                        form: this.$data.form_out
+                    })
+                    .then((response) => {
+                        this.loading = false
+                        this.resetForm()
+                        this.snackbar = true
+                        this.message = 'successifully scanned'
+                        this.icon = 'check_circle'
+                        this.color = 'indigo'
+                    })
+                    .catch((error) => {
+                        this.loading = false;
+                        if (error.response.status === 500) {
+                            eventBus.$emit('errorEvent', error.response.statusText)
+                            return
+                        } else if (error.response.status === 401 || error.response.status === 409) {
+                            // window.location.href = "/apilogin";
+                            eventBus.$emit('reloadRequest')
+                            return
+                        } else if (error.response.status === 422) {
+                            eventBus.$emit('errorEvent', error.response.data.message)
+                            return
+                        }
+                        this.errors = error.response.data.errors;
+                    })
+            }).catch(() => {
+                this.loading = false
+                this.$message({
+                    type: 'error',
+                    message: 'Scan canceled'
+                });
+            });
         },
+
         Inscansub() {
             this.loading_in = true
-            axios.post('/statusUpdateIn', {
-                    scan: this.$data.AllScanned,
-                    form: this.$data.form_in
-                })
-                .then((response) => {
-                    this.loading_in = false
-                    this.snackbar = true
-                    this.message = 'successifully scanned'
-                    this.icon = 'check_circle'
-                    this.color = 'indigo'
-                    this.resetForm()
-                    // this.form_in.branch_id = ''
-                    // this.form_in.bar_code_in = ''
-                    // this.form_in.status_in = ''
-                    // // this.form_in.scan_date_in = ''
-                    // this.form_in.remarks_in = ''
-                    // this.form_in.location_in = ''
-                })
-                .catch((error) => {
-                    this.loading_in = false;
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        return
-                    } else if (error.response.status === 401 || error.response.status === 409) {
-                        // window.location.href = "/apilogin";
-                        eventBus.$emit('reloadRequest')
-                        return
-                    } else if (error.response.status === 422) {
-                        eventBus.$emit('errorEvent', error.response.data.message)
-                        return
-                    }
-                    this.errors = error.response.data.errors;
-                })
+            this.$confirm(this.AllScanned.length + ' orders will be scanned' + '. Continue?', 'Warning', {
+                confirmButtonText: 'OK',
+                cancelButtonText: 'Cancel',
+                type: 'warning',
+                center: true
+            }).then(() => {
+                axios.post('/statusUpdateIn', {
+                        scan: this.$data.AllScanned,
+                        form: this.$data.form_in
+                    })
+                    .then((response) => {
+                        this.loading_in = false
+                        this.snackbar = true
+                        this.message = 'successifully scanned'
+                        this.icon = 'check_circle'
+                        this.color = 'indigo'
+                        this.resetForm()
+                    })
+                    .catch((error) => {
+                        this.loading_in = false;
+                        if (error.response.status === 500) {
+                            eventBus.$emit('errorEvent', error.response.statusText)
+                            return
+                        } else if (error.response.status === 401 || error.response.status === 409) {
+                            // window.location.href = "/apilogin";
+                            eventBus.$emit('reloadRequest')
+                            return
+                        } else if (error.response.status === 422) {
+                            eventBus.$emit('errorEvent', error.response.data.message)
+                            return
+                        }
+                        this.errors = error.response.data.errors;
+                    })
+
+            }).catch(() => {
+                this.loading = false;
+                this.$message({
+                    type: 'error',
+                    message: 'Scan canceled'
+                });
+            });
         },
         removeItem(item) {
             // this.loading = true;

@@ -20,31 +20,33 @@
                         <!-- <img :src="user.profile" alt="John"> -->
                     </v-list-tile-avatar>
 
-                        <v-list-tile-content>
-                            <v-list-tile-title>{{ user.name }}</v-list-tile-title>
-                        </v-list-tile-content>
+                    <v-list-tile-content>
+                        <v-list-tile-title>{{ user.name }}</v-list-tile-title>
+                    </v-list-tile-content>
 
-                        <v-list-tile-action v-if="notifications.length > 0">
-                            <v-tooltip bottom>
-                                <v-btn slot="activator" :class="fav ? 'red--text' : ''" icon @click="read()">
+                    <v-list-tile-action v-if="notifications.length > 0">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                                <v-btn v-on="on" slot="activator" :class="fav ? 'red--text' : ''" icon @click="read()">
                                     <v-icon>check_circle</v-icon>
                                 </v-btn>
-                                <span>Mark as read</span>
-                            </v-tooltip>
-                        </v-list-tile-action>
+                            </template>
+                            <span>Mark as read</span>
+                        </v-tooltip>
+                    </v-list-tile-action>
                 </v-list-tile>
             </v-list>
-
             <v-divider></v-divider>
-
             <v-list>
                 <v-list-tile v-for="notification in notifications" :key="notification.id" v-if="notifications.length > 0">
                     <v-list-tile-action>
                         <!-- <v-switch v-model="message" color="purple"></v-switch> -->
                         <v-tooltip bottom>
-                            <v-btn slot="activator" icon class="mx-0" @click="noty(notification.id)">
-                                <v-icon small color="blue darken-2">visibility</v-icon>
-                            </v-btn>
+                            <template v-slot:activator="{ on }">
+                                <v-btn v-on="on" slot="activator" icon class="mx-0" @click="noty(notification.id)">
+                                    <v-icon small color="blue darken-2">visibility</v-icon>
+                                </v-btn>
+                            </template>
                             <span>View Shipment</span>
                         </v-tooltip>
                     </v-list-tile-action>
@@ -75,74 +77,74 @@
 let NotyShipment = require("./NotyShipment");
 import Avatar from "vue-avatar";
 export default {
-  props: ["user"],
-  components: {
-    NotyShipment,
-    Avatar
-  },
-  data: () => ({
-    fav: true,
-    menu: false,
-    message: false,
-    notyShow: false,
-    hints: true,
-    notifications: [],
-    seeShipment: []
-  }),
-  methods: {
-    noty(item) {
-      // console.log(item)
-      // this.editedIndex = this.notifications.indexOf(item)
-      // this.seeShipment = item
-      axios.post(`/Notyshpments/${item}`).then(response => {
-        console.log(response.data);
-        this.seeShipment = response.data;
-      });
-      this.notyShow = true;
+    props: ["user"],
+    components: {
+        NotyShipment,
+        Avatar
     },
-    read() {
-      axios.post("/read").then(response => {
-        this.fav = false;
-        this.notifications = response.data;
-        // this.Allusers.splice(index, 1)
-        // this.notifications.splice(index, 1)
-      });
-    },
+    data: () => ({
+        fav: true,
+        menu: false,
+        message: false,
+        notyShow: false,
+        hints: true,
+        notifications: [],
+        seeShipment: []
+    }),
+    methods: {
+        noty(item) {
+            // console.log(item)
+            // this.editedIndex = this.notifications.indexOf(item)
+            // this.seeShipment = item
+            axios.post(`/Notyshpments/${item}`).then(response => {
+                console.log(response.data);
+                this.seeShipment = response.data;
+            });
+            this.notyShow = true;
+        },
+        read() {
+            axios.post("/read").then(response => {
+                this.fav = false;
+                this.notifications = response.data;
+                // this.Allusers.splice(index, 1)
+                // this.notifications.splice(index, 1)
+            });
+        },
 
-    getnotifications() {
-      axios
-        .get("/notifications")
-        .then(response => {
-          this.notifications = response.data;
-        })
-        .catch(error => {
-          this.errors = error.response.data.errors;
-        });
+        getnotifications() {
+            axios
+                .get("/notifications")
+                .then(response => {
+                    this.notifications = response.data;
+                })
+                .catch(error => {
+                    this.errors = error.response.data.errors;
+                });
+        },
+        close() {
+            this.notyShow = false;
+        }
     },
-    close() {
-      this.notyShow = false;
+    //   created() {
+    //     this.timer = window.setInterval(() => {
+    //       this.getnotifications();
+    //     }, 60000);
+    //   },
+    beforeDestroy() {
+        clearInterval(this.timer);
+    },
+    mounted() {
+        axios
+            .get("/notifications")
+            .then(response => {
+                this.loader = false;
+                this.notifications = response.data;
+            })
+            .catch(error => {
+                this.loader = false;
+                this.errors = error.response.data.errors;
+            });
     }
-  },
-//   created() {
-//     this.timer = window.setInterval(() => {
-//       this.getnotifications();
-//     }, 60000);
-//   },
-  beforeDestroy() {
-    clearInterval(this.timer);
-  },
-  mounted() {
-    axios
-      .get("/notifications")
-      .then(response => {
-        this.loader = false;
-        this.notifications = response.data;
-      })
-      .catch(error => {
-        this.loader = false;
-        this.errors = error.response.data.errors;
-      });
-  }
 };
 </script>
 

@@ -17,6 +17,9 @@ class CreateCountriesTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->string('country_name');
+            $table->string('company_name')->nullable();
+            $table->string('image')->nullable();
+            $table->text('notes')->nullable();
 			$table->softDeletes();
             $table->timestamps();
         });

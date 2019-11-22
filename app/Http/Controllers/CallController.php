@@ -15,17 +15,11 @@ class CallController extends Controller
      */
     public function index()
     {
-        $calls = Call::with('shipment')->latest()->paginate(200);
+        $calls = Call::with('shipment', 'user')->latest()->paginate(200);
         $calls->transform(function ($call, $key) {
             // dd($call->shipment);
             // $call->shipment = unserialize($call->shipment);
-            $user = User::find($call->user_id);
-            if (empty($user)) {
-                // dd($call);
-            } else {
-                $call->user_name = $user->name;
-                // dd($call->user_id);
-            }
+            $call->user_name = $call->user->name;
             return $call;
         });
         return $calls;
@@ -34,27 +28,20 @@ class CallController extends Controller
     public function Filterlogs(Request $request)
     {
         // return $request->all();
-        $end_date = $request->form['end_date'];
-        $start_date = $request->form['start_date'];
-        $calls = Call::with('shipment');
+        $end_date = $request->end_date;
+        $start_date = $request->start_date;
+        $calls = Call::latest()->with('shipment', 'user');
         if ($end_date & $start_date) {
             $calls = $calls->whereBetween('created_at', [$start_date, $end_date]);
         }
         if ($request->client_id) {
             $calls = $calls->where('user_id', $request->client_id);
         }
-        // $calls = Call::whereBetween('created_at', [$start_date, $end_date])->where('user_id', $user_id)->skip($start - 1)->take(200)->latest()->get();
         $calls = $calls->paginate(200);
         $calls->transform(function ($call, $key) {
             // dd($call->shipment);
             // $call->shipment = unserialize($call->shipment);
-            $user = User::find($call->user_id);
-            if (empty($user)) {
-                // dd($call);
-            } else {
-                $call->user_name = $user->name;
-                // dd($call->user_id);
-            }
+            $call->user_name = $call->user->name;
             return $call;
         });
         return $calls;

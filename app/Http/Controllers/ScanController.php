@@ -21,9 +21,21 @@ class ScanController extends Controller
     {
         // return $request->all();
         $bar_code = str_replace("-", "", $request->bar_code_out);
-        $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->get();
+        $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->take(5)->get();
         // $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->first();
         if (count($barcode) > 0) {
+            return $barcode;
+        } else {
+            return response()->json(['errors' => 'errors']);
+        }
+    }
+    // In Scan
+    public function barcodeIn(Request $request, Shipment $shipment, $bar_code_in = null)
+    {
+        $bar_code = str_replace("-", "", $request->bar_code_in);
+        // dd($barcode);
+        $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->take(5)->get();
+        if ($barcode) {
             return $barcode;
         } else {
             return response()->json(['errors' => 'errors']);
@@ -252,18 +264,6 @@ class ScanController extends Controller
         return $shipment;
     }
 
-    // In Scan
-    public function barcodeIn(Request $request, Shipment $shipment, $bar_code_in = null)
-    {
-        $bar_code = str_replace("-", "", $request->bar_code_in);
-        // dd($barcode);
-        $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->first();
-        if ($barcode) {
-            return $barcode;
-        } else {
-            return response()->json(['errors' => 'errors']);
-        }
-    }
 
     public function filterR(Request $request)
     {
@@ -321,5 +321,10 @@ class ScanController extends Controller
         curl_close($ch);
 
         return $phone;
+    }
+
+    public function dispatch_scanner($search)
+    {
+
     }
 }

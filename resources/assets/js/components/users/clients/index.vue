@@ -31,9 +31,9 @@
                             <td class="text-xs-right">{{ props.item.email }}</td>
                             <td class="text-xs-right">{{ props.item.address }}</td>
                             <td class="text-xs-right">{{ props.item.phone }}</td>
-                            <td class="text-xs-right">{{ props.item.city }}</td>
-                            <td class="text-xs-right">{{ props.item.country }}</td>
-                            <td class="text-xs-right">{{ props.item.status }}</td>
+                            <td class="text-xs-right">{{ props.item.start_day }}</td>
+                            <td class="text-xs-right">{{ props.item.end_day }}</td>
+                            <td class="text-xs-right">{{ props.item.show_on }}</td>
                             <td class="justify-center layout px-0">
                                 <!-- <v-tooltip bottom> -->
                                 <v-btn icon class="mx-0" @click="openEdit(props.item)" slot="activator" v-if="user.can['edit users']">
@@ -122,8 +122,16 @@ export default {
                     value: "phone"
                 },
                 {
-                    text: "Country",
-                    value: "country"
+                    text: "Report start",
+                    value: "start_day"
+                },
+                {
+                    text: "Report End",
+                    value: "end_day"
+                },
+                {
+                    text: "Report Show on",
+                    value: "show_on"
                 },
                 {
                     text: "Actions",

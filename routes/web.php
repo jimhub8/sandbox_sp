@@ -110,6 +110,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::resource('calls', 'CallController');
 	Route::resource('delStatus', 'DelStatusController');
 	Route::resource('clients', 'ClientController');
+	Route::resource('riders', 'RiderController');
 
 	Route::post('updateStatus/{id}', 'ShipmentController@updateStatus')->name('updateStatus');
 	Route::get('getAdmin', 'ShipmentController@getAdmin')->name('getAdmin');
@@ -175,6 +176,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('country_branch/{id}', 'BranchController@country_branch')->name('country_branch');
 
 	Route::any('getCountry', 'CountryController@getCountry')->name('getCountry');
+	Route::post('country_image/{id}', 'CountryController@country_image')->name('getCountry');
 
 	Route::post('getCompanies', 'CompanyController@getCompanies')->name('getCompanies');
 	Route::post('getCompanyAdmin', 'CompanyController@getCompanyAdmin')->name('getCompanyAdmin');
@@ -411,6 +413,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('messages', 'ChatsController@sendMessage');
 
     Route::post('importShipments', 'UploadController@importShipments')->name('importShipments');
+
+    Route::get('search_order/{search}', 'DispatchSheetController@search_order')->name('search_order');
+    Route::get('export_dispatch', 'DispatchSheetController@export_dispatch')->name('export_dispatch');
 
 
 

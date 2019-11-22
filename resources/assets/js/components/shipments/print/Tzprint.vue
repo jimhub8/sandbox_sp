@@ -131,7 +131,7 @@ export default {
                 doc.text(
                     20,
                     240,
-                    "Clients are requested to pay through M-PESA NUMBER - 0768 382 001 "
+                    "Clients are requested to pay through M-PESA NUMBER - 0743972585 "
                 );
                 doc.text(
                     20,
