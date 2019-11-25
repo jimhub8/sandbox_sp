@@ -19,6 +19,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Notification;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Milon\Barcode\DNS1D;
@@ -49,8 +50,11 @@ class ShipmentController extends Controller
         Shipment::unsetEventDispatcher();
         $today = Carbon::today();
         // $tomorrow = Carbon::tomorrow();
-        $yest = Carbon::now()->subDays(30);
-        $prev_month = $today->subMonth();
+        $yest = Carbon::now()->subDays(1);
+        $prev_month = Carbon::today()->subMonth();
+
+        // DB::enableQueryLog(); // Enable query log
+
         $refused = Shipment::select('id', 'bar_code')->setEagerLoads([])
             ->where(function ($query) {
                 $query->where('status', 'Returned');
@@ -61,6 +65,11 @@ class ShipmentController extends Controller
             ->whereDate('derivery_date', '<=', $yest)
             ->whereDate('created_at', '<=', $prev_month)
             ->get('id')->toArray();
+
+        // dd(DB::getQueryLog()); // Show results of log
+
+
+
         $cancell_status = ['Returned', 'Scheduled', 'Dispatched', 'Delivered', 'Warehouse', 'Cancelled', 'Refused'];
         $cancelled = Shipment::select('id')->setEagerLoads([])
             ->whereNotIn('status', $cancell_status)
@@ -76,8 +85,11 @@ class ShipmentController extends Controller
         // dd($cancelled, $refused);
         // $bar_code = Shipment::select('bar_code')->setEagerLoads([])->whereIn('id', $id_can)->get()->toArray();
         // $bar_code_ = array_flatten($bar_code);
-        // Shipment::whereIn('id', $id_ref)->update(['status' => 'Refused']);
-        // Shipment::whereIn('id', $id_can)->update(['status' => 'Cancelled']);
+        Shipment::whereIn('id', $id_ref)->update(['status' => 'Refused']);
+        Shipment::whereIn('id', $id_can)->update(['status' => 'Cancelled']);
+
+        // Shipment::whereIn('id', $id_ref)->count();
+        // Shipment::whereIn('id', $id_can)->count();
         // $update_s = new Cancelled;
         // $this->update_status($bar_code_);
         Shipment::setEventDispatcher($dispatcher);

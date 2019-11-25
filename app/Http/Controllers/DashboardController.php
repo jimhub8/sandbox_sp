@@ -14,20 +14,27 @@ class DashboardController extends Controller
 {
     public function getChartData(Request $request)
     {
+        // return $request->all();
         // return Shipment::take(100)->get();
-        if (empty($request->id)) {
+        if (empty($request->country)) {
             $shipments = DB::table('shipments')
                 ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
+                ->whereYear('created_at', '=', date("Y"))
                 ->groupBy('date')
                 ->get();
         } else {
             $shipments = Shipment::withoutGlobalScopes()
                 ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
-                ->groupBy('date')
-                ->where('country_id', $request->id)
-                ->get();
+                ->groupBy('date');
+            if ($request->country) {
+                $shipments = $shipments->where('country_id', $request->country);
+            }
+            if ($request->year_f) {
+                $shipments = $shipments->whereYear('created_at', '=', (int)$request->year_f);
+            }
+            $shipments = $shipments->get();
         }
         $lables = [];
         $rows = [];
@@ -45,10 +52,11 @@ class DashboardController extends Controller
     public function getChartScheduled(Request $request)
     {
         // return $request->all();
-        if (empty($request->id)) {
-                $shipments = DB::table('shipments')
+        if (empty($request->country)) {
+            $shipments = DB::table('shipments')
                 ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
+                ->whereYear('created_at', '=', date("Y"))
                 ->groupBy('date')
                 ->where('status', 'Scheduled')
                 ->get();
@@ -56,8 +64,9 @@ class DashboardController extends Controller
             $shipments = Shipment::withoutGlobalScopes()
                 ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
+                ->whereYear('created_at', '=', $request->year_f)
                 ->groupBy('date')
-                ->where('country_id', $request->id)
+                ->where('country_id', $request->country)
                 ->where('status', 'Scheduled')
                 ->get();
         }
@@ -78,10 +87,11 @@ class DashboardController extends Controller
     public function getChartDelivered(Request $request)
     {
         // return Shipment::take(100)->get();
-        if (empty($request->id)) {
+        if (empty($request->country)) {
             $shipments = DB::table('shipments')
                 ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
+                ->whereYear('created_at', '=', date("Y"))
                 ->groupBy('date')
                 ->where('status', 'Delivered')
                 ->get();
@@ -89,8 +99,9 @@ class DashboardController extends Controller
             $shipments = Shipment::withoutGlobalScopes()
                 ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
+                ->whereYear('created_at', '=', $request->year_f)
                 ->groupBy('date')
-                ->where('country_id', $request->id)
+                ->where('country_id', $request->country)
                 ->where('status', 'Delivered')
                 ->get();
         }
@@ -111,20 +122,25 @@ class DashboardController extends Controller
     public function getChartCancled(Request $request)
     {
         // return Shipment::take(100)->get();
-        if (empty($request->id)) {
+        if (empty($request->country)) {
             $shipments = Shipment::select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
+                ->whereYear('created_at', '=', date("Y"))
                 ->groupBy('date')
                 ->where('status', 'Cancelled')
                 ->get();
         } else {
+            // DB::enableQueryLog(); // Enable query log
             $shipments = Shipment::withoutGlobalScopes()
                 ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
+                ->whereYear('created_at', '=', $request->year_f)
                 ->groupBy('date')
-                ->where('country_id', $request->id)
+                ->where('country_id', $request->country)
                 ->where('status', 'Cancelled')
                 ->get();
+                // dd(DB::getQueryLog()); // Show results of log
+
         }
 
         $lables = [];
@@ -159,13 +175,14 @@ class DashboardController extends Controller
 
     public function getBranchCount(Request $request)
     {
-        if (empty($request->id)) {
+        // return $request->all();
+        if (empty($request->country)) {
             $branches = Branch::setEagerLoads([])->where('country_id', Auth::user()->country_id)->get();
         } else {
-            $branches = Branch::setEagerLoads([])->where('country_id', $request->id)->get();
+            $branches = Branch::setEagerLoads([])->where('country_id', $request->country)->get();
         }
         $branch_count = [];
-        if (empty($request->id)) {
+        if (empty($request->country)) {
             foreach ($branches as $key => $branch) {
                 // return $branch->id;
                 // $branch_count[] = Shipment::where('branch_id', $branch->id)->count();
@@ -180,7 +197,7 @@ class DashboardController extends Controller
                 $branch_count[] = array(
                     'name' => $branch->branch_name,
                     'id' => $key,
-                    'count' => Shipment::withoutGlobalScopes()->where('branch_id', $branch->id)->where('country_id', $request->id)->count(),
+                    'count' => Shipment::withoutGlobalScopes()->where('branch_id', $branch->id)->where('country_id', $request->country)->count(),
                 );
             }
         }
@@ -190,10 +207,11 @@ class DashboardController extends Controller
     public function getChartBranch(Request $request)
     {
         // return Shipment::take(100)->get();
-        if (empty($request->id)) {
+        if (empty($request->country)) {
             $shipments = DB::table('shipments')
                 ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
+                ->whereYear('created_at', '=', date("Y"))
                 ->groupBy('date')
                 // ->where('branch_id', Auth::id())
                 ->get();
@@ -201,8 +219,9 @@ class DashboardController extends Controller
             $shipments = Shipment::withoutGlobalScopes()
                 ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
+                ->whereYear('created_at', '=', $request->year_f)
                 ->groupBy('date')
-                ->where('country_id', $request->id)
+                ->where('country_id', $request->country)
                 // ->where('branch_id', Auth::id())
                 ->get();
         }
@@ -223,10 +242,11 @@ class DashboardController extends Controller
     public function getChartCount(Request $request)
     {
         // return Shipment::take(100)->get();
-        if (empty($request->id)) {
+        if (empty($request->country)) {
             $shipments = DB::table('shipments')
                 ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
+                ->whereYear('created_at', '=', date("Y"))
                 ->groupBy('date')
                 // ->where('branch_id', Auth::id())
                 ->get();
@@ -234,8 +254,9 @@ class DashboardController extends Controller
             $shipments = Shipment::withoutGlobalScopes()
                 ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
+                ->whereYear('created_at', '=', $request->year_f)
                 ->groupBy('date')
-                ->where('country_id', $request->id)
+                ->where('country_id', $request->country)
                 // ->where('branch_id', Auth::id())
                 ->get();
         }
@@ -258,10 +279,11 @@ class DashboardController extends Controller
         $branches = Branch::all();
         $A_branch = [];
         foreach ($branches as $branch) {
-            if (empty($request->id)) {
+            if (empty($request->country)) {
                 $shipmen_ts = DB::table('shipments')
                     ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date, branch_id'))
                     ->orderBy('id', 'asc')
+                    ->whereYear('created_at', '=', date("Y"))
                     ->groupBy('date')
                     // ->where('branch_id', $branch->id)
                     ->get();
@@ -269,8 +291,9 @@ class DashboardController extends Controller
                 $shipmen_ts = Shipment::withoutGlobalScopes()
                     ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date, branch_id'))
                     ->orderBy('id', 'asc')
+                    ->whereYear('created_at', '=', date("Y"))
                     ->groupBy('date')
-                    ->where('country_id', $request->id)
+                    ->where('country_id', $request->country)
                     // ->where('branch_id', $branch->id)
                     ->get();
             }
@@ -293,7 +316,7 @@ class DashboardController extends Controller
             $country_count[] = array(
                 'name' => $country->country_name,
                 'id' => $key,
-                'count' => Shipment::withoutGlobalScopes()->where('country_id', $country->id)->count(),
+                'count' => Shipment::withoutGlobalScopes()->whereYear('created_at', '=', date("Y"))->where('country_id', $country->id)->count(),
             );
         }
         return $country_count;
@@ -302,20 +325,21 @@ class DashboardController extends Controller
     public function getChartCountry(Request $request)
     {
         // return Shipment::take(100)->get();
-        if (empty($request->id)) {
+        if (empty($request->country)) {
             $shipments = DB::table('shipments')
                 ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
+                ->whereYear('created_at', '=', date("Y"))
                 ->groupBy('date')
                 // ->where('country_id', )
                 ->get();
         } else {
-
             $shipments = Shipment::withoutGlobalScopes()
                 ->select(DB::raw('count(id) as count, date_format(created_at, "%M") as date'))
                 ->orderBy('id', 'asc')
+                ->whereYear('created_at', '=', $request->year_f)
                 ->groupBy('date')
-                ->where('country_id', $request->id)
+                ->where('country_id', $request->country)
                 // ->where('country_id', )
                 ->get();
         }
@@ -336,20 +360,20 @@ class DashboardController extends Controller
     public function countDelivered(Request $request)
     {
         // return $request->all();
-        if (empty($request->id)) {
-            return Shipment::where('status', 'Delivered')->count();
+        if (empty($request->country)) {
+            return Shipment::whereYear('created_at', '=', date("Y"))->where('status', 'Delivered')->count();
         } else {
-            return Shipment::withoutGlobalScopes()->where('country_id', $request->id)->where('status', 'Delivered')->count();
+            return Shipment::withoutGlobalScopes()->whereYear('created_at', '=', $request->year_f)->where('country_id', $request->country)->where('status', 'Delivered')->count();
         }
     }
 
     public function countPending(Request $request)
     {
         // return Shipment::count();
-        if (empty($request->id)) {
-            return Shipment::where('status', '!=', 'Delivered')->where('status', '!=', 'Cancelled')->count();
+        if (empty($request->country)) {
+            return Shipment::whereYear('created_at', '=', date("Y"))->where('status', '!=', 'Delivered')->where('status', '!=', 'Cancelled')->count();
         } else {
-            return Shipment::withoutGlobalScopes()->where('country_id', $request->id)->where('status', '!=', 'Delivered')->where('status', '!=', 'Cancelled')->count();
+            return Shipment::withoutGlobalScopes()->whereYear('created_at', '=', $request->year_f)->where('country_id', $request->country)->where('status', '!=', 'Delivered')->where('status', '!=', 'Cancelled')->count();
         }
     }
 
@@ -358,15 +382,15 @@ class DashboardController extends Controller
     public function countCountShipments(Request $request)
     {
         // return Shipment::count();
-        if (empty($request->id)) {
-            return Shipment::count();
+        if (empty($request->country)) {
+            return Shipment::whereYear('created_at', '=', date("Y"))->count();
         } else {
-            return Shipment::withoutGlobalScopes()->where('country_id', $request->id)->count();
+            return Shipment::withoutGlobalScopes()->where('country_id', $request->country)->whereYear('created_at', '=', $request->year_f)->count();
         }
     }
 
     public function countOrders(Request $request)
     {
-        return Shipment::count();
+        return Shipment::whereYear('created_at', '=', $request->year_f)->count();
     }
 }

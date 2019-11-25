@@ -16,7 +16,7 @@ export default {
     // },
     methods: {
         screen_chart() {
-            axios.get(`/screen_filter_chart/${this.client.id}`)
+            axios.get(`/screen_filter_chart_1/${this.client.id}`)
                 .then((response) => {
                     // console.log(response);
                     this.label = response.data.data.lables
@@ -28,7 +28,7 @@ export default {
                 })
         },
         screen_c_chart(id) {
-            axios.get(`/screen_filter_chart/${id}`)
+            axios.get(`/screen_filter_chart_1/${id}`)
                 .then((response) => {
                     // console.log(response);
                     this.label = response.data.data.lables
@@ -51,17 +51,6 @@ export default {
                 ]
             }, { responsive: true, maintainAspectRatio: false })
         },
-        ref() {
-            axios.get('/getChartBranch')
-                .then((response) => {
-                    console.log(response);
-                    this.label = response.data.lables
-                    this.data = response.data.rows
-                })
-                .catch((error) => {
-                    this.errors = error.response.data.errors
-                })
-        }
     },
     created() {
         eventBus.$on('chartEvent', data => {

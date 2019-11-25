@@ -1,7 +1,7 @@
   //Importing Line class from the vue-chartjs wrapper
   import {Line} from 'vue-chartjs'
   //Exporting this so it can be used in other components
-  export default { 
+  export default {
     // extend: Line,
     extends: Line,
     data () {
@@ -54,7 +54,7 @@
         this.label = data.lables
         this.data = data.rows
     });
-    
+
     eventBus.$on('DashchartEvent', data => {
       this.ref(data)
   });

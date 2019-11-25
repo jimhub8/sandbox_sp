@@ -17,19 +17,19 @@ class PermissionController extends Controller
 
     public function getUsersCount(Request $request)
     {
-        if (empty($request->id)) {
-            return User::where('country_id', Auth::user()->country_id)->count();
+        if (empty($request->country)) {
+            return User::where('country_id', Auth::user()->country_id)->whereYear('created_at', '=', date("Y"))->count();
         } else {
-            return User::where('country_id', $request->id)->count();
+            return User::where('country_id', $request->country)->whereYear('created_at', '=', $request->year_f)->count();
         }
     }
 
     public function getShipmentsCount(Request $request)
     {
-        if (empty($request->id)) {
-            return Shipment::where('country_id', Auth::user()->country_id)->count();
+        if (empty($request->country)) {
+            return Shipment::where('country_id', Auth::user()->country_id)->whereYear('created_at', '=', date("Y"))->count();
         } else {
-            return Shipment::where('country_id', $request->id)->count();
+            return Shipment::where('country_id', $request->country)->whereYear('created_at', '=', $request->year_f)->count();
         }
     }
 
@@ -41,17 +41,17 @@ class PermissionController extends Controller
 
     public function getCanceledCount(Request $request)
     {
-        if (empty($request->id)) {
-            return Shipment::where('country_id', Auth::user()->country_id)->where('status', 'Cancelled')->count();
+        if (empty($request->country)) {
+            return Shipment::where('country_id', Auth::user()->country_id)->whereYear('created_at', '=', date("Y"))->where('status', 'Cancelled')->count();
         } else {
-            return Shipment::where('country_id', $request->id)->where('status', 'Cancelled')->count();
+            return Shipment::where('country_id', $request->country)->whereYear('created_at', '=', $request->year_f)->where('status', 'Cancelled')->count();
         }
     }
-    
+
 // Dashboard
     public function delayedShipmentCount(Request $request)
     {
-        if (empty($request->id)) {
+        if (empty($request->country)) {
             return Shipment::where('status', 'Delayed')->count();
         } else {
             return Shipment::where('status', 'Delayed')->count();
@@ -60,29 +60,29 @@ class PermissionController extends Controller
 
     public function scheduledShipmentCount(Request $request)
     {
-        if (empty($request->id)) {
-            return Shipment::where('country_id', Auth::user()->country_id)->where('status', 'Scheduled')->count();
+        if (empty($request->country)) {
+            return Shipment::where('country_id', Auth::user()->country_id)->whereYear('created_at', '=', date("Y"))->where('status', 'Scheduled')->count();
         } else {
-            return Shipment::where('country_id', $request->id)->where('status', 'Scheduled')->count();
+            return Shipment::where('country_id', $request->country)->whereYear('created_at', '=', $request->year_f)->where('status', 'Scheduled')->count();
         }
     }
 
     public function deriveredShipmentCount(Request $request)
     {
-        if (empty($request->id)) {
-            return Shipment::where('country_id', Auth::user()->country_id)->where('status', 'Derivered')->count();
+        if (empty($request->country)) {
+            return Shipment::where('country_id', Auth::user()->country_id)->whereYear('created_at', '=', date("Y"))->where('status', 'Derivered')->count();
         } else {
-            return Shipment::where('country_id', $request->id)->where('status', 'Derivered')->count();
+            return Shipment::where('country_id', $request->country)->whereYear('created_at', '=', $request->year_f)->where('status', 'Derivered')->count();
         }
     }
 
 
     public function dispatchedShipmentCount(Request $request)
     {
-        if (empty($request->id)) {
-            return Shipment::where('country_id', Auth::user()->country_id)->where('status', 'Dispatched')->count();
+        if (empty($request->country)) {
+            return Shipment::where('country_id', Auth::user()->country_id)->whereYear('created_at', '=', date("Y"))->where('status', 'Dispatched')->count();
         } else {
-            return Shipment::where('country_id', $request->id)->where('status', 'Dispatched')->count();
+            return Shipment::where('country_id', $request->country)->whereYear('created_at', '=', $request->year_f)->where('status', 'Dispatched')->count();
         }
     }
-} 
+}

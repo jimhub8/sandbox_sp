@@ -13,7 +13,6 @@
                     <v-layout wrap>
                         <v-flex sm6>
                             <v-pagination v-model="AllShipments.current_page" :length="AllShipments.last_page" total-visible="5" @input="next()" circle v-if="AllShipments.last_page > 1"></v-pagination>
-
                         </v-flex>
                         <v-flex sm6 id="input-cont">
                             <v-text-field v-model="glsearch.search" append-icon="search" label="Global Search" single-line hide-details @keyup.enter="itemSearch"></v-text-field>

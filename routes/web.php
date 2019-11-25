@@ -86,6 +86,15 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/screen', 'ScreenController@screen')->name('screen');
 	Route::get('/screen_chart', 'ScreenController@screen_chart')->name('screen_chart');
 	Route::get('/get_data', 'ScreenController@get_data')->name('get_data');
+	Route::get('/get_filter_data/{id}', 'ScreenController@get_filter_data')->name('get_filter_data');
+	Route::get('/screen_filter_chart/{id}', 'ScreenController@screen_filter_chart')->name('screen_filter_chart');
+
+
+	Route::get('/screen_1', 'ScreenController@screen_1')->name('screen_1');
+	Route::get('/screen_chart_1', 'ScreenController@screen_chart_1')->name('screen_chart_1');
+	Route::get('/get_data_1', 'ScreenController@get_data_1')->name('get_data_1');
+	Route::get('/get_filter_data_1/{id}', 'ScreenController@get_filter_data_1')->name('get_filter_data_1');
+	Route::get('/screen_filter_chart_1/{id}', 'ScreenController@screen_filter_chart_1')->name('screen_filter_chart_1');
 
 
     Route::get('/logoutOther', 'UserController@logoutOther')->name('logoutOther');

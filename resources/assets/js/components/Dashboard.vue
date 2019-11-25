@@ -3,9 +3,25 @@
     <v-container fluid fill-height>
         <v-layout justify-center align-center>
             <v-flex sm12>
-                <div v-if="user.can['filter by country']" style="width: 100%; margin-top: 70px;">
-                    <v-select :items="AllCount" v-model="select" hint="COUNTRY" label="Filter By Country" single-line item-text="country_name" item-value="id" return-object persistent-hint @change="countryDash()"></v-select>
-                </div>
+                <v-layout row wrap>
+                    <v-flex sm5>
+                        <div v-if="user.can['filter by country']">
+                            <!-- <v-select :items="AllCount" v-model="form.country" hint="COUNTRY" label="Filter By Country" single-line item-text="country_name" item-value="id" persistent-hint @change="countryDash()"></v-select> -->
+                            <el-select filterable v-model="form.country" placeholder="Select Country" style="width: 100%; margin-top: 80px;" @change="countryDash()">
+                                <el-option v-for="item in AllCount" :key="item.id" :label="item.country_name" :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </div>
+
+                    </v-flex>
+                    <v-flex sm5 offset-sm1>
+                        <el-select allow-create filterable v-model="form.year_f" placeholder="Select Year" style="width: 100%; margin-top: 80px;" @change="countryDash()">
+                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </v-flex>
+
+                </v-layout>
                 <v-layout wrap>
                     <div class="panel-header panel-header-lg row" style="width: 120% !important">
                         <div class="column">
@@ -220,7 +236,7 @@ import Branch from './charts/Branch'
 import Country from './charts/Country'
 
 export default {
-    name: 'VueChartJS',
+    name: 'dashboard',
     components: {
         'my-shipment': Shipment,
         'my-schedule': Scheduled,
@@ -255,12 +271,26 @@ export default {
             countryFilter: {
                 id: null
             },
+            form: {
+                year_f: new Date().getFullYear(),
+                country: '',
+            },
+            options: [{
+                value: '2018',
+                label: '2018'
+            }, {
+                value: '2019',
+                label: '2019'
+            }, {
+                value: '2020',
+                label: '2020'
+            }],
         }
     },
     methods: {
         countryDash() {
-            this.countryFilter = this.select
-            eventBus.$emit('DashchartEvent', this.countryFilter);
+            // this.form = this.select
+            eventBus.$emit('DashchartEvent', this.form);
 
             // this.getCountCount()
             this.getBranchCount()
@@ -282,7 +312,7 @@ export default {
         },
 
         getCountShip() {
-            axios.post('/countCountShipments', this.countryFilter)
+            axios.post('/countCountShipments', this.form)
                 .then((response) => {
                     this.country_count = response.data
                 })
@@ -291,7 +321,7 @@ export default {
                 })
         },
         getCountCount() {
-            axios.post('/getCountryhipments', this.countryFilter)
+            axios.post('/getCountryhipments', this.form)
                 .then((response) => {
                     this.countryC = response.data
                 })
@@ -300,7 +330,7 @@ export default {
                 })
         },
         getBranchCount() {
-            axios.post('/getBranchCount', this.countryFilter)
+            axios.post('/getBranchCount', this.form)
                 .then((response) => {
                     this.branchC = response.data
                 })
@@ -310,7 +340,7 @@ export default {
         },
 
         ref() {
-            axios.post('/getChartData', this.countryFilter)
+            axios.post('/getChartData', this.form)
                 .then((response) => {
                     // console.log(response);
                     eventBus.$emit('chartEvent', response.data);
@@ -323,7 +353,7 @@ export default {
         },
 
         getUsersCount() {
-            axios.post('/getUsersCount', this.countryFilter)
+            axios.post('/getUsersCount', this.form)
                 .then((response) => {
                     this.Allusers = response.data
                 })
@@ -333,7 +363,7 @@ export default {
         },
         countDelivered() {
             eventBus.$emit("progressEvent");
-            axios.post('/countDelivered', this.countryFilter)
+            axios.post('/countDelivered', this.form)
                 .then((response) => {
                     eventBus.$emit("StoprogEvent");
                     this.AllDelivered = response.data
@@ -344,7 +374,7 @@ export default {
                 })
         },
         countPending() {
-            axios.post('/countPending', this.countryFilter)
+            axios.post('/countPending', this.form)
                 .then((response) => {
                     this.AllPending = response.data
                 })
@@ -354,7 +384,7 @@ export default {
         },
 
         getShipmentsCount() {
-            axios.post('/getDashCount', this.countryFilter)
+            axios.post('/getDashCount', this.form)
                 .then((response) => {
                     this.Allshipments = response.data
                 })
@@ -362,9 +392,9 @@ export default {
                     this.errors = error.response.data.errors
                 })
         },
-
+ 
         scheduledShipmentCount() {
-            axios.post('/scheduledShipmentCount', this.countryFilter)
+            axios.post('/scheduledShipmentCount', this.form)
                 .then((response) => {
                     this.AllScheduled = response.data
                 })
@@ -375,7 +405,7 @@ export default {
 
         // Dashboard
         delayedShipmentCount() {
-            axios.post('/delayedShipmentCount', this.countryFilter)
+            axios.post('/delayedShipmentCount', this.form)
                 .then((response) => {
                     this.AlldelayedShipment = response.data
                 })
@@ -385,7 +415,7 @@ export default {
         },
 
         getCanceledCount() {
-            axios.post('/getCanceledCount', this.countryFilter)
+            axios.post('/getCanceledCount', this.form)
                 .then((response) => {
                     this.AllCanceled = response.data
                 })
@@ -395,7 +425,7 @@ export default {
         },
 
         deriveredShipmentCount() {
-            axios.post('/deriveredShipmentCount', this.countryFilter)
+            axios.post('/deriveredShipmentCount', this.form)
                 .then((response) => {
                     this.AllderiveredShipment = response.data
                 })
@@ -405,7 +435,7 @@ export default {
         },
 
         deriveredShipmentCount() {
-            axios.post('/deriveredShipmentCount', this.countryFilter)
+            axios.post('/deriveredShipmentCount', this.form)
                 .then((response) => {
                     this.loader = false
                     this.AllderiveredShipment = response.data
@@ -417,7 +447,7 @@ export default {
         },
 
         getCountryhipments() {
-            axios.post('/getCountryhipments', this.countryFilter)
+            axios.post('/getCountryhipments', this.form)
                 .then((response) => {
                     this.countryC = response.data
                 })
@@ -427,7 +457,7 @@ export default {
         },
 
         getCountry() {
-            axios.post('/getCountry', this.countryFilter)
+            axios.post('/getCountry', this.form)
                 .then((response) => {
                     this.AllCount = response.data
                 })
@@ -453,6 +483,7 @@ export default {
         this.deriveredShipmentCount()
         this.getCountryhipments()
         this.getCountry()
+        this.form.country = this.user.country_id
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
@@ -462,7 +493,7 @@ export default {
                 next('/unauthorized');
             }
         })
-    }
+    },
 }
 </script>
 
