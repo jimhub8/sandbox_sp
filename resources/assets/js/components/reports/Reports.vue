@@ -13,199 +13,38 @@
             <v-layout wrap>
                 <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
-                        <h1>Clients Reports</h1>
-                        <hr>
-                        <!-- <form action="userDateExpo" method="post"> -->
-                        <label for="">Client</label>
-                        <option value=""></option><select class="custom-select custom-select-md col-md-12 col-md-12" v-model="Client.client_id" style="font-size:
-                        13px;">
-                            <option v-for="customer in Allcustomers" :value="customer.id" :key="customer.id">{{ customer.name }}</option>
-                        </select> Between
-                        <hr>
-                        <v-flex xs12 sm12>
-                            <v-text-field v-model="Client.start_date" label="start date" type="date" color="blue darken-2" required></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm12>
-                            <v-text-field v-model="Client.end_date" label="End Date" type="date" color="blue darken-2" required></v-text-field>
-                        </v-flex>
-                        <v-card-actions>
-                            <v-btn flat @click="ClientReport" :loading="Cload" :disabled="Cload" success color="black">Get Data</v-btn>
-                            <v-spacer></v-spacer>
-                            <v-btn flat color="orange">{{ AllClientR.length }} </v-btn>
-                        </v-card-actions>
-                        <v-divider></v-divider>
-                        <download-excel :data="AllClientR" :fields="json_fields" v-show="Cdown">
-                            Export
-                            <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
-                        </download-excel>
-
-                        <!-- </form> -->
+                        <myClientReport></myClientReport>
                     </v-card>
                 </v-flex>
 
                 <!-- <v-divider vertical></v-divider> -->
                 <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
-                        <h1>Status Reports</h1>
-                        <hr>
-                        <form action="displayReport" method="post">
-                            <div>
-                                <label for="">Status</label>
-                                <select v-model="statusR.status" class="custom-select custom-select-md col-md-12">
-                                    <option value=""></option>
-                                    <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
-                                </select>
-                            </div>
-                            <hr>
-                            <v-flex xs12 sm12>
-                                <v-text-field v-model="statusR.start_date" label="start date" type="date" color="blue darken-2" required></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm12>
-                                <v-text-field v-model="statusR.end_date" label="End Date" type="date" color="blue darken-2" required></v-text-field>
-                            </v-flex>
-                            <v-card-actions>
-                                <v-btn flat @click="AllStatusR" :loading="Sload" :disabled="Sload" success color="black">Get Data</v-btn>
-                                <v-spacer></v-spacer>
-                                <v-btn flat color="orange">{{ AllStatus.length }} </v-btn>
-                                <v-divider></v-divider>
-                            </v-card-actions>
-                            <download-excel :data="AllStatus" :fields="json_fields" v-show="Sdown">
-                                Export
-                                <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
-                            </download-excel>
-                        </form>
+                    <mySReport :statuses="statuses"></mySReport>
                     </v-card>
                 </v-flex>
 
                 <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
-                        <h1>Branch Reports</h1>
-                        <hr>
-                        <!-- <form action="DriverReport" method="post"> -->
-                        <div>
-                            <label for="">Status</label>
-                            <select v-model="branchStatus.status" class="custom-select custom-select-md col-md-12">
-                                <option value=""></option>
-                                <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
-                            </select>
-                        </div>
-                        <label for="">Branch</label>
-                        <select class="custom-select custom-select-md col-md-12" v-model="branchR.branch_id">
-                            <option value=""></option>
-                            <option v-for="branch in AllBranches" :key="branch.id" :value="branch.id">{{ branch.branch_name }}</option>
-                        </select> Between
-                        <hr>
-                        <v-flex xs12 sm12>
-                            <v-text-field v-model="branchR.start_date" label="start date" type="date" color="blue darken-2" required></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm12>
-                            <v-text-field v-model="branchR.end_date" label="End Date" type="date" color="blue darken-2" required></v-text-field>
-                        </v-flex>
-                        <v-card-actions>
-                            <v-btn flat @click="AllbranchR" :loading="Bload" :disabled="Bload" success color="black">Get Data</v-btn>
-                            <v-spacer></v-spacer>
-                            <v-btn flat color="orange">{{ AllBranchD.length }} </v-btn>
-                        </v-card-actions>
-                        <v-divider></v-divider>
-                        <download-excel :data="AllBranchD" :fields="json_fields" v-show="Bdown">
-                            Export
-                            <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
-                        </download-excel>
-                        <!-- </form> -->
+                        <myBranchReport :statuses="statuses"></myBranchReport>
                     </v-card>
                 </v-flex>
                 <!-- <v-divider vertical></v-divider> -->
-                <v-flex xs4 sm4 style="margin-top: 40px;">
+                <v-flex xs4 sm4 style="margin-top: 140px;">
                     <v-card>
-                        <h1>Rider Reports</h1>
-                        <hr>
-                        <!-- <form action="DriverReport" method="post"> -->
-                        <label for="">Rider</label>
-                        <select class="custom-select custom-select-md col-md-12" v-model="Rinder.rinder_id">
-                            <option value=""></option>
-                            <option v-for="driver in AllDrivers" :key="driver.id" :value="driver.id">{{ driver.name }}</option>
-                        </select> Between
-                        <hr>
-                        <v-flex xs12 sm12>
-                            <v-text-field v-model="Rinder.start_date" label="start date" type="date" color="blue darken-2" required></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm12>
-                            <v-text-field v-model="Rinder.end_date" label="End Date" type="date" color="blue darken-2" required></v-text-field>
-                        </v-flex>
-                        <v-card-actions>
-                            <v-btn flat @click="AllRinderR" :loading="Rload" :disabled="Rload" success color="black">Get Data</v-btn>
-                            <v-spacer></v-spacer>
-                            <v-btn flat color="orange">{{ AllRinder.length }} </v-btn>
-                        </v-card-actions>
-                        <v-divider></v-divider>
-                        <download-excel :data="AllRinder" :fields="json_fields" v-show="Rdown">
-                            Export
-                            <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
-                        </download-excel>
-                        <!-- </form> -->
+                        <myRiderReport></myRiderReport>
                     </v-card>
                 </v-flex>
-                <v-flex xs4 sm4 style="margin-top: 40px;">
+                <v-flex xs4 sm4 style="margin-top: 140px;">
                     <v-card>
-                        <h1>Delivery Reports</h1>
-                        <hr>
-                        <!-- <form action="DriverReport" method="post"> -->
-                        <label for="">Status</label>
-                        <select v-model="DeliveryR.status" class="custom-select custom-select-md col-md-12">
-                            <option value=""></option>
-                            <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
-                        </select>
-
-                        <label for="">Branch</label>
-                        <select class="custom-select custom-select-md col-md-12" v-model="DeliveryR.branch_id">
-                            <option value=""></option>
-                            <option v-for="branch in AllBranches" :key="branch.id" :value="branch.id">{{ branch.branch_name }}</option>
-                        </select> Between
-                        <hr>
-                        <h2>Delivery Date Between:</h2>
-
-                        <hr>
-                        <v-layout wrap>
-                            <v-flex xs12 sm5>
-                                <v-text-field v-model="DeliveryR.start_date" label="start date" type="date" color="blue darken-2" required></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm6 offset-sm-1>
-                                <v-text-field v-model="DeliveryR.end_date" label="End Date" type="date" color="blue darken-2" required></v-text-field>
-                            </v-flex>
-                        </v-layout>
-                        <h2>Upload Date Between:</h2>
-                        <hr>
-                        <v-layout wrap>
-                            <v-flex xs12 sm6>
-                                <v-text-field v-model="DeliveryR.Upstart_date" label="start date" type="date" color="blue darken-2" required></v-text-field>
-                            </v-flex>
-                            <v-flex xs12 sm6>
-                                <v-text-field v-model="DeliveryR.Upend_date" label="End Date" type="date" color="blue darken-2" required></v-text-field>
-                            </v-flex>
-                        </v-layout>
-                        <v-card-actions>
-                            <v-btn flat @click="AllDeliveryRR" :loading="Dload" :disabled="Dload" success color="black">Get Data</v-btn>
-                            <v-spacer></v-spacer>
-                            <v-btn flat color="orange">{{ AllDeliveryR.length }} </v-btn>
-                        </v-card-actions>
-                        <v-divider></v-divider>
-                        <download-excel :data="AllDeliveryR" :fields="json_fields" v-show="Ddown">
-                            Export
-                            <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
-                        </download-excel>
-                        <!-- </form> -->
-                        <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
-                            {{ message }}
-                            <v-icon dark right>check_circle</v-icon>
-                        </v-snackbar>
+                        <myDeliveryReport :statuses="statuses"></myDeliveryReport>
                     </v-card>
                 </v-flex>
-
+<!--
                 <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
                         <h1>Product Reports</h1>
                         <hr>
-                        <!-- <form action="DriverReport" method="post"> -->
                         <label for="">Status</label>
                         <v-flex xs12 sm12>
                             <v-text-field v-model="ProdR.email" color="blue darken-2" label="Product email" required></v-text-field>
@@ -232,16 +71,12 @@
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
-                        <!-- </form> -->
                         <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
                             {{ message }}
                             <v-icon dark right>check_circle</v-icon>
                         </v-snackbar>
                     </v-card>
-                </v-flex>
-                <v-flex sm4>
-                    <mySReport :statuses="statuses"></mySReport>
-                </v-flex>
+                </v-flex>-->
             </v-layout>
         </v-layout>
 
@@ -252,9 +87,13 @@
 
 <script>
 import mySReport from './status_report'
+import myDeliveryReport from './delivery_report'
+import myClientReport from './client_report'
+import myRiderReport from './rider_report'
+import myBranchReport from './branch_report'
 export default {
     components: {
-        mySReport,
+        mySReport, myDeliveryReport, myClientReport, myRiderReport, myBranchReport
     },
     data() {
         return {
@@ -323,34 +162,6 @@ export default {
         }
     },
     methods: {
-        ClientReport() {
-            eventBus.$emit("progressEvent");
-            this.Cload = true
-            this.AllClientR = []
-            axios.post("/userDateExpo", this.$data.Client)
-                .then(response => {
-                    this.Cload = false
-                    this.AllClientR = response.data
-                    if (this.AllClientR.length < 1) {
-                        this.message = 'no data'
-                        this.color = 'red'
-                        this.snackbar = true
-                        this.Cdown = false
-                    } else {
-                        this.Cdown = true
-                        this.message = 'success'
-                        this.color = 'black'
-                        this.snackbar = true
-                    }
-                    eventBus.$emit("StoprogEvent");
-                })
-                .catch(error => {
-                    eventBus.$emit("StoprogEvent");
-                    this.Cload = false
-                    this.errors = error.response.data.errors;
-                });
-        },
-
         AllStatusR() {
             eventBus.$emit("progressEvent");
             this.Sload = true
@@ -376,34 +187,6 @@ export default {
                 .catch(error => {
                     eventBus.$emit("StoprogEvent");
                     this.Sload = false
-                    this.errors = error.response.data.errors;
-                });
-        },
-
-        AllRinderR() {
-            eventBus.$emit("progressEvent");
-            this.Rload = true
-            this.AllRinder = []
-            axios.post("/DriverReport", this.$data.Rinder)
-                .then(response => {
-                    this.Rload = false
-                    this.AllRinder = response.data
-                    if (this.AllRinder.length < 1) {
-                        this.message = 'no data'
-                        this.color = 'red'
-                        this.snackbar = true
-                        this.Rdown = false
-                    } else {
-                        this.Rdown = true
-                        this.message = 'success'
-                        this.color = 'black'
-                        this.snackbar = true
-                    }
-                    eventBus.$emit("StoprogEvent");
-                })
-                .catch(error => {
-                    eventBus.$emit("StoprogEvent");
-                    this.Rload = false
                     this.errors = error.response.data.errors;
                 });
         },

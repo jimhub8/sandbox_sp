@@ -697,13 +697,7 @@ export default {
             // this.sortItem()
             this.loading = true;
             axios
-                .post(this.AllShipments.path + '?page=' + this.AllShipments.current_page, {
-                    select: this.select,
-                    no_btw: this.between,
-                    selectStatus: this.selectItem,
-                    form: this.form,
-                    selectCountry: this.selectCountry
-                })
+                .post(this.AllShipments.path + '?page=' + this.AllShipments.current_page,  this.form)
                 .then(response => {
                     this.loading = false;
                     this.AllShipments = response.data;

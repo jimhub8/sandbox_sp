@@ -43,12 +43,14 @@ class UploadController extends Controller
     }
     public function importShipments(Request $request)
     {
+
         $orders = Excel::toArray(new ShipmentImport, request()->file('shipment'));
         $client_det = AppClient::find($request->client);
         // dd($orders);
         // $orders_col = Excel::toCollection(new OrderImport, request()->file('orders'));
         $arr = $orders[0];
         $data = array('data' => $arr, 'client' => $client_det);
+        // dd($data);
         // try {
         //     $client = new Client();
         //     $request = $client->request('POST', env('API_URL') . '/api/importOrder', [
@@ -69,7 +71,7 @@ class UploadController extends Controller
         //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
         //     return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
         // }
-        // $this->update_status($data);
+        $this->update_status($data);
         foreach ($arr as $key => $order) {
             // dd($order['delivery_date']);
             $order_data = new Shipment();
@@ -101,7 +103,6 @@ class UploadController extends Controller
             $order_data->status = $status;
             }
             // dd($order_data->status);
-
 
             if (array_key_exists('delivery_date', $order)) {
                 // dd($order);

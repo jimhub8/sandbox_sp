@@ -74,6 +74,8 @@ Route::get('/', function () {
 });
 Route::get('signup/activate/{token}', 'AuthController@signupActivate');
 
+Route::get('/google_drive', 'GoogledriveController@google_drive')->name('google_drive');
+
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function () {
@@ -426,6 +428,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('search_order/{search}', 'DispatchSheetController@search_order')->name('search_order');
     Route::get('export_dispatch', 'DispatchSheetController@export_dispatch')->name('export_dispatch');
 
+    Route::get('searchClient/{search}', 'ClientController@searchClient')->name('searchClient');
+    Route::get('searchRider/{search}', 'RiderController@searchRider')->name('searchRider');
 
 
 

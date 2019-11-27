@@ -25,7 +25,7 @@ export default {
     created() {
         this.timer = window.setInterval(() => {
             this.screen_show = !this.screen_show
-        }, 6000);
+        }, 30000);
     },
     beforeDestroy() {
         clearInterval(this.timer);

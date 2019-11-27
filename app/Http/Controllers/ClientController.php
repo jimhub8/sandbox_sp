@@ -201,4 +201,9 @@ class ClientController extends Controller
             return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
         }
     }
+
+    public function searchClient($search)
+    {
+        return Client::where('name', 'LIKE', "%{$search}%")->get();
+    }
 }

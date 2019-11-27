@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Branch;
 use App\Cancelled;
+use App\models\Rider;
 use App\Notifications\ShipmentNoty;
 use App\Product;
 use App\ScheduleLogs;
@@ -967,7 +968,7 @@ class ShipmentController extends Controller
                 $shipment->branch_id = $branch->branch_name;
             }
             if (!empty($shipment->driver)) {
-                $driver = User::find($shipment->driver);
+                $driver = Rider::find($shipment->driver);
                 $shipment->driver = $driver->name;
             }
             // } else {

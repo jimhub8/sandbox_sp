@@ -122,4 +122,9 @@ class RiderController extends Controller
         }
         return $randomString;
     }
+
+    public function searchRider($search)
+    {
+        return Rider::where('name', 'LIKE', "%{$search}%")->get();
+    }
 }

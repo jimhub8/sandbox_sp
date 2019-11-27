@@ -3,12 +3,12 @@
     <!-- <v-text-field color="success" :loading="loading"></v-text-field> -->
     <v-card class="mx-auto" style="padding: 10px;text-align: center;">
         <VCardTitle primary-title>
-            <h1 style="margin: auto;">status Report</h1>
+            <h1 style="margin: auto;">Delivery Reports</h1>
         </VCardTitle>
         <VDivider />
         <v-card-text>
             <label for="">Status</label>
-            <el-select v-model="status_report.status" multiple filterable clearable placeholder="Select status" style="width: 100%;">
+            <el-select v-model="status_report.status" filterable clearable placeholder="Select status" style="width: 100%;">
                 <el-option v-for="item in statuses" :key="item.name" :label="item.name" :value="item.name">
                 </el-option>
             </el-select>
@@ -21,6 +21,7 @@
                 </el-select>
             </div>
             <div style="margin: 10px 0;"></div>
+            <h2>Delivery Date Between:</h2>
             <div class="block">
                 <span class="demonstration" style="float: left">Start Date</span>
                 <el-date-picker v-model="status_report.start_date" type="date" placeholder="Pick a day" style="width: 100%;">
@@ -29,6 +30,18 @@
             <div class="block">
                 <span class="demonstration" style="float: left">End Date</span>
                 <el-date-picker v-model="status_report.end_date" type="date" placeholder="Pick a day" style="width: 100%;">
+                </el-date-picker>
+            </div>
+            <div style="margin: 10px 0;"></div>
+            <h2>Upload Date Between:</h2>
+            <div class="block">
+                <span class="demonstration" style="float: left">Start Date</span>
+                <el-date-picker v-model="status_report.Upstart_date" type="date" placeholder="Pick a day" style="width: 100%;">
+                </el-date-picker>
+            </div>
+            <div class="block">
+                <span class="demonstration" style="float: left">End Date</span>
+                <el-date-picker v-model="status_report.Upend_date" type="date" placeholder="Pick a day" style="width: 100%;">
                 </el-date-picker>
             </div>
         </v-card-text>
@@ -116,7 +129,7 @@ export default {
         getReport(query) {
             this.loading = true;
             this.form.search = query
-            axios.post('status_report', this.status_report).then((response) => {
+            axios.post('DelivReport', this.status_report).then((response) => {
                 this.loading = false
                 this.delivery_data = response.data
                 if (response.data.length < 1) {

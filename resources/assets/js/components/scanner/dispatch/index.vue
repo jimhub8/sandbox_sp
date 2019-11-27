@@ -8,7 +8,7 @@
                 </v-flex>
                 <v-divider></v-divider>
                 <v-flex sm12 style="margin-top: 30px">
-                    <download-excel :data="scanned_orders" :fields="json_fields">
+                    <download-excel name="Dispatch Outbound.csv"  type="csv" :data="scanned_orders" :fields="json_fields">
                         Export
                         <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                     </download-excel>

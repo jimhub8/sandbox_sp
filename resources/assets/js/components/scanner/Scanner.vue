@@ -52,8 +52,16 @@
                                             <barcode :value="form_in.bar_code_in" style="height: 30px;"></barcode>
                                         </v-flex>
                                         <v-divider></v-divider>
-                                        <v-btn color="primary" flat @click="Inscansub" :disabled="loading_in" :loading="loading_in">Outscan
-                                        </v-btn>
+
+                                        <!-- <download-excel :data="AllScanned" :fields="json_fields">
+                                            <v-btn color="primary" flat @click="Inscansub" :disabled="loading" :loading="loading">Outscan
+                                            </v-btn>
+                                        </download-excel> -->
+
+                                        <download-excel name="Dispatch Inbound.csv" :data="AllScanned" type="csv" :fields="json_fields">
+                                            <v-btn color="primary" flat @click="Inscansub" :disabled="loading_in" :loading="loading_in">Outscan
+                                            </v-btn>
+                                        </download-excel>
                                     </v-flex>
                                 </v-layout>
                             </v-container>
@@ -101,8 +109,10 @@
                                             <barcode :value="form_out.bar_code_out" style="height: 30px;"></barcode>
                                         </v-flex>
                                         <v-divider></v-divider>
-                                        <v-btn color="primary" flat @click="OutscanSub" :disabled="loading" :loading="loading">Outscan
-                                        </v-btn>
+                                        <download-excel name="Dispatch Inbound.csv" :data="AllScanned" :fields="json_fields" type="csv">
+                                            <v-btn color="primary" flat @click="OutscanSub" :disabled="loading" :loading="loading">Outscan
+                                            </v-btn>
+                                        </download-excel>
                                     </v-flex>
                                 </v-layout>
                             </v-container>
@@ -112,7 +122,6 @@
                 <v-card v-if="AllScanned.length > 0">
                     <v-card-title>
                         Shipments
-
                         <v-tooltip right>
                             <template v-slot:activator="{ on }">
                                 <v-btn icon v-on="on" slot="activator" class="mx-0" @click="resetForm">
@@ -239,9 +248,27 @@ export default {
                     sortable: false
                 }
             ],
+            json_fields: {
+                "Order Id": "order_id",
+                "Product Name": "client_email",
+                "Client Name": "client_name",
+                "Client Address": "client_address",
+                "Special Instructions": "speciial_instruction",
+                "Contact": "client_phone",
+                "Amount": "cod_amount",
+                "Payment Code": 'null',
+                "Delivery Date": "null",
+                "Time": "null",
+            },
         }
     },
     methods: {
+        startDownload() {
+            alert('show loading');
+        },
+        finishDownload(type = "csv") {
+            alert('hide loading');
+        },
         reset() {
             this.form = Object.assign({}, this.defaultForm)
             this.$refs.form_in.reset()

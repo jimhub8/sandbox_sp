@@ -3,32 +3,36 @@
     <!-- <v-text-field color="success" :loading="loading"></v-text-field> -->
     <v-card class="mx-auto" style="padding: 10px;text-align: center;">
         <VCardTitle primary-title>
-            <h1 style="margin: auto;">status Report</h1>
+            <h1 style="margin: auto;">Branch Report</h1>
         </VCardTitle>
         <VDivider />
         <v-card-text>
             <label for="">Status</label>
-            <el-select v-model="status_report.status" multiple filterable clearable placeholder="Select status" style="width: 100%;">
+            <el-select v-model="branch_report.status" filterable clearable placeholder="Select status" style="width: 100%;">
                 <el-option v-for="item in statuses" :key="item.name" :label="item.name" :value="item.name">
                 </el-option>
             </el-select>
             <div style="margin: 10px 0;"></div>
             <div>
-                <label for="">Client</label>
-                <el-select v-model="status_report.client" multiple filterable remote reserve-keyword placeholder="type at least 3 characters" :remote-method="getClient" :loading="loading" style="width: 100%;">
-                    <el-option v-for="item in clients" :key="item.id" :label="item.name" :value="item.id">
+                <label for="">Branch</label>
+            <el-select v-model="branch_report.branch" filterable clearable placeholder="Select status" style="width: 100%;">
+                <el-option v-for="item in AllBranches" :key="item.id" :label="item.branch_name" :value="item.id">
+                </el-option>
+            </el-select>
+                <!-- <el-select v-model="branch_report.branch" multiple filterable remote reserve-keyword placeholder="type at least 3 characters" :remote-method="getBranch" :loading="loading" style="width: 100%;">
+                    <el-option v-for="item in branchs" :key="item.id" :label="item.name" :value="item.id">
                     </el-option>
-                </el-select>
+                </el-select> -->
             </div>
             <div style="margin: 10px 0;"></div>
             <div class="block">
                 <span class="demonstration" style="float: left">Start Date</span>
-                <el-date-picker v-model="status_report.start_date" type="date" placeholder="Pick a day" style="width: 100%;">
+                <el-date-picker v-model="branch_report.start_date" type="date" placeholder="Pick a day" style="width: 100%;">
                 </el-date-picker>
             </div>
             <div class="block">
                 <span class="demonstration" style="float: left">End Date</span>
-                <el-date-picker v-model="status_report.end_date" type="date" placeholder="Pick a day" style="width: 100%;">
+                <el-date-picker v-model="branch_report.end_date" type="date" placeholder="Pick a day" style="width: 100%;">
                 </el-date-picker>
             </div>
         </v-card-text>
@@ -39,10 +43,7 @@
                 Get Report
             </v-btn>
             <VSpacer />
-            <!-- <v-btn text color="primary" flat>
-            Download excel
-        </v-btn> -->
-            <download-excel :data="delivery_data" :fields="json_fields" v-if="delivery_data.length> 0">
+            <download-excel :data="branch_data" :fields="json_fields" v-if="branch_data.length> 0">
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
                         <v-btn icon v-on="on" slot="activator" class="mx-0" color="primary">
@@ -52,7 +53,7 @@
                     <span>Download report</span>
                 </v-tooltip>
             </download-excel>
-            <el-tag type="red" v-if="delivery_data.length > 0">{{ delivery_data.length }}</el-tag>
+            <el-tag type="red" v-if="branch_data.length > 0">{{ branch_data.length }}</el-tag>
 
         </v-card-actions>
     </v-card>
@@ -67,11 +68,11 @@ export default {
             form: {
                 search: ''
             },
-            status_report: {
+            branch_report: {
                 start_date: '',
                 end_date: '',
                 option: '',
-                client: [],
+                branch: [],
             },
             options: [{
                 value: 'Orders',
@@ -80,11 +81,11 @@ export default {
                 value: 'Products',
                 label: 'Products'
             }, ],
-            client_options: [],
+            branch_options: [],
             products: [],
-            clients: [],
+            branchs: [],
             loading: false,
-            delivery_data: [],
+            branch_data: [],
             order_data: [],
             json_fields: {
                 'Order Id': 'order_id',
@@ -94,14 +95,14 @@ export default {
                 'Sender City': 'sender_city',
                 'Sender Address': 'sender_address',
                 'Driver': 'driver',
-                'Client Name': 'client_name',
-                'Client Email': 'client_email',
-                'Client Phone': 'client_phone',
-                'Client City': 'client_city',
-                'Client Address': 'client_address',
+                'Branch Name': 'branch_name',
+                'Branch Email': 'branch_email',
+                'Branch Phone': 'branch_phone',
+                'Branch City': 'branch_city',
+                'Branch Address': 'branch_address',
                 'Derivery Status': 'status',
                 'From': 'sender_address',
-                'To': 'client_address',
+                'To': 'branch_address',
                 'Derivery Date': 'derivery_date',
                 'Derivery Time': 'derivery_time',
                 'Quantity': 'amount_ordered',
@@ -116,9 +117,9 @@ export default {
         getReport(query) {
             this.loading = true;
             this.form.search = query
-            axios.post('status_report', this.status_report).then((response) => {
+            axios.post('userDateExpo', this.branch_report).then((response) => {
                 this.loading = false
-                this.delivery_data = response.data
+                this.branch_data = response.data
                 if (response.data.length < 1) {
                     eventBus.$emit('errorEvent', 'No data found')
                 } else {
@@ -137,18 +138,17 @@ export default {
                 }
             })
         },
-        getClient(query) {
-            if (query.length > 2) {
-                this.loading = true;
-                this.form.search = query
-                axios.get(`searchClient/${query}`).then((response) => {
-                    this.loading = false
-                    this.clients = response.data
+        getBranch(query) {
+            axios.get("/getBranch")
+            .then(response => {
+                this.AllBranches = response.data;
+                this.loader = false;
+            })
 
-                }).catch((error) => {
-                    this.loading = true;
-                })
-            }
+            .catch(error => {
+                this.loader = false;
+                this.errors = error.response.data.errors;
+            })
         },
         getProducts(query) {
             if (query.length > 2) {
@@ -167,7 +167,7 @@ export default {
         // }
     },
     mounted() {
-        // this.getApiStatuses();
+        this.getBranch();
     },
     computed: {
         // api_status() {
