@@ -282,7 +282,7 @@
                             </router-link> -->
                         </v-list-group>
 
-                       <router-link to="/dispatch" class="v-list__tile v-list__tile--link">
+                        <router-link to="/dispatch" class="v-list__tile v-list__tile--link">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">
@@ -290,6 +290,16 @@
                                 </div>
                             </div>
                         </router-link>
+                        <a href="/screen" target="blank" class="v-list__tile v-list__tile--link" v-if="user.can['view screen']">
+                            <div class="v-list__tile__action">
+                                <i aria-hidden="true" class="icon material-icons">fullscreen</i>
+                            </div>
+                            <div class="v-list__tile__content">
+                                <div class="v-list__tile__title">
+                                    Screen
+                                </div>
+                            </div>
+                        </a>
                         <!--  <router-link to="/schedulelogs" class="v-list__tile v-list__tile--link" v-if="user.can['view logs']">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
                             <div class="v-list__tile__content">

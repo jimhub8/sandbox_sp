@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Shipment;
 use App\ShipmentStatus;
 use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
@@ -172,7 +173,7 @@ class ScanController extends Controller
         if (array_key_exists('rider_out', $request->form)) {
         $rider_out = $request->form['rider_out'];
         }
-        $this->update_status($request->all());
+        // $this->update_status($request->all());
         // $this->validate($request, [
         //     'form.status_in' => 'required',
         //     'form.branch_id' => 'required',
@@ -326,5 +327,12 @@ class ScanController extends Controller
     public function dispatch_scanner($search)
     {
 
+    }
+    public function filter_rider(Request $request)
+    {
+        // return $request->all();
+        $start_date = Carbon::today();
+        $end_date = Carbon::tomorrow();
+        return Shipment::setEagerLoads([])->whereBetween('assign_date', [$start_date, $end_date])->where('driver', $request->rider_out)->get();
     }
 }

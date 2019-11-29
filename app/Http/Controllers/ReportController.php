@@ -88,10 +88,23 @@ class ReportController extends Controller
     public function DelivReport(Request $request)
     {
         // return $request->all();
+        if (!$request->start_date || !$request->end_date || !$request->status) {
+            // abort(422);
+            $this->Validate($request, [
+                'status' => 'required',
+                'end_date' => 'required',
+                'start_date' => 'required',
+            ]);
+        }
+
+        // return $request->all();
         $status = $request->status;
         $branch_id = $request->branch_id;
         $client = $request->client;
         $shipments = Shipment::setEagerLoads([]);
+        if (Auth::user()->hasPermissionTo('filter by country') && $request->country) {
+            $shipments = $shipments->withoutGlobalScope(ShipmentScope::class);
+        }
         if ($request->start_date && $request->end_date) {
             $start_date = Carbon::parse($request->start_date);
             $end_date = Carbon::parse($request->end_date);

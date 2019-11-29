@@ -33,7 +33,7 @@
                 Get Report
             </v-btn>
             <VSpacer />
-            <download-excel :data="client_data" :fields="json_fields" v-if="client_data.length> 0">
+            <download-excel :data="client_data" name="Client Report.csv" type="csv" :fields="json_fields" v-if="client_data.length> 0">
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
                         <v-btn icon v-on="on" slot="activator" class="mx-0" color="primary">

@@ -20,6 +20,7 @@
      <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <!-- Styles -->
+    {{-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> --}}
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     {{--  <link href="{{ asset('css/main.css') }}" rel="stylesheet">  --}}

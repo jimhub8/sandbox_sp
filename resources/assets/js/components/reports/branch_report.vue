@@ -43,7 +43,7 @@
                 Get Report
             </v-btn>
             <VSpacer />
-            <download-excel :data="branch_data" :fields="json_fields" v-if="branch_data.length> 0">
+            <download-excel :data="branch_data" name="Branch Report.csv" type="csv" :fields="json_fields" v-if="branch_data.length> 0">
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
                         <v-btn icon v-on="on" slot="activator" class="mx-0" color="primary">
@@ -62,7 +62,7 @@
 
 <script>
 export default {
-    props: ['user', 'statuses'],
+    props: ['user', 'statuses', 'AllBranches'],
     data() {
         return {
             form: {
@@ -138,18 +138,6 @@ export default {
                 }
             })
         },
-        getBranch(query) {
-            axios.get("/getBranch")
-            .then(response => {
-                this.AllBranches = response.data;
-                this.loader = false;
-            })
-
-            .catch(error => {
-                this.loader = false;
-                this.errors = error.response.data.errors;
-            })
-        },
         getProducts(query) {
             if (query.length > 2) {
                 this.loading = true;
@@ -167,7 +155,7 @@ export default {
         // }
     },
     mounted() {
-        this.getBranch();
+        // this.getBranch();
     },
     computed: {
         // api_status() {

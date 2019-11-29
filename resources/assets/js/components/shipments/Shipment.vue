@@ -73,6 +73,7 @@
                         <v-btn color="primary" flat @click="ShipmentCsv" v-if="user.can['upload excel']">Upload Excel</v-btn>
                         <!-- <v-btn color="primary" flat @click="send_sms">Send Sms</v-btn> -->
                         <v-btn color="primary" flat @click="send_sms" v-if="user.can['send sms']">Send Sms</v-btn>
+                        <v-btn color="primary" flat @click="google_upload" v-if="user.can['send sms']">Upload Orders</v-btn>
                         <v-tooltip right>
                             <template v-slot:activator="{ on }">
                                 <v-btn icon v-on="on" slot="activator" class="mx-0" @click="sortItem">
@@ -226,6 +227,7 @@
     <myRows :myRows="RowModal" @closeRequest="close" :updateCharges="shipment"></myRows>
     <!-- <myPrintPod :PrintRequest="printModal" @closeRequest="close" :selected="selected"></myPrintPod> -->
     <mySms></mySms>
+    <myGoogle :customers="Allcustomers"></myGoogle>
     <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
         {{ message }}
         <v-icon dark right>check_circle</v-icon>
@@ -248,6 +250,7 @@ import AssignBranch from "./AssignBranch";
 import TrackShipment from "./TrackShipment";
 import myCsvFile from "../csv/CsvFile";
 import mySCharges from "./Charge";
+import myGoogle from '../upload/google'
 // import myPrintPod from './PrintPod
 import myRows from "./rows/Rows";
 import mySms from './sms/Sms'
@@ -271,7 +274,7 @@ export default {
         UgPrintSpdf,
         RwPrintSpdf,
         mySms,
-        // myPrintPod
+        myGoogle,
     },
     data() {
         return {
@@ -423,6 +426,9 @@ export default {
     methods: {
         send_sms() {
             eventBus.$emit('sendSmsEvent', this.AllShipments.data)
+        },
+        google_upload() {
+            eventBus.$emit('GoogleUploadEvent')
         },
         UpdateStatus() {
             // alert(this.updateitedItem.id);

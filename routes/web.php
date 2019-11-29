@@ -75,6 +75,7 @@ Route::get('/', function () {
 Route::get('signup/activate/{token}', 'AuthController@signupActivate');
 
 Route::get('/google_drive', 'GoogledriveController@google_drive')->name('google_drive');
+Route::get('/google_s', 'GoogledriveController@google_s')->name('google_s');
 
 Auth::routes();
 
@@ -296,6 +297,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('filterR', 'ScanController@filterR')->name('filterR');
 	Route::post('getDelScan', 'ScanController@getDelScan')->name('getDelScan');
 	Route::post('getNotDelScan', 'ScanController@getNotDelScan')->name('getNotDelScan');
+    Route::post('filter_rider', 'ScanController@filter_rider')->name('filter_rider');
 
 	Route::post('rows', 'RowsController@rows')->name('rows');
 	Route::get('getRows', 'RowsController@getRows')->name('getRows');
@@ -431,6 +433,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('searchClient/{search}', 'ClientController@searchClient')->name('searchClient');
     Route::get('searchRider/{search}', 'RiderController@searchRider')->name('searchRider');
 
+
+    Route::post('/google_sheets', 'GoogledriveController@google_sheets')->name('google_sheets');
 
 
 });

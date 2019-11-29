@@ -98,9 +98,9 @@ import mysubsicriber from './components/emails/Subscribe.vue';
 import myReports from './components/reports/Reports.vue';
 import mybranchShip from './components/branches/BranchShipments.vue';
 import myRoles from './components/users/roles/Roles.vue';
-import myscheduled from './components/shipments/Scheduled.vue';
-import myTasks from './components/tasks/Task.vue';
-import myUploadFile from './components/upload/UploadFile.vue';
+// import myscheduled from './components/shipments/Scheduled.vue';
+// import myTasks from './components/tasks/Task.vue';
+// import myUploadFile from './components/upload/UploadFile.vue'; 
 import myCharges from './components/charge/Charge.vue';
 import myTown from './components/town/Town.vue';
 import mySticker from './components/shipments/print/Sticker.vue';
@@ -144,9 +144,9 @@ const routes = [
     { path: '/reports', component: myReports },
     { path: '/roles', component: myRoles },
     { path: '/branch/:id', component: mybranchShip },
-    { path: '/scheduled', component: myscheduled },
-    { path: '/tasks', component: myTasks },
-    { path: '/uploads', component: myUploadFile },
+    // { path: '/scheduled', component: myscheduled },
+    // { path: '/tasks', component: myTasks },
+    // { path: '/uploads', component: myUploadFile },
     { path: '/charges', component: myCharges },
     { path: '/towns', component: myTown },
     { path: '/print', component: myWaybill },
@@ -187,12 +187,12 @@ const app = new Vue({
     components: {
         myHeader, myUser, myShipment, myScanner, myMap,
         myBranch, myProfile, myCompany, myCustomer,
-        myReports, mybranchShip, myRoles, myscheduled, myTasks, myUploadFile, myCharges,
+        myReports, mybranchShip, myRoles, myCharges,
         myTown, myWaybill, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash,
         myunauth, myDash, myFilter, myChatty, myFinance, myFinClient, mySticker, myDStatus, myLogs, mySc,
 
         myClients, myScreen, myRiders, myDispatch
-        // myContainer
+        // myContainer, myUploadFile, myTasks, myscheduled
     },
     // data: {
     //     role: '',

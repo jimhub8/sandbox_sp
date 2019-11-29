@@ -12,6 +12,7 @@
                 <el-option v-for="item in statuses" :key="item.name" :label="item.name" :value="item.name">
                 </el-option>
             </el-select>
+            <small class="has-text-danger" v-if="errors.status">{{ errors.status[0] }}</small>
             <div style="margin: 10px 0;"></div>
             <div>
                 <label for="">Client</label>
@@ -21,16 +22,26 @@
                 </el-select>
             </div>
             <div style="margin: 10px 0;"></div>
+            <div v-if="user.can['filter by country']">
+                <label for="">Country</label>
+                <el-select v-model="status_report.country" filterable clearable placeholder="Select Country" style="width: 100%;">
+                    <el-option v-for="item in countries" :key="item.id" :label="item.country_name" :value="item.id">
+                    </el-option>
+                </el-select>
+            </div>
+            <div style="margin: 10px 0;"></div>
             <h2>Delivery Date Between:</h2>
             <div class="block">
                 <span class="demonstration" style="float: left">Start Date</span>
                 <el-date-picker v-model="status_report.start_date" type="date" placeholder="Pick a day" style="width: 100%;">
                 </el-date-picker>
+                <small class="has-text-danger" v-if="errors.start_date">{{ errors.start_date[0] }}</small>
             </div>
             <div class="block">
                 <span class="demonstration" style="float: left">End Date</span>
                 <el-date-picker v-model="status_report.end_date" type="date" placeholder="Pick a day" style="width: 100%;">
                 </el-date-picker>
+                <small class="has-text-danger" v-if="errors.end_date">{{ errors.end_date[0] }}</small>
             </div>
             <div style="margin: 10px 0;"></div>
             <h2>Upload Date Between:</h2>
@@ -52,10 +63,7 @@
                 Get Report
             </v-btn>
             <VSpacer />
-            <!-- <v-btn text color="primary" flat>
-            Download excel
-        </v-btn> -->
-            <download-excel :data="delivery_data" :fields="json_fields" v-if="delivery_data.length> 0">
+            <download-excel :data="delivery_data" name="Delivery Report.csv" type="csv" :fields="json_fields" v-if="delivery_data.length> 0">
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
                         <v-btn icon v-on="on" slot="activator" class="mx-0" color="primary">
@@ -66,7 +74,6 @@
                 </v-tooltip>
             </download-excel>
             <el-tag type="red" v-if="delivery_data.length > 0">{{ delivery_data.length }}</el-tag>
-
         </v-card-actions>
     </v-card>
 </div>
@@ -74,16 +81,17 @@
 
 <script>
 export default {
-    props: ['user', 'statuses'],
+    props: ['user', 'statuses', 'countries'],
     data() {
         return {
+            errors: [],
             form: {
                 search: ''
             },
             status_report: {
                 start_date: '',
                 end_date: '',
-                option: '',
+                status: 'Delivered',
                 client: [],
             },
             options: [{
@@ -127,7 +135,8 @@ export default {
     },
     methods: {
         getReport(query) {
-            this.loading = true;
+            this.errors = [],
+                this.loading = true;
             this.form.search = query
             axios.post('DelivReport', this.status_report).then((response) => {
                 this.loading = false
@@ -146,6 +155,7 @@ export default {
                     eventBus.$emit('reloadRequest', error.response.statusText)
                 } else if (error.response.status === 422) {
                     eventBus.$emit('errorEvent', error.response.statusText)
+                    this.errors = error.response.data.errors
                     return
                 }
             })
@@ -197,5 +207,6 @@ label {
 
 .theme--light.v-card>.v-card__text {
     height: 450px;
+    overflow: scroll
 }
 </style>

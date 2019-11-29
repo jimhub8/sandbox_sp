@@ -90,7 +90,6 @@
                                         <label for="inputAddress2">Location</label>
                                         <input type="text" class="form-control" id="inputAddress2" placeholder="Location" v-model="form_out.location_out">
                                     </div>
-
                                     <v-flex xs6 sm6>
                                         <v-text-field v-model="form_out.scan_date_out" :type="'date'" color="blue darken-2" label="Date" required></v-text-field>
                                     </v-flex>
@@ -109,17 +108,40 @@
                                             <barcode :value="form_out.bar_code_out" style="height: 30px;"></barcode>
                                         </v-flex>
                                         <v-divider></v-divider>
-                                        <download-excel name="Dispatch Inbound.csv" :data="AllScanned" :fields="json_fields" type="csv">
-                                            <v-btn color="primary" flat @click="OutscanSub" :disabled="loading" :loading="loading">Outscan
-                                            </v-btn>
-                                        </download-excel>
+                                        <!-- <download-excel name="Dispatch Inbound.csv" :data="AllScanned" :fields="json_fields" type="csv"> -->
+                                        <v-btn color="primary" flat @click="OutscanSub" :disabled="loading" :loading="loading">Outscan
+                                        </v-btn>
+                                        <!-- </download-excel> -->
                                     </v-flex>
                                 </v-layout>
                             </v-container>
                         </v-form>
                     </v-flex>
                 </v-layout>
+                <v-divider></v-divider>
+
+
+                <download-excel :data="scanned_shipments" type= "csv" name="Dispatch Inbound.csv" :fields="json_fields" v-if="scanned_shipments.length > 0" style="float: right; margin-right: 10px;">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-btn icon v-on="on" slot="activator" class="mx-0" color="primary">
+                                <i color="info" class="fas fa-file-excel"></i>
+                            </v-btn>
+                        </template>
+                        <span>Download report</span>
+                    </v-tooltip>
+                    <el-tag>{{ scanned_shipments.length }}</el-tag>
+                </download-excel>
+
+                <v-divider></v-divider>
+                <!-- <download-excel :data="scanned_shipments" name="Dispatch Inbound.csv" :fields="json_fields" v-if="scanned_shipments.length > 0">
+                        Export
+                        <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
+                    </download-excel> -->
                 <v-card v-if="AllScanned.length > 0">
+                    <!-- <download-excel class="btn" :data="scanned_shipments" :fields="json_fields" type="csv">
+                        Download Excel
+                    </download-excel> -->
                     <v-card-title>
                         Shipments
                         <v-tooltip right>
@@ -184,6 +206,7 @@ export default {
             errors: [],
             search: '',
             message: 'test',
+            scanned_shipments: [],
             AllShipments: {},
             form: Object.assign({}, defaultForm),
             form_out: {
@@ -263,11 +286,9 @@ export default {
         }
     },
     methods: {
-        startDownload() {
-            alert('show loading');
-        },
-        finishDownload(type = "csv") {
-            alert('hide loading');
+        myClickEvent($event) {
+            const elem = this.$refs.myBtn
+            elem.click()
         },
         reset() {
             this.form = Object.assign({}, this.defaultForm)
@@ -275,6 +296,17 @@ export default {
         },
         resetForm() {
             this.AllScanned = []
+        },
+        fetchData() {
+            axios.post('/filter_rider', this.form_out).then((response) => {
+                    // console.log(response.data);
+                    this.scanned_shipments = response.data
+                    return response.data
+                })
+                .catch((error) => {
+                    this.loading = false
+                    this.errors = error.response.data.errors
+                })
         },
         Outscan() {
             this.loading = true
@@ -385,11 +417,16 @@ export default {
                     })
                     .then((response) => {
                         this.loading = false
+                        this.fetchData()
                         this.resetForm()
-                        this.snackbar = true
-                        this.message = 'successifully scanned'
-                        this.icon = 'check_circle'
-                        this.color = 'indigo'
+                        // this.snackbar = true
+                        // this.message = 'successifully scanned'
+                        // this.icon = 'check_circle'
+                        // this.color = 'indigo'
+                        this.$message({
+                            type: 'success',
+                            message: 'successifully scanned'
+                        });
                     })
                     .catch((error) => {
                         this.loading = false;

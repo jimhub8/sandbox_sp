@@ -121,11 +121,23 @@ class StatusController extends Controller
         // $derivery_date = $request->form['scheduled_date'];
         $shipment = Shipment::whereIn('id', $id)->update(['printed' => 1, 'printReceipt' => 1, 'printed_at' => now()]);
         $print_shipment->transform(function ($shipment) {
-            // dd(DNS1D::getBarcodeSVG("4445645656", "C39"));
-            $bar_code = 'data:image/png;base64,' . DNS1D::getBarcodePNG($shipment->bar_code, "C39");
+            $length = strlen($shipment->bar_code);
+            if ($length > 10) {
+                // $cut = $length - 10;
+                $bar_code_str = substr($shipment->bar_code, '-10');
+            } else {
+                $bar_code_str = $shipment->bar_code;
+            }
+            $bar_code = 'data:image/png;base64,' . DNS1D::getBarcodePNG($bar_code_str, "C39");
             $shipment->barcode = $bar_code;
             // $shipment->country_logo = $country_logo;
             return $shipment;
+
+            // dd(DNS1D::getBarcodeSVG("4445645656", "C39"));
+            // $bar_code = 'data:image/png;base64,' . DNS1D::getBarcodePNG($shipment->bar_code, "C39");
+            // $shipment->barcode = $bar_code;
+            // // $shipment->country_logo = $country_logo;
+            // return $shipment;
         });
         Shipment::setEventDispatcher($dispatcher);
         return $print_shipment;

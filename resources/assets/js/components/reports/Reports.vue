@@ -20,13 +20,13 @@
                 <!-- <v-divider vertical></v-divider> -->
                 <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
-                    <mySReport :statuses="statuses"></mySReport>
+                        <mySReport :statuses="statuses"></mySReport>
                     </v-card>
                 </v-flex>
 
                 <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
-                        <myBranchReport :statuses="statuses"></myBranchReport>
+                        <myBranchReport :AllBranches="AllBranches" :statuses="statuses"></myBranchReport>
                     </v-card>
                 </v-flex>
                 <!-- <v-divider vertical></v-divider> -->
@@ -37,10 +37,10 @@
                 </v-flex>
                 <v-flex xs4 sm4 style="margin-top: 140px;">
                     <v-card>
-                        <myDeliveryReport :statuses="statuses"></myDeliveryReport>
+                        <myDeliveryReport :countries="countries" :user="user" :statuses="statuses"></myDeliveryReport>
                     </v-card>
                 </v-flex>
-<!--
+                <!--
                 <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
                         <h1>Product Reports</h1>
@@ -92,47 +92,17 @@ import myClientReport from './client_report'
 import myRiderReport from './rider_report'
 import myBranchReport from './branch_report'
 export default {
+    props: ['user'],
     components: {
-        mySReport, myDeliveryReport, myClientReport, myRiderReport, myBranchReport
+        mySReport,
+        myDeliveryReport,
+        myClientReport,
+        myRiderReport,
+        myBranchReport
     },
     data() {
         return {
-            AllProd: [],
-            ProdR: {},
-            Allcustomers: [],
-            AllDrivers: [],
-            statusR: {},
-            statusD: {},
-            Client: {},
-            DeliveryR: {
-                branch_id: ''
-            },
-            Rinder: {},
-            branchStatus: {},
-            AllBranches: [],
-            AllStatus: [],
-            AllClientR: [],
-            AllRinder: [],
-            branchRD: {},
-            branchR: {},
-            AllBranchD: [],
-            AllDeliveryR: [],
-            statuses: [],
             loader: false,
-            Sload: false,
-            Cload: false,
-            Bload: false,
-            Dload: false,
-            Rload: false,
-            Cdown: false,
-            Bdown: false,
-            Sdown: false,
-            Pdown: false,
-            Ddown: false,
-            Pload: false,
-            Rdown: false,
-            snackbar: false,
-            timeout: 5000,
             message: 'Success',
             color: 'black',
             json_fields: {
@@ -159,127 +129,29 @@ export default {
                 'Special Instructions': 'speciial_instruction',
                 'Last updated': 'updated_at'
             },
+            statuses: {},
+            AllBranches: {},
+            countries: {},
+
         }
     },
     methods: {
-        AllStatusR() {
-            eventBus.$emit("progressEvent");
-            this.Sload = true
-            this.AllStatus = []
-            axios.post("/displayReport", this.$data.statusR)
-                .then(response => {
-                    this.Sload = false
-                    this.AllStatus = response.data
-                    // console.log(response.data)
-                    if (this.AllStatus.length < 1) {
-                        this.message = 'no data'
-                        this.color = 'red'
-                        this.snackbar = true
-                        this.Sdown = false
-                    } else {
-                        this.Sdown = true
-                        this.message = 'success'
-                        this.color = 'black'
-                        this.snackbar = true
-                    }
-                    eventBus.$emit("StoprogEvent");
-                })
-                .catch(error => {
-                    eventBus.$emit("StoprogEvent");
-                    this.Sload = false
-                    this.errors = error.response.data.errors;
-                });
-        },
 
-        AllProdR() {
-            eventBus.$emit("progressEvent");
-            this.Pload = true
-            // this.AllProd = []
-            axios.post("/ProdReport", this.$data.ProdR)
-                .then(response => {
-                    this.Pload = false
-                    this.AllProd = response.data
-                    if (this.AllProd.length < 1) {
-                        this.message = 'no data'
-                        this.color = 'red'
-                        this.snackbar = true
-                        this.Pdown = false
-                    } else {
-                        this.Pdown = true
-                        this.message = 'success'
-                        this.color = 'black'
-                        this.snackbar = true
-                    }
-                    eventBus.$emit("StoprogEvent");
+        getCountry(query) {
+            axios.get('/getCountry')
+                .then((response) => {
+                    this.countries = response.data
+                    this.loader = false
                 })
-                .catch(error => {
-                    eventBus.$emit("StoprogEvent");
-                    this.Rload = false
-                    this.errors = error.response.data.errors;
-                });
+                .catch((error) => {
+                    this.loader = false
+                    this.errors = error.response.data.errors
+                })
         },
-        AllDeliveryRR() {
-            eventBus.$emit("progressEvent");
-            this.Dload = true
-            this.AllDeliveryR = []
-            axios.post("/DelivReport", this.$data.DeliveryR)
-                .then(response => {
-                    this.Dload = false
-                    this.AllDeliveryR = response.data
-                    if (this.AllDeliveryR.length < 1) {
-                        this.message = 'no data'
-                        this.color = 'red'
-                        this.snackbar = true
-                        this.Ddown = false
-                    } else {
-                        this.Ddown = true
-                        this.message = 'success'
-                        this.color = 'black'
-                        this.snackbar = true
-                    }
-                    eventBus.$emit("StoprogEvent");
-                })
-                .catch(error => {
-                    eventBus.$emit("StoprogEvent");
-                    this.Rload = false
-                    this.errors = error.response.data.errors;
-                });
-        },
-        AllbranchR() {
-            eventBus.$emit("progressEvent");
-            this.Bload = true
-            this.AllBranchD = []
-            axios.post("/branchesExpo", {
-                    branch: this.$data.branchR,
-                    branch_status: this.$data.branchStatus,
-                })
-                .then(response => {
-                    this.Bload = false
-                    this.AllBranchD = response.data;
-                    if (this.AllBranchD.length < 1) {
-                        this.message = 'no data'
-                        this.color = 'red'
-                        this.snackbar = true
-                        this.Bdown = false
-                    } else {
-                        this.Bdown = true
-                        this.message = 'success'
-                        this.color = 'black'
-                        this.snackbar = true
-                        this.AllBranchD = response.data
-                    }
-                    eventBus.$emit("StoprogEvent");
-                })
-                .catch(error => {
-                    eventBus.$emit("StoprogEvent");
-                    this.Bload = false
-                    this.errors = error.response.data.errors;
-                });
-        }
     },
     mounted() {
         this.loader = true;
-
+        this.getCountry()
         axios.get("/getCustomer")
             .then(response => {
                 this.Allcustomers = response.data;

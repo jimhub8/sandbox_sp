@@ -42,7 +42,7 @@
             <!-- <v-btn text color="primary" flat>
             Download excel
         </v-btn> -->
-            <download-excel :data="delivery_data" :fields="json_fields" v-if="delivery_data.length> 0">
+            <download-excel :data="delivery_data" name="Status Report.csv" type="csv" :fields="json_fields" v-if="delivery_data.length > 0">
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
                         <v-btn icon v-on="on" slot="activator" class="mx-0" color="primary">
