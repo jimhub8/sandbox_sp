@@ -197,7 +197,7 @@ export default {
             this.showMap = false;
         },
         alert() {
-            this.$emit("alertRequest");
+            eventBus.$emit('alertRequest', 'Success')
         },
         setDescription(description) {
             this.description = description;
@@ -217,7 +217,7 @@ export default {
             }
         },
         mapUpsd() {
-            this.markers = []; 
+            this.markers = [];
             this.showMap = true;
         },
         getDistance() {
@@ -228,7 +228,7 @@ export default {
             //         position: {
             //             lat: this.place.geometry.location.lat(),
             //             lng: this.place.geometry.location.lng()
-            //         } 
+            //         }
             //     });
             //     this.place = null;
             // }

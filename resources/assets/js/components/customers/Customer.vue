@@ -156,7 +156,6 @@ export default {
       timeout: 5000,
       color: "black",
       message: "Success",
-      Allcustomers: [],
       form: {
         search: ""
       },
@@ -209,16 +208,6 @@ export default {
     this.loader = true;
     this.refresh();
 
-    axios
-      .get("/getCustomer")
-      .then(response => {
-        this.Allcustomers = response.data;
-        this.loader = false;
-      })
-      .catch(error => {
-        this.errors = error.response.data.errors;
-        this.loader = false;
-      });
   }
   // beforeRouteEnter(to, from, next) {
   //     next(vm => {

@@ -33,7 +33,7 @@
                             <v-flex xs4 sm2 offset-sm1>
                                 <v-select :items="AllStatus" v-model="selectItem" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint></v-select>
                             </v-flex>
-                            
+
                             <!-- <v-spacer></v-spacer> -->
                             <v-flex xs12 sm2 offset-sm1>
                                 <v-text-field label="Start Date" v-model="form.start_date" color="blue darken-2" type="date" required></v-text-field>
@@ -181,19 +181,19 @@
 
 <script>
 import VueBarcode from "vue-barcode";
-let AddShipment = require("./AddShipment");
-let EditShipment = require("./EditShipment");
-let ShowShipment = require("./PrintSPdf");
-let UpdateShipment = require("./UpdateShipment");
-let UpdateShipmentStatus = require("./UpdateShipmentStatus");
-let AssignDriver = require("./AssignDriver");
-let AssignBranch = require("./AssignBranch");
-let TrackShipment = require("./TrackShipment");
-let myCsvFile = require("../csv/CsvFile");
-let mySCharges = require("./Charge");
-// let myPrintPod = require('./PrintPod')
-let myRows = require("./rows/Rows");
-// let myPrintSPdf = require('./PrintSPdf.js');
+import AddShipment from "./AddShipment"
+import EditShipment from "./EditShipment"
+import ShowShipment from "./PrintSPdf"
+import UpdateShipment from "./UpdateShipment"
+import UpdateShipmentStatus from "./UpdateShipmentStatus"
+import AssignDriver from "./AssignDriver"
+import AssignBranch from "./AssignBranch"
+import TrackShipment from "./TrackShipment"
+import myCsvFile from "../csv/CsvFile"
+import mySCharges from "./Charge"
+// import myPrintPod from './PrintPod'
+import myRows from "./rows/Rows"
+// import myPrintSPdf from './PrintSPdf.js'
 export default {
   props: ["user", "role"],
   components: {

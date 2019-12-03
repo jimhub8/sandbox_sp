@@ -126,8 +126,8 @@
                                                                         Remark <small>(optional)</small>
                                                                     </div>
                                                                 </v-text-field>
-                                                                <!-- <v-checkbox 
-                              :label="Apply" 
+                                                                <!-- <v-checkbox
+                              :label="Apply"
                               v-model="addToContainer.apply"
                             ></v-checkbox> -->
                                                             </v-flex>
@@ -318,9 +318,9 @@
 
 <script>
 import VueBarcode from 'vue-barcode';
-let AddContainer = require('./AddContainer')
-let EditContainer = require('./EditContainer')
-// let UpdateContainer = require('./UpdateContainer')
+import AddContainer from './AddContainer'
+import EditContainer from './EditContainer'
+// import UpdateContainer from './UpdateContainer'
 export default {
     props: ['user', 'role'],
     components: {
@@ -464,8 +464,8 @@ export default {
           addShipment() {
             axios.post(`/container/${this.addToContainer.id}`, this.$data.form)
             .then((response) => {
-             console.log(response.data); 
-             this.AllContainers.push(response.data) 
+             console.log(response.data);
+             this.AllContainers.push(response.data)
              this.pdialog2 = false
            })
          },*/
@@ -549,7 +549,7 @@ export default {
         },
 
         UpdateStatus() {
-            // alert(this.updateitedItem.id);      
+            // alert(this.updateitedItem.id);
             axios.post(`/conupdateStatus/${this.addToContainer.id}`, this.$data.addToContainer)
                 .then((response) => {
                     console.log(response);

@@ -77,7 +77,7 @@ export default {
                 .then(response => {
                     this.loading = false;
                     console.log(response);
-                    this.$emit("alertRequest");
+                    eventBus.$emit('alertRequest', 'Success')
                     this.$parent.AllRoles.push(response.data);
                     this.resetForm();
                     this.$emit("closeRequest");

@@ -26,7 +26,7 @@
 
                 <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
-                        <myBranchReport :AllBranches="AllBranches" :statuses="statuses"></myBranchReport>
+                        <myBranchReport :branches="branches" :statuses="statuses"></myBranchReport>
                     </v-card>
                 </v-flex>
                 <!-- <v-divider vertical></v-divider> -->
@@ -129,81 +129,73 @@ export default {
                 'Special Instructions': 'speciial_instruction',
                 'Last updated': 'updated_at'
             },
-            statuses: {},
-            AllBranches: {},
-            countries: {},
 
         }
     },
     methods: {
-
-        getCountry(query) {
-            axios.get('/getCountry')
-                .then((response) => {
-                    this.countries = response.data
-                    this.loader = false
-                })
-                .catch((error) => {
-                    this.loader = false
-                    this.errors = error.response.data.errors
-                })
+        getCountry() {
+            var payload = {
+                url: '/getCountry',
+                list: 'updateCountryList',
+                data: this.form,
+            }
+            this.$store.dispatch('getItems', payload)
+        },
+        getCustomer() {
+            var payload = {
+                url: '/getCustomer',
+                list: 'updateClientList',
+                data: this.form,
+            }
+            this.$store.dispatch('getItems', payload)
+        },
+        getDrivers() {
+            var payload = {
+                url: '/getDrivers',
+                list: 'updateRidersList',
+                data: this.form,
+            }
+            this.$store.dispatch('getItems', payload)
+        },
+        getBranch() {
+            var payload = {
+                url: '/getBranchEger',
+                list: 'updateBranchesList',
+                data: this.form,
+            }
+            this.$store.dispatch('getItems', payload)
+        },
+        getStatus() {
+            var payload = {
+                url: '/getStatuses',
+                list: 'updateStatusList',
+            }
+            this.$store.dispatch('getItems', payload)
         },
     },
     mounted() {
-        this.loader = true;
+        // this.loader = true;
+        // this.getDrivers()
+        // this.getCustomer()
+        this.getBranch()
+        this.getStatus()
         this.getCountry()
-        axios.get("/getCustomer")
-            .then(response => {
-                this.Allcustomers = response.data;
-            })
-            .catch(error => {
-                this.errors = error.response.data.errors;
-            });
+    },
 
-        axios.get("/getDrivers")
-            .then(response => {
-                this.AllDrivers = response.data;
-                this.loader = false;
-            })
-
-            .catch(error => {
-                this.loader = false;
-                this.errors = error.response.data.errors;
-            });
-
-        axios.get("/getBranch")
-            .then(response => {
-                this.AllBranches = response.data;
-                this.loader = false;
-            })
-
-            .catch(error => {
-                this.loader = false;
-                this.errors = error.response.data.errors;
-            })
-
-        axios.get('/getStatuses')
-            .then((response) => {
-                this.statuses = response.data
-            })
-            .catch((error) => {
-                if (error.response.status === 500) {
-                    eventBus.$emit('errorEvent', error.response.statusText)
-                    this.loading = false
-                    return
-                } else if (error.response.status === 401 || error.response.status === 409) {
-                    this.loading = false
-                    eventBus.$emit('reloadRequest')
-                    return
-                } else if (error.response.status === 422) {
-                    this.loading = false
-                    eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                    return
-                }
-                this.errors = error.response.data.errors
-            })
-
-    }
+    computed: {
+        clients() {
+            return this.$store.getters.clients
+        },
+        countries() {
+            return this.$store.getters.countries
+        },
+        branches() {
+            return this.$store.getters.branches
+        },
+        statuses() {
+            return this.$store.getters.statuses
+        },
+    },
 }
 </script>
 

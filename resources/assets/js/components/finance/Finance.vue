@@ -132,7 +132,7 @@
 
 <script>
 import VueBarcode from "vue-barcode";
-let mySCharges = require("../shipments/Charge");
+import mySCharges from "../shipments/Charge";
 export default {
     props: ["user"],
     components: {
@@ -416,27 +416,6 @@ export default {
             this.getShipments();
         },
 
-        getCustomer() {
-            axios
-                .get("/getCustomer")
-                .then(response => {
-                    this.Allcustomers = response.data;
-                })
-                .catch(error => {
-                    this.errors = error.response.data.errors;
-                });
-        },
-        getDrivers() {
-            axios
-                .get("/getDrivers")
-                .then(response => {
-                    this.AllDrivers = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errors = error.response.data.errors;
-                });
-        },
         getBranch() {
             axios
                 .get("/getBranchEger")
@@ -470,22 +449,9 @@ export default {
         }
     },
     computed: {
-        getShipmentsComp() {
-            // this.loading = true;
-            // axios
-            //     .get("/getShipments")
-            //     .then(response => {
-            //         this.loading = false;
-            //         this.loader = false;
-            //         this.AllShipments = response.data;
-            //     })
-            //     .catch(error => {
-            //         this.loading = false;
-            //         this.loader = false;
-            //         this.errors = error.response.data.errors;
-            //     });
-            // this.getShipments()
-        }
+        clients() {
+            return this.$store.getters.clients
+        },
     },
     created() {
         eventBus.$on("selectClear", data => {

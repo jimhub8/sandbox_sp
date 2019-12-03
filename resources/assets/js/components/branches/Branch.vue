@@ -114,7 +114,7 @@
 </template>
 
 <script>
-let AddBranch = require('./AddBranch')
+import AddBranch from './AddBranch'
 export default {
     props: ['user'],
     components: {

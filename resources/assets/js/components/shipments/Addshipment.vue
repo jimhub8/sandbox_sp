@@ -1,6 +1,6 @@
 <template>
 <v-layout row justify-center>
-    <v-dialog v-model="addShipment" persistent>
+    <v-dialog v-model="dialog" persistent>
         <v-card>
             <v-card-title>
                 Add Shipment
@@ -347,7 +347,7 @@
 <script>
 import VueBarcode from "vue-barcode";
 export default {
-    props: ["addShipment", "user", 'role', 'Allcustomer', 'AllDrivers', 'AllBranches'],
+    props: ["user", 'role', 'Allcustomer', 'AllDrivers', 'AllBranches'],
     components: {
         barcode: VueBarcode
     },
@@ -402,6 +402,7 @@ export default {
                 country: "",
             },
             customerArr: [],
+            dialog: false,
             loading: false,
             selectD: [],
             selectC: [],
@@ -462,7 +463,7 @@ export default {
                 });
         },
         close() {
-            this.$emit("closeRequest");
+            this.dialog = false
         },
         resetForm() {
             this.form = Object.assign({}, this.defaultForm);
@@ -480,17 +481,6 @@ export default {
             const index = this.form.products.indexOf(product)
             this.form.products.splice(index, 1)
         },
-        // getUserDetails() {
-        //     axios.get(`getUserDetails/${this.model}`)
-        //   .then(res => {
-        //     this.customerArr = res.data
-        //     this.isLoading = false
-        //   })
-        //   .catch(err => {
-        //     console.log(err)
-        //   })
-        //   .finally(() => (this.isLoading = false))
-        // }
     },
     watch: {
         search(val) {
@@ -511,36 +501,18 @@ export default {
             //   .finally(() => (this.isLoading = false))
         }
     },
+
+    created () {
+        eventBus.$on('addShipmentEvent', data => {
+            this.dialog = true
+        })
+    },
     computed: {
         subTotal: function () {
             return this.form.products.reduce(function (carry, product) {
                 return carry + parseFloat(product.price);
             }, 0);
         },
-        // vat: function() {
-        //     return this.grandTotal * parseFloat(0.16);
-        //     // (this.subTotal - parseFloat(this.form.discount)) * parseFloat(0.16);
-        // },
-        // grandTotal: function() {
-        //     return this.subTotal - parseFloat(this.form.discount);
-        // },
-        formIsValid() {
-            return (
-                this.form.client_name &&
-                this.form.client_phone &&
-                this.form.client_email &&
-                this.form.client_address &&
-                this.form.client_city &&
-                this.form.airway_bill_no &&
-                this.form.total_weight &&
-                this.form.shipment_type &&
-                this.form.payment &&
-                this.form.total_freight &&
-                this.form.insuarance_status &&
-                this.form.booking_date &&
-                this.form.derivery_date
-            );
-        }
     },
 };
 </script>

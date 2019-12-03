@@ -1,19 +1,21 @@
 <template>
 <v-layout row justify-center>
 
-    <v-dialog v-model="OpenAssignBranch" persistent width="500px">
-        <v-card v-if="OpenAssignBranch">
+    <v-dialog v-model="dialog" persistent width="500px">
+        <v-card v-if="dialog">
             <v-card-title>
                 Assign Branch
             </v-card-title>
-                <v-spacer></v-spacer>
-                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn icon dark @click="close">
+                <v-icon color="black">close</v-icon>
+            </v-btn>
             <v-container grid-list-md>
                 <v-layout row wrap>
                     <v-flex xs12>
                         <v-card>
                             <select class="custom-select custom-select-md col-md-12" v-model="form.branch_id" style="font-size: 15px;">
-                                <option v-for="branch in AllBranches" :key="branch.id" :value="branch.id">{{ branch.branch_name }}</option>
+                                <option v-for="branch in branches" :key="branch.id" :value="branch.id">{{ branch.branch_name }}</option>
                             </select>
                             <v-flex xs12 sm12>
                                 <v-textarea v-model="form.remark" color="blue">
@@ -41,47 +43,50 @@
 
 <script>
 export default {
-    props: ['OpenAssignBranch', 'updateitedItem', 'selectedItems', 'AllBranches'],
+    props: ['updateitedItem', 'selectedItems'],
     data() {
 
         return {
-            loading: false,
-            snackbar: false,
-            timeout: 5000,
-            message: "",
-            color: "",
+            dialog: false,
             form: {
-              'remark': '',
-              'branch_id': '',
+                'remark': '',
+                'branch_id': '',
             },
         }
     },
     methods: {
         branchAssign() {
-            // alert(this.updateitedItem.id);
-            this.loading = true
-            axios
-                .post(`/assignBranch`, {
+            var payload = {
+                url: '/assignBranch',
+                data: {
                     selected: this.selectedItems,
                     form: this.form
-                })
-                .then(response => {
-                    this.loading = false
-                    this.$emit("alertRequest");
+                },
+            }
+            this.$store.dispatch('postItems', payload)
+                .then((response) => {
+                    eventBus.$emit('alertRequest', 'Branch assigned')
                     eventBus.$emit('selectClear');
-                      this.close();
+                    this.close();
+
                 })
-                .catch(error => {
-                    this.loading = false;
-                    this.errors = error.response.data.errors;
-                });
         },
         close() {
-            this.$emit("closeRequest");
+            this.dialog = false
         },
     },
-    mounted() {
-
-    }
+    created() {
+        eventBus.$on('AssignBranchlEvent', data => {
+            this.dialog = true
+        });
+    },
+    computed: {
+        branches() {
+            return this.$store.getters.branches
+        },
+        loading() {
+            return this.$store.getters.loading
+        }
+    },
 }
 </script>

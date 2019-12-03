@@ -57,11 +57,11 @@
             </v-flex>
         </v-layout>
     </v-container>
-</v-content>
+</v-content> 
 </template>
 
 <script>
-import Pusher from 'pusher-js';
+// import Pusher from 'pusher-js';
 export default {
     name: "Chatty",
     props: ["user"],

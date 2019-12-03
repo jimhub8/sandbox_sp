@@ -38,9 +38,14 @@ class UploadController extends Controller
         } catch (\Exception $e) {
 
             \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 401) {
+                abort(401);
+            }
             return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
         }
     }
+
     public function importShipments(Request $request)
     {
 
@@ -70,7 +75,7 @@ class UploadController extends Controller
 
         //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
         //     return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
-        // }
+        // }c
         $this->update_status($data);
         foreach ($arr as $key => $order) {
             // dd($order['delivery_date']);
@@ -100,7 +105,7 @@ class UploadController extends Controller
                         $status = $order['status'];
                     }
                 }
-            $order_data->status = $status;
+                $order_data->status = $status;
             }
             // dd($order_data->status);
 
@@ -111,7 +116,7 @@ class UploadController extends Controller
                 } else {
                     $delivery_date = $order['delivery_date'];
                 }
-            $order_data->derivery_date = $delivery_date;
+                $order_data->derivery_date = $delivery_date;
             }
 
             if (array_key_exists('instructions', $order)) {

@@ -98,11 +98,11 @@
 </template>
 
 <script>
-let AddUser = require("./AddUser.vue");
-let PermUser = require('./Permission.vue')
-let DeletedUsers = require('./DeletedUsers.vue')
-let EditUser = require("./EditUser.vue");
-let UserProfile = require("./UserProfile.vue");
+import AddUser from "./AddUser.vue"
+import PermUser from './Permission.vue'
+import DeletedUsers from './DeletedUsers.vue'
+import EditUser from "./EditUser.vue"
+import UserProfile from "./UserProfile.vue"
 export default {
     props: ["user", "role"],
     components: {

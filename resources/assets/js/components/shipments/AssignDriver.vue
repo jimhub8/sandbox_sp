@@ -1,19 +1,21 @@
 <template>
 <v-layout row justify-center>
-    <v-dialog v-model="OpenAssignDriver" persistent width="500px">
-        <v-card v-if="OpenAssignDriver">
+    <v-dialog v-model="dialog" persistent width="500px">
+        <v-card v-if="dialog">
             <v-card-title>
                 Assign Driver
                 <v-spacer></v-spacer>
-                <v-btn icon dark @click="close">                         <v-icon color="black">close</v-icon>                     </v-btn>
+                <v-btn icon dark @click="close">
+                    <v-icon color="black">close</v-icon>
+                </v-btn>
             </v-card-title>
             <v-container grid-list-md>
                 <v-layout row wrap>
                     <v-flex xs12>
                         <v-card>
                             <select class="custom-select custom-select-md col-md-12" v-model="form.driver" style="font-size: 15px;">
-                                <option v-for="driver in AllDrivers" :key="driver.id" :value="driver.id">{{ driver.name }}</option>
-                          </select>
+                                <option v-for="driver in riders" :key="driver.id" :value="driver.id">{{ driver.name }}</option>
+                            </select>
                             <v-flex xs12 sm12>
                                 <v-textarea v-model="form.remark" color="blue">
                                     <div slot="label">
@@ -38,14 +40,10 @@
 
 <script>
 export default {
-    props: ['OpenAssignDriver', 'updateitedItem', 'selectedItems', 'AllDrivers'],
+    props: ['updateitedItem', 'selectedItems'],
     data() {
         return {
-            loading: false,
-            snackbar: false,
-            timeout: 5000,
-            message: "",
-            color: "",
+            dialog: false,
             form: {
                 'remark': '',
                 'driver': '',
@@ -55,31 +53,37 @@ export default {
     methods: {
         driverAssign() {
             // alert(this.updateitedItem.id);
-            this.loading = true
-            axios
-                .post(`/assignDriver`, {
+            var payload = {
+                url: '/assignDriver',
+                data: {
                     selected: this.selectedItems,
                     form: this.form
-                })
-                .then(response => {
-                    this.loading = false
-                    this.$emit("alertRequest");
-                    this.$emit("alertRequest");
+                },
+            }
+            this.$store.dispatch('postItems', payload)
+                .then((response) => {
+                    eventBus.$emit('alertRequest', 'Rider assigned')
                     eventBus.$emit('selectClear');
                     this.close();
-                    //   this.$emit("closeRequest");
+
                 })
-                .catch(error => {
-                    this.loading = false;
-                    this.errors = error.response.data.errors;
-                });
         },
         close() {
-            this.$emit("closeRequest");
+            this.dialog = false
         },
     },
-    mounted() {
-
-    }
+    created() {
+        eventBus.$on('AssignDriverlEvent', data => {
+            this.dialog = true
+        });
+    },
+    computed: {
+        riders() {
+            return this.$store.getters.riders
+        },
+        loading() {
+            return this.$store.getters.loading
+        }
+    },
 }
 </script>

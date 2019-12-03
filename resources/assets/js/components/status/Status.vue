@@ -82,7 +82,7 @@
 </template>
 
 <script>
-let AddStatus = require('./AddStatus')
+import AddStatus from './AddStatus'
 export default {
     props: ['user'],
     components: {

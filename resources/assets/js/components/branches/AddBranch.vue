@@ -17,7 +17,7 @@
                                 <v-layout wrap>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.branch_name" :rules="rules.name" color="blue darken-2" label="Branch name" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.branch_name" >{{ errors.branch_name[0] }}</small>
+                                        <small class="has-text-danger" v-if="errors.branch_name">{{ errors.branch_name[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.address" :rules="rules.name" color="blue darken-2" label="Branch Address" required></v-text-field>
@@ -34,9 +34,9 @@
                                     <div class="form-group row">
                                         <label for="password" class="col-md-6 col-form-label text-md-right">Country</label>
                                         <select class="custom-select custom-select-md col-md-12" v-model="form.country_id">
-                                                <option v-for="country in AllCountries" :key="country.id" :value="country.id">{{ country.country_name }}</option>
+                                            <option v-for="country in AllCountries" :key="country.id" :value="country.id">{{ country.country_name }}</option>
                                         </select>
-                                        <small class="has-text-danger" v-if="errors.country_id" >{{ errors.country_id[0] }}</small>
+                                        <small class="has-text-danger" v-if="errors.country_id">{{ errors.country_id[0] }}</small>
                                     </div>
                                 </v-layout>
                             </v-container>
@@ -89,10 +89,19 @@ export default {
                     this.close;
                     this.resetForm();
                     this.$emit("closeRequest");
-                    this.$emit("alertRequest");
+                    eventBus.$emit('alertRequest', 'Success')
                 })
                 .catch(error => {
                     this.loading = false;
+                    if (error.response.status === 500) {
+                        eventBus.$emit('errorEvent', error.response.statusText)
+                        return
+                    } else if (error.response.status === 401 || error.response.status === 409) {
+                        eventBus.$emit('reloadRequest', error.response.statusText)
+                    } else if (error.response.status === 422) {
+                        eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                        return
+                    }
                     this.errors = error.response.data.errors;
                 });
         },
@@ -101,7 +110,7 @@ export default {
             this.$refs.form.reset();
         },
         alert() {
-            this.$emit("alertRequest");
+            eventBus.$emit('alertRequest', 'Success')
         },
         close() {
             this.$emit("closeRequest");

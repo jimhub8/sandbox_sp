@@ -73,7 +73,6 @@ export default {
             }, ],
             client_options: [],
             products: [],
-            clients: [],
             loading: false,
             client_data: [],
             order_data: [],
@@ -130,15 +129,14 @@ export default {
         },
         getClient(query) {
             if (query.length > 2) {
-                this.loading = true;
+                // this.loading = true;
                 this.form.search = query
-                axios.get(`searchClient/${query}`).then((response) => {
-                    this.loading = false
-                    this.clients = response.data
 
-                }).catch((error) => {
-                    this.loading = true;
-                })
+            var payload = {
+                url: '/searchClient/' + query,
+                list: 'updateClientList',
+            }
+            this.$store.dispatch('searchItems', payload)
             }
         },
         getProducts(query) {
@@ -161,9 +159,9 @@ export default {
         // this.getApiStatuses();
     },
     computed: {
-        // api_status() {
-        //     return this.$store.getters.api_status
-        // }
+        clients() {
+            return this.$store.getters.clients
+        },
     },
 }
 </script>

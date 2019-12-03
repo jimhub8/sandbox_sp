@@ -1,5 +1,5 @@
 <template>
-<v-dialog v-model="OpenCsv" persistent width="400px">
+<v-dialog v-model="dialog" persistent width="400px">
     <v-card>
         <v-card-title>
             Upload Excel Shipments
@@ -12,23 +12,9 @@
                         <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">Client</label>
                             <select class="custom-select custom-select-md col-md-8" name="client">
-                                <option v-for="client in Allcustomers" :key="client.id" :value="client.id">{{ client.name }}</option>
+                                <option v-for="client in clients" :key="client.id" :value="client.id">{{ client.name }}</option>
                             </select>
                         </div>
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">Country</label>
-                            <select class="custom-select custom-select-md col-md-8" name="country_id">
-                                <option v-for="country in AllCountries" :key="country.id" :value="country.id">{{ country.country_name }}</option>
-                            </select>
-                        </div>
-                        <!-- <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label text-md-right">Client</label>
-                            <select class="custom-select custom-select-md col-md-8" name="country">
-                                    <option value="Kenya">Kenya</option>
-                                <option value="Tanzania">Tanzania</option>
-                                <option value="Uganda">Uganda</option>
-                            </select>
-                        </div>  -->
                         <v-btn color="red" darken-1 raised @click="onPickFile" style="color: #fff;">Upload</v-btn>
                         <input type="file" name="shipment" id="csv" ref="fileInput" style="display: none">
                         <v-divider></v-divider>
@@ -47,14 +33,13 @@
 
 <script>
 export default {
-    props: ['OpenCsv'],
     data() {
         return {
             csrf: document
                 .querySelector('meta[name="csrf-token"]')
                 .getAttribute("content"),
+            dialog: false,
             imagePlaced: false,
-            Allcustomers: [],
             AllCountries: [],
         }
     },
@@ -63,31 +48,18 @@ export default {
             this.$refs.fileInput.click()
         },
         close() {
-            this.$emit('closeRequest')
-        }
+            this.dialog = false
+        },
     },
-    mounted() {
-
-        axios
-            .get("/getCustomer")
-            .then(response => {
-                this.Allcustomers = response.data;
-                this.loader = false;
-            })
-            .catch(error => {
-                this.errors = error.response.data.errors;
-                this.loader = false;
-            });
-        axios
-            .get("/getCountry")
-            .then(response => {
-                this.AllCountries = response.data;
-                this.loader = false;
-            })
-            .catch(error => {
-                this.errors = error.response.data.errors;
-                this.loader = false;
-            });
+    created() {
+        eventBus.$on('uploadOrdersEvent', data => {
+            this.dialog = true
+        })
+    },
+    computed: {
+        clients() {
+            return this.$store.getters.clients
+        },
     },
 }
 </script>

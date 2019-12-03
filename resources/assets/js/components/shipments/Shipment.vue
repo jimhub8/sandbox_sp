@@ -8,11 +8,10 @@
                     <v-progress-circular :width="3" indeterminate color="red" style="margin: 1rem"></v-progress-circular>
                 </div>
                 <div v-show="!loader">
-                    <!-- <v-btn color="primary" flat @click="openRow">Filter Rows</v-btn> -->
                     <v-spacer></v-spacer>
                     <v-layout wrap>
                         <v-flex sm6>
-                            <v-pagination v-model="AllShipments.current_page" :length="AllShipments.last_page" total-visible="5" @input="next()" circle v-if="AllShipments.last_page > 1"></v-pagination>
+                            <v-pagination v-model="shipments.current_page" :length="shipments.last_page" total-visible="5" @input="next()" circle v-if="shipments.last_page > 1"></v-pagination>
                         </v-flex>
                         <v-flex sm6 id="input-cont">
                             <v-text-field v-model="glsearch.search" append-icon="search" label="Global Search" single-line hide-details @keyup.enter="itemSearch"></v-text-field>
@@ -22,29 +21,26 @@
                         <v-layout wrap>
                             <v-flex xs4 sm2 v-if="user.can['filter by country']">
                                 <el-select v-model="form.country_id" clearable filterable placeholder="Select Country" @change="changeCat">
-                                    <el-option v-for="item in AllCountries" :key="item.id" :label="item.country_name" :value="item.id">
+                                    <el-option v-for="item in countries" :key="item.id" :label="item.country_name" :value="item.id">
                                     </el-option>
                                 </el-select>
-                                <!-- <v-select :items="AllCountries" v-model="selectCountry" hint="COUNTRY" label="Filter By country" single-line item-text="country_name" item-value="id" return-object persistent-hint @change="changeCat(selectCountry)"></v-select> -->
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
                                 <el-select v-model="form.branch_id" clearable filterable placeholder="Select Branch">
-                                    <el-option v-for="item in AllBranches" :key="item.id" :label="item.branch_name" :value="item.id">
+                                    <el-option v-for="item in branches" :key="item.id" :label="item.branch_name" :value="item.id">
                                     </el-option>
                                 </el-select>
-                                <!-- <v-select :items="AllBranches" v-model="select" hint="BRANCHES" label="Filter By Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select> -->
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
 
                                 <el-select v-model="form.status" clearable filterable placeholder="Select Status">
-                                    <el-option v-for="item in AllStatus" :key="item.name" :label="item.name" :value="item.name">
+                                    <el-option v-for="item in statuses" :key="item.name" :label="item.name" :value="item.name">
                                     </el-option>
                                 </el-select>
-                                <!-- <v-select :items="AllStatus" v-model="selectItem" hint="STATUS" label="Filter By Status" single-line item-text="name" item-value="name" return-object persistent-hint @blur="close_select"></v-select> -->
                             </v-flex>
                             <v-flex xs4 sm2 offset-sm1>
                                 <el-select v-model="form.client_id" clearable filterable placeholder="Select Client">
-                                    <el-option v-for="item in Allcustomers" :key="item.id" :label="item.name" :value="item.id">
+                                    <el-option v-for="item in clients" :key="item.id" :label="item.name" :value="item.id">
                                     </el-option>
                                 </el-select>
                             </v-flex>
@@ -65,13 +61,12 @@
                         </v-layout>
                     </v-card>
                     <v-card-title>
-                        <download-excel :data="AllShipments.data" :fields="json_fields">
+                        <download-excel :data="shipments.data" :fields="json_fields">
                             Export
                             <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
                         </download-excel>
                         <v-btn color="primary" flat @click="openShipment" v-if="user.can['create shipments']">Add Shipment</v-btn>
                         <v-btn color="primary" flat @click="ShipmentCsv" v-if="user.can['upload excel']">Upload Excel</v-btn>
-                        <!-- <v-btn color="primary" flat @click="send_sms">Send Sms</v-btn> -->
                         <v-btn color="primary" flat @click="send_sms" v-if="user.can['send sms']">Send Sms</v-btn>
                         <v-btn color="primary" flat @click="google_upload" v-if="user.can['send sms']">Upload Orders</v-btn>
                         <v-tooltip right>
@@ -85,7 +80,7 @@
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
-                    <v-data-table :headers="headers" :items="AllShipments.data" :search="search" counter select-all class="elevation-1" v-model="selected" :loading="loading">
+                    <v-data-table :headers="headers" :items="shipments.data" :search="search" counter select-all class="elevation-1" v-model="selected" :loading="loading">
                         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
                         <template slot="items" slot-scope="props">
                             <td>
@@ -203,31 +198,28 @@
                         </v-alert>
                     </v-data-table>
                     <v-btn color="primary" raised style="float: right;" @click="UpdateShipmentStatus" v-if="user.can['assign']">Update Status</v-btn>
-                    <v-btn color="info" raised style="float: right;" @click="assignDriver" v-if="user.can['assign']">Assign Driver</v-btn>
+                    <v-btn color="info" raised style="float: right;" @click="assignDriver" v-if="user.can['assign']">Assign Rider</v-btn>
                     <v-btn color="success" raised style="float: right;" @click="assignBranch" v-if="user.can['assign']">Assign Branch</v-btn>
-                    <!-- <v-btn color="success" raised style="float: right;" @click="assignPrint">Print</v-btn> -->
                 </div>
             </div>
             <!-- Data table -->
         </v-container>
     </v-content>
-    <AddShipment :addShipment="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers"></AddShipment>
-    <EditShipment :EditShipment="dialog1" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers" :form="editedItem"></EditShipment>
-    <ShowShipment :element="element" @closeRequest="close" :customers="Allcustomers" :showItems="showItem"></ShowShipment>
+    <AddShipment :addShipment="dialog" @alertRequest="showalert" :Allcustomer="clients" :user="user" :role="role" :countries="countries" :AllDrivers="AllDrivers"></AddShipment>
+    <EditShipment :EditShipment="dialog1" @alertRequest="showalert" :Allcustomer="clients" :user="user" :role="role" :countries="countries" :AllDrivers="AllDrivers" :form="editedItem"></EditShipment>
+    <ShowShipment :element="element" :customers="clients" :showItems="showItem"></ShowShipment>
     <TzShipment></TzShipment>
     <RwPrintSpdf></RwPrintSpdf>
     <UgPrintSpdf></UgPrintSpdf>
-    <UpdateShipment :UpdateShipment="updateModal" @closeRequest="close" :markers="markers" :updateitedItem="updateitedItem" @alertRequest="showalert"></UpdateShipment>
-    <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
-    <AssignDriver :AllDrivers="AllDrivers" :OpenAssignDriver="AssignDriverModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></AssignDriver>
-    <AssignBranch :AllBranches="AllBranches" :OpenAssignBranch="AssignBranchModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></AssignBranch>
-    <TrackShipment @refreshRequest="sortItem" :shipments="updateitedItem" :OpenTrackBranch="trackModel" @alertRequest="showalert" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected" :user="user"></TrackShipment>
-    <myCsvFile :OpenCsv="csvModel" @closeRequest="close"></myCsvFile>
-    <mySCharges :mySCharges="chargeModal" @closeRequest="close" :updateCharges="shipment" @alertRequest="showalert"></mySCharges>
-    <myRows :myRows="RowModal" @closeRequest="close" :updateCharges="shipment"></myRows>
-    <!-- <myPrintPod :PrintRequest="printModal" @closeRequest="close" :selected="selected"></myPrintPod> -->
+    <UpdateShipment :UpdateShipment="updateModal" :markers="markers" :updateitedItem="updateitedItem" @alertRequest="showalert"></UpdateShipment>
+    <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @alertRequest="showalert" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
+    <AssignDriver :AllDrivers="AllDrivers" :OpenAssignDriver="AssignDriverModel" @alertRequest="showalert" :updateitedItem="editedItem" :selectedItems="selected"></AssignDriver>
+    <AssignBranch :countries="countries" :OpenAssignBranch="AssignBranchModel" @alertRequest="showalert" :updateitedItem="editedItem" :selectedItems="selected"></AssignBranch>
+    <TrackShipment @refreshRequest="sortItem" :shipments="updateitedItem" :OpenTrackBranch="trackModel" @alertRequest="showalert" :updateitedItem="editedItem" :selectedItems="selected" :user="user"></TrackShipment>
+    <myCsvFile></myCsvFile>
+    <mySCharges></mySCharges>
     <mySms></mySms>
-    <myGoogle :customers="Allcustomers"></myGoogle>
+    <myGoogle :customers="clients"></myGoogle>
     <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
         {{ message }}
         <v-icon dark right>check_circle</v-icon>
@@ -251,14 +243,10 @@ import TrackShipment from "./TrackShipment";
 import myCsvFile from "../csv/CsvFile";
 import mySCharges from "./Charge";
 import myGoogle from '../upload/google'
-// import myPrintPod from './PrintPod
-import myRows from "./rows/Rows";
 import mySms from './sms/Sms'
-// import myPrintSPdf from './PrintSPdf.js';
 export default {
     props: ["user", "role"],
     components: {
-        myRows,
         AddShipment,
         ShowShipment,
         EditShipment,
@@ -278,18 +266,12 @@ export default {
     },
     data() {
         return {
-            RowModal: false,
-            csvModel: false,
             trackModel: false,
             chargeModal: false,
             printColor: "",
             printModal: false,
-            ploading: false,
-            nloading: false,
             mloading: false,
             timer: "",
-            AllBranches: [],
-            AllCountries: [],
             AllDrivers: [],
             element: [],
             glsearch: {
@@ -338,11 +320,9 @@ export default {
             AssignBranchModel: false,
             UpdateShipmentModel: false,
             showdialog1: false,
-            AllShipments: [],
             search: "",
             temp: "",
             dialog: false,
-            loading: false,
             dialog1: false,
             pdialog2: false,
             AssignDriverModel: false,
@@ -416,22 +396,19 @@ export default {
             AllRows: [],
             selectStatus: [],
             direction: "left",
-            Allcustomers: [],
             shipment: {},
             markers: [],
-            AllStatus: [],
             shipmentsCount: null
         };
     },
     methods: {
         send_sms() {
-            eventBus.$emit('sendSmsEvent', this.AllShipments.data)
+            eventBus.$emit('sendSmsEvent', this.shipments.data)
         },
         google_upload() {
             eventBus.$emit('GoogleUploadEvent')
         },
         UpdateStatus() {
-            // alert(this.updateitedItem.id);
             axios
                 .post(`/updateStatus/${this.updateitedItem.id}`, {
                     formobg: this.$data.updateitedItem,
@@ -439,29 +416,19 @@ export default {
                 })
                 .then(response => {
                     this.resetForm();
-                    // console.log(response);
                     this.message = "Updated";
                     this.color = "black";
                     this.snackbar = true;
-                    // this.markers.push(response.data);
                 });
-        },
-        close_select(payload) {
-            // console.log(payload);
-            // alert('bluer')
         },
         resetForm() {
             this.form = Object.assign({}, this.defaultForm);
             this.$refs.form.reset();
         },
         openShipment() {
-            this.dialog = true;
-            this.getBranch();
-            this.getCustomer();
-            this.getDrivers();
+            eventBus.$emit('addShipmentEvent')
         },
         addProduct() {
-            // alert(this.updateitedItem.id);
             axios
                 .post(`/productAdd/${this.updateitedItem.id}`, this.$data.form)
                 .then(response => {
@@ -474,32 +441,22 @@ export default {
                     this.pdialog2 = false;
                 });
         },
-        // editShipment(key) {
-        //   // alert(key);
-        //   this.$children[2].list = this.AllShipments[key];
-        //   this.dialog1 = true;
-        // },
         openProduct(updateitedItem) {
             this.pdialog2 = true;
         },
         UpdateItems(item) {
-            axios
-                .post(`/getcoordinatesArray/${item.id}`)
-                .then(response => (this.markers = response.data))
-                .catch(error => (this.errors = error.response.data.errors));
-            console.log(this.coordinatesArr);
-            this.updateitedItem = Object.assign({}, item);
-            this.updatedIndex = this.AllShipments.data.indexOf(item);
-            this.updateModal = true;
+            eventBus.$emit("UpdateStatusEvent", item);
+            // axios
+            //     .post(`/getcoordinatesArray/${item.id}`)
+            //     .then(response => (this.markers = response.data))
+            //     .catch(error => (this.errors = error.response.data.errors));
+            // console.log(this.coordinatesArr);
+            // this.updateitedItem = Object.assign({}, item);
+            // this.updatedIndex = this.shipments.data.indexOf(item);
+            // this.updateModal = true;
         },
         editItem(item) {
-            this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.data.indexOf(item);
-            // console.log(this.editedItem);
-            this.dialog1 = true;
-            this.getBranch();
-            this.getCustomer();
-            this.getDrivers();
+            eventBus.$emit("updateOrdersEvent", item);
         },
         showDetails(item) {
             eventBus.$emit("printEvent", item);
@@ -514,25 +471,20 @@ export default {
             eventBus.$emit("RwprintEvent", item);
         },
         ShipmentTrack(item) {
-            this.updateitedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.data.indexOf(item);
-            this.trackModel = true;
             eventBus.$emit('TrackShipEvent', item);
         },
         Shipcharges(item) {
-            this.shipment = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.data.indexOf(item);
-            this.chargeModal = true;
-        },
-        openRow() {
-            this.RowModal = true;
+            eventBus.$emit('ShipchargesEvent', item);
+            // this.shipment = Object.assign({}, item);
+            // this.editedIndex = this.shipments.data.indexOf(item);
+            // this.chargeModal = true;
         },
         ShipmentCsv() {
-            this.csvModel = true;
-            this.getCustomer();
+            eventBus.$emit('uploadOrdersEvent')
+            // this.getCustomer();
         },
         deleteItem(item) {
-            const index = this.AllShipments.data.indexOf(item);
+            const index = this.shipments.data.indexOf(item);
             if (confirm("Are you sure you want to delete this item?")) {
                 axios
                     .delete(`/shipment/${item.id}`)
@@ -540,7 +492,7 @@ export default {
                         this.message = "Deleted";
                         this.color = "black";
                         this.snackbar = true;
-                        this.AllShipments.data.splice(index, 1);
+                        this.shipments.data.splice(index, 1);
                         // console.log(response);
                     })
                     .catch(error => (this.errors = error.response.data.errors));
@@ -548,53 +500,41 @@ export default {
         },
         notPrinted(item) {
             this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.data.indexOf(item);
-            (this.loading = true),
+            this.editedIndex = this.shipments.data.indexOf(item);
             axios
                 .post(`/notprinted/${item.id}`)
                 .then(response => {
-                    // this.printColor = 'red'
-                    // this.loading = false,
                     this.sortItem();
                     this.message = "Not Printed";
                     this.color = "black";
                     this.snackbar = true;
-                    // Object.assign(this.AllShipments.data[this.editedIndex], this.editedItem)
-                    // console.log(response);
                 })
                 .catch(error => (this.errors = error.response.data.errors));
         },
         printed(item) {
             this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.data.indexOf(item);
-            (this.loading = true),
+            this.editedIndex = this.shipments.data.indexOf(item);
             axios
                 .post(`/printed/${item.id}`)
                 .then(response => {
-                    // this.printColor = 'green'
                     this.sortItem();
-                    // this.loading = false,
                     this.message = "Printed";
                     this.color = "black";
                     this.snackbar = true;
-                    // Object.assign(this.AllShipments.data[this.editedIndex], this.editedItem)
-                    // console.log(response);
                 })
                 .catch(error => (this.errors = error.response.data.errors));
         },
         pending(item) {
             this.editedItem = Object.assign({}, item);
-            this.editedIndex = this.AllShipments.data.indexOf(item);
+            this.editedIndex = this.shipments.data.indexOf(item);
             (this.mloading = true),
             axios
                 .post(`/pending/${item.id}`)
                 .then(response => {
-                    // this.printColor = 'blue'
                     (this.mloading = false), (this.message = "Pending");
                     this.color = "black";
                     this.snackbar = true;
-                    Object.assign(this.AllShipments.data[this.editedIndex], this.editedItem);
-                    // console.log(response);
+                    Object.assign(this.shipments.data[this.editedIndex], this.editedItem);
                 })
                 .catch(error => (this.errors = error.response.data.errors));
         },
@@ -614,7 +554,7 @@ export default {
                 this.color = "red";
                 this.snackbar = true;
             } else {
-                this.UpdateShipmentModel = true;
+                eventBus.$emit('UpdateShipmentModelEvent')
             }
         },
         assignDriver() {
@@ -623,7 +563,8 @@ export default {
                 this.color = "red";
                 this.snackbar = true;
             } else {
-                this.AssignDriverModel = true;
+                eventBus.$emit('AssignDriverlEvent')
+                // this.AssignDriverModel = true;
                 this.getDrivers();
             }
         },
@@ -633,8 +574,9 @@ export default {
                 this.color = "red";
                 this.snackbar = true;
             } else {
-                this.AssignBranchModel = true;
-                this.getBranch();
+                eventBus.$emit('AssignBranchlEvent')
+                // this.AssignBranchModel = true;
+                // this.getBranch();
             }
         },
         assignPrint() {
@@ -660,106 +602,29 @@ export default {
             this.snackbar = true;
         },
         sortItem() {
-            this.loading = true;
-            if (this.AllShipments.current_page > 1) {
+            // alert('test')
+            if (this.shipments.current_page > 1) {
                 this.next()
                 return
             }
-            axios
-                .post("/filterShipment", this.form)
-                .then(response => {
-                    this.loading = false;
-                    this.AllShipments = response.data;
-                    // this.filterCount()
-
-                })
-                .catch(error => {
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        this.loading = false
-                        return
-                    } else if (error.response.status === 401 || error.response.status === 409) {
-                        this.loading = false
-
-                        if (!user.is_client) {
-                            eventBus.$emit('reloadRequest')
-                        } else {
-                            eventBus.$emit('reloadAppRequest')
-                        }
-                        return
-                    } else if (error.response.status === 422) {
-                        this.loading = false
-                        eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                        return
-                    }
-                    this.loading = false;
-                    this.errors = error.response.data.errors;
-                });
+            var payload = {
+                url: '/filterShipment',
+                list: 'updateShipmentsList',
+                data: this.form,
+            }
+            this.$store.dispatch('filterItems', payload)
+            this.loader = false;
         },
         next() {
-            // this.loading = true;
-            // this.between.start = parseInt(this.between.start) + 500;
-            // this.between.end = parseInt(this.between.end) + 500;
-            // this.sortItem()
-            this.loading = true;
-            axios
-                .post(this.AllShipments.path + '?page=' + this.AllShipments.current_page,  this.form)
-                .then(response => {
-                    this.loading = false;
-                    this.AllShipments = response.data;
-                    // this.filterCount()
-
-                })
-                .catch(error => {
-                    if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
-                        this.loading = false
-                        return
-                    } else if (error.response.status === 401 || error.response.status === 409) {
-                        this.loading = false
-                        if (!user.is_client) {
-                            eventBus.$emit('reloadRequest')
-                        } else {
-                            eventBus.$emit('reloadAppRequest')
-                        }
-                        return
-                    } else if (error.response.status === 422) {
-                        this.loading = false
-                        eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                        return
-                    }
-                    this.loading = false;
-                    this.errors = error.response.data.errors;
-                });
-        },
-        previous() {
-            this.loading = true;
-            if (this.between.start >= 500) {
-                this.between.start = parseInt(this.between.start) - 500;
-                this.between.end = parseInt(this.between.end) - 500;
-                this.sortItem()
-
-            } else {
-                return;
-                this.loading = false;
+            var payload = {
+                path: this.shipments.path,
+                page: this.shipments.current_page,
+                data: this.form,
+                list: 'updateShipmentsList',
             }
-        },
-        currentPage() {
-            this.loading = true;
-            axios.post("/btwRefShipments", this.$data.between)
-                .then(response => {
-                    this.loading = false;
-                    this.AllShipments = response.data;
-                })
-                .catch(error => {
-                    this.loading = false;
-                    this.errors = error.response.data.errors;
-                });
+            this.$store.dispatch('nextPage', payload)
         },
 
-        close() {
-            this.dialog1 = this.dialog = this.pdialog2 = this.updateModal = this.showdialog1 = this.UpdateShipmentModel = this.AssignDriverModel = this.AssignBranchModel = this.trackModel = this.csvModel = this.chargeModal = this.RowModal = this.printModal = false;
-        },
         filReset() {
             this.selectAss = {
                 Assigned: "All"
@@ -777,104 +642,58 @@ export default {
         },
 
         getCustomer() {
-            axios
-                .get("/getCustomer")
-                .then(response => {
-                    this.Allcustomers = response.data;
-                })
-                .catch(error => {
-                    this.errors = error.response.data.errors;
-                });
+            var payload = {
+                url: '/getCustomer',
+                list: 'updateClientList',
+                data: this.form,
+            }
+            this.$store.dispatch('getItems', payload)
         },
         getDrivers() {
-            axios
-                .get("/getDrivers")
-                .then(response => {
-                    this.AllDrivers = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errors = error.response.data.errors;
-                });
+            var payload = {
+                url: '/getDrivers',
+                list: 'updateRidersList',
+                data: this.form,
+            }
+            this.$store.dispatch('getItems', payload)
         },
         getBranch() {
-            axios
-                .get("/getBranchEger")
-                .then(response => {
-                    this.AllBranches = response.data;
-                    this.select = {
-                        branch_name: "All",
-                        id: "all"
-                    };
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errors = error.response.data.errors;
-                });
-        },
-        currentSTPage() {
-            this.loading = true;
-            axios.post("/btwSTdate", {
-                    date_btw: this.$data.between,
-                    filter_btw: this.form
-                })
-                .then(response => {
-                    this.loading = false;
-                    this.AllShipments = response.data;
-                })
-                .catch(error => {
-                    this.loading = false;
-                    this.errors = error.response.data.errors;
-                });
-        },
-        cancelAutoUpdate() {
-            clearInterval(this.timer);
+            var payload = {
+                url: '/getBranchEger',
+                list: 'updateBranchesList',
+                data: this.form,
+            }
+            this.$store.dispatch('getItems', payload)
         },
         itemSearch() {
-            this.loading = true;
-            axios.post("/glSearch", this.glsearch)
-                .then(response => {
-                    this.loading = false;
-                    this.AllShipments = response.data;
-                })
-                .catch(error => {
-                    this.loading = false;
-                    this.errors = error.response.data.errors;
-                });
+            var payload = {
+                url: '/glSearch/' + this.glsearch.search,
+                list: 'updateShipmentsList',
+            }
+            this.$store.dispatch('searchItems', payload)
         },
-        // filterCount() {
-        //     axios
-        //         .post("/filterCount", {
-        //             select: this.select,
-        //             no_btw: this.between,
-        //             selectStatus: this.selectItem,
-        //             form: this.form,
-        //             selectCountry: this.selectCountry
-        //         })
-        //         .then(response => {
-        //             this.shipmentsCount = response.data;
-        //         })
-        //         .catch(error => {
-        //             this.errors = error.response.data.errors;
-        //         });
-        // },
         changeCat(item) {
-            console.log(item);
-            axios.get(`/country_branch/${item}`)
-                .then(response => {
-                    this.AllBranches = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errors = error.response.data.errors;
-                });
-
-            // this.select = {
-            //     branch_name: "All",
-            //     id: "all"
-            // };
-            // this.AllBranches = item.branches;
+            var payload = {
+                url: '/country_branch/' + item,
+                list: 'updateBranchesList',
+            }
+            this.$store.dispatch('getItems', payload)
         },
+        getStatus() {
+            var payload = {
+                url: '/getStatuses',
+                list: 'updateStatusList',
+            }
+            this.$store.dispatch('getItems', payload)
+        },
+        getCountry() {
+            var payload = {
+                url: '/getCountry',
+                list: 'updateCountryList',
+                data: this.form,
+            }
+            this.$store.dispatch('getItems', payload)
+        }
     },
     created() {
         eventBus.$on("selectClear", data => {
@@ -893,22 +712,13 @@ export default {
         clearInterval(this.timer);
     },
     mounted() {
+
         this.loader = true;
+        this.sortItem();
+        this.getStatus();
         this.getCustomer();
         this.getBranch();
-        // this.filterCount()
-        axios
-            .get("/getCountry")
-            .then(response => {
-                this.AllCountries = response.data;
-                this.loader = false;
-            })
-            .catch(error => {
-                console.log(error);
-                this.errors = error.response.data.errors;
-                this.loader = false;
-            });
-
+        this.getCountry()
         axios
             .get("/getShipmentsCount")
             .then(response => {
@@ -917,41 +727,7 @@ export default {
             .catch(error => {
                 this.errors = error.response.data.errors;
             });
-        axios
-            .get("/getStatuses")
-            .then(response => {
-                this.AllStatus = response.data;
-            })
-            .catch(error => {
-                this.errors = error.response.data.errors;
-            });
-        this.updateCancelled();
-        this.sortItem();
     },
-    // computed: {
-    //     resetFilter() {
-    //         if(this.between.start < this.shipmentsCount) {
-    //             this.between.start = 1
-    //             this.between.end = 500
-    //             this.sortItem()
-    //         }
-    //     }
-    // },
-    // watch: {
-    //     checked() {
-    //         let period = this.between.start
-    //         let countS = this.shipmentsCount
-
-    //         if ((period > countS)) {
-    //             // this.sortItem()
-    //             alert('oppps')
-    //         } else {
-    //             alert('oqqqs')
-    //             // this.filterCount()
-    //         }
-
-    //     }
-    // },
     beforeRouteEnter(to, from, next) {
         next(vm => {
             if (vm.user.can["view shipments"]) {
@@ -960,7 +736,31 @@ export default {
                 next("/unauthorized");
             }
         });
-    }
+    },
+    computed: {
+        shipments() {
+            return this.$store.getters.shipments
+        },
+        clients() {
+            return this.$store.getters.clients
+        },
+        countries() {
+            return this.$store.getters.countries
+        },
+        branches() {
+            return this.$store.getters.branches
+        },
+        riders() {
+            return this.$store.getters.riders
+        },
+        statuses() {
+            return this.$store.getters.statuses
+        },
+        loading() {
+            return this.$store.getters.loading
+        },
+    },
+
 };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
 <v-layout row justify-center>
-    <v-dialog v-model="EditShipment" persistent>
+    <v-dialog v-model="dialog" persistent>
         <v-card>
             <v-card-title>
                 Edit Shipment
@@ -15,7 +15,7 @@
                         <v-form ref="form" @submit.prevent="submit">
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
-                                    <!-- <div v-for="client in Allcustomer" :key="client.id" v-if="client.id = selectC.id"> -->
+                                    <!-- <div v-for="client in clients" :key="client.id" v-if="client.id = selectC.id"> -->
 
                                     <!--  -->
                                     <v-flex sm6>
@@ -47,7 +47,7 @@
                                         </div>
                                         <div v-else>
                                             <!-- <v-card-text>
-                                                    <v-autocomplete :items="Allcustomer" :filter="customFilter" color="white" item-text="name" label="Search Sender"></v-autocomplete>
+                                                    <v-autocomplete :items="clients" :filter="customFilter" color="white" item-text="name" label="Search Sender"></v-autocomplete>
                                                 </v-card-text> -->
 
                                             <v-autocomplete v-model="model" :items="customerArr" :loading="isLoading" :search-input.sync="search" chips clearable hide-details hide-selected item-text="name" item-value="id" label="Search for a client..." solo>
@@ -86,7 +86,7 @@
                                                         <v-text-field v-model="form.sender_name" color="blue darken-2" label="Sender Name" required></v-text-field>
                                                     </v-flex>
                                                     <v-flex xs6 sm6>
-                                                        <v-text-field v-model="form.sender_email" :rules="emailRules" color="blue darken-2" label="Sender Email" required></v-text-field>
+                                                        <v-text-field v-model="form.sender_email" color="blue darken-2" label="Sender Email" required></v-text-field>
                                                     </v-flex>
                                                     <v-flex xs6 sm6>
                                                         <v-text-field v-model="form.sender_address" color="blue darken-2" label="Sender Address" required></v-text-field>
@@ -100,15 +100,15 @@
                                                 </v-layout>
                                             </div>
                                             <!-- <v-flex xs6 sm6 v-if="cust.id === model">
-                                                    <v-select :items="Allcustomer" v-model="selectCl" label="Select Sender" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
+                                                    <v-select :items="clients" v-model="selectCl" label="Select Sender" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
                                                 </v-flex> -->
-                                            <div v-if="model" v-for="cust in Allcustomer" :key="cust.id">
+                                            <div v-if="model" v-for="cust in clients" :key="cust.id">
                                                 <v-layout wrap row>
                                                     <v-flex xs6 sm6 v-if="cust.id === model">
                                                         <v-text-field v-model="cust.name" color="blue darken-2" label="Sender Name" required></v-text-field>
                                                     </v-flex>
                                                     <v-flex xs6 sm6 v-if="cust.id === model">
-                                                        <v-text-field v-model="cust.email" :rules="emailRules" color="blue darken-2" label="Sender Email" required></v-text-field>
+                                                        <v-text-field v-model="cust.email" color="blue darken-2" label="Sender Email" required></v-text-field>
                                                     </v-flex>
                                                     <v-flex xs6 sm6 v-if="cust.id === model">
                                                         <v-text-field v-model="cust.address" color="blue darken-2" label="Sender Address" required></v-text-field>
@@ -136,7 +136,7 @@
                                             </v-flex>
                                             <!-- </div> -->
                                             <v-flex xs6 sm6>
-                                                <v-text-field v-model="form.client_email" :rules="emailRules" color="blue darken-2" label="Client Email" required></v-text-field>
+                                                <v-text-field v-model="form.client_email" color="blue darken-2" label="Client Email" required></v-text-field>
                                             </v-flex>
                                             <v-flex xs6 sm6>
                                                 <v-text-field v-model="form.client_address" color="blue darken-2" label="Client Address" required></v-text-field>
@@ -285,13 +285,13 @@
                                             </v-flex>
 
                                             <v-flex xs12 sm4>
-                                                <v-select :items="Allcustomer" v-model="selectC" :hint="`${selectC.name}`" label="Select Client" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
+                                                <v-select :items="clients" v-model="selectC" :hint="`${selectC.name}`" label="Select Client" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
                                             </v-flex>
                                             <v-flex xs12 sm4>
-                                                <v-select :items="AllDrivers" v-model="selectD" :hint="`${select.name}`" label="Select Driver" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
+                                                <v-select :items="riders" v-model="selectD" :hint="`${select.name}`" label="Select Driver" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
                                             </v-flex>
                                             <v-flex xs12 sm4>
-                                                <v-select :items="AllBranches" v-model="selectB" :hint="`${selectB.branch_name}`" label="Select Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select>
+                                                <v-select :items="branches" v-model="selectB" :hint="`${selectB.branch_name}`" label="Select Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select>
                                             </v-flex>
 
                                             <v-flex xs12 sm4>
@@ -339,48 +339,24 @@
 <script>
 import VueBarcode from "vue-barcode";
 export default {
-    props: ["EditShipment", "user", 'role', 'Allcustomer', 'AllDrivers', 'AllBranches', 'form'],
-    // props: ['EditShipment', 'customers', 'form', 'role'],
+    props: ["user", 'role'],
     components: {
         barcode: VueBarcode
     },
     data() {
         return {
             selectCl: [],
-            // AllDrivers: [],
-            // Allcustomer: [],
-            // AllBranches: [],
-            loading: false,
-            // selectD: {
-            //     name: 'Select Driver'
-            // },
-            // selectC: {
-            //     name: 'Select Client'
-            // },
-            // selectB: {
-            //     branch_name: 'Select Name'
-            // },
+            form: {},
+            dialog: false,
             customerArr: [],
             selectD: [],
             selectC: [],
             selectB: [],
-            // select: [],
             select: [],
             isLoading: false,
             loader: false,
             search: null,
             model: null,
-            emailRules: [
-                v => {
-                    return !!v || "E-mail is required";
-                },
-                v =>
-                /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-                "E-mail must be valid"
-            ],
-            rules: {
-                name: [val => (val || "").length > 0 || "This field is required"]
-            },
             items: [{
                     state: "Yes",
                     abbr: "yes"
@@ -402,7 +378,7 @@ export default {
             // Lazily load input customerArr
             // axios.get('/getCustomer')
             //     .then(res => {
-            this.customerArr = this.Allcustomer
+            this.customerArr = this.clients
             this.isLoading = false
             // })
             // .catch(err => {
@@ -413,33 +389,21 @@ export default {
     },
     methods: {
         save() {
-            this.loading = true;
-            axios
-                .patch(`/shipment/${this.form.id}`, {
+            var payload = {
+                url: '/shipment/' + this.form.id,
+                data: {
                     form: this.form,
                     selectD: this.selectD,
                     selectC: this.selectC,
                     selectB: this.selectB,
                     user: this.user,
                     selectCl: this.selectCl
-                })
-                .then(response => {
-                    this.loading = false;
-                    // console.log(response);
-                    this.$emit('alertRequest');
-                    // this.$emit('closeRequest');
-                    Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.editedItem)
-                    // this.$parent.AllShipments.push(response.data);
-                    // this.$emit('closeRequest');
-                    // this.resetForm;
-                })
-                .catch(error => {
-                    this.loading = false;
-                    this.errors = error.response.data.errors;
-                });
+                },
+            }
+            this.$store.dispatch('patchItems', payload)
         },
         close() {
-            this.$emit("closeRequest");
+            this.dialog = false
         },
         add_product() {
             this.form.products.push({
@@ -454,19 +418,25 @@ export default {
             this.form.products.splice(index, 1)
         }
     },
-    // computed: {
-    //     subTotal: function () {
-    //         return this.form.products.reduce(function (carry, product) {
-    //             return carry + parseFloat(product.price);
-    //         }, 0);
-    //     },
-    //     vat: function() {
-    //         return this.grandTotal * parseFloat(0.16);
-    //         // (this.subTotal - parseFloat(this.form.discount)) * parseFloat(0.16);
-    //     },
-    //     grandTotal: function() {
-    //         return this.subTotal - parseFloat(this.form.discount);
-    //     },
-    // },
+    created () {
+        eventBus.$on('updateOrdersEvent', data => {
+            this.dialog = true
+            this.form = data
+        })
+    },
+    computed: {
+        clients() {
+            return this.$store.getters.clients
+        },
+        branches() {
+            return this.$store.getters.branches
+        },
+        riders() {
+            return this.$store.getters.riders
+        },
+        loading() {
+            return this.$store.getters.loading
+        },
+    },
 }
 </script>

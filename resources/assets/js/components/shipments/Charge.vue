@@ -1,7 +1,7 @@
 <template>
 <v-layout row justify-center>
-    <v-dialog v-model="mySCharges" persistent width="500px">
-        <v-card v-if="mySCharges">
+    <v-dialog v-model="dialog" persistent width="500px">
+        <v-card v-if="dialog">
             <v-card-title>
                 Charges
                 <v-spacer></v-spacer>
@@ -81,7 +81,6 @@
 
 <script>
 export default {
-    props: ["updateCharges", "mySCharges"],
     data() {
         return {
             AllTowns: [],
@@ -90,8 +89,10 @@ export default {
                 distance: "",
                 charges: ""
             },
+            updateCharges: [],
             select: [],
             Stype: "OVS",
+            dialog: false,
             loading: false
         };
     },
@@ -108,7 +109,7 @@ export default {
                 .then(response => {
                     this.loading = false;
                     // console.log(response);
-                    this.$emit("alertRequest");
+                    eventBus.$emit('alertRequest', 'Success')
                     Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.shipment)
                     this.close()
                 })
@@ -118,7 +119,7 @@ export default {
                 });
         },
         close() {
-            this.$emit("closeRequest");
+            this.dialog = false
         }
     },
     computed: {
@@ -138,6 +139,12 @@ export default {
         gettotal() {
             return parseInt(this.getCharge) + parseFloat(this.getVat);
         }
+    },
+    created() {
+        eventBus.$on("ShipchargesEvent", data => {
+            this.dialog = true
+            this.updateCharges = data
+        });
     },
     mounted() {
         axios

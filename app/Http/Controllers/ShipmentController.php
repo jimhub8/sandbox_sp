@@ -20,9 +20,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use Notification;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 use Milon\Barcode\DNS1D;
 
 // use App\Observers\BaseObserver;
@@ -86,8 +83,8 @@ class ShipmentController extends Controller
         // dd($cancelled, $refused);
         // $bar_code = Shipment::select('bar_code')->setEagerLoads([])->whereIn('id', $id_can)->get()->toArray();
         // $bar_code_ = array_flatten($bar_code);
-        Shipment::whereIn('id', $id_ref)->update(['status' => 'Refused']);
-        Shipment::whereIn('id', $id_can)->update(['status' => 'Cancelled']);
+        // Shipment::whereIn('id', $id_ref)->update(['status' => 'Refused']);
+        // Shipment::whereIn('id', $id_can)->update(['status' => 'Cancelled']);
 
         // Shipment::whereIn('id', $id_ref)->count();
         // Shipment::whereIn('id', $id_can)->count();

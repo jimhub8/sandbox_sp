@@ -106,12 +106,12 @@
             </div>
         </v-layout>
     </v-container>
-    <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" @closeRequest="close" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
+    <UpdateShipmentStatus :UpdateShipmentStatus="UpdateShipmentModel" :updateitedItem="editedItem" :selectedItems="selected"></UpdateShipmentStatus>
 </v-content>
 </template>
 
 <script>
-let UpdateShipmentStatus = require("../shipments/UpdateShipmentStatus");
+import UpdateShipmentStatus from "../shipments/UpdateShipmentStatus"
 export default {
     components: {
         UpdateShipmentStatus
@@ -219,13 +219,21 @@ export default {
         },
 
         UpdateShipmentStatus(item) {
+
             if (this.selected.length < 1) {
-                this.message = "at least one shipment is need";
+                this.message = "please select a shipment";
                 this.color = "red";
                 this.snackbar = true;
             } else {
-                this.UpdateShipmentModel = true;
+                eventBus.$emit('UpdateShipmentModelEvent')
             }
+            // if (this.selected.length < 1) {
+            //     this.message = "at least one shipment is need";
+            //     this.color = "red";
+            //     this.snackbar = true;
+            // } else {
+            //     this.UpdateShipmentModel = true;
+            // }
         },
         getDeriveredS() {
             axios
@@ -261,7 +269,7 @@ export default {
             this.color = 'black';
         },
         close() {
-            this.UpdateShipmentModel = false;
+            // this.dialog = false;
         },
     },
 

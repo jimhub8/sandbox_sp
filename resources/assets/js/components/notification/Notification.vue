@@ -74,7 +74,7 @@
 </template>
 
 <script>
-let NotyShipment = require("./NotyShipment");
+import NotyShipment from "./NotyShipment";
 import Avatar from "vue-avatar";
 export default {
     props: ["user"],

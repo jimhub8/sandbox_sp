@@ -1,7 +1,7 @@
 <template>
 <div class="text-xs-center">
-    <v-dialog v-model="OpenTrackBranch" hide-overlay persistent width="1500">
-        <v-card v-if="OpenTrackBranch">
+    <v-dialog v-model="dialog" hide-overlay persistent width="1500">
+        <v-card v-if="dialog">
             <!-- <v-card> -->
             <v-card-text id="print">
                 <ul class="list-group">
@@ -175,12 +175,13 @@
 <script>
 import VueBarcode from "vue-barcode";
 export default {
-    props: ["shipments", "OpenTrackBranch", 'user'],
+    props: ['user'],
     components: {
         barcode: VueBarcode
     },
     data() {
         return {
+            shipments: [],
             shipD: [],
             dialog: false,
             status: [],
@@ -194,7 +195,7 @@ export default {
             eventBus.$emit('TrackEvent', this.shipments);
         },
         close() {
-            this.$emit("closeRequest");
+            this.dialog = false
         },
         trackShip(data) {
             axios.post(`/getshipD/${data.id}`)
@@ -249,6 +250,8 @@ export default {
         eventBus.$on("TrackShipEvent", data => {
             this.getShipStatus(data)
             this.trackShip(data)
+            this.dialog = true
+            this.shipments = data
         });
     },
     computed: {

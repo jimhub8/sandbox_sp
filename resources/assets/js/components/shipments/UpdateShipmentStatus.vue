@@ -1,7 +1,7 @@
 <template>
 <v-layout row justify-center>
-    <v-dialog v-model="UpdateShipmentStatus" persistent width="600px">
-        <v-card v-if="UpdateShipmentStatus">
+    <v-dialog v-model="dialog" persistent width="600px">
+        <v-card v-if="dialog">
             <v-card-title>
                 Update Shipment Status
                 <v-spacer></v-spacer>
@@ -19,7 +19,7 @@
                                     <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
                                 </select>
                             </div>
-                            <!-- <v-layout wrap> -->    
+                            <!-- <v-layout wrap> -->
                             <div v-if="form.status === 'Delivered'">
                                 <v-flex xs12 sm12>
                                     <v-text-field v-model="form.receiver_name" color="blue darken-2" label="Received By"></v-text-field>
@@ -64,15 +64,14 @@
 
 <script>
 export default {
-    props: ["UpdateShipmentStatus", "updateitedItem", "selectedItems"],
+    props: ["updateitedItem", "selectedItems"],
     data() {
         return {
-            loading: false,
+            dialog: false,
             snackbar: false,
             timeout: 5000,
             message: "",
             color: "",
-            statuses: [],
             form: {
                 delivery_date: "",
                 derivery_time: "",
@@ -86,15 +85,16 @@ export default {
     methods: {
         UpdateShipment() {
             // alert(this.updateitedItem.id);
-            this.loading = true;
-            axios
-                .patch(`/UpdateShipment`, {
+            var payload = {
+                url: '/UpdateShipment',
+                data: {
                     selected: this.selectedItems,
                     form: this.form
-                })
-                .then(response => {
-                    this.loading = false;
-                    this.$emit("alertRequest");
+                },
+            }
+            this.$store.dispatch('postItems', payload)
+                .then((response) => {
+                    eventBus.$emit('alertRequest', 'Status updated')
                     this.close();
                     this.form.delivery_date = ''
                     this.form.derivery_time = ''
@@ -104,27 +104,25 @@ export default {
                     this.receiver_id = ''
                     eventBus.$emit('selectClear');
                     eventBus.$emit("refreshShipEvent");
-                    console.log(response.data)
-                    // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.$parent.editedItem)
                 })
-                .catch(error => {
-                    this.loading = false;
-                    this.errors = error.response.data.errors;
-                });
+
         },
         close() {
-            this.$emit("closeRequest");
+            this.dialog = false
         }
     },
-    mounted() {
-        axios
-            .get("/getStatuses")
-            .then(response => {
-                this.statuses = response.data;
-            })
-            .catch(error => {
-                this.errors = error.response.data.errors;
-            });
-    }
+    created () {
+        eventBus.$on('UpdateShipmentModelEvent', data => {
+            this.dialog = true
+        });
+    },
+    computed: {
+        statuses() {
+            return this.$store.getters.statuses
+        },
+        loading() {
+            return this.$store.getters.loading
+        }
+    },
 };
 </script>

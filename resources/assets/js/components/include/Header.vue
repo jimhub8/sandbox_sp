@@ -222,7 +222,7 @@
                             </router-link>
                         </v-list-group>
 
-                        <v-list-group prepend-icon="settings" v-for="roleQ in user.roles" :key="roleQ.id" v-if="roleQ.name === 'Admin'">
+                        <v-list-group prepend-icon="settings">
                             <v-list-tile slot="activator">
                                 <v-list-tile-title>App Settings</v-list-tile-title>
                             </v-list-tile>
@@ -344,13 +344,13 @@
         {{ message }}
         <v-icon dark right>check_circle</v-icon>
     </v-snackbar>
-    <AddShipment :addShipment="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers"></AddShipment>
+    <!-- <AddShipment :addShipment="dialog" @closeRequest="close" @alertRequest="showalert" :Allcustomer="Allcustomers" :user="user" :role="role" :AllBranches="AllBranches" :AllDrivers="AllDrivers"></AddShipment> -->
 </div>
 </template>
 
 <script>
 import Notifications from "../notification/Notification";
-import AddShipment from "../shipments/Addshipment";
+// import AddShipment from "../shipments/Addshipment";
 import {
     vueTopprogress
 } from "vue-top-progress";
@@ -359,7 +359,7 @@ import Logout from "./Logout";
 export default {
     components: {
         Notifications,
-        AddShipment,
+        // AddShipment,
         vueTopprogress,
         Logout
         //  chattyNoty
@@ -387,43 +387,37 @@ export default {
     },
     methods: {
         openShipment() {
-            this.dialog = true;
-            this.getBranch();
-            this.getCustomer();
-            this.getDrivers();
+            eventBus.$emit('addShipmentEvent')
+            // this.dialog = true;
+            // this.getBranch();
+            // this.getCustomer();
+            // this.getDrivers();
         },
 
+
         getCustomer() {
-            axios
-                .get("/getCustomer")
-                .then(response => {
-                    this.Allcustomers = response.data;
-                })
-                .catch(error => {
-                    this.errors = error.response.data.errors;
-                });
+            var payload = {
+                url: '/getCustomer',
+                list: 'updateClientList',
+                data: this.form,
+            }
+            this.$store.dispatch('getItems', payload)
         },
         getDrivers() {
-            axios
-                .get("/getDrivers")
-                .then(response => {
-                    this.AllDrivers = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errors = error.response.data.errors;
-                });
+            var payload = {
+                url: '/getDrivers',
+                list: 'updateRidersList',
+                data: this.form,
+            }
+            this.$store.dispatch('getItems', payload)
         },
         getBranch() {
-            axios
-                .get("/getBranchEger")
-                .then(response => {
-                    this.AllBranches = response.data;
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.errors = error.response.data.errors;
-                });
+            var payload = {
+                url: '/getBranchEger',
+                list: 'updateBranchesList',
+                data: this.form,
+            }
+            this.$store.dispatch('getItems', payload)
         },
         close() {
             this.dialog = false;
@@ -469,15 +463,6 @@ export default {
             this.errorAlert(data)
         });
     },
-    mounted() {
-        // axios.post('/getLogo')
-        //     .then((response) => {
-        //         this.company = response.data
-        //     })
-        //     .catch((error) => {
-        //         this.errors = error.response.data.errors
-        //     })
-    }
 };
 </script>
 

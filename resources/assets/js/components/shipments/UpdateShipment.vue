@@ -1,8 +1,8 @@
 <template>
 <v-layout row justify-center>
 
-    <v-dialog v-model="UpdateShipment" persistent width="1300px">
-        <v-card v-if="UpdateShipment">
+    <v-dialog v-model="dialog" persistent width="500px">
+        <v-card v-if="dialog">
             <v-card-title>
                 Update Shipment
                 <v-spacer></v-spacer>
@@ -13,32 +13,7 @@
             <v-container grid-list-md>
                 <v-card style="width: 100%;">
                     <v-layout row wrap>
-                        <v-flex sm8>
-                            <v-layout wrap>
-                                <v-flex sm6>
-                                    <GmapAutocomplete @place_changed="setPlace" class="form-control" v-show="showMap">
-                                    </GmapAutocomplete>
-                                </v-flex>
-                                <v-flex sm6>
-                                    <v-card-actions>
-                                        <v-btn flat color="primary" @click="usePlace" v-show="showMap" class="col-md-6">Add</v-btn>
-                                        <v-spacer></v-spacer>
-                                        <v-btn flat color="primary" @click="mapUpsd" v-show="!showMap" class="col-md-6">Update Location</v-btn>
-                                        <v-btn flat color="primary" @click="locationUpdate" :loading="loading_loc" :disabled="loading_loc" class="col-md-6" v-show="showMap">Update Location</v-btn>
-                                    </v-card-actions>
-                                </v-flex>
-                            </v-layout>
-
-                            <GmapMap style="width: 700px; height: 450px;" :zoom="4" :center="{lat: -1.3072985, lng: 36.908417299999996}">
-                                <GmapMarker v-for="(marker, index) in markers" :key="index" :position="marker.position" />
-                                <GmapMarker v-if="this.place" label="★" :position="{
-                                lat: this.place.geometry.location.lat(),
-                                lng: this.place.geometry.location.lng(),
-                                }" />
-                            </GmapMap>
-                            <v-divider></v-divider>
-                        </v-flex>
-                        <v-flex sm4 style="border-left: 1px solid #c1c1c1;">
+                        <v-flex sm12 style="border-left: 1px solid #c1c1c1;">
                             <div class="form-group col-md-12">
                                 <label for="">Status</label>
                                 <select class="custom-select custom-select-md col-md-12" v-model="updateitedItem.status">
@@ -98,7 +73,6 @@
                     <v-flex xs4 sm3>
                         <v-text-field v-model="dist" color="blue darken-2" label="Distance" ref="distanceGet" required></v-text-field>
                     </v-flex>
-                    <v-btn flat @click="getDistance">Dist</v-btn>
                     <v-spacer></v-spacer>
                     <v-btn color="primary" flat @click="UpdateStatus" :loading="loading" :disabled="loading">Update Status</v-btn>
                 </v-card-actions>
@@ -111,39 +85,22 @@
 <script>
 // import VueGoogleAutocomplete from "vue-google-autocomplete";
 export default {
-    props: ["UpdateShipment", "AllProducts", "updateitedItem", "markers"],
     components: {
         // VueGoogleAutocomplete,
     },
     data() {
         return {
+            dialog: false,
             loading: false,
             loading_loc: false,
-            // markers: [],
-            statuses: [],
             showMap: false,
             place: null,
-            dist: ""
+            dist: "",
+            updateitedItem: {},
         };
     },
-    description: "Maps",
 
     methods: {
-        locationUpdate() {
-            this.loading_loc = true;
-            this.updateitedItem.location = this.updateitedItem.location;
-            axios
-                .post(`/locationUpdate/${this.updateitedItem.id}`, this.markers)
-                .then(response => {
-                    this.loading_loc = false;
-                    this.alert();
-                    // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.updateitedItem)
-                })
-                .catch(error => {
-                    this.loading_loc = false;
-                    this.errors = error.response.data.errors;
-                });
-        },
         UpdateStatus() {
             // alert(this.updateitedItem.id);
             this.loading = true;
@@ -199,7 +156,6 @@ export default {
                 .then(response => {
                     this.loading = false;
                     this.alert();
-                    // Object.assign(this.$parent.AllShipments[this.$parent.editedIndex], this.updateitedItem)
                 })
                 .catch(error => {
                     this.loading = false;
@@ -207,141 +163,23 @@ export default {
                 });
         },
 
-        // getAddressData: function(addressData, placeResultData, id) {
-        //   this.address = addressData;
-        // },
-
         close() {
-            this.$emit("closeRequest");
-            this.showMap = false;
+            this.dialog = false
         },
         alert() {
-            this.$emit("alertRequest");
+            eventBus.$emit('alertRequest', 'Success')
         },
-        setDescription(description) {
-            this.description = description;
-        },
-        setPlace(place) {
-            this.place = place;
-        },
-        usePlace(place) {
-            if (this.place) {
-                this.markers.push({
-                    position: {
-                        lat: this.place.geometry.location.lat(),
-                        lng: this.place.geometry.location.lng()
-                    }
-                });
-                this.place = null;
-            }
-        },
-        mapUpsd() {
-            this.markers = [];
-            this.showMap = true;
-        },
-        getDistance() {
-            // var p1 = new google.maps.LatLng(45.463688, 9.18814);
-            // var p2 = new google.maps.LatLng(46.0438317, 9.75936230000002);
-            // if (this.place) {
-            //     this.markers.push({
-            //         position: {
-            //             lat: this.place.geometry.location.lat(),
-            //             lng: this.place.geometry.location.lng()
-            //         }
-            //     });
-            //     this.place = null;
-            // }
-            var dist = []
-            for (let i = 0; i < this.markers.length; i++) {
-                const element = this.markers[i];
-                // console.log(element)
-                // alert(element['position']['lat'])
-                var p1 = new google.maps.LatLng(element['position']['lat'], element['position']['lng']);
-                // var p2 = new google.maps.LatLng(element['position']['lat'], element['position']['lng']);
-                dist.push(p1)
-                // alert(p1)
-                // var p2 = new google.maps.LatLng(-4.05052, 39.667169);
-            }
-            alert(dist)
-            // alert(calcDistance(p1, p2));
-            // console.log(calcDistance(dist))
-
-            //calculates distance between two points in km's
-            function calcDistance(dist) {
-                return this.dist = (google.maps.geometry.spherical.computeDistanceBetween(dist) / 1000).toFixed(2);
-            }
-            // var directionsService = new google.maps.DirectionsService();
-
-            // var request = {
-            //     origin: "Mombasa, Kenya", // a city, full address, landmark etc
-            //     destination: "Nairobi, Kenya",
-            //     travelMode: google.maps.DirectionsTravelMode.DRIVING
-            // };
-            // // var dista = this.dist
-
-            // directionsService.route(request, function (response, status, dista) {
-            //     // if (status == google.maps.DirectionsStatus.OK) {
-            //     this.$refs["distanceGet"];
-            //     console.log(response.routes[0].legs[0].distance.value);
-            //     alert(response.routes[0].legs[0].distance.value);
-            //     dista = response.routes[0].legs[0].distance.value; // the distance in metres
-            //     this.dist = dista;
-            //     alert(dista);
-            //     alert(this.dist);
-            //     // } else {
-            //     //     alert('wrong');
-            //     // oops, there's no route between these two locations
-            //     // every time this happens, a kitten dies
-            //     // so please, ensure your address is formatted properly
-            //     // }
-            // });
-            // alert(this.dista)
-            // this.dist = dista
-            // return dist
-        }
     },
     computed: {
-        // getDistance() {
-        //     var directionsService = new google.maps.DirectionsService();
-        //     var request = {
-        //         origin: 'Mombasa, Kenya', // a city, full address, landmark etc
-        //         destination: 'Nairobi, Kenya',
-        //         travelMode: google.maps.DirectionsTravelMode.DRIVING
-        //     };
-        //     directionsService.route(request, function (response, status) {
-        //         // if (status == google.maps.DirectionsStatus.OK) {
-        //             // alert(response.routes[0].legs[0].distance.value);
-        //             this.dist = response.routes[0].legs[0].distance.value // the distance in metres
-        //         // } else {
-        //         //     alert('wrong');
-        //             // oops, there's no route between these two locations
-        //             // every time this happens, a kitten dies
-        //             // so please, ensure your address is formatted properly
-        //         // }
-        //     });
-        //     // return dist
-        // }
-        // getMarkers() {
-        //     if (this.UpdateShipment) {
-        //         this.markers.push({
-        //             position: {
-        //                 lat: this.updateitedItem.lat,
-        //                 lng: this.updateitedItem.lng,
-        //             }
-        //         })
-        //     }
-        // }
+        statuses() {
+            return this.$store.getters.statuses
+        }
     },
-
-    mounted() {
-        axios
-            .get("/getStatuses")
-            .then(response => {
-                this.statuses = response.data;
-            })
-            .catch(error => {
-                this.errors = error.response.data.errors;
-            });
-    }
+    created () {
+        eventBus.$on('UpdateStatusEvent', data => {
+            this.dialog = true
+            this.updateitedItem = data
+        });
+    },
 };
 </script>

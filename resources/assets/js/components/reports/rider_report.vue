@@ -73,7 +73,6 @@ export default {
             }, ],
             rider_options: [],
             products: [],
-            riders: [],
             loading: false,
             rider_data: [],
             order_data: [],
@@ -130,15 +129,14 @@ export default {
         },
         getRider(query) {
             if (query.length > 2) {
-                this.loading = true;
+                // this.loading = true;
                 this.form.search = query
-                axios.get(`searchRider/${query}`).then((response) => {
-                    this.loading = false
-                    this.riders = response.data
 
-                }).catch((error) => {
-                    this.loading = true;
-                })
+            var payload = {
+                url: '/searchRider/' + query,
+                list: 'updateRidersList',
+            }
+            this.$store.dispatch('searchItems', payload)
             }
         },
         getProducts(query) {
@@ -157,13 +155,10 @@ export default {
         //     this.$store.dispatch('getApiStatuses')
         // }
     },
-    mounted() {
-        // this.getApiStatuses();
-    },
     computed: {
-        // api_status() {
-        //     return this.$store.getters.api_status
-        // }
+        riders() {
+            return this.$store.getters.riders
+        },
     },
 }
 </script>

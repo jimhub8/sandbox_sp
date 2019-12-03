@@ -76,9 +76,9 @@
 </template>
 
 <script>
-let AddCompany = require('./AddCompany')
-let EditCompany = require('./EditCompany')
-let Logo = require('./Logo')
+import AddCompany from'./AddCompany'
+import EditCompany from'./EditCompany'
+import Logo from'./Logo'
 export default {
     props: ['user', 'role'],
     components: {
@@ -153,9 +153,10 @@ export default {
             this.editedItem = Object.assign({}, item)
         },
         imageUpload(item) {
-            this.editedIndex = this.AllCompanies.indexOf(item)
-            this.imageItem = Object.assign({}, item)
-            this.LogoModal = true
+            eventBus.$emit('companyLogoEvent', item)
+            // this.editedIndex = this.AllCompanies.indexOf(item)
+            // this.imageItem = Object.assign({}, item)
+            // this.LogoModal = true
         },
         openAdd() {
             this.OpenAdd = true

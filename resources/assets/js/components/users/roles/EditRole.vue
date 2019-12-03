@@ -66,7 +66,7 @@ export default {
                 .then(response => {
                     this.loading = false;
                     console.log(response);
-                    this.$emit("alertRequest");
+                    eventBus.$emit('alertRequest', 'Success')
                     Object.assign(
                         this.$parent.AllRoles[this.$parent.editedIndex],
                         this.$parent.editedItem
@@ -102,7 +102,7 @@ export default {
             });
     },
     computed: {
-      
+
         sortPerm() {
             return _.orderBy(this.permissions, 'name', 'asc')
         }

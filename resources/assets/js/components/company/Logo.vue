@@ -1,6 +1,6 @@
 <template>
 <v-layout row justify-center>
-    <v-dialog v-model="openLogoRequest" persistent max-width="400">
+    <v-dialog v-model="dialog" persistent max-width="400">
         <!-- <v-btn slot="activator" color="primary" dark>Open Dialog</v-btn> -->
         <v-card>
             <v-divider></v-divider>
@@ -17,17 +17,15 @@
 
 <script>
 export default {
-    props: ['openLogoRequest', 'company'],
     components: {},
     data() {
         return {
             errors: {},
+            dialog: false,
             loading: false,
-            imagePlaced: false,
+            imagePlaced: true,
+            company: {},
             avatar: '',
-            rules: {
-                name: [val => (val || '').length > 0 || 'This field is required']
-            },
         }
     },
     methods: {
@@ -51,7 +49,7 @@ export default {
             axios.post(`/logo/${this.company.id}`, this.file)
                 .then((response) => {
                     this.loading = false
-                    console.log(response);            
+                    console.log(response);
                     this.$emit('alertRequest')
                     this.close()
                 })
@@ -92,13 +90,12 @@ export default {
             }
         },
         close() {
-            this.$emit('closeRequest')
+            this.dialog = false
         },
 
-
     },
-    mounted(){
-        
+    mounted() {
+
         axios.post('/getLogoOnly')
             .then((response) => {
                 if (response.data.length > 0) {
@@ -113,6 +110,13 @@ export default {
                 this.errors = error.response.data.errors
                 this.loader = false
             })
-    }
+    },
+    created() {
+        eventBus.$on('companyLogoEvent', data => {
+            this.dialog = true
+            this.company = data
+            this.avatar = data.logo
+        })
+    },
 }
 </script>

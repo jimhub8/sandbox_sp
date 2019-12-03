@@ -19,7 +19,7 @@
                                     <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
                                 </select>
                             </div>
-                            <!-- <v-layout wrap> -->    
+                            <!-- <v-layout wrap> -->
                             <div v-if="form.status === 'Delivered'">
                                 <v-flex xs12 sm12>
                                     <v-text-field v-model="form.receiver_name" color="blue darken-2" label="Received By"></v-text-field>
@@ -94,7 +94,7 @@ export default {
                 })
                 .then(response => {
                     this.loading = false;
-                    this.$emit("alertRequest");
+                    eventBus.$emit('alertRequest', 'Success')
                     this.close();
                     this.form.delivery_date = ''
                     this.form.derivery_time = ''

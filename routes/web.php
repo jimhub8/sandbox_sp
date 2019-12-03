@@ -130,6 +130,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getShipmentsBtw', 'ShipmentController@getShipmentsBtw')->name('getShipmentsBtw');
 	Route::get('getShipments', 'ShipmentController@getShipments')->name('getShipments');
 	Route::post('csv/export', 'ShipmentController@export')->name('export');
+	Route::post('UpdateShipment', 'ShipmentController@UpdateShipment')->name('UpdateShipment');
 	Route::patch('UpdateShipment', 'ShipmentController@UpdateShipment')->name('UpdateShipment');
 	Route::post('assignBranch', 'ShipmentController@assignBranch')->name('assignBranch');
 	Route::post('assignDriver', 'ShipmentController@assignDriver')->name('assignDriver');
@@ -148,7 +149,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('getreturned', 'FilterController@getreturned')->name('getreturned');
 	Route::post('getPendingS', 'FilterController@getPendingS')->name('getPendingS');
 	Route::post('filterPayment', 'FilterController@filterPayment')->name('filterPayment');
-	Route::post('glSearch', 'FilterController@glSearch')->name('glSearch');
+	// Route::post('glSearch', 'FilterController@glSearch')->name('glSearch');
+	Route::get('glSearch/{search}', 'FilterController@glSearch')->name('glSearch');
 
 	Route::post('AddShipments/{id}', 'ContainerController@AddShipments')->name('AddShipments');
 	Route::post('conupdateStatus/{id}', 'ContainerController@conupdateStatus')->name('conupdateStatus');
@@ -419,8 +421,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::any('invoiceOrder', 'InvoiceController@invoiceOrder')->name('invoiceOrder');
     Route::any('invoice/{id}', 'InvoiceController@invoice')->name('invoice');
 
-
-
 	Route::get('chat', 'ChatsController@index');
 	Route::get('messages', 'ChatsController@fetchMessages');
     Route::post('messages', 'ChatsController@sendMessage');
@@ -435,6 +435,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::post('/google_sheets', 'GoogledriveController@google_sheets')->name('google_sheets');
+
 
 
 });

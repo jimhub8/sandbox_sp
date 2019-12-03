@@ -171,9 +171,9 @@
 
 <script>
 import VueBarcode from "vue-barcode";
-let UpdateShipment = require("./UpdateShipment");
-let UpdateShipmentStatus = require("./UpdateShipmentStatus");
-let TrackShipment = require("../TrackShipment");
+import UpdateShipment from "./UpdateShipment"
+import UpdateShipmentStatus from "./UpdateShipmentStatus"
+import TrackShipment from "../TrackShipment"
 export default {
     props: ["user"],
     components: {
