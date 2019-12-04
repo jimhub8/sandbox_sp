@@ -10,14 +10,9 @@ use Google\Spreadsheet\ServiceRequestFactory;
 use Google\Spreadsheet\SpreadsheetService;
 use Illuminate\Http\Request;
 use Google_Client;
-use Google_Service_Drive;
 use Google_Service_Sheets;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
-use League\Csv\Reader;
-use League\Csv\Statement;
-use Revolution\Google\Sheets\Facades\Sheets;
-
 
 class GoogledriveController extends Controller
 {
@@ -25,66 +20,17 @@ class GoogledriveController extends Controller
     {
         return session()->get('token.access_token');
     }
-    /**
-     * Returns an authorized API client.
-     * @return Google_Client the authorized client object
-     */
-    function getClient()
-    {
-
-        $client = new Google_Client();
-        $client->setApplicationName('Google Sheets API PHP Quickstart');
-        $client->setScopes(Google_Service_Sheets::SPREADSHEETS_READONLY);
-        $path = public_path('google/credentials.json');
-        $client->setAuthConfig($path);
-        $client->setAccessType('offline');
-        $client->setPrompt('select_account consent');
-        // Load previously authorized token from a file, if it exists.
-        // The file token.json stores the user's access and refresh tokens, and is
-        // created automatically when the authorization flow completes for the first
-        // time.
-        $tokenPath = 'token.json';
-        if (file_exists($tokenPath)) {
-            $accessToken = json_decode(file_get_contents($tokenPath), true);
-            $client->setAccessToken($accessToken);
-        }
-        // If there is no previous token or it's expired.
-        if ($client->isAccessTokenExpired()) {
-            // Refresh the token if possible, else fetch a new one.
-            if ($client->getRefreshToken()) {
-                $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
-            } else {
-                // Request authorization from the user.
-                $authUrl = $client->createAuthUrl();
-                printf("Open the following link in your browser:\n%s\n", $authUrl);
-                print 'Enter verification code: ';
-                $authCode = trim(fgets(STDIN));
-                // Exchange authorization code for an access token.
-                $accessToken = $client->fetchAccessTokenWithAuthCode($authCode);
-                $client->setAccessToken($accessToken);
-                // Check to see if there was an error.
-                if (array_key_exists('error', $accessToken)) {
-                    throw new Exception(join(', ', $accessToken));
-                }
-            }
-            // Save the token to a file.
-            if (!file_exists(dirname($tokenPath))) {
-                mkdir(dirname($tokenPath), 0700, true);
-            }
-            file_put_contents($tokenPath, json_encode($client->getAccessToken()));
-        }
-        return $client;
-    }
 
     public function google_sheets(Request $request)
     {
         // dd($request->all());
         $client_id = $request->client;
         $client_details = AppClient::find($client_id);
+        // dd($client_details);
         $sheet_name = $request->sheet_name;
         $work_sheet = $request->work_sheet;
-        // $path = public_path('google/googleserviceworker.json');
-        $path = public_path('google/googlesheets.json');
+        $path = public_path('google/googleserviceworker.json');
+        // $path = public_path('google/googlesheets.json');
         // dd($path);
         putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $path);
         $client = new Google_Client();
@@ -132,9 +78,27 @@ class GoogledriveController extends Controller
 
         $data['data'] = $representative;
         $data['client'] = $client_details;
-
         // dd(($representative));
-        $this->update_status($data);
+        // $this->update_status($data);
+        try {
+            $client = new Client();
+            $request = $client->request('POST', env('API_URL') . '/api/googleSheet', [
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->token_f(),
+                ],
+                'body' => json_encode([
+                    'data' => $data,
+                ])
+            ]);
+            // $response = $http->get(env('API_URL').'/api/getUsers');
+            return $response = $request->getBody()->getContents();
+            // dd($response);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+            return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        }
         $this->check_order($representative, $client_details);
         return redirect('/#/shipments');
     }
@@ -172,7 +136,7 @@ class GoogledriveController extends Controller
                 }
                 $shipment->speciial_instruction = $order['specialinstructions'];
                 $shipment->booking_date = now();
-                $shipment->derivery_date = $order['deliverydate'];
+                $shipment->derivery_date = ($order['deliverydate']) ? $order['deliverydate'] : null;
                 $shipment->bar_code = $order['orderid'];
                 // $shipment->to_city = $order['to_city'];
                 $shipment->cod_amount = $order['codamount'];
@@ -185,7 +149,7 @@ class GoogledriveController extends Controller
                 $shipment->amount_ordered = $order['quantity'];
                 $shipment->country_id = Auth::user()->country_id;
                 $shipment->user_id = Auth::id();
-                $shipment->client_id = $client;
+                $shipment->client_id = $client->id;
                 $shipment->save();
             }
         }

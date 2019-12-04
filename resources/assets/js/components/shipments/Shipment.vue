@@ -68,7 +68,7 @@
                         <v-btn color="primary" flat @click="openShipment" v-if="user.can['create shipments']">Add Shipment</v-btn>
                         <v-btn color="primary" flat @click="ShipmentCsv" v-if="user.can['upload excel']">Upload Excel</v-btn>
                         <v-btn color="primary" flat @click="send_sms" v-if="user.can['send sms']">Send Sms</v-btn>
-                        <v-btn color="primary" flat @click="google_upload" v-if="user.can['send sms']">Upload Orders</v-btn>
+                        <v-btn color="primary" flat @click="google_upload" v-if="user.can['google sheet upload']">Upload Orders</v-btn>
                         <v-tooltip right>
                             <template v-slot:activator="{ on }">
                                 <v-btn icon v-on="on" slot="activator" class="mx-0" @click="sortItem">
@@ -613,7 +613,9 @@ export default {
                 data: this.form,
             }
             this.$store.dispatch('filterItems', payload)
-            this.loader = false;
+                .then((response) => {
+                    this.loader = false;
+                })
         },
         next() {
             var payload = {
@@ -712,7 +714,6 @@ export default {
         clearInterval(this.timer);
     },
     mounted() {
-
         this.loader = true;
         this.sortItem();
         this.getStatus();

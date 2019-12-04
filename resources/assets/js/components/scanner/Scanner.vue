@@ -313,24 +313,15 @@ export default {
             axios.post(`/barcodeUpdate/${this.form_out.bar_code_out}`, this.$data.form_out)
                 .then((response) => {
                     this.loading = false
-                    console.log(response.data.length);
+                    // console.log(response.data.length);
                     if (response.data.length > 1) {
 
                         this.$message({
                             type: 'error',
                             message: response.data.length + ' shipment found'
                         });
-                        // this.snackbar = true
-                        // this.message = response.data.length + 'shipment found'
-                        // this.icon = 'block'
-                        // this.color = 'error'
                     }
                     if (response.data.errors === 'errors') {
-                        // this.snackbar = true
-                        // this.message = 'shipment Not found'
-                        // this.icon = 'block'
-                        // this.color = 'error'
-
                         this.$message({
                             type: 'error',
                             message: 'Order Not found'
@@ -364,16 +355,12 @@ export default {
             axios.post(`/barcodeIn/${this.form_in.bar_code_in}`, this.$data.form_in)
                 .then((response) => {
                     this.loading_in = false
-                    console.log(response.data.length);
+                    // console.log(response.data.length);
                     if (response.data.length > 1) {
                         this.$message({
                             type: 'error',
                             message: response.data.length + ' shipment found'
                         });
-                        // eventBus.$emit('errorRequest', response.data.length + ' shipment found')
-                        // this.message = response.data.length + 'shipment found'
-                        // this.icon = 'block'
-                        // this.color = 'error'
                     }
                     if (response.data.errors === 'errors') {
                         // if (response.errors) {
@@ -382,7 +369,11 @@ export default {
                         this.icon = 'block'
                         this.color = 'error'
                     } else {
-                        this.AllScanned.push(response.data);
+                        // this.AllScanned.push(response.data);
+                        this.form_in.bar_code_in = ''
+                        response.data.forEach(element => {
+                            this.AllScanned.push(element);
+                        });
                         this.form_in.bar_code_in = ''
                     }
                 })
