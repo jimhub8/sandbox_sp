@@ -44,7 +44,7 @@
                                 <div class="v-list__tile__title">My Shipments</div>
                             </div>
                         </router-link>
-                        <router-link to="/Shipments" class="v-list__tile v-list__tile--link" v-if="user.can['view shipments']">
+                        <router-link to="/Shipments" class="v-list__tile v-list__tile--link" v-if="user.can['view shipments'] || user.is_client">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">local_shipping</i>
                             </div>

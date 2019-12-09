@@ -25,7 +25,7 @@
                                     </el-option>
                                 </el-select>
                             </v-flex>
-                            <v-flex xs4 sm2 offset-sm1>
+                            <v-flex xs4 sm2 offset-sm1 v-if="!user.is_client">
                                 <el-select v-model="form.branch_id" clearable filterable placeholder="Select Branch">
                                     <el-option v-for="item in branches" :key="item.id" :label="item.branch_name" :value="item.id">
                                     </el-option>
@@ -77,6 +77,14 @@
                             </template>
                             <span>Refresh</span>
                         </v-tooltip>
+                        <!-- <v-tooltip right>
+                            <template v-slot:activator="{ on }">
+                                <v-btn icon v-on="on" slot="activator" class="mx-0" @click="updateCancelled">
+                                    <v-icon color="red darken-2" small>refresh</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Refresh</span>
+                        </v-tooltip> -->
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
@@ -731,7 +739,7 @@ export default {
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            if (vm.user.can["view shipments"]) {
+            if (vm.user.can["view shipments"] || user.is_client) {
                 next();
             } else {
                 next("/unauthorized");

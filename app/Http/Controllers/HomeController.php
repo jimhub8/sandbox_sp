@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\FileManagement\Props;
 use App\FileManagement\Repositories\Attachment\AttachmentRepository;
-use Auth;
 use Exception;
 use App\AttachmentCategory;
 use App\Attachment;
@@ -13,6 +12,8 @@ use App\User;
 use App\Company;
 use Spatie\Permission\Models\Permission;
 use App\Country;
+use Illuminate\Support\Facades\Auth;
+
 class HomeController extends Controller
 {
     public function courier()

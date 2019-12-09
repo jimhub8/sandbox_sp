@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://speedball-215310.appspot.com'),
+    'url' => env('APP_URL', 'https://web.speedballcourier.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -104,7 +104,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY', 'base64:wlyuyWk/5JrZ1jdW0n04hkEi/RUpxqaf0hexuB63lxY='),
 
     'cipher' => 'AES-256-CBC',
 

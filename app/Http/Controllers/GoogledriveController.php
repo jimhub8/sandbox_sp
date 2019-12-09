@@ -76,33 +76,16 @@ class GoogledriveController extends Controller
             $representative[] = $entry->getValues();
         }
 
+        $statuses = Status::all();
         $data['data'] = $representative;
         $data['client'] = $client_details;
+        $data['status'] = $statuses;
         // dd(($representative));
-        // $this->update_status($data);
-        try {
-            $client = new Client();
-            $request = $client->request('POST', env('API_URL') . '/api/googleSheet', [
-                'headers' => [
-                    'Content-type' => 'application/json',
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
-                ],
-                'body' => json_encode([
-                    'data' => $data,
-                ])
-            ]);
-            // $response = $http->get(env('API_URL').'/api/getUsers');
-            return $response = $request->getBody()->getContents();
-            // dd($response);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
-            return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
-        }
+        
+        $this->update_status($data);
         $this->check_order($representative, $client_details);
         return redirect('/#/shipments');
     }
-
 
     public function check_order($orders, $client)
     {

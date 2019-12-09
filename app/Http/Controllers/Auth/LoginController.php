@@ -38,6 +38,7 @@ class LoginController extends Controller {
 	 */
 	public function __construct() {
 		$this->middleware('guest')->except('logout');
+        $this->middleware('guest:clients')->except('logout');
 	}
 
 	/**
@@ -75,7 +76,7 @@ class LoginController extends Controller {
 		}
 	}
 
-	
+
 	/**
 	 * Get the needed authorization credentials from the request.
 	 *

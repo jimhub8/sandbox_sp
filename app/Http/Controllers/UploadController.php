@@ -48,14 +48,15 @@ class UploadController extends Controller
 
     public function importShipments(Request $request)
     {
-
         $orders = Excel::toArray(new ShipmentImport, request()->file('shipment'));
         $client_det = AppClient::find($request->client);
         // dd($orders);
         // $orders_col = Excel::toCollection(new OrderImport, request()->file('orders'));
+        $status = Status::all();
         $arr = $orders[0];
-        $data = array('data' => $arr, 'client' => $client_det);
+        $data = array('data' => $arr, 'client' => $client_det, 'status' => $status);
         // dd($data);
+
 
         $this->update_status($data);
         foreach ($arr as $key => $order) {

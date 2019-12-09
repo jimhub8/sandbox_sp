@@ -20,6 +20,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Notification;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Milon\Barcode\DNS1D;
 
 // use App\Observers\BaseObserver;
@@ -51,7 +52,6 @@ class ShipmentController extends Controller
         $yest = Carbon::now()->subDays(1);
         $prev_month = Carbon::today()->subMonth();
 
-        // DB::enableQueryLog(); // Enable query log
 
         $refused = Shipment::select('id', 'bar_code')->setEagerLoads([])
             ->where(function ($query) {
@@ -64,17 +64,16 @@ class ShipmentController extends Controller
             ->whereDate('created_at', '<=', $prev_month)
             ->get('id')->toArray();
 
-        // dd(DB::getQueryLog()); // Show results of log
-
-
 
         $cancell_status = ['Returned', 'Scheduled', 'Dispatched', 'Delivered', 'Warehouse', 'Cancelled', 'Refused'];
+        // DB::enableQueryLog(); // Enable query log
         $cancelled = Shipment::select('id')->setEagerLoads([])
-            ->whereNotIn('status', $cancell_status)
-            ->orWhere('status', null)
-            ->orderBy('created_at')
             ->whereDate('created_at', '<=', $prev_month)
+            ->whereNotIn('status', $cancell_status)
+            // ->orWhere('status', null)
+            ->orderBy('created_at')
             ->get('id')->toArray();
+            // dd(DB::getQueryLog()); // Show results of log
 
         $id_ref = array_flatten($refused);
         $id_can = array_flatten($cancelled);
@@ -487,14 +486,14 @@ class ShipmentController extends Controller
         //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
         //     // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
         //     // return $e->getMessage();
-        //     $message = $e->getResponse()->getBody();
-        //     $code = $e->getResponse()->getStatusCode();
+        //     return $message = $e->getResponse()->getBody();
+        //     // return $code = $e->getResponse()->getStatusCode();
         //     if ($code == 401) {
         //         abort(401);
         //     }
         //     // return;
         //     // $arrayName = array('error' => 'Error', 'message' => $message);
-        //     // dd($message);
+        //     dd($message);
         //     abort(422, $message);
         //     // return $e->getMessage();
         // }
@@ -600,7 +599,8 @@ class ShipmentController extends Controller
             // dd($increment);
             // ship_model::where('product_code', $product_code)->increment('count');
 
-            dd($ship_model);
+            // dd($ship_model);
+            return ;
         }
     }
 

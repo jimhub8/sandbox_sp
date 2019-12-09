@@ -104,7 +104,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/logOtherDevices', 'UserController@logOtherDevices')->name('logOtherDevices');
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::get('/courier', 'HomeController@courier')->name('courier');
-	Route::get('/courier/{name}', 'HomeController@courierHome')->name('courierHome');
+	// Route::get('/courier/{name}', 'HomeController@courierHome')->name('courierHome');
 	Route::resource('users', 'UserController');
 	Route::resource('roles', 'RoleController');
 	Route::resource('shipment', 'ShipmentController');
@@ -443,3 +443,13 @@ Route::any('/failsafe', 'ShipmentController@failsafe')->name('failsafe');
 
 Route::get('verifyEmailFirst', 'Auth\RegisterController@verifyEmailFirst')->name('verifyEmailFirst');
 Route::get('/verify/{verifyToken}', 'EmailController@verify')->name('verify');
+
+Route::get('/client/login', 'ClientController@showClientLoginForm');
+Route::post('/client/login', 'ClientController@clientLogin');
+
+Route::post('/login/writer', 'Auth\LoginController@writerLogin');
+
+Route::group(['middleware' => ['auth:clients']], function () {
+    Route::get('/client', 'ClientController@client')->name('client');
+    // Route::get('/client', 'ClientController@client')->name('client');
+});

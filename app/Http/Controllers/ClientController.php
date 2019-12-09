@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\models\Country;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 
 class ClientController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -205,5 +209,47 @@ class ClientController extends Controller
     public function searchClient($search)
     {
         return Client::where('name', 'LIKE', "%{$search}%")->get();
+    }
+
+    public function showClientLoginForm()
+    {
+        return view('auth.client.login', ['url' => 'client']);
+    }
+
+    public function clientLogin(Request $request)
+    {
+        $this->validate($request, [
+            'email'   => 'required|email',
+            'password' => 'required|min:6'
+        ]);
+
+        if (Auth::guard('clients')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+
+            return redirect()->intended('/client');
+        }
+        return back()->withInput($request->only('email', 'remember'));
+    }
+    public function client()
+    {
+        $permissions = [];
+        foreach (Permission::all() as $permission) {
+            if (Auth::user()->can($permission->name)) {
+                $permissions[$permission->name] = true;
+            } else {
+                $permissions[$permission->name] = false;
+            }
+        }
+        $user = Auth::user();
+        // $country = Country::find($user->country_id);
+        // dd($country);
+        // $user->country_name = $country->country_name;
+        // $users->transform(function ($user, $key) {
+        //     $country = Country::find($user->country_id);
+        //     $user->country_name = $country->name;
+		// 	return $user;
+        // });
+        // dd(json_decode(json_encode((Auth::user()), false)));
+        $auth_user = array_prepend($user->toArray(), $permissions, 'can');
+        return view('welcome', compact('auth_user'));
     }
 }
