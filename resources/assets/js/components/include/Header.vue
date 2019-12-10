@@ -19,7 +19,7 @@
                 <template>
                     <v-card>
                         <!-- <v-card style="background: url('storage/ps/landS.jpg')"> -->
-                        <router-link to="/" class="v-list__tile v-list__tile--link">
+                        <router-link to="/" class="v-list__tile v-list__tile--link" v-if="!user.is_client">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">dashboard</i>
                             </div>
@@ -78,7 +78,7 @@
                                 </div>
                             </div>
               </router-link>-->
-                        <router-link to="/profile" class="v-list__tile v-list__tile--link">
+                        <router-link to="/profile" class="v-list__tile v-list__tile--link" v-if="!user.is_client">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">account_circle</i>
                             </div>
@@ -222,7 +222,7 @@
                             </router-link>
                         </v-list-group>
 
-                        <v-list-group prepend-icon="settings">
+                        <v-list-group prepend-icon="settings" v-if="!user.is_client">
                             <v-list-tile slot="activator">
                                 <v-list-tile-title>App Settings</v-list-tile-title>
                             </v-list-tile>
@@ -282,7 +282,7 @@
                             </router-link> -->
                         </v-list-group>
 
-                        <router-link to="/dispatch" class="v-list__tile v-list__tile--link">
+                        <router-link to="/dispatch" class="v-list__tile v-list__tile--link" v-if="!user.is_client">
                             <div class="v-list__tile__action"><i aria-hidden="true" class="icon material-icons">book</i></div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">

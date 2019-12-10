@@ -29,7 +29,10 @@ class GoogledriveController extends Controller
         // dd($client_details);
         $sheet_name = $request->sheet_name;
         $work_sheet = $request->work_sheet;
-        $path = public_path('google/googleserviceworker.json');
+        // $path = public_path('google/googleserviceworker.json');
+
+        $work_sheet = $request->work_sheet;
+        $path = '/home/speedbal/web.speedballcourier.com/google/googlesheets.json';
         // $path = public_path('google/googlesheets.json');
         // dd($path);
         putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $path);
@@ -81,7 +84,7 @@ class GoogledriveController extends Controller
         $data['client'] = $client_details;
         $data['status'] = $statuses;
         // dd(($representative));
-        
+
         $this->update_status($data);
         $this->check_order($representative, $client_details);
         return redirect('/#/shipments');
@@ -142,7 +145,6 @@ class GoogledriveController extends Controller
 
     public function update_status($data)
     {
-
         try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/googleSheet', [
@@ -160,6 +162,11 @@ class GoogledriveController extends Controller
             // dd($response);
         } catch (\Exception $e) {
             \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 401) {
+                abort(401);
+            }
             return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
         }
     }

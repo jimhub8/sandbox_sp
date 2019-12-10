@@ -26,6 +26,7 @@ class PermissionController extends Controller
 
     public function getShipmentsCount(Request $request)
     {
+        
         if (empty($request->country)) {
             return Shipment::where('country_id', Auth::user()->country_id)->whereYear('created_at', '=', date("Y"))->count();
         } else {

@@ -68,6 +68,9 @@ class StatusController extends Controller
     public function getStatuses()
     {
         // return Status::select('name')->orderBy('name', 'ASC')->get();
+        if (Auth::guard('clients')) {
+            return Status::select('name')->orderBy('name', 'ASC')->get();
+        }
         $user = Auth::user();
         if ($user->hasAllPermissions(['update delivered', 'update dispatched', 'update returned'])) {
             return Status::select('name')->orderBy('name', 'ASC')->get();

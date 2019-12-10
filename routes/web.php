@@ -79,7 +79,7 @@ Route::get('/google_s', 'GoogledriveController@google_s')->name('google_s');
 
 Auth::routes();
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['authcheck']], function () {
 	Route::get('/testSS', function () {
 		$today = Carbon::today();
 		$shipments = (Shipment::whereBetween('created_at', [$today->subMonth(1), $today->addMonth(1)])->get());
@@ -432,7 +432,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('searchClient/{search}', 'ClientController@searchClient')->name('searchClient');
     Route::get('searchRider/{search}', 'RiderController@searchRider')->name('searchRider');
-
 
     Route::post('/google_sheets', 'GoogledriveController@google_sheets')->name('google_sheets');
 

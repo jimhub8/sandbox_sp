@@ -22,7 +22,7 @@ class RedirectIfAuthenticated
         // }
 
         // return $next($request);
-
+            
         if ($guard == "clients" && Auth::guard($guard)->check()) {
             return redirect('/client');
         }

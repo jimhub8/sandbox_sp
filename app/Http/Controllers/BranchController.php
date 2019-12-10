@@ -106,6 +106,9 @@ class BranchController extends Controller
 
 	public function getBranchEger()
 	{
+        if (Auth::guard('clients')) {
+    		return Branch::setEagerLoads([])->orderBy('branch_name')->get();
+        }
 		return Branch::setEagerLoads([])->orderBy('branch_name')->where('country_id', Auth::user()->country_id)->get();
 	}
 

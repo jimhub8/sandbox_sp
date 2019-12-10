@@ -12,6 +12,39 @@ class FilterController extends Controller
 {
     public function filterShipment(Request $request)
     {
+        if (Auth::guard('clients')->check()) {
+            $shipment_filter = Shipment::withoutGlobalScope(ShipmentScope::class);
+            if ($request->country_id) {
+                    $shipment_filter = $shipment_filter->where('country_id', $request->country_id);
+            }
+            if ($request->status == "Returned" && ($request->start_date && $request->end_date)) {
+                $date_b = [
+                    'start_date' => $request->start_date,
+                    'end_date' => $request->end_date
+                ];
+                $shipment_filter = $shipment_filter->whereBetween('return_date', $date_b);
+            } else {
+                if ($request->start_date && $request->end_date) {
+                    $date_b = [
+                        'start_date' => $request->start_date,
+                        'end_date' => $request->end_date
+                    ];
+                    $shipment_filter = $shipment_filter->whereBetween('created_at', $date_b);
+                }
+            }
+
+            if ($request->status) {
+                $shipment_filter = $shipment_filter->where('status', $request->status);
+            }
+            if ($request->branch_id) {
+                $shipment_filter = $shipment_filter->where('branch_id', $request->branch_id);
+            }
+            if ($request->client_id) {
+                $shipment_filter = $shipment_filter->where('client_id', $request->client_id);
+            }
+            $shipment_filter = $shipment_filter->paginate(500);
+            return $shipment_filter;
+        }
         // return $request->all();
         $shipment_filter = new Shipment;
         // $start = $request->no_btw['start'] - 1;

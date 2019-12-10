@@ -62,7 +62,7 @@ export default {
                 bar_code: ''
             },
             json_fields: {
-                "Order Id": "order_id",
+                "Order Id": "bar_code",
                 "Product Name": "client_email",
                 "Client Name": "client_name",
                 "Contact": "client_phone",

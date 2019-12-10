@@ -225,7 +225,7 @@ class ClientController extends Controller
 
         if (Auth::guard('clients')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
 
-            return redirect()->intended('/client');
+            return redirect()->intended('/client/#/Shipments');
         }
         return back()->withInput($request->only('email', 'remember'));
     }

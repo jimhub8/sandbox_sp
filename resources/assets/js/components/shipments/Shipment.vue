@@ -38,7 +38,7 @@
                                     </el-option>
                                 </el-select>
                             </v-flex>
-                            <v-flex xs4 sm2 offset-sm1>
+                            <v-flex xs4 sm2 offset-sm1 v-if="!user.is_client">
                                 <el-select v-model="form.client_id" clearable filterable placeholder="Select Client">
                                     <el-option v-for="item in clients" :key="item.id" :label="item.name" :value="item.id">
                                     </el-option>
@@ -297,27 +297,28 @@ export default {
                 name: "All"
             },
             json_fields: {
-                "Order Id": "order_id",
+                "Order Id": "bar_code",
+                Quantity: "amount_ordered",
+                "COD Amount": "cod_amount",
+                "Client Name": "client_name",
+                "Client Email": "client_email",
+                "Client Phone": "client_phone",
+                "Client City": "client_city",
+                "Client Address": "client_address",
+                "Status": "status",
+                "Delivery Date": "derivery_date",
+                "Instructions": "speciial_instruction",
                 "Sender Name": "sender_name",
                 "Sender Email": "sender_email",
                 "Sender Phone": "sender_phone",
                 "Sender City": "sender_city",
                 "Sender Address": "sender_address",
                 Driver: "driver",
-                "Client Name": "client_name",
-                "Client Email": "client_email",
-                "Client Phone": "client_phone",
-                "Client City": "client_city",
-                "Client Address": "client_address",
                 "Derivery Status": "status",
                 From: "sender_address",
                 To: "client_address",
-                "Derivery Date": "derivery_date",
                 "Derivery Time": "derivery_time",
-                Quantity: "amount_ordered",
-                "COD Amount": "cod_amount",
                 "Booking Date": "booking_date",
-                "Special Instructions": "speciial_instruction"
             },
             snackbar: false,
             timeout: 5000,
