@@ -11,9 +11,9 @@
             </v-flex>
             <v-flex sm12>
                 <div class="col-md-12">
-                    <div class="card card-stats card-raised">
-                        <div class="card-body">
-                            <div class="row">
+                    <!-- <div class="card card-stats card-raised">
+                        <div class="card-body"> -->
+                    <!-- <div class="row">
                                 <div class="col-md-3">
                                     <div class="statistics">
                                         <div class="">
@@ -62,14 +62,81 @@
                                     </div>
                                 </div>
                             </div>
+                            </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-xl-3 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="text-white mt-3">Orders</h4>
+                                            <h4 class="text-white mt-3">{{ total }}</h4>
+                                            <h6 class="text-muted">Since last last week</h6>
+                                        </div>
+                                        <div class="icon-box icon-box-bg-image-warning">
+                                            <v-icon color="indigo lighten-5">shopping_cart</v-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-xl-3 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="text-white mt-3">Delivered</h4>
+                                            <h4 class="text-white mt-3">{{ delivered }}</h4>
+                                            <h6 class="text-muted">Since last week</h6>
+                                        </div>
+                                        <div class="icon-box icon-box-bg-image-info">
+                                            <v-icon color="brown lighten-3">offline_pin</v-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-xl-3 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="text-white mt-3">Delivery percentage</h4>
+                                            <h4 class="text-white mt-3">{{ delivered_perc }}</h4>
+                                            <h6 class="text-muted">Since last week</h6>
+                                        </div>
+                                        <div class="icon-box icon-box-bg-image-danger">
+                                            <v-icon color="white">map</v-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-xl-3 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="text-white mt-3">Target</h4>
+                                            <h4 class="text-white mt-3">60%</h4>
+                                            <h6 class="text-muted">Since last week</h6>
+                                        </div>
+                                        <div class="icon-box icon-box-bg-image-success">
+                                            <v-icon color="grey lighten-1">gps_fixed</v-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
                 <!-- </div> -->
                 <myChart style="height: 300px;" :client="client"></myChart>
                 <!-- <v-btn @click="getBranchCount" flat color="primary">Count</v-btn> -->
                 <div class="col-md-12">
-                    <div class="card card-stats card-raised">
+                    <!-- <div class="card card-stats card-raised">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3">
@@ -121,7 +188,74 @@
                                 </div>
                             </div>
                         </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-xl-3 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="text-white mt-3">Expected Deliveries</h4>
+                                            <h4 class="text-white mt-3">{{ expected_del }}</h4>
+                                            <h6 class="text-muted">Since last last week</h6>
+                                        </div>
+                                        <div class="icon-box icon-box-bg-image-warning">
+                                            <v-icon color="indigo lighten-5">beenhere</v-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-xl-3 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="text-white mt-3">Remaining</h4>
+                                            <h4 class="text-white mt-3">{{ remaining_del }}</h4>
+                                            <h6 class="text-muted">Since last week</h6>
+                                        </div>
+                                        <div class="icon-box icon-box-bg-image-info">
+                                            <v-icon color="brown lighten-3">gps_off</v-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-xl-3 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="text-white mt-3">Remaining percentage</h4>
+                                            <h4 class="text-white mt-3">{{ remaining_per }}%</h4>
+                                            <h6 class="text-muted">Since last week</h6>
+                                        </div>
+                                        <div class="icon-box icon-box-bg-image-danger">
+                                            <v-icon color="white">block</v-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-xl-3 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <h4 class="text-white mt-3">Target</h4>
+                                            <h4 class="text-white mt-3">60%</h4>
+                                            <h6 class="text-muted">Since last week</h6>
+                                        </div>
+                                        <div class="icon-box icon-box-bg-image-success">
+                                            <v-icon color="grey lighten-1">gps_fixed</v-icon>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
             </v-flex>
         </v-layout>
@@ -247,12 +381,25 @@ export default {
 }
 
 .v-icon {
-    box-shadow: 0 9px 30px -6px rgba(255, 54, 54, .5);
+    /* box-shadow: 0 9px 30px -6px #fff; */
+    box-shadow: -2px -3px 17px 7px #1d4dd47a;
     padding: 5px;
     border-radius: 50%;
 }
 
 .info-title {
     margin-top: 20px;
+}
+
+.card .card-body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: rgb(24, 25, 28) !important;
+    background-clip: border-box;
+    border: 1px solid #313452;
+    border-radius: 0;
 }
 </style>

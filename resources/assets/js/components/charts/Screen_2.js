@@ -45,7 +45,7 @@ export default {
                 datasets: [
                     {
                         label: 'Week Delivery Graph',
-                        backgroundColor: '#0095ff',
+                        backgroundColor: '#2a513e',
                         data: this.rows
                     }
                 ]
