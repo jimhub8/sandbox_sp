@@ -51,7 +51,7 @@
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div>
                                             <h4 class="text-white mt-3">Delivery percentage</h4>
-                                            <h4 class="text-white mt-3">{{ delivered_perc }}%</h4>
+                                            <h4 class="text-white mt-3">{{ delivered_perc }}</h4>
                                             <h6 class="text-muted">Since last week</h6>
                                         </div>
                                         <div class="icon-box icon-box-bg-image-danger">
@@ -84,6 +84,59 @@
                 <myChart style="height: 300px;" :client="client"></myChart>
                 <!-- <v-btn @click="getBranchCount" flat color="primary">Count</v-btn> -->
                 <div class="col-md-12">
+                    <!-- <div class="card card-stats card-raised">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="statistics">
+                                        <div class="">
+                                            <div class="icon icon-primary">
+                                                <v-icon color="green">beenhere</v-icon>
+                                            </div>
+                                            <h3 class="info-title"><span><b>{{ expected_del }}</b></span></h3>
+                                            <h6 class="stats-title"><strong>Expected Deliveries</strong></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <v-divider vertical></v-divider>
+                                <div class="col-md-3">
+                                    <div class="statistics">
+                                        <div class="">
+                                            <div class="icon icon-success">
+                                                <v-icon color="purple">gps_off</v-icon>
+                                            </div>
+                                            <h3 class="info-title"><span><b>{{ remaining_del }}</b></span></h3>
+                                            <h6 class="stats-title"><strong>Remaining</strong></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <v-divider vertical></v-divider>
+                                <div class="col-md-3">
+                                    <div class="statistics">
+                                        <div class="">
+                                            <div class="icon icon-info">
+                                                <v-icon color="indigo">block</v-icon>
+                                            </div>
+                                            <h3 class="info-title"><span><b>{{ remaining_per }}%</b></span></h3>
+                                            <h6 class="stats-title"><strong>Remaining percentage</strong></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <v-divider vertical></v-divider>
+                                <div class="col-md-2">
+                                    <div class="statistics">
+                                        <div class="">
+                                            <div class="icon icon-danger">
+                                                <v-icon color="red">gps_fixed</v-icon>
+                                            </div>
+                                            <h3 class="info-title"><span><b>60%</b></span></h3>
+                                            <h6 class="stats-title"><strong> Target</strong></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
                     <div class="row">
                         <div class="col-12 col-sm-6 col-xl-3 grid-margin">
                             <div class="card">

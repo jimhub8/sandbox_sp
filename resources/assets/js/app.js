@@ -130,6 +130,9 @@ import myScreen from './components/screen';
 
 import myDispatch from './components/scanner/dispatch'
 
+import myUpdate from './components/shipments/update/Returns'
+
+import mySendSms from './components/shipments/sms/Sendsms'
 const routes = [
     // {path: '/', component: dashboard },
     { path: '/users', component: myUser },
@@ -179,6 +182,8 @@ const routes = [
 
     { path: '/dispatch', component: myDispatch },
 
+    { path: '/sms', component: mySendSms },
+    { path: '/update', component: myUpdate },
 ]
 const router = new VueRouter({
     // mode: 'history',
@@ -196,7 +201,7 @@ const app = new Vue({
         myTown, myWaybill, myStatus, myStatuses, myCountry, myRinder, myCustDash, myDrivDash,
         myunauth, myDash, myFilter, myChatty, myFinance, myFinClient, mySticker, myDStatus, myLogs, mySc,
 
-        myClients, myScreen, myRiders, myDispatch
+        myClients, myScreen, myRiders, myDispatch, mySendSms, myUpdate
         // myContainer, myUploadFile, myTasks, myscheduled
     },
 });

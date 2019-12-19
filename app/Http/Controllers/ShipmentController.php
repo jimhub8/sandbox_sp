@@ -389,7 +389,7 @@ class ShipmentController extends Controller
         $shipment = Shipment::find($id);
         try {
             $client = new Client;
-            $request = $client->request('DELETE', env('API_URL') . '/api/order_delete' . $shipment->bar_code, [
+            $request = $client->request('DELETE', env('API_URL') . '/api/order_delete/' . $shipment->bar_code, [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',

@@ -7,11 +7,8 @@
                     <input type="text" class="form-control" id="inputAddress2" placeholder="Barcode" v-model="form.bar_code" @change="search_order">
                 </v-flex>
                 <v-divider></v-divider>
-                <v-flex sm12 style="margin-top: 30px">
-                    <download-excel name="Dispatch Outbound.csv" type="csv" :data="scanned_orders" :fields="json_fields" style="width: 7%">
-                        Export
-                        <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
-                    </download-excel>
+                <v-flex sm12 style="margin-top: 30px" v-if="scanned_orders.length > 0">
+                    <v-btn color="primary" flat @click="send_sms" v-if="user.can['send sms']">Send Sms</v-btn>
                     <v-tooltip right>
                         <template v-slot:activator="{ on }">
                             <v-btn icon v-on="on" slot="activator" class="mx-0" @click="resetForm">
@@ -44,14 +41,19 @@
                     </v-data-table>
                 </v-flex>
             </v-layout>
-
         </v-layout>
     </v-container>
+    <mySms></mySms>
 </v-content>
 </template>
 
 <script>
+import mySms from './Sms'
 export default {
+    props: ['user'],
+    components: {
+        mySms,
+    },
     data() {
         return {
             errors: {},
@@ -145,11 +147,15 @@ export default {
                     })
             } else {
                 eventBus.$emit('errorEvent', 'Shipment exists in the table')
+                // console.log(this.form.bar_code);
                 this.form.bar_code = ''
+
                 return
             }
         },
-
+        send_sms() {
+            eventBus.$emit('sendSmsEvent', this.scanned_orders)
+        },
         removeItem(item) {
             // this.loading = true;
             const index = this.scanned_orders.indexOf(item)

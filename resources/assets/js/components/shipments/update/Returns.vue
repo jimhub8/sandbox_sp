@@ -7,11 +7,8 @@
                     <input type="text" class="form-control" id="inputAddress2" placeholder="Barcode" v-model="form.bar_code" @change="search_order">
                 </v-flex>
                 <v-divider></v-divider>
-                <v-flex sm12 style="margin-top: 30px">
-                    <download-excel name="Dispatch Outbound.csv" type="csv" :data="scanned_orders" :fields="json_fields" style="width: 7%">
-                        Export
-                        <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
-                    </download-excel>
+                <v-flex sm12 style="margin-top: 30px" v-if="scanned_orders.length > 0">
+                    <v-btn color="primary" flat @click="openModel">Update status</v-btn>
                     <v-tooltip right>
                         <template v-slot:activator="{ on }">
                             <v-btn icon v-on="on" slot="activator" class="mx-0" @click="resetForm">
@@ -27,6 +24,7 @@
                             <td class="text-xs-right">{{ props.item.client_email }}</td>
                             <td class="text-xs-right">{{ props.item.client_name }}</td>
                             <td class="text-xs-right">{{ props.item.client_phone }}</td>
+                            <td class="text-xs-right">{{ props.item.status }}</td>
                             <td class="justify-center layout px-0">
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
@@ -44,14 +42,19 @@
                     </v-data-table>
                 </v-flex>
             </v-layout>
-
         </v-layout>
     </v-container>
+    <myUpdate :selectedItems="scanned_orders"></myUpdate>
 </v-content>
 </template>
 
 <script>
+import myUpdate from '../UpdateShipmentStatus'
 export default {
+    props: ['user'],
+    components: {
+        myUpdate,
+    },
     data() {
         return {
             errors: {},
@@ -87,6 +90,10 @@ export default {
                 {
                     text: 'Client Phone',
                     value: 'client_phone'
+                },
+                {
+                    text: 'Status',
+                    value: 'status'
                 },
                 {
                     text: 'Actions',
@@ -143,13 +150,11 @@ export default {
                         }
                         this.errors = error.response.data.errors;
                     })
-            } else {
-                eventBus.$emit('errorEvent', 'Shipment exists in the table')
-                this.form.bar_code = ''
-                return
             }
         },
-
+        openModel() {
+            eventBus.$emit('UpdateShipmentModelEvent', this.scanned_orders)
+        },
         removeItem(item) {
             // this.loading = true;
             const index = this.scanned_orders.indexOf(item)
@@ -160,6 +165,17 @@ export default {
             this.scanned_orders = []
         },
 
+        getStatus() {
+            var payload = {
+                url: '/getStatuses',
+                list: 'updateStatusList',
+            }
+            this.$store.dispatch('getItems', payload)
+        },
+
+    },
+    mounted() {
+        this.getStatus()
     },
 }
 </script>

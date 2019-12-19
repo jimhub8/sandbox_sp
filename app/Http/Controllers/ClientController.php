@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Client;
 use App\models\Country;
+use GuzzleHttp\Client as GuzzleHttpClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,10 @@ class ClientController extends Controller
         return Client::all();
     }
 
+    public function token_f()
+    {
+        return session()->get('token.access_token');
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -39,7 +44,7 @@ class ClientController extends Controller
             // 'role_id' => 'required',
         ]);
         // return $request->all();
-        $user = new Client;
+        $user = new Client();
         $password = $this->generateRandomString();
         $password_hash = Hash::make($password);
         $user->password = $password_hash;
@@ -60,7 +65,31 @@ class ClientController extends Controller
         // $user->assignRole($request->role_id);
         // $user->givePermissionTo($request->selected);
         // $user->password_hash = $password_hash;
-        // $user = $user->makeVisible('password')->toArray();
+        $user = $user->makeVisible('password')->toArray();
+        try {
+            $client = new GuzzleHttpClient();
+            $request = $client->request('POST', env('API_URL') . '/api/clients', [
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->token_f(),
+                ],
+                'body' => json_encode([
+                    'data' => $user,
+                ])
+            ]);
+            return $response = $request->getBody()->getContents();
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+
+            $message = $e->getResponse()->getBody();
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 401) {
+                abort(401);
+            }
+            abort(422, $message);
+            return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        }
         $this->client_api($user);
         return;
         //     if ($request->role_id == 'Client') {
@@ -154,7 +183,7 @@ class ClientController extends Controller
     public function client_api($user)
     {
         try {
-            $client = new Client();
+            $client = new GuzzleHttpClient();
             $request = $client->request('POST', env('API_URL') . '/api/clients', [
                 'headers' => [
                     'Content-type' => 'application/json',
@@ -182,7 +211,7 @@ class ClientController extends Controller
     public function clientupdate_api($user)
     {
         try {
-            $client = new Client();
+            $client = new GuzzleHttpClient();
             $request = $client->request('PATCH', env('API_URL') . '/api/clients', [
                 'headers' => [
                     'Content-type' => 'application/json',

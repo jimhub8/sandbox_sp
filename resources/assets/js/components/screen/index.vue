@@ -46,9 +46,9 @@ export default {
         }
     },
     created() {
-        // this.timer = window.setInterval(() => {
-        //     this.screen_show = !this.screen_show
-        // }, 30000);
+        this.timer = window.setInterval(() => {
+            this.screen_show = !this.screen_show
+        }, 30000);
     },
     beforeDestroy() {
         clearInterval(this.timer);

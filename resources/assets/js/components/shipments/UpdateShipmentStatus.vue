@@ -64,7 +64,7 @@
 
 <script>
 export default {
-    props: ["updateitedItem", "selectedItems"],
+    props: ["selectedItems"],
     data() {
         return {
             dialog: false,
@@ -111,7 +111,7 @@ export default {
             this.dialog = false
         }
     },
-    created () {
+    created() {
         eventBus.$on('UpdateShipmentModelEvent', data => {
             this.dialog = true
         });

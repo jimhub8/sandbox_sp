@@ -5,7 +5,7 @@
             <v-card-title>
                 Send Sms
                 <v-spacer></v-spacer>
-                <v-btn icon dark @click="close">
+                <v-btn icon dark @click="dialog = false">
                     <v-icon color="black">close</v-icon>
                 </v-btn>
             </v-card-title>
@@ -17,6 +17,10 @@
                             </el-option>
                         </el-select>
                         <small class="has-text-danger" v-if="errors.status">{{ errors.status[0] }}</small>
+                    </v-flex>
+                    <v-flex sm12 v-if="form.status == 'Custome'">
+                        <el-input type="textarea" placeholder="Please input" v-model="form.message">
+                        </el-input>
                     </v-flex>
                 </v-layout>
                 <v-divider></v-divider>
@@ -49,6 +53,9 @@ export default {
             }, {
                 value: 'Not picking',
                 label: 'Not picking'
+            }, {
+                value: 'Custome',
+                label: 'Custome'
             }],
             errors: [],
         };
@@ -73,15 +80,14 @@ export default {
                         eventBus.$emit('reloadRequest', error.response.statusText)
                     } else if (error.response.status === 422) {
                         eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                    this.errors = error.response.data.errors;
+                        this.errors = error.response.data.errors;
                         return
                     }
                     this.errors = error.response.data.errors;
                 });
         },
     },
-    mounted() {
-    },
+    mounted() {},
     created() {
         eventBus.$on('sendSmsEvent', data => {
             this.dialog = true

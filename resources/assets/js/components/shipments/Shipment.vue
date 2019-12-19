@@ -77,14 +77,14 @@
                             </template>
                             <span>Refresh</span>
                         </v-tooltip>
-                        <v-tooltip right>
+                        <!-- <v-tooltip right>
                             <template v-slot:activator="{ on }">
                                 <v-btn icon v-on="on" slot="activator" class="mx-0" @click="updateCancelled">
                                     <v-icon color="red darken-2" small>refresh</v-icon>
                                 </v-btn>
                             </template>
                             <span>Refresh</span>
-                        </v-tooltip>
+                        </v-tooltip> -->
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>

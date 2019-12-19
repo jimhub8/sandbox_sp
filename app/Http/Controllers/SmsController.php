@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\models\Sms;
 use Illuminate\Http\Request;
 
 class SmsController extends Controller
@@ -23,27 +24,32 @@ class SmsController extends Controller
             $phone = preg_replace('/[^A-Za-z0-9\-]/', '', $phone);
              $start_no = ((substr($phone, 0, 1)));
              if ($start_no == 2) {
-                $phone = ((substr($phone, 0, 11)));
+                $phone = ((substr($phone, 0, 12)));
              } elseif($start_no == 0) {
                 $phone = ((substr($phone, 0, 10)));
              } elseif($start_no == 7) {
-                $phone = ((substr($phone, 0, 9)));
+                $phone = +254 . ((substr($phone, 0, 9)));
              } else {
                 $phone = $phone;
              }
-            //  return $phone;
-            // $phone = '254731090832';
-            // $phone = '254743895505';
-            // return ;
+            //  dd($phone);
             if ($status == 'Returns') {
-                $sms = 'Dear ' . $shipment['client_name'] . ' we made an attempt to deliver your parcel for ' .  $shipment['client_email'] . ' but the delivery was not successful. We would loke to make another delivery attempt. Kindly call or text us 0799870144/0799869844 or text 0778301465 to schedule for delivery ' .
+                $sms = 'Dear ' . $shipment['client_name'] . ' we made an attempt to deliver your parcel for ' .  $shipment['client_email'] . ' but the delivery was not successful. We would like to make another delivery attempt. Kindly call or text us 0799870144/0799869844 or text 0778301465 to schedule for delivery ' .
                     ' regards. ';
-            } else {
+            } elseif ($status == 'Not picking') {
                 $sms = 'Dear ' . $shipment['client_name'] . ' we have received your parcel for ' .  $shipment['client_email'] . ' that you ordered online. Kindly call 0799870144/0799869844 to let us know when to make the delivery' . "\n" .
                     ' regards. ' . "\n" . ' ';
+            } else {
+                $message = $request->message;
+                $sms = 'Dear ' . $shipment['client_name'] . '. ' . $message;
             }
+
+            $africas_talking = new Sms();
+            $africas_talking->sms($phone, $sms);
+
+
             // return $sms;
-            $senderID = 'SPEEDBALL';
+            /*$senderID = 'SPEEDBALL';
             $login = 'SPEEDBALL';
             $password = 'sp33dbal';
 
@@ -73,7 +79,7 @@ class SmsController extends Controller
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $output = curl_exec($ch);
             curl_close($ch);
-            // return $output;
+            // return $output; */
         }
         return;
     }

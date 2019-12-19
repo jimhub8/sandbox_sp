@@ -151,6 +151,24 @@
                                 </v-list-tile-action>
                                 <v-list-tile-title>Delivery Report</v-list-tile-title>
                             </router-link>
+
+                            <router-link to="/update" class="v-list__tile theme--light" style="text-decoration: none">
+                                <div class="v-list__tile__action">
+                                    <v-icon>update</v-icon>
+                                </div>
+                                <div class="v-list__tile__content">
+                                    <div class="v-list__tile__title">Update Status</div>
+                                </div>
+                            </router-link>
+
+                            <router-link to="/sms" class="v-list__tile theme--light" style="text-decoration: none"  v-if="user.can['send sms']">
+                                <div class="v-list__tile__action">
+                                    <v-icon>textsms</v-icon>
+                                </div>
+                                <div class="v-list__tile__content">
+                                    <div class="v-list__tile__title">Send sms</div>
+                                </div>
+                            </router-link>
                         </v-list-group>
 
                         <v-list-group prepend-icon="account_circle" v-if="user.can['view users']">
@@ -393,7 +411,6 @@ export default {
             // this.getCustomer();
             // this.getDrivers();
         },
-
 
         getCustomer() {
             var payload = {
