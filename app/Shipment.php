@@ -13,6 +13,11 @@ class Shipment extends Model
 {
     use SoftDeletes;
     public $with = ['products', 'statuses'];
+    public $timestamps = true;
+
+    public $fillable = [
+        'user_id', 'sender_name', 'sender_email', 'sender_address', 'sender_city', 'sender_phone', 'vendor', 'client_name', 'client_email', 'client_address', 'client_postal_code', 'client_region', 'client_city', 'client_phone', 'client_id', 'assign_staff', 'airway_bill_no', 'bar_code', 'amount_ordered', 'shipment_id', 'paid', 'status', 'container', 'driver', 'payment', 'shipment_type', 'insuarance_status', 'from', 'to', 'charges', 'booking_date', 'derivery_date', 'delivered_on', 'derivery_time', 'remark', 'branch_id', 'derivery_status', 'order_id', 'to_city', 'from_city', 'weight', 'receiver_name', 'sub_total', 'cod_amount', 'speciial_instruction', 'lat_to', 'lat', 'lng', 'location', 'lng_to', 'printed', 'description',  'country', 'printReceipt', 'deleted_at', 'created_at', 'updated_at', 'country_id', 'driver_id', 'assign_date', 'return_date', 'receiver_id', 'distance', 'sticker', 'pickup_at', 'printed_at', 'pickup_id', 'dispatch_date',
+    ];
     // use Searchable;
     /**
      * Get the index name for the model.
@@ -44,13 +49,6 @@ class Shipment extends Model
         return $this->hasMany('App\Call', 'shipment_id');
     }
 
-    public $fillable = [
-        'client_name', 'client_phone', 'client_email', 'client_address', 'client_city',
-        'assign_staff', 'airway_bill_no', 'shipment_type', 'payment', 'insuarance_status',
-        'booking_date', 'derivery_date', 'bar_code', 'derivery_time', 'sender_name',
-        'sender_phone', 'sender_address', 'sender_city', 'total_freight',
-    ];
-
     protected static function boot()
     {
         parent::boot();
@@ -58,4 +56,3 @@ class Shipment extends Model
         static::addGlobalScope(new ClientScope);
     }
 }
-

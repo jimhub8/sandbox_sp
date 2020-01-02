@@ -13,6 +13,7 @@ use Google_Client;
 use Google_Service_Sheets;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class GoogledriveController extends Controller
 {
@@ -29,10 +30,10 @@ class GoogledriveController extends Controller
         // dd($client_details);
         $sheet_name = $request->sheet_name;
         $work_sheet = $request->work_sheet;
-        // $path = public_path('google/googleserviceworker.json');
+        $path = public_path('google/googleserviceworker.json');
 
         $work_sheet = $request->work_sheet;
-        $path = '/home/speedbal/web.speedballcourier.com/google/googlesheets.json';
+        // $path = '/home/speedbal/web.speedballcourier.com/google/googlesheets.json';
         // $path = public_path('google/googlesheets.json');
         // dd($path);
         putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $path);
@@ -85,7 +86,31 @@ class GoogledriveController extends Controller
         $data['status'] = $statuses;
         // dd(($representative));
 
-        $this->update_status($data);
+        try {
+            $client = new Client();
+            $request = $client->request('POST', env('API_URL') . '/api/googleSheet', [
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer ' . $this->token_f(),
+                ],
+                'body' => json_encode([
+                    'data' => $data,
+                ])
+            ]);
+            // $response = $http->get(env('API_URL').'/api/getUsers');
+            return $response = $request->getBody()->getContents();
+            // dd($response);
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 401) {
+                abort(401);
+            }
+            return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        }
+        // $this->update_status($data);
         $this->check_order($representative, $client_details);
         return redirect('/#/shipments');
     }
@@ -93,6 +118,7 @@ class GoogledriveController extends Controller
     public function check_order($orders, $client)
     {
         $order_arr = [];
+        $shipment_array = [];
         foreach ($orders as $order) {
             // dd($order);
             $shipment = Shipment::where('bar_code', '=', $order['orderid'])->first();
@@ -125,7 +151,7 @@ class GoogledriveController extends Controller
                 $shipment->derivery_date = ($order['deliverydate']) ? $order['deliverydate'] : null;
                 $shipment->bar_code = $order['orderid'];
                 // $shipment->to_city = $order['to_city'];
-                $shipment->cod_amount = $order['codamount'];
+                $shipment->cod_amount = (int)$order['codamount'];
                 // $shipment->from_city = $order['from_city'];
                 $shipment->sender_name = $client->name;
                 $shipment->sender_email = $client->email;
@@ -136,9 +162,26 @@ class GoogledriveController extends Controller
                 $shipment->country_id = Auth::user()->country_id;
                 $shipment->user_id = Auth::id();
                 $shipment->client_id = $client->id;
-                $shipment->save();
+                $shipment->created_at = now();
+                $shipment->updated_at = now();
+                // $shipment->save();
+                $shipment_array[] = $shipment;
             }
         }
+
+        if (!empty($shipment_array)) {
+            $shipment_array = collect($shipment_array); // Make a collection to use the chunk method
+            // dd($shipment_array);
+            // it will chunk the dataset in smaller collections containing 500 values each.
+            // Play with the value to get best result
+            $chunks = $shipment_array->chunk(300);
+            // dd('chunk', $chunks);
+            foreach ($chunks as $chunk) {
+                DB::table('shipments')->insert($chunk->toArray());
+            }
+            return;
+        }
+
         // dd($order_arr);
         return;
     }

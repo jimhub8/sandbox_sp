@@ -5,7 +5,7 @@
         <v-container grid-list-md>
             <v-card-text>
                 <v-layout wrap>
-                    <form action="/google_sheets" method="post" enctype="multipart/form-data" style="width: 100%;">
+                    <form action="/google_sheets" method="post" enctype="multipart/form-data" style="width: 100%;" ref="google_form">
                         <input type="hidden" name="_token" :value="csrf" />
                         <div class="form-group row">
                             <label for="password" class="col-form-label text-md-right">Client</label>
@@ -27,7 +27,7 @@
                         <v-card-actions>
                             <v-btn flat @click="close">Close</v-btn>
                             <v-spacer></v-spacer>
-                            <v-btn flat type="submit" color="primary">Upload</v-btn>
+                            <v-btn flat color="primary" :disabled="loading" @click="disable_btn">Upload</v-btn>
                         </v-card-actions>
                     </form>
                 </v-layout>
@@ -46,13 +46,15 @@ export default {
                 .querySelector('meta[name="csrf-token"]')
                 .getAttribute("content"),
             dialog: false,
+            loading: false,
             imagePlaced: false
         };
     },
     methods: {
-        // onPickFile() {
-        //     this.$refs.fileInput.click();
-        // },
+        disable_btn() {
+            this.loading = true
+            this.$refs.google_form.submit()
+        },
         close() {
             this.dialog = false;
         }
