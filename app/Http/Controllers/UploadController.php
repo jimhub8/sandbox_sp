@@ -56,13 +56,36 @@ class UploadController extends Controller
         $arr = $orders[0];
         $data = array('data' => $arr, 'client' => $client_det, 'status' => $status);
         // dd($data);
+        // try {
+        //     $client = new Client();
+        //     $request = $client->request('POST', env('API_URL') . '/api/importOrder', [
+        //         'headers' => [
+        //             'Content-type' => 'application/json',
+        //             'Accept' => 'application/json',
+        //             'Authorization' => 'Bearer ' . $this->token_f(),
+        //         ],
+        //         'body' => json_encode([
+        //             'data' => $data,
+        //         ])
+        //     ]);
+        //     // $response = $http->get(env('API_URL').'/api/getUsers');
+        //     return $response = $request->getBody()->getContents();
+        //     // dd($response);
+        // } catch (\Exception $e) {
 
+        //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+        //     $code = $e->getResponse()->getStatusCode();
+        //     if ($code == 401) {
+        //         abort(401);
+        //     }
+        //     return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        // }
 
         $this->update_status($data);
         foreach ($arr as $key => $order) {
-            $order_exists = Shipment::where('bar_code', $order["order_id"])->count();
-            if ($order_exists > 0) {
-                // dd($order['delivery_date']); 
+            $order_exists = Shipment::where('bar_code', $order["order_id"])->first();
+            if (!$order_exists) {
+                // dd($order['delivery_date']);
                 $order_data = new Shipment();
                 $order_data->order_id = $order["order_id"];
                 $order_data->airway_bill_no = $order["order_id"];
@@ -90,6 +113,8 @@ class UploadController extends Controller
                         }
                     }
                     $order_data->status = $status;
+                } else {
+                    $order_data->status = 'Warehouse';
                 }
                 // dd($order_data->status);
 
@@ -103,16 +128,31 @@ class UploadController extends Controller
                     $order_data->derivery_date = $delivery_date;
                 }
 
-                if (array_key_exists('instructions', $order)) {
+                // $instructions = (array_key_exists('special_instructions', $order)) ? $order['special_instructions'] : $order['instructions'];
+                $instructions = (array_key_exists('special_instructions', $order)) ? $order['special_instructions'] : null;
+
+                if ($instructions) {
                     // dd($order);
-                    if ($order['instructions'] == '' || $order['instructions'] == null) {
+                    if ($instructions == '' || $instructions == null) {
                         $instructions = null;
                     } else {
-                        $instructions = $order['instructions'];
+                        $instructions = $instructions;
                     }
                     $order_data->speciial_instruction = $instructions;
                 }
+
+                // if (array_key_exists('instructions', $order)) {
+                //     // dd($order);
+                //     if ($order['instructions'] == '' || $order['instructions'] == null) {
+                //         $instructions = null;
+                //     } else {
+                //         $instructions = $order['instructions'];
+                //     }
+                //     $order_data->speciial_instruction = $instructions;
+                // }
+                // $order_data->client_email = $order['sender_mail'];
                 $order_data->client_email = (array_key_exists('sender_mail', $order)) ? $order['sender_mail'] : $order['product_name'];
+
                 $order_data->client_phone = $order['phone'];
                 $order_data->client_address = $order['address'];
                 $order_data->client_city = (array_key_exists('city', $order)) ? $order['city'] : null;

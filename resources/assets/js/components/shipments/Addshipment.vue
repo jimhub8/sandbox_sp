@@ -21,14 +21,14 @@
                                     <v-flex sm6>
                                         <h3><b>Pickup At</b></h3>
                                         <v-divider></v-divider>
-                                        <div v-if="role === 'Customer'">
-                                            <v-layout wrap row>
+                                        <div>
+                                            <v-layout wrap row v-if="client_role == 'isClient'">
                                                 <v-flex xs6 sm6>
-                                                    <v-text-field v-model="role" color="blue darken-2" label="Sender name" required></v-text-field>
+                                                    <v-text-field v-model="user.name" color="blue darken-2" label="Sender name" required></v-text-field>
                                                 </v-flex>
                                                 <!-- </div> -->
                                                 <v-flex xs6 sm6>
-                                                    <v-text-field v-model="user.email" :rules="emailRules" color="blue darken-2" label="Sender Email" required></v-text-field>
+                                                    <v-text-field v-model="user.email" color="blue darken-2" label="Sender Email" required></v-text-field>
                                                 </v-flex>
                                                 <v-flex xs6 sm6>
                                                     <v-text-field v-model="user.address" color="blue darken-2" label="Sender Address" required></v-text-field>
@@ -44,91 +44,91 @@
                                                     <v-text-field v-model="user.country" color="blue darken-2" label="Country" required></v-text-field>
                                                 </v-flex>
                                             </v-layout>
-                                        </div>
-                                        <div v-else>
-                                            <!-- <v-card-text>
+                                            <div v-else>
+                                                <!-- <v-card-text>
                                                     <v-autocomplete :items="Allcustomer" :filter="customFilter" color="white" item-text="name" label="Search Sender"></v-autocomplete>
                                                 </v-card-text> -->
 
-                                            <v-autocomplete v-model="model" :items="customerArr" :loading="isLoading" :search-input.sync="search" chips clearable hide-details hide-selected item-text="name" item-value="id" label="Search for a client..." solo>
-                                                <template slot="no-data">
-                                                    <v-list-tile>
-                                                        <v-list-tile-title>
-                                                            Search for
-                                                            <strong>Clients</strong>
-                                                        </v-list-tile-title>
-                                                    </v-list-tile>
-                                                </template>
-                                                <template slot="selection" slot-scope="{ item, selected }">
-                                                    <v-chip :selected="selected" color="blue-grey" class="white--text">
-                                                        <v-icon left>mdi-coin</v-icon>
-                                                        <span v-text="item.name"></span>
-                                                    </v-chip>
-                                                </template>
-                                                <template slot="item" slot-scope="{ item, tile }">
-                                                    <v-list-tile-avatar color="indigo" class="headline font-weight-light white--text">
-                                                        {{ item.name.charAt(0) }}
-                                                    </v-list-tile-avatar>
-                                                    <v-list-tile-content>
-                                                        <v-list-tile-title v-text="item.name"></v-list-tile-title>
-                                                        <v-list-tile-sub-title v-text="item.email"></v-list-tile-sub-title>
-                                                    </v-list-tile-content>
-                                                    <v-list-tile-action>
-                                                        <v-icon>mdi-coin</v-icon>
-                                                    </v-list-tile-action>
-                                                </template>
-                                            </v-autocomplete>
-                                            <v-divider></v-divider>
+                                                <v-autocomplete v-model="model" :items="customerArr" :loading="isLoading" :search-input.sync="search" chips clearable hide-details hide-selected item-text="name" item-value="id" label="Search for a client..." solo>
+                                                    <template slot="no-data">
+                                                        <v-list-tile>
+                                                            <v-list-tile-title>
+                                                                Search for
+                                                                <strong>Clients</strong>
+                                                            </v-list-tile-title>
+                                                        </v-list-tile>
+                                                    </template>
+                                                    <template slot="selection" slot-scope="{ item, selected }">
+                                                        <v-chip :selected="selected" color="blue-grey" class="white--text">
+                                                            <v-icon left>mdi-coin</v-icon>
+                                                            <span v-text="item.name"></span>
+                                                        </v-chip>
+                                                    </template>
+                                                    <template slot="item" slot-scope="{ item, tile }">
+                                                        <v-list-tile-avatar color="indigo" class="headline font-weight-light white--text">
+                                                            {{ item.name.charAt(0) }}
+                                                        </v-list-tile-avatar>
+                                                        <v-list-tile-content>
+                                                            <v-list-tile-title v-text="item.name"></v-list-tile-title>
+                                                            <v-list-tile-sub-title v-text="item.email"></v-list-tile-sub-title>
+                                                        </v-list-tile-content>
+                                                        <v-list-tile-action>
+                                                            <v-icon>mdi-coin</v-icon>
+                                                        </v-list-tile-action>
+                                                    </template>
+                                                </v-autocomplete>
+                                                <v-divider></v-divider>
 
-                                            <div v-if="!model">
-                                                <v-layout wrap row>
-                                                    <v-flex xs6 sm6>
-                                                        <v-text-field v-model="form.sender_name" color="blue darken-2" label="Sender Name" required></v-text-field>
-                                                    </v-flex>
-                                                    <v-flex xs6 sm6>
-                                                        <v-text-field v-model="form.sender_email" :rules="emailRules" color="blue darken-2" label="Sender Email" required></v-text-field>
-                                                    </v-flex>
-                                                    <v-flex xs6 sm6>
-                                                        <v-text-field v-model="form.sender_address" color="blue darken-2" label="Sender Address" required></v-text-field>
-                                                    </v-flex>
-                                                    <v-flex xs6 sm6>
-                                                        <v-text-field v-model="form.sender_city" color="blue darken-2" label="Sender City" required></v-text-field>
-                                                    </v-flex>
-                                                    <v-flex xs6 sm6>
-                                                        <v-text-field v-model="form.sender_phone" color="blue darken-2" label="Sender Phone" required></v-text-field>
-                                                    </v-flex>
-                                                </v-layout>
-                                            </div>
-                                            <!-- <v-flex xs6 sm6 v-if="cust.id === model">
+                                                <div v-if="!model">
+                                                    <v-layout wrap row>
+                                                        <v-flex xs6 sm6>
+                                                            <v-text-field v-model="form.sender_name" color="blue darken-2" label="Sender Name" required></v-text-field>
+                                                        </v-flex>
+                                                        <v-flex xs6 sm6>
+                                                            <v-text-field v-model="form.sender_email" color="blue darken-2" label="Sender Email" required></v-text-field>
+                                                        </v-flex>
+                                                        <v-flex xs6 sm6>
+                                                            <v-text-field v-model="form.sender_address" color="blue darken-2" label="Sender Address" required></v-text-field>
+                                                        </v-flex>
+                                                        <v-flex xs6 sm6>
+                                                            <v-text-field v-model="form.sender_city" color="blue darken-2" label="Sender City" required></v-text-field>
+                                                        </v-flex>
+                                                        <v-flex xs6 sm6>
+                                                            <v-text-field v-model="form.sender_phone" color="blue darken-2" label="Sender Phone" required></v-text-field>
+                                                        </v-flex>
+                                                    </v-layout>
+                                                </div>
+                                                <!-- <v-flex xs6 sm6 v-if="cust.id === model">
                                                     <v-select :items="Allcustomer" v-model="selectCl" label="Select Sender" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
                                                 </v-flex> -->
-                                            <div v-if="model" v-for="cust in Allcustomer" :key="cust.id">
-                                                <v-layout wrap row>
-                                                    <v-flex xs6 sm6 v-if="cust.id === model">
-                                                        <v-text-field v-model="cust.name" color="blue darken-2" label="Sender Name" required></v-text-field>
-                                                    </v-flex>
-                                                    <v-flex xs6 sm6 v-if="cust.id === model">
-                                                        <v-text-field v-model="cust.email" :rules="emailRules" color="blue darken-2" label="Sender Email" required></v-text-field>
-                                                    </v-flex>
-                                                    <v-flex xs6 sm6 v-if="cust.id === model">
-                                                        <v-text-field v-model="cust.address" color="blue darken-2" label="Sender Address" required></v-text-field>
-                                                    </v-flex>
-                                                    <v-flex xs6 sm6 v-if="cust.id === model">
-                                                        <v-text-field v-model="cust.city" color="blue darken-2" label="Sender City" required></v-text-field>
-                                                    </v-flex>
-                                                    <v-flex xs6 sm6 v-if="cust.id === model">
-                                                        <v-text-field v-model="cust.phone" color="blue darken-2" label="Sender Phone" required></v-text-field>
-                                                    </v-flex>
+                                                <div v-for="cust in Allcustomer" :key="cust.id">
+                                                    <v-layout wrap row v-if="model">
+                                                        <v-flex xs6 sm6 v-if="cust.id === model">
+                                                            <v-text-field v-model="cust.name" color="blue darken-2" label="Sender Name" required></v-text-field>
+                                                        </v-flex>
+                                                        <v-flex xs6 sm6 v-if="cust.id === model">
+                                                            <v-text-field v-model="cust.email" color="blue darken-2" label="Sender Email" required></v-text-field>
+                                                        </v-flex>
+                                                        <v-flex xs6 sm6 v-if="cust.id === model">
+                                                            <v-text-field v-model="cust.address" color="blue darken-2" label="Sender Address" required></v-text-field>
+                                                        </v-flex>
+                                                        <v-flex xs6 sm6 v-if="cust.id === model">
+                                                            <v-text-field v-model="cust.city" color="blue darken-2" label="Sender City" required></v-text-field>
+                                                        </v-flex>
+                                                        <v-flex xs6 sm6 v-if="cust.id === model">
+                                                            <v-text-field v-model="cust.phone" color="blue darken-2" label="Sender Phone" required></v-text-field>
+                                                        </v-flex>
 
-                                                    <v-flex xs6 sm6 v-if="cust.id === model">
-                                                        <v-text-field v-model="cust.country" color="blue darken-2" label="Country" required></v-text-field>
-                                                    </v-flex>
-                                                </v-layout>
+                                                        <v-flex xs6 sm6 v-if="cust.id === model">
+                                                            <v-text-field v-model="cust.country" color="blue darken-2" label="Country" required></v-text-field>
+                                                        </v-flex>
+                                                    </v-layout>
+                                                </div>
                                             </div>
                                         </div>
                                     </v-flex>
                                     <v-flex sm6>
-                                        <h3><b>Deriver To</b></h3>
+                                        <h3><b>Deliver To</b></h3>
                                         <v-divider></v-divider>
                                         <v-layout wrap>
                                             <v-flex xs6 sm6>
@@ -136,7 +136,7 @@
                                             </v-flex>
                                             <!-- </div> -->
                                             <v-flex xs6 sm6>
-                                                <v-text-field v-model="form.client_email" :rules="emailRules" color="blue darken-2" label="Client Email" required></v-text-field>
+                                                <v-text-field v-model="form.client_email" color="blue darken-2" label="Client Email" required></v-text-field>
                                             </v-flex>
                                             <v-flex xs6 sm6>
                                                 <v-text-field v-model="form.client_address" color="blue darken-2" label="Client Address" required></v-text-field>
@@ -147,12 +147,12 @@
                                             <v-flex xs6 sm6>
                                                 <v-text-field v-model="form.client_phone" color="blue darken-2" label="Client Phone" required></v-text-field>
                                             </v-flex>
+                                            <v-flex xs6 sm6>
+                                                <v-text-field v-model="form.cod_amount" color="blue darken-2" label="COD Amount" required></v-text-field>
+                                            </v-flex>
 
                                             <v-flex xs6 sm6>
                                                 <v-text-field v-model="form.from_city" color="blue darken-2" label="From" required></v-text-field>
-                                            </v-flex>
-                                            <v-flex xs6 sm6>
-                                                <v-text-field v-model="form.cod_amount" color="blue darken-2" label="COD Amount" required></v-text-field>
                                             </v-flex>
                                             <v-flex xs6 sm6>
                                                 <v-text-field v-model="form.to_city" color="blue darken-2" label="To" required></v-text-field>
@@ -179,7 +179,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr v-for="product, key in form.products">
+                                                        <tr v-for="(product, key) in form.products" :key="key">
                                                             <th scope="row">{{ key+1 }}</th>
                                                             <td><input type="text" class="form-control" placeholder="Product Description" v-model="product.product_name"></td>
                                                                 <!-- <td><input type="text" class="form-control" placeholder="COD Amount" v-model="product.cod_amount"></td> -->
@@ -229,53 +229,37 @@
                                                         <option value="Same day">Same day</option>
                                                     </select>
 
-                                                    <div class="form-group col-md-6">
+                                                    <!-- <div class="form-group col-md-6">
                                                         <label for="insurance" class="col-md-4 col-form-label text-md-right">Insuarance</label>
                                                         <select class="custom-select" v-model="form.insuarance_status">
                                                             <option value="yes">Yes</option>
                                                             <option value="no">No</option>
                                                         </select>
-                                                    </div>
+                                                    </div> -->
 
                                                     <!-- </div>  -->
                                                     <div class="form-group col-md-4">
-                                                        <label for="payment" class="col-md-4 col-form-label text-md-right">Paid</label>
-                                                        <select class="custom-select" v-model="form.payment">
+                                                        <div v-if="client_role != 'isClient'">
+                                                            <label for="payment" class="col-md-12 col-form-label text-md-right">Paid</label>
+                                                            <select class="custom-select" v-model="form.payment">
                                                             <option value="yes">Yes</option>
                                                             <option value="no">No</option>
                                                         </select>
+                                                        </div>
                                                     </div>
                                                 </v-layout>
                                             </v-flex>
                                             <v-flex sm4>
-                                                <h3><b>Status</b></h3>
-                                                <v-divider></v-divider>
-                                                <v-layout wrap>
-                                                    <select class="custom-select custom-select-md col-md-12" v-model="form.status">
-                                                       <option value="Awaiting Approval">Awaiting Approval</option>
-                                                        <option value="Approved">Approved</option>
-                                                        <option value="Arrived">Arrived</option>
-                                                        <option value="Awaiting Confirmation">Awaiting Confirmation</option>
-                                                        <option value="Cancelled ">Call Back</option>
-                                                        <option value="Cancelled">Cancelled</option>
-                                                        <option value="Cleared">Cleared</option>
-                                                        <option value="Delivered">Delivered</option>
-                                                        <option value="Dispatched">Dispatched</option>
-                                                        <option value="Hold">Hold</option>
-                                                        <option value="Not Available">Not Available</option>
-                                                        <option value="Not Picking">Not Picking</option>
-                                                        <option value="Out For Destination">Out For Destination</option>
-                                                        <option value="Offline">Offline</option>
-                                                        <option value="Out For Delivery">Out For Delivery</option>
-                                                        <option value="Returned">Returned</option>
-                                                        <option value="Ready For Depart">Ready For Depart</option>
-                                                        <option value="Scheduled">Scheduled</option>
-                                                        <option value="Shipment Collected">Shipment Collected</option>
-                                                        <option value="Transit">Transit</option>
-                                                        <option value="Waiting for Scan">Waiting for scan</option>
-                                                        <option value="Wrong Number">Wrong Number</option>
+                                                <div v-if="client_role != 'isClient'">
+                                                    <h3><b>Status</b></h3>
+                                                    <v-divider></v-divider>
+                                                    <v-layout wrap>
+                                                        <select class="custom-select custom-select-md col-md-12" v-model="form.status">
+                                                       <option value=""></option>
+                                                        <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
                                                     </select>
-                                                </v-layout>
+                                                    </v-layout>
+                                                </div>
                                             </v-flex>
                                             <v-flex sm4>
                                                 <h3><b>Special Instructions</b></h3>
@@ -292,27 +276,28 @@
                                                 </v-layout>
                                             </v-flex>
 
-                                            <v-flex xs12 sm4>
+                                            <!-- <v-flex xs12 sm4  v-if="client_role != 'isClient'">
                                                 <v-select :items="Allcustomer" v-model="selectC" :hint="`${selectC.name}`" label="Select Client" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
+                                            </v-flex> -->
+                                            <!-- <div> -->
+                                            <v-flex xs12 sm4 v-if="client_role != 'isClient'">
+                                                <v-select :items="AllDrivers" v-model="selectD" label="Select Driver" single-line item-text="name" item-value="id" return-object></v-select>
                                             </v-flex>
-                                            <v-flex xs12 sm4>
-                                                <v-select :items="AllDrivers" v-model="selectD" :hint="`${select.name}`" label="Select Driver" single-line item-text="name" item-value="id" return-object persistent-hint></v-select>
+                                            <v-flex xs12 sm4 v-if="client_role != 'isClient'">
+                                                <v-select :items="AllBranches" v-model="selectB" label="Select Branch" single-line item-text="branch_name" item-value="id" return-object></v-select>
                                             </v-flex>
-                                            <v-flex xs12 sm4>
-                                                <v-select :items="AllBranches" v-model="selectB" :hint="`${selectB.branch_name}`" label="Select Branch" single-line item-text="branch_name" item-value="id" return-object persistent-hint></v-select>
-                                            </v-flex>
-
+                                            <!-- </div> -->
                                             <v-flex xs12 sm4>
                                                 <v-text-field v-model="form.booking_date" :type="'date'" color="blue darken-2" label="Booking Date" required></v-text-field>
                                             </v-flex>
 
                                             <v-flex xs12 sm4>
-                                                <v-text-field v-model="form.derivery_date" :type="'date'" color="blue darken-2" label="Deriery Date" required></v-text-field>
+                                                <v-text-field v-model="form.derivery_date" :type="'date'" color="blue darken-2" label="Delivery Date" required></v-text-field>
                                             </v-flex>
 
-                                            <v-flex xs12 sm4>
+                                            <!-- <v-flex xs12 sm4>
                                                 <v-text-field v-model="form.derivery_time" :type="'time'" color="blue darken-2" label="Ready Time" required></v-text-field>
-                                            </v-flex>
+                                            </v-flex> -->
                                         </v-layout>
                                     </v-flex>
                                     <!--  -->
@@ -322,7 +307,7 @@
 
                                 </div>
                                 <v-flex xs6 sm6>
-                                    <v-text-field v-model="form.bar_code" color="blue darken-2" label="Barcode" required></v-text-field>
+                                    <v-text-field v-model="form.bar_code" color="blue darken-2" label="Waybill Number" required></v-text-field>
                                 </v-flex>
                                 <barcode v-bind:value="form.bar_code"></barcode>
                             </v-container>
@@ -347,7 +332,7 @@
 <script>
 import VueBarcode from "vue-barcode";
 export default {
-    props: ["user", 'role', 'Allcustomer', 'AllDrivers', 'AllBranches'],
+    props: ["user", 'Allcustomer', 'AllDrivers', 'AllBranches', 'statuses', 'last_id'],
     components: {
         barcode: VueBarcode
     },
@@ -380,7 +365,7 @@ export default {
                 price: 0,
             }],
             // sender_name: 'SpeedBall courier services',
-            // sender_email: 'info@speedballcourier.com',
+            // sender_email: 'info@boxleocourier.com',
             // sender_phone: '+254728492446',
             // sender_address: '17254 00100',
             // sender_city: 'Embakasi, Nairobi',
@@ -392,6 +377,7 @@ export default {
             sender_city: '',
         });
         return {
+            client_role: '',
             selectCl: [],
             cust: {
                 name: "",
@@ -481,6 +467,17 @@ export default {
             const index = this.form.products.indexOf(product)
             this.form.products.splice(index, 1)
         },
+        // getUserDetails() {
+        //     axios.get(`getUserDetails/${this.model}`)
+        //   .then(res => {
+        //     this.customerArr = res.data
+        //     this.isLoading = false
+        //   })
+        //   .catch(err => {
+        //     console.log(err)
+        //   })
+        //   .finally(() => (this.isLoading = false))
+        // }
     },
     watch: {
         search(val) {
@@ -501,18 +498,48 @@ export default {
             //   .finally(() => (this.isLoading = false))
         }
     },
-
-    created () {
-        eventBus.$on('addShipmentEvent', data => {
-            this.dialog = true
-        })
-    },
     computed: {
         subTotal: function () {
             return this.form.products.reduce(function (carry, product) {
                 return carry + parseFloat(product.price);
             }, 0);
         },
+        isAdmin() {
+            this.user.roles.forEach(element => {
+                if (element.name == 'Client') {
+                    // alert('oopp')
+                    return this.client_role = 'isClient'
+                } else {
+                    // alert('ooppss')
+                    return this.client_role = 'notClient'
+                }
+            });
+        },
+
+        formIsValid() {
+            return (
+                this.form.client_name &&
+                this.form.client_phone &&
+                this.form.client_email &&
+                this.form.client_address &&
+                this.form.client_city &&
+                this.form.airway_bill_no &&
+                this.form.total_weight &&
+                this.form.shipment_type &&
+                this.form.payment &&
+                this.form.total_freight &&
+                this.form.insuarance_status &&
+                this.form.booking_date &&
+                this.form.derivery_date
+            );
+        }
+    },
+
+
+    created () {
+        eventBus.$on('addShipmentEvent', data => {
+            this.dialog = true
+        })
     },
 };
 </script>
