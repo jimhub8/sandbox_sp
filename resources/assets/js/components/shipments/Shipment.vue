@@ -729,6 +729,9 @@ export default {
         this.getCustomer();
         this.getBranch();
         this.getCountry()
+        this.timer = setTimeout(() => {
+            this.updateCancelled()
+        }, 5000);
         axios
             .get("/getShipmentsCount")
             .then(response => {

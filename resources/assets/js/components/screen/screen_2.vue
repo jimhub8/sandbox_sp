@@ -72,7 +72,7 @@
                                         <div>
                                             <h4 class="text-white mt-3">Orders</h4>
                                             <h4 class="text-white mt-3">{{ total }}</h4>
-                                            <h6 class="text-muted">Since last last week</h6>
+                                            <h6 class="text-muted">Since {{ client.start_day }}</h6>
                                         </div>
                                         <div class="icon-box icon-box-bg-image-warning">
                                             <v-icon color="indigo lighten-5">shopping_cart</v-icon>
@@ -88,7 +88,7 @@
                                         <div>
                                             <h4 class="text-white mt-3">Delivered</h4>
                                             <h4 class="text-white mt-3">{{ delivered }}</h4>
-                                            <h6 class="text-muted">Since last week</h6>
+                                            <h6 class="text-muted">Since {{ client.start_day }}</h6>
                                         </div>
                                         <div class="icon-box icon-box-bg-image-info">
                                             <v-icon color="brown lighten-3">offline_pin</v-icon>
@@ -104,7 +104,7 @@
                                         <div>
                                             <h4 class="text-white mt-3">Delivery percentage</h4>
                                             <h4 class="text-white mt-3">{{ delivered_perc }}%</h4>
-                                            <h6 class="text-muted">Since last week</h6>
+                                            <h6 class="text-muted">Since {{ client.start_day }}                                                                                                                                                                                                                                                                                                                                                                                                                                                 </h6>
                                         </div>
                                         <div class="icon-box icon-box-bg-image-danger">
                                             <v-icon color="white">map</v-icon>
@@ -120,7 +120,7 @@
                                         <div>
                                             <h4 class="text-white mt-3">Target</h4>
                                             <h4 class="text-white mt-3">60%</h4>
-                                            <h6 class="text-muted">Since last week</h6>
+                                            <h6 class="text-muted">Since {{ client.start_day }}                                                                                                                                                                                                                                                                                                                                                                                                                                                 </h6>
                                         </div>
                                         <div class="icon-box icon-box-bg-image-success">
                                             <v-icon color="grey lighten-1">gps_fixed</v-icon>
@@ -197,7 +197,7 @@
                                         <div>
                                             <h4 class="text-white mt-3">Expected Deliveries</h4>
                                             <h4 class="text-white mt-3">{{ expected_del }}</h4>
-                                            <h6 class="text-muted">Since last last week</h6>
+                                            <h6 class="text-muted">Since {{ client.start_day }}</h6>
                                         </div>
                                         <div class="icon-box icon-box-bg-image-warning">
                                             <v-icon color="indigo lighten-5">beenhere</v-icon>
@@ -213,7 +213,7 @@
                                         <div>
                                             <h4 class="text-white mt-3">Remaining</h4>
                                             <h4 class="text-white mt-3">{{ remaining_del }}</h4>
-                                            <h6 class="text-muted">Since last week</h6>
+                                            <h6 class="text-muted">Since {{ client.start_day }}                                                                                                                                                                                                                                                                                                                                                                                                                                                 </h6>
                                         </div>
                                         <div class="icon-box icon-box-bg-image-info">
                                             <v-icon color="brown lighten-3">gps_off</v-icon>
@@ -229,7 +229,7 @@
                                         <div>
                                             <h4 class="text-white mt-3">Remaining percentage</h4>
                                             <h4 class="text-white mt-3">{{ remaining_per }}%</h4>
-                                            <h6 class="text-muted">Since last week</h6>
+                                            <h6 class="text-muted">Since {{ client.start_day }}                                                                                                                                                                                                                                                                                                                                                                                                                                                 </h6>
                                         </div>
                                         <div class="icon-box icon-box-bg-image-danger">
                                             <v-icon color="white">block</v-icon>
@@ -245,7 +245,7 @@
                                         <div>
                                             <h4 class="text-white mt-3">Target</h4>
                                             <h4 class="text-white mt-3">60%</h4>
-                                            <h6 class="text-muted">Since last week</h6>
+                                            <h6 class="text-muted">Since {{ client.start_day }}                                                                                                                                                                                                                                                                                                                                                                                                                                                 </h6>
                                         </div>
                                         <div class="icon-box icon-box-bg-image-success">
                                             <v-icon color="grey lighten-1">gps_fixed</v-icon>

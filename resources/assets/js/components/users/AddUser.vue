@@ -120,7 +120,9 @@ export default {
                     this.$parent.Allusers.push(response.data)
                     this.close();
                     // this.resetForm();
-                    this.$emit('alertRequest');
+                    // this.$emit('alertRequest');
+                    eventBus.$emit('userEvent')
+                    eventBus.$emit('alertRequest', 'User created')
                 })
                 .catch((error) => {
                     this.loading = false

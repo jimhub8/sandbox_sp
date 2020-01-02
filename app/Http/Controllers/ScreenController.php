@@ -116,7 +116,18 @@ class ScreenController extends Controller
                 $end_day_ = Carbon::today();
             }
         } else {
-            return;
+            $client = Client::all()->random(1)->first();
+            $start_day = $client->start_day;
+            $end_day = $client->end_day;
+            $today = Carbon::today();
+            if ($day_ == $start_day) {
+                $start_day_ = Carbon::today()->modify("last " . $client->start_day);
+                $end_day_ = Carbon::today()->modify("next " . $client->end_day);
+            } else {
+                $start_day_ = Carbon::today()->modify("last " . $client->start_day);
+                $end_day_ = Carbon::today();
+            }
+            // return;
         }
         $date_arr = [];
         $count = 0;
