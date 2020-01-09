@@ -35,7 +35,7 @@
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line></v-text-field>
                     </v-card-title>
-                    <v-data-table :headers="headers" :items="Allusers" class="elevation-1" :loading="loading" :search="search">
+                    <v-data-table :headers="headers" :items="Allusers" class="elevation-1" :loading="loading" :search="search"  disable-initial-sort>
                         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
                         <template slot="items" slot-scope="props">
                             <td>{{ props.item.name }}</td>
@@ -46,6 +46,7 @@
                             <!-- <td class="text-xs-right">{{ props.item.branch }}</td> -->
                             <!-- <td class="text-xs-right">{{ props.item.country }}</td> -->
                             <td class="text-xs-right">{{ props.item.status }}</td>
+                            <td class="text-xs-right">{{ props.item.created_at }}</td>
                             <td class="justify-center layout px-0">
                                 <!-- <v-tooltip bottom> -->
                                 <v-btn icon class="mx-0" @click="openEdit(props.item)" slot="activator" v-if="user.can['edit users']">
@@ -152,6 +153,10 @@ export default {
                 {
                     text: "Status",
                     value: "status"
+                },
+                {
+                    text: "Created On",
+                    value: "created_at"
                 },
                 {
                     text: "Actions",

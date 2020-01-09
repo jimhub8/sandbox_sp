@@ -88,7 +88,7 @@
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
-                    <v-data-table :headers="headers" :items="shipments.data" :search="search" counter select-all class="elevation-1" v-model="selected" :loading="loading">
+                    <v-data-table :headers="headers" :items="shipments.data" :search="search" counter select-all class="elevation-1" v-model="selected" :loading="loading" disable-initial-sort>
                         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
                         <template slot="items" slot-scope="props">
                             <td>

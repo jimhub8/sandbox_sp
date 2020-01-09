@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Client as AppClient;
+use App\Jobs\ShipmentJob;
 use App\Shipment;
 use App\Status;
 use Google\Spreadsheet\DefaultServiceRequest;
@@ -86,31 +87,7 @@ class GoogledriveController extends Controller
         $data['status'] = $statuses;
         // dd(($representative));
 
-        try {
-            $client = new Client();
-            $request = $client->request('POST', env('API_URL') . '/api/googleSheet', [
-                'headers' => [
-                    'Content-type' => 'application/json',
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
-                ],
-                'body' => json_encode([
-                    'data' => $data,
-                ])
-            ]);
-            // $response = $http->get(env('API_URL').'/api/getUsers');
-            return $response = $request->getBody()->getContents();
-            // dd($response);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
-
-            $code = $e->getResponse()->getStatusCode();
-            if ($code == 401) {
-                abort(401);
-            }
-            return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
-        }
-        // $this->update_status($data);
+        $this->update_status($data);
         $this->check_order($representative, $client_details);
         return redirect('/#/shipments');
     }
@@ -121,7 +98,7 @@ class GoogledriveController extends Controller
         $shipment_array = [];
         foreach ($orders as $order) {
             // dd($order);
-            $shipment = Shipment::where('bar_code', '=', $order['orderid'])->first();
+            $shipment = Shipment::where('bar_code', '=', $order['orderid'])->exists();
             if (!$shipment) {
                 $shipment = new Shipment;
                 $shipment->client_name = $order['nameoftheclient'];
@@ -171,11 +148,9 @@ class GoogledriveController extends Controller
 
         if (!empty($shipment_array)) {
             $shipment_array = collect($shipment_array); // Make a collection to use the chunk method
-            // dd($shipment_array);
-            // it will chunk the dataset in smaller collections containing 500 values each.
+            // it will chunk the dataset in smaller collections containing 300 values each.
             // Play with the value to get best result
             $chunks = $shipment_array->chunk(300);
-            // dd('chunk', $chunks);
             foreach ($chunks as $chunk) {
                 DB::table('shipments')->insert($chunk->toArray());
             }

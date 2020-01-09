@@ -433,7 +433,7 @@ Route::group(['middleware' => ['authcheck']], function () {
     Route::get('searchClient/{search}', 'ClientController@searchClient')->name('searchClient');
     Route::get('searchRider/{search}', 'RiderController@searchRider')->name('searchRider');
 
-    Route::post('/google_sheets', 'GoogledriveController@google_sheets')->name('google_sheets');
+    Route::post('/google_sheets', 'GoogledriveController@google_sheets')->name('google_sheets')->middleware('exc_time');
 
 
 
