@@ -17,10 +17,16 @@ class RiderController extends Controller
     public function index()
     {
         if (Auth::user()->hasRole('Admin')) {
-            return Rider::paginate(1000);
+            $riders =  Rider::with('country_')->paginate(1000);
         } else {
-            return Rider::where('country_id', Auth::user()->country_id)->paginate(1000);
+            $riders =  Rider::with('country_')->where('country_id', Auth::user()->country_id)->paginate(1000);
         }
+        // return $riders;
+        $riders->transform(function($rider) {
+            $rider->country = ($rider->country_) ? $rider->country_->country_name : '';
+            return $rider;
+        });
+        return $riders;
     }
 
     /**
@@ -88,7 +94,7 @@ class RiderController extends Controller
         //     'form.email' => 'required|email',
         //     'form.phone' => 'required|numeric',
         // ]);
-        // return $request->all();
+        return $request->all();
         $user = Rider::find($id);
         $user->name = $request->name;
         $user->email = $request->email;

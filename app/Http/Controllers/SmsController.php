@@ -34,14 +34,14 @@ class SmsController extends Controller
              }
             //  dd($phone);
             if ($status == 'Returns') {
-                $sms = 'Dear ' . $shipment['client_name'] . ' we made an attempt to deliver your parcel for ' .  $shipment['client_email'] . ' but the delivery was not successful. We would like to make another delivery attempt. Kindly call or text us 0799870144/0799869844 or text 0778301465 to schedule for delivery ' .
+                $sms = 'Dear ' . $shipment['client_name'] . ', we made an attempt to deliver your parcel for ' .  $shipment['client_email'] . ' but the delivery was not successful. We would like to make another delivery attempt. Kindly call or text us 0799870144/0799869844 or text 0778301465 to schedule for delivery ' .
                     ' regards. ';
             } elseif ($status == 'Not picking') {
-                $sms = 'Dear ' . $shipment['client_name'] . ' we have received your parcel for ' .  $shipment['client_email'] . ' that you ordered online. Kindly call 0799870144/0799869844 to let us know when to make the delivery' . "\n" .
+                $sms = 'Dear ' . $shipment['client_name'] . ', we have received your parcel for ' .  $shipment['client_email'] . ' that you ordered online. Kindly call 0799870144/0799869844 to let us know when to make the delivery' . "\n" .
                     ' regards. ' . "\n" . ' ';
             } else {
                 $message = $request->message;
-                $sms = 'Dear ' . $shipment['client_name'] . '. ' . $message;
+                $sms = 'Dear ' . $shipment['client_name'] . ', ' . $message;
             }
 
             $africas_talking = new Sms();

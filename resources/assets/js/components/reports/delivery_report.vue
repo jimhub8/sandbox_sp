@@ -108,7 +108,7 @@ export default {
             delivery_data: [],
             order_data: [],
             json_fields: {
-                'Order Id': 'order_id',
+                'Order Id': 'bar_code',
                 'Sender Name': 'sender_name',
                 'Sender Email': 'sender_email',
                 'Sender Phone': 'sender_phone',

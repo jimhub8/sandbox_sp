@@ -142,8 +142,8 @@
                         <v-alert slot="no-results" :value="true" color="error" icon="warning">
                             Your search for "{{ search }}" found no results.
                         </v-alert>
-                         
-                             
+
+
                         </template>
                     </v-data-table>
                     <v-btn color="primary" raised style="float: right;" @click="UpdateShipmentStatus">Update Status</v-btn>
@@ -266,7 +266,7 @@ export default {
                 },
             ],
             json_fields: {
-                'Order Id': 'order_id',
+                'Order Id': 'bar_code',
                 'Sender Name': 'sender_name',
                 'Sender Email': 'sender_email',
                 'Sender Phone': 'sender_phone',

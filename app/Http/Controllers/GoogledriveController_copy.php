@@ -51,7 +51,7 @@ class GoogledriveController_copy extends Controller
         foreach ($records as $key => $value) {
             $newarray[] =  $value;
         }
-        dd($newarray);
+        // dd($newarray);
         $this->check_order($newarray);
 
         // $order_arr = [];
@@ -105,7 +105,8 @@ class GoogledriveController_copy extends Controller
                 $shipment->save();
             }
         }
-        dd($order_arr);
+        // dd($order_arr);
+        return $order_arr;
     }
 
     public function google_s()
@@ -184,6 +185,7 @@ class GoogledriveController_copy extends Controller
 
     public function google_sheets()
     {
+        dd('order_arr');
         $path = public_path('google/googleserviceworker.json');
         // dd($path);
         putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $path);

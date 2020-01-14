@@ -20,7 +20,14 @@ class ClientController extends Controller
      */
     public function index()
     {
-        return Client::all();
+        $clients = Client::all();
+
+        // return $riders;
+        $clients->transform(function($client) {
+            $client->country = ($client->country_) ? $client->country_->country_name : '';
+            return $client;
+        });
+        return $clients;
     }
 
     public function token_f()

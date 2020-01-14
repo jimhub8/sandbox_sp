@@ -31,6 +31,7 @@ class UserController extends Controller
             // dd($user);
             // $country_name = Country::find($user->country_id);
             // $user->branch = ($user->branch) ? $user->branch->branch_name : null;
+            $user->country = ($user->country_) ? $user->country_->country_name : '';
             $user->country_name = ($user->country) ? $user->country : 'null';
             $user->status = 'active';
             return $user;

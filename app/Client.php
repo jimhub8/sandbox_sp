@@ -62,4 +62,9 @@ class Client extends Authenticatable
     {
         return true;
     }
+
+    public function country_()
+    {
+        return $this->belongsTo('App\Country', 'country_id');
+    }
 }

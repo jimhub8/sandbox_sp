@@ -146,10 +146,10 @@ export default {
                 //     text: "Branch",
                 //     value: "branch"
                 // },
-                // {
-                //     text: "Country",
-                //     value: "country"
-                // },
+                {
+                    text: "Country",
+                    value: "country"
+                },
                 {
                     text: "Status",
                     value: "status"
