@@ -18,7 +18,8 @@ use Illuminate\Http\Request;
 //  });
 
 
-
+Route::get('/passwordExpiration','Auth\PwdExpirationController@showPasswordExpirationForm');
+Route::post('/passwordExpiration','Auth\PwdExpirationController@postPasswordExpiration')->name('passwordExpiration');
 // API
 Route::get('/apilogin', function () {
     $query = http_build_query([

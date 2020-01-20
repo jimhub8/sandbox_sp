@@ -14,6 +14,8 @@ use App\Branch;
 use App\Client as AppClient;
 use App\Country;
 use App\models\Rider;
+use App\PasswordSecurity;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 
 class UserController extends Controller
@@ -83,6 +85,11 @@ class UserController extends Controller
             $create_user->notify(new SignupActivate($create_user, $password));
             $this->user_api($user);
         }
+        $passwordSecurity = PasswordSecurity::create([
+            'user_id' => $user->id,
+            'password_expiry_days' => 1,
+            'password_updated_at' => Carbon::now(),
+        ]);
         // $user->splice('password_hash');
         // return $user->makeHidden('password_hash')->toArray();
     }

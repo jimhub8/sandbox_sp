@@ -75,7 +75,11 @@ class User extends Authenticatable
 	{
 		return $this->hasMany('App\ShipmentStatus', 'user_id');
 	}
-
+    public function passwordSecurity()
+    {
+        return $this->hasOne('App\PasswordSecurity');
+    }
+    
     /**
  * A user can have many messages
  *
