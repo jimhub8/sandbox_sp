@@ -46,4 +46,15 @@ export default {
     updateDeletedUsers(state, payload) {
         state.deleted_users = payload
     },
+
+
+    updateLeaveList(state, payload) {
+        state.leaves = payload
+    },
+    updateLeaveTypeList(state, payload) {
+        state.leaves_type = payload
+    },
+    updateExpensesList(state, payload) {
+        state.expenses = payload
+    },
 }

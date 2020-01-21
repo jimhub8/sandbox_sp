@@ -453,3 +453,13 @@ Route::group(['middleware' => ['auth:clients']], function () {
     Route::get('/client', 'ClientController@client')->name('client');
     // Route::get('/client', 'ClientController@client')->name('client');
 });
+
+
+
+Route::group(['middleware' => ['authcheck']], function () {
+    Route::get('/hr', 'Hr\HomeController@hr')->name('hr');
+
+    Route::resource('leaves', 'Hr\LeaveController');
+    Route::resource('leave_type', 'Hr\LeaveTypeController');
+    Route::resource('expense', 'Hr\ExpenseController');
+});

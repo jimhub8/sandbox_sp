@@ -15,12 +15,14 @@ export default {
         console.log(payload);
 
         var model = payload.model
-        var update = payload.update
+        var update = payload.update_list
         context.commit('loading', true)
         axios.get(model).then((response) => {
-            // context.commit('loading', false)
+            // console.log(update);
+            context.commit('loading', false)
             context.commit(update, response.data)
         }).catch((error) => {
+            // console.log(error);
             context.commit('loading', false)
             if (error.response.status === 500) {
                 eventBus.$emit('errorEvent', error.response.statusText)

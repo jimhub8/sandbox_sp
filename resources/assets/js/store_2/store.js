@@ -16,6 +16,10 @@ export default {
         clientSearch: [],
         deleted_clients: [],
         deleted_users: [],
+
+        leaves: [],
+        leaves_type: [],
+        expenses: [],
     },
     getters,
     mutations,

@@ -11,6 +11,8 @@ window.Vue = require('vue');
 import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
 import Vuex from 'vuex'
+
+
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@fortawesome/fontawesome-free/css/all.css' // Ensure you are using css-loader
 import 'vuetify/dist/vuetify.min.css'
@@ -19,6 +21,12 @@ import locale from 'element-ui/lib/locale/lang/en'
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI, { locale });
 import StoreData from './store_2/store'
+import VueGoodTablePlugin from 'vue-good-table';
+
+// import the styles
+import 'vue-good-table/dist/vue-good-table.css'
+
+Vue.use(VueGoodTablePlugin);
 
 window.eventBus = new Vue()
 Vue.use(Vuetify)
@@ -31,11 +39,16 @@ const store = new Vuex.Store(StoreData)
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-import myHeader from './components/include/Header.vue';
+import myHeader from './components_2/include/Header.vue';
 import myUsers from './components/users/User'
+import myLeave from './components_2/leave'
+import myLeaveType from './components_2/leave/leave_type'
+import myExpenses from './components_2/expenses'
 
 const routes = [
-    // {path: '/', component: dashboard },
+    {path: '/leave', component: myLeave },
+    {path: '/leave_type', component: myLeaveType },
+    {path: '/expenses', component: myExpenses },
 ]
 const router = new VueRouter({
     // mode: 'history',
@@ -47,6 +60,6 @@ const app = new Vue({
     store,
     router,
     components: {
-        myHeader, myUsers
+        myHeader, myUsers, myLeave, myLeaveType, myExpenses
     },
 });

@@ -50,8 +50,8 @@ class PwdExpirationController extends Controller
             // dd('test');
 
         //Change Password
-        $user->password = bcrypt('password');
-        // $user->password = bcrypt($request->get('new-password'));
+        // $user->password = bcrypt('password');
+        $user->password = bcrypt($request->get('new-password'));
         $user->save();
 
         //Update password updation timestamp

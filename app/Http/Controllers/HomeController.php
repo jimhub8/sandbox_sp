@@ -12,12 +12,22 @@ use App\User;
 use App\Company;
 use Spatie\Permission\Models\Permission;
 use App\Country;
+use App\PasswordSecurity;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
     public function courier()
     {
+        $user = Auth::user();
+        if (!$user->passwordSecurity) {
+            $passwordSecurity = PasswordSecurity::create([
+                'user_id' => $user->id,
+                'password_expiry_days' => 1,
+                'password_updated_at' => Carbon::now(),
+            ]);
+        }
         $permissions = [];
         foreach (Permission::all() as $permission) {
             if (Auth::user()->can($permission->name)) {
@@ -33,7 +43,7 @@ class HomeController extends Controller
         // $users->transform(function ($user, $key) {
         //     $country = Country::find($user->country_id);
         //     $user->country_name = $country->name;
-		// 	return $user;
+        // 	return $user;
         // });
         // dd(json_decode(json_encode((Auth::user()), false)));
         $auth_user = array_prepend($user->toArray(), $permissions, 'can');
@@ -103,7 +113,6 @@ class HomeController extends Controller
                 'data' => $attachment,
                 'errors' => []
             ), 200);
-
         } catch (\Exception $e) {
 
             return response()->json(array(
@@ -111,7 +120,6 @@ class HomeController extends Controller
                 'data' => 'Server error happened',
                 'errors' => $e->getMessage()
             ), 200);
-
         }
     }
 
@@ -138,7 +146,6 @@ class HomeController extends Controller
                 'data' => $attachments,
                 'errors' => []
             ), 200);
-
         } catch (\Exception $e) {
 
             return response()->json(array(
@@ -146,7 +153,6 @@ class HomeController extends Controller
                 'data' => 'Server error happened',
                 'errors' => $e->getMessage()
             ), 200);
-
         }
     }
 
@@ -171,7 +177,6 @@ class HomeController extends Controller
                 'data' => [],
                 'errors' => []
             ), 200);
-
         } catch (\Exception $e) {
             return response()->json(array(
                 'success' => false,
@@ -228,7 +233,6 @@ class HomeController extends Controller
                 'data' => $categories,
                 'errors' => []
             ), 200);
-
         } catch (\Exception $e) {
 
             return response()->json(array(
@@ -236,7 +240,6 @@ class HomeController extends Controller
                 'data' => 'Server error happened',
                 'errors' => $e->getMessage()
             ), 200);
-
         }
     }
 
@@ -273,7 +276,6 @@ class HomeController extends Controller
     public function upload(Request $request)
     {
         return Props::get();
-
     }
 
     public function categories()

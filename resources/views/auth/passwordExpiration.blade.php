@@ -5,15 +5,19 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
+                <div class="card-header">{{ __('Reset Pasword') }}</div>
                 @if (session('error'))
-                <div class="alert alert-danger">
-                    {{ session('error') }}
+                <div class="alert alert-danger text-center">
+                    <p>{{ session('error') }}</p>
                 </div>
 
                 @elseif (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
+                <div class="alert alert-success text-center">
+                    <p>{{ session('success') }}</p>
+                </div>
+                @elseif (session('info'))
+                <div class="alert alert-info text-center">
+                    <p>{{ session('info') }}</p>
                 </div>
                 @endif
                 <div class="card-body">

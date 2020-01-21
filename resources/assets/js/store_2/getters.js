@@ -34,4 +34,15 @@ export default {
     deleted_clients(state) {
         return state.deleted_clients
     },
+
+
+    leaves(state) {
+        return state.leaves
+    },
+    leaves_type(state) {
+        return state.leaves_type
+    },
+    expenses(state) {
+        return state.expenses
+    },
 }

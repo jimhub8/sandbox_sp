@@ -133,7 +133,7 @@ class ReportController extends Controller
         if ($status) {
             $shipments = $shipments->where('status', $status);
         }
-        $shipments->latest()->take(20000)->get();
+        $shipments = $shipments->latest()->take(20000)->get();
         $shipments->transform(function($shipment) {
             $shipment->order_id = $shipment->bar_code;
             return $shipment;

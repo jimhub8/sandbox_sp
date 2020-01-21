@@ -101,17 +101,17 @@ class LoginController extends Controller
         // dd($user->passwordSecurity);
         if ($user->passwordSecurity) {
 
-        $request->session()->forget('password_expired_id');
+            $request->session()->forget('password_expired_id');
 
-        $password_updated_at = $user->passwordSecurity->password_updated_at;
-        $password_expiry_days = $user->passwordSecurity->password_expiry_days;
-        $password_expiry_at = Carbon::parse($password_updated_at)->addDays($password_expiry_days);
-        if ($password_expiry_at->lessThan(Carbon::now())) {
-            $request->session()->put('password_expired_id', $user->id);
-            auth()->logout();
-            return redirect('/passwordExpiration')->with('message', "Your Password is expired, You need to change your password.");
-        }
-    } else {
+            $password_updated_at = $user->passwordSecurity->password_updated_at;
+            $password_expiry_days = $user->passwordSecurity->password_expiry_days;
+            $password_expiry_at = Carbon::parse($password_updated_at)->addDays($password_expiry_days);
+            if ($password_expiry_at->lessThan(Carbon::now())) {
+                $request->session()->put('password_expired_id', $user->id);
+                auth()->logout();
+                return redirect('/passwordExpiration')->with("info", "Your Password has expired, Please change your password. The new password will expire in 24 hours");
+            }
+        } else {
             $passwordSecurity = PasswordSecurity::create([
                 'user_id' => $user->id,
                 'password_expiry_days' => 1,
