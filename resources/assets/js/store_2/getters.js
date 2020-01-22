@@ -45,4 +45,7 @@ export default {
     expenses(state) {
         return state.expenses
     },
+    attendances(state) {
+        return state.attendances
+    },
 }

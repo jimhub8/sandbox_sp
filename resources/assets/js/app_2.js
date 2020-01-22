@@ -44,11 +44,13 @@ import myUsers from './components/users/User'
 import myLeave from './components_2/leave'
 import myLeaveType from './components_2/leave/leave_type'
 import myExpenses from './components_2/expenses'
+import myAttendance from './components_2/attendance'
 
 const routes = [
     {path: '/leave', component: myLeave },
     {path: '/leave_type', component: myLeaveType },
     {path: '/expenses', component: myExpenses },
+    {path: '/attendance', component: myAttendance },
 ]
 const router = new VueRouter({
     // mode: 'history',
@@ -60,6 +62,6 @@ const app = new Vue({
     store,
     router,
     components: {
-        myHeader, myUsers, myLeave, myLeaveType, myExpenses
+        myHeader, myUsers, myLeave, myLeaveType, myExpenses, myAttendance
     },
 });

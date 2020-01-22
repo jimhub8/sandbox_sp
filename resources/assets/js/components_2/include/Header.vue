@@ -21,7 +21,7 @@
                         <!-- <v-card style="background: url('storage/ps/landS.jpg')"> -->
                         <router-link to="/" class="v-list__tile v-list__tile--link" v-if="!user.is_client">
                             <div class="v-list__tile__action">
-                                <i aria-hidden="true" class="icon material-icons">dashboard</i>
+                                <v-icon>dashboard</v-icon>
                             </div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">Dashboard</div>
@@ -29,15 +29,20 @@
                         </router-link>
                         <router-link to="/expenses" class="v-list__tile v-list__tile--link" v-if="!user.is_client">
                             <div class="v-list__tile__action">
-                                <i aria-hidden="true" class="icon material-icons">dashboard</i>
+                                <v-icon>explicit</v-icon>
                             </div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">Expenses</div>
                             </div>
                         </router-link>
-                        <!--  -->
-                        <!--  -->
-                        <!--  -->
+                        <router-link to="/attendance" class="v-list__tile v-list__tile--link" v-if="!user.is_client">
+                            <div class="v-list__tile__action">
+                                <v-icon>picture_in_picture_alt</v-icon>
+                            </div>
+                            <div class="v-list__tile__content">
+                                <div class="v-list__tile__title">Attendance</div>
+                            </div>
+                        </router-link>
                         <v-list-group prepend-icon="book" v-if="user.can['outscan', 'inscan']">
                             <v-list-tile slot="activator">
                                 <v-list-tile-title>Leave</v-list-tile-title>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Branch;
 use App\Cancelled;
+use App\models\Apimft;
 use App\models\Rider;
 use App\Notifications\ShipmentNoty;
 use App\Product;
@@ -30,7 +31,14 @@ class ShipmentController extends Controller
 
     public function token_f()
     {
-        return session()->get('token.access_token');
+        // return session()->get('token.access_token');
+        $token = Apimft::where('user_id', Auth::id())->first();
+        if ($token) {
+            return $token->access_token;
+        }else {
+            abort(401);
+        }
+
     }
     public function getShipments()
     {
@@ -73,7 +81,7 @@ class ShipmentController extends Controller
             // ->orWhere('status', null)
             ->orderBy('created_at')
             ->get('id')->toArray();
-            // dd(DB::getQueryLog()); // Show results of log
+        // dd(DB::getQueryLog()); // Show results of log
 
         $id_ref = array_flatten($refused);
         $id_can = array_flatten($cancelled);
@@ -133,7 +141,8 @@ class ShipmentController extends Controller
         $user = User::find($request->client);
         if ($request->file('shipment')) {
             $path = $request->file('shipment')->getRealPath();
-            $data = Excel::load($path, function ($reader) { })->get();
+            $data = Excel::load($path, function ($reader) {
+            })->get();
 
             if (!empty($data) && $data->count()) {
                 foreach ($data->toArray() as $row) {
@@ -386,6 +395,7 @@ class ShipmentController extends Controller
      */
     public function destroy($id)
     {
+        $token = $this->token_f();
         $shipment = Shipment::find($id);
         try {
             $client = new Client;
@@ -393,7 +403,7 @@ class ShipmentController extends Controller
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
             ]);
             Shipment::find($id)->delete();
@@ -434,14 +444,15 @@ class ShipmentController extends Controller
 
     public function update_status($data)
     {
-        // dd($request);
+        // dd($this->token_f());
+        $token = $this->token_f();
         try {
             $client = new Client;
             $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
                 'body' => json_encode([
                     'data' => $data,
@@ -450,6 +461,7 @@ class ShipmentController extends Controller
             // $response = $http->get(env('API_URL').'/api/getUsers');
             return $response = $request->getBody()->getContents();
         } catch (\Exception $e) {
+            // dd($e);
             \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
             // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
             // return $e->getMessage();
@@ -600,7 +612,7 @@ class ShipmentController extends Controller
             // ship_model::where('product_code', $product_code)->increment('count');
 
             // dd($ship_model);
-            return ;
+            return;
         }
     }
 

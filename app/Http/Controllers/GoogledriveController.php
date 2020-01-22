@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Client as AppClient;
 use App\Jobs\ShipmentJob;
+use App\models\Apimft;
 use App\Shipment;
 use App\Status;
 use Google\Spreadsheet\DefaultServiceRequest;
@@ -20,7 +21,14 @@ class GoogledriveController extends Controller
 {
     public function token_f()
     {
-        return session()->get('token.access_token');
+        // return session()->get('token.access_token');
+
+        $token = Apimft::where('user_id', Auth::id())->first();
+        if ($token) {
+            return $token->access_token;
+        }else {
+            abort(401);
+        }
     }
 
     public function google_sheets(Request $request)
@@ -163,13 +171,14 @@ class GoogledriveController extends Controller
 
     public function update_status($data)
     {
+        $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/googleSheet', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
                 'body' => json_encode([
                     'data' => $data,

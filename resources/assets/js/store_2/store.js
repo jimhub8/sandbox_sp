@@ -20,6 +20,7 @@ export default {
         leaves: [],
         leaves_type: [],
         expenses: [],
+        attendances: [],
     },
     getters,
     mutations,

@@ -26,7 +26,7 @@
                                 <span>Refresh</span>
                             </v-tooltip>
                         </v-flex>
-                        <v-flex sm1>
+                        <v-flex sm2>
                             <h3 style="margin-left: 30px !important;margin-top: 10px;">Expenses</h3>
                         </v-flex>
                         <v-flex offset-sm8 sm2>

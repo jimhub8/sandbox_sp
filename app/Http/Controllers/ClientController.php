@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Client;
+use App\models\Apimft;
 use App\models\Country;
 use GuzzleHttp\Client as GuzzleHttpClient;
 use Illuminate\Http\Request;
@@ -32,7 +33,13 @@ class ClientController extends Controller
 
     public function token_f()
     {
-        return session()->get('token.access_token');
+        // return session()->get('token.access_token');
+        $token = Apimft::where('user_id', Auth::id())->first();
+        if ($token) {
+            return $token->access_token;
+        }else {
+            abort(401);
+        }
     }
     /**
      * Store a newly created resource in storage.
@@ -79,7 +86,7 @@ class ClientController extends Controller
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -195,7 +202,7 @@ class ClientController extends Controller
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -217,13 +224,14 @@ class ClientController extends Controller
 
     public function clientupdate_api($user)
     {
+        $token = $this->token_f();
         try {
             $client = new GuzzleHttpClient();
             $request = $client->request('PATCH', env('API_URL') . '/api/clients', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
                 'body' => json_encode([
                     'data' => $user,

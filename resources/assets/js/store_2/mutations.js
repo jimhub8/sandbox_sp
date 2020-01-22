@@ -57,4 +57,7 @@ export default {
     updateExpensesList(state, payload) {
         state.expenses = payload
     },
+    updateAttendancesList(state, payload) {
+        state.attendances = payload
+    },
 }
