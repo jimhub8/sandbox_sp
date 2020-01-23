@@ -264,7 +264,7 @@ class UserController extends Controller
         ]);
         $user = User::find(Auth::id());
         $password_hash = Hash::make($request->password);
-        dd($password_hash);
+        // dd($password_hash);
         $user->password_hash = $password_hash;
         $this->reset_password($user);
         $user = User::find(Auth::id());

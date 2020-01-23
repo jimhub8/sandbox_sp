@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog" persistent max-width="500px">
         <v-card>
             <v-card-title>
-                <span class="headline text-center" style="margin: auto;">Create Expense</span>
+                <span class="headline text-center" style="margin: auto;">Edit Requisition</span>
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>

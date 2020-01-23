@@ -23,6 +23,7 @@ class CreateExpensesTable extends Migration
             $table->integer('qty')->nullable();
             $table->date('purchase_date');
             $table->text('remarks')->nullable();
+            $table->boolean('status')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

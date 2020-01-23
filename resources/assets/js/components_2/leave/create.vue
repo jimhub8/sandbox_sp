@@ -37,6 +37,11 @@
                                     <el-input type="textarea" placeholder="Please input" v-model="form.reason" maxlength="500" show-word-limit>
                                     </el-input>
                                 </div>
+                                <div>
+                                    <label for="">Work alocation</label>
+                                    <el-input type="textarea" placeholder="Please input" v-model="form.alocation">
+                                    </el-input>
+                                </div>
                             </v-card-text>
                         </v-flex>
                     </v-layout>

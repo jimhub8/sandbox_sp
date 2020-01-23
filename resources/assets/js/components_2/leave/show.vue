@@ -29,12 +29,21 @@
                                 <li class="list-group-item"><b>Remark</b> <span style="float: right">{{ form.remark }}</span></li>
                                 <li class="list-group-item"><b>Status</b> <span style="float: right">{{ form.status }}</span></li>
                             </ul>
+
+
+                                <div v-show="disapproved">
+                                    <label for="">Reason</label>
+                                    <el-input type="textarea" placeholder="Please input" v-model="form.disapprove_reason" maxlength="500" show-word-limit>
+                                    </el-input>
+                                </div>
                         </v-flex>
                     </v-layout>
                 </v-container>
             </v-card-text>
             <v-card-actions>
-
+                <v-btn flat v-show="disapproved" color="primary">Submit</v-btn>
+                <v-btn flat @click="close" color="primary">Close</v-btn>
+                <v-spacer></v-spacer>
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
                         <v-btn v-on="on" icon class="mx-0" @click="approve" slot="activator">
@@ -43,7 +52,6 @@
                     </template>
                     <span>Approve</span>
                 </v-tooltip>
-                <v-spacer></v-spacer>
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
                         <v-btn v-on="on" icon class="mx-0" @click="Disapprove" slot="activator">
@@ -62,6 +70,7 @@
 export default {
     data: () => ({
         dialog: false,
+        disapproved: false,
         loading: false,
         form: {},
         payload: {
@@ -80,10 +89,10 @@ export default {
             this.dialog = false;
         },
         Disapprove(){
-
+            this.disapproved = true
         },
         approve(){
-
+            this.disapproved = false
         }
     },
 };

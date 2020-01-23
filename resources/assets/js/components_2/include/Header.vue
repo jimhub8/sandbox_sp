@@ -32,7 +32,7 @@
                                 <v-icon>explicit</v-icon>
                             </div>
                             <div class="v-list__tile__content">
-                                <div class="v-list__tile__title">Expenses</div>
+                                <div class="v-list__tile__title">Requisition</div>
                             </div>
                         </router-link>
                         <router-link to="/attendance" class="v-list__tile v-list__tile--link" v-if="!user.is_client">

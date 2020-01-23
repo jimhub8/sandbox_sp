@@ -6,7 +6,7 @@
                 <v-card style="padding: 20px 0;">
                     <el-breadcrumb separator-class="el-icon-arrow-right">
                         <el-breadcrumb-item :to="{ path: '/' }">Dashboard</el-breadcrumb-item>
-                        <el-breadcrumb-item>Expenses</el-breadcrumb-item>
+                        <el-breadcrumb-item>Requisition</el-breadcrumb-item>
                     </el-breadcrumb>
                 </v-card>
             </v-flex>
@@ -27,10 +27,10 @@
                             </v-tooltip>
                         </v-flex>
                         <v-flex sm2>
-                            <h3 style="margin-left: 30px !important;margin-top: 10px;">Expenses</h3>
+                            <h3 style="margin-left: 30px !important;margin-top: 10px;">Requisition</h3>
                         </v-flex>
                         <v-flex offset-sm8 sm2>
-                            <v-btn color="info" @click="openCreate" text>Create Expense</v-btn>
+                            <v-btn color="info" @click="openCreate" text>Create Requisition</v-btn>
                         </v-flex>
                     </v-layout>
                 </v-card>
@@ -54,6 +54,14 @@
                                     </v-btn>
                                 </template>
                                 <span>Edit {{ props.row.name }}</span>
+                            </v-tooltip>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn v-on="on" icon class="mx-0" @click="openShow(props.row)" slot="activator">
+                                        <v-icon small color="blue darken-2">visibility</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>View</span>
                             </v-tooltip>
                             <v-tooltip bottom>
                                 <template v-slot:activator="{ on }">
@@ -95,17 +103,19 @@
     </v-container>
     <Create></Create>
     <Edit></Edit>
+    <Show></Show>
 </v-content>
 </template>
 
 <script>
 import Create from "./create";
 import Edit from "./edit";
+import Show from "./show";
 
 export default {
     props: ['user'],
     components: {
-        Create, Edit
+        Create, Edit, Show
     },
     data() {
         return {
@@ -167,6 +177,9 @@ export default {
         },
         openEdit(data) {
             eventBus.$emit("openEditExpenseType", data);
+        },
+        openShow(data) {
+            eventBus.$emit("openShowExpense", data);
         },
 
         confirm_delete(item) {
