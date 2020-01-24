@@ -18,6 +18,8 @@ class DispatchSheetController extends Controller
     public function search_order($search)
     {
         // dd($search);
+
+        $search = str_replace(' ', '', $search);
         return Shipment::where('bar_code', 'LIKE', "%{$search}%")->first();
     }
 }

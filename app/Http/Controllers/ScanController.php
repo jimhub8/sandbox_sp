@@ -2,33 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\models\Apimft;
 use App\Shipment;
 use App\ShipmentStatus;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Auth;
+
 // use Illuminate\Support\Carbon;
 
 class ScanController extends Controller
 {
     public function token_f()
     {
-        // return session()->get('token.access_token');
-
-        $token = Apimft::where('user_id', Auth::id())->first();
-        if ($token) {
-            return $token->access_token;
-        }else {
-            abort(401);
-        }
+        return session()->get('token.access_token');
     }
     // Out Scan
     public function barcodeUpdate(Request $request, Shipment $shipment, $bar_code = null)
     {
         // return $request->all();
         $bar_code = str_replace("-", "", $request->bar_code_out);
+        $bar_code = str_replace("  ", "", $request->bar_code_out);
         $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->take(5)->get();
         // $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->first();
         if (count($barcode) > 0) {
@@ -41,6 +35,7 @@ class ScanController extends Controller
     public function barcodeIn(Request $request, Shipment $shipment, $bar_code_in = null)
     {
         $bar_code = str_replace("-", "", $request->bar_code_in);
+        $bar_code = str_replace("  ", "", $request->bar_code_in);
         // dd($barcode);
         $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->take(5)->get();
         if ($barcode) {
@@ -51,7 +46,6 @@ class ScanController extends Controller
     }
     public function update_status($data)
     {
-        $token = $this->token_f();
         $url = env('API_URL') . '/api/orderScan';
         try {
             $client = new Client;
@@ -59,7 +53,7 @@ class ScanController extends Controller
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token,
+                    'Authorization' => 'Bearer ' . $this->token_f(),
                 ],
                 'body' => json_encode([
                     'data' => $data,
@@ -80,7 +74,6 @@ class ScanController extends Controller
 
     public function statusUpdate(Request $request)
     {
-        $token = $this->token_f();
         // return $request->all();
         $this->update_status($request->all());
         // $request->all()
@@ -111,7 +104,7 @@ class ScanController extends Controller
                     'headers' => [
                         'Content-type' => 'application/json',
                         'Accept' => 'application/json',
-                        'Authorization' => 'Bearer ' . $token,
+                        'Authorization' => 'Bearer ' . $this->token_f(),
                     ],
                     'body' => json_encode([
                         'data' => $request->all(),

@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Storage;
 use App\Branch;
 use App\Client as AppClient;
 use App\Country;
-use App\models\Apimft;
 use App\models\Rider;
 use App\PasswordSecurity;
 use Carbon\Carbon;
@@ -87,10 +86,11 @@ class UserController extends Controller
             $this->user_api($user);
         }
         $passwordSecurity = PasswordSecurity::create([
-            'user_id' => $user->id,
+            'user_id' => $user['id'],
             'password_expiry_days' => 1,
             'password_updated_at' => Carbon::now(),
         ]);
+        return;
         // $user->splice('password_hash');
         // return $user->makeHidden('password_hash')->toArray();
     }
@@ -264,7 +264,7 @@ class UserController extends Controller
         ]);
         $user = User::find(Auth::id());
         $password_hash = Hash::make($request->password);
-        // dd($password_hash);
+        dd($password_hash);
         $user->password_hash = $password_hash;
         $this->reset_password($user);
         $user = User::find(Auth::id());
@@ -318,14 +318,13 @@ class UserController extends Controller
 
     public function user_api($user)
     {
-        $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/user', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token,
+                    'Authorization' => 'Bearer ' . $this->token_f(),
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -347,14 +346,13 @@ class UserController extends Controller
 
     public function client_api($user)
     {
-        $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/clients', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token,
+                    'Authorization' => 'Bearer ' . $this->token_f(),
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -376,14 +374,13 @@ class UserController extends Controller
 
     public function clientupdate_api($user)
     {
-        $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request('PATCH', env('API_URL') . '/api/clients', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token,
+                    'Authorization' => 'Bearer ' . $this->token_f(),
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -405,14 +402,13 @@ class UserController extends Controller
 
     public function userupdate_api($user)
     {
-        $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/update_user', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token,
+                    'Authorization' => 'Bearer ' . $this->token_f(),
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -434,14 +430,13 @@ class UserController extends Controller
 
     public function reset_password($user)
     {
-        $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/user_password', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token,
+                    'Authorization' => 'Bearer ' . $this->token_f(),
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -464,14 +459,13 @@ class UserController extends Controller
 
     public function api_delete($user)
     {
-        $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request("DELETE", env('API_URL') . '/api/user', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token,
+                    'Authorization' => 'Bearer ' . $this->token_f(),
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -493,13 +487,6 @@ class UserController extends Controller
 
     public function token_f()
     {
-        // return session()->get('token.access_token');
-
-        $token = Apimft::where('user_id', Auth::id())->first();
-        if ($token) {
-            return $token->access_token;
-        }else {
-            abort(401);
-        }
+        return session()->get('token.access_token');
     }
 }

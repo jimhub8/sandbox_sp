@@ -572,6 +572,7 @@ class FilterController extends Controller
     {
         // return $request->all();
         $search = $request->search;
+        
         $shipments = Shipment::where('bar_code', 'LIKE', "%{$search}%")
             ->orwhere('client_phone', 'LIKE', "%{$search}%")
             ->orwhere('client_email', 'LIKE', "%{$search}%")

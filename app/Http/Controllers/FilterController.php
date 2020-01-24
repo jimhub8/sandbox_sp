@@ -313,6 +313,8 @@ class FilterController extends Controller
         if (!$search) {
             return;
         }
+        $search = str_replace(' ', '', $search);
+
         if (Auth::user()->hasRole('Admin')) {
             return Shipment::withoutGlobalScope(ShipmentScope::class)->where('bar_code', 'LIKE', "%{$search}%")
                 ->orwhere('client_phone', 'LIKE', "%{$search}%")
