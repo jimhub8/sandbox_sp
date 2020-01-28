@@ -22,7 +22,7 @@ class ScanController extends Controller
     {
         // return $request->all();
         $bar_code = str_replace("-", "", $request->bar_code_out);
-        $bar_code = str_replace("  ", "", $request->bar_code_out);
+        $bar_code = trim($request->bar_code_out);
         $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->take(5)->get();
         // $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->first();
         if (count($barcode) > 0) {
@@ -35,7 +35,7 @@ class ScanController extends Controller
     public function barcodeIn(Request $request, Shipment $shipment, $bar_code_in = null)
     {
         $bar_code = str_replace("-", "", $request->bar_code_in);
-        $bar_code = str_replace("  ", "", $request->bar_code_in);
+        $bar_code = trim($request->bar_code_in);
         // dd($barcode);
         $barcode = Shipment::where('bar_code', 'LIKE', "%{$bar_code}%")->take(5)->get();
         if ($barcode) {

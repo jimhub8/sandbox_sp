@@ -48,4 +48,8 @@ export default {
     attendances(state) {
         return state.attendances
     },
+
+    tasks(state) {
+        return state.tasks;
+    },
 }

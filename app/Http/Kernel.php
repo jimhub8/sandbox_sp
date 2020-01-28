@@ -62,5 +62,9 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'authcheck' => \App\Http\Middleware\CheckGuardAuth::class,
         'exc_time' => \App\Http\Middleware\MeasureResponseTime::class,
+        '2fa' => \App\Http\Middleware\Google2FAMiddleware::class,
+
+        // '2fa' => \PragmaRX\Google2FALaravel\Middleware::class,
+
     ];
 }

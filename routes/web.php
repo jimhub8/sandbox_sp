@@ -20,6 +20,10 @@ use Illuminate\Support\Facades\Auth;
 // 	\Illuminate\Support\Facades\Artisan::call('notifications:SchedueledShipment');
 //  });
 
+Route::get('/2fa/enable', 'Google2FAController@enableTwoFactor');
+Route::get('/2fa/validate', 'Auth\LoginController@getValidateToken');
+Route::get('/2fa/disable', 'Google2FAController@disableTwoFactor');
+Route::post('/2fa/validate', ['middleware' => 'throttle:5', 'uses' => 'Auth\LoginController@postValidateToken']);
 
 Route::get('/passwordExpiration', 'Auth\PwdExpirationController@showPasswordExpirationForm');
 Route::post('/passwordExpiration', 'Auth\PwdExpirationController@postPasswordExpiration')->name('passwordExpiration');
@@ -83,6 +87,7 @@ Route::get('/callback', function (Request $request) {
 
     return redirect('/courier/#/shipments');
 });
+Route::get('/home', 'HomeController@index')->name('home');
 
 
 
@@ -107,7 +112,7 @@ Route::get('/algoria', function () {
 // });
 
 Route::get('/', function () {
-    return redirect('login');
+    return redirect('courier');
 });
 Route::get('signup/activate/{token}', 'AuthController@signupActivate');
 
@@ -116,7 +121,7 @@ Route::get('/google_s', 'GoogledriveController@google_s')->name('google_s');
 
 Auth::routes();
 
-Route::group(['middleware' => ['authcheck']], function () {
+Route::group(['middleware' => ['authcheck', '2fa']], function () {
     Route::get('/testSS', function () {
         $today = Carbon::today();
         $shipments = (Shipment::whereBetween('created_at', [$today->subMonth(1), $today->addMonth(1)])->get());
@@ -139,7 +144,7 @@ Route::group(['middleware' => ['authcheck']], function () {
 
     Route::get('/logoutOther', 'UserController@logoutOther')->name('logoutOther');
     Route::post('/logOtherDevices', 'UserController@logOtherDevices')->name('logOtherDevices');
-    Route::get('/home', 'HomeController@index')->name('home');
+    // Route::any('/home', 'HomeController@index')->name('home');
     Route::get('/courier', 'HomeController@courier')->name('courier');
     // Route::get('/courier/{name}', 'HomeController@courierHome')->name('courierHome');
     Route::resource('users', 'UserController');
@@ -211,6 +216,7 @@ Route::group(['middleware' => ['authcheck']], function () {
     Route::post('UserShip', 'UserController@UserShip')->name('UserShip');
     Route::get('deletedUsers', 'UserController@deletedUsers')->name('deletedUsers');
     Route::patch('undeletedUser/{id}', 'UserController@undeletedUser')->name('undeletedUser');
+    Route::post('change_password/{id}', 'UserController@change_password')->name('change_password');
 
 
     Route::get('getUsersRole', 'RoleController@getUsersRole')->name('getUsersRole');
@@ -496,4 +502,5 @@ Route::group(['middleware' => ['authcheck']], function () {
     Route::resource('leave_type', 'Hr\LeaveTypeController');
     Route::resource('expense', 'Hr\ExpenseController');
     Route::resource('attendance', 'Hr\AttendaceController');
+    Route::resource('task', 'Hr\TaskController');
 });

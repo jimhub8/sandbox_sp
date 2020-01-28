@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ValidateSecretRequest;
 use App\PasswordSecurity;
 use App\User;
 use Carbon\Carbon;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Socialite;
+use Cache;
 
 class LoginController extends Controller
 {
@@ -96,9 +98,43 @@ class LoginController extends Controller
     //     return $credentials;
     // }
 
+    /**
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getValidateToken()
+    {
+
+        if (session('2fa:user:id')) {
+            return view('2fa/validate');
+        }
+
+        return redirect('login');
+    }
+
+    /**
+     *
+     * @param  App\Http\Requests\ValidateSecretRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function postValidateToken(ValidateSecretRequest $request)
+    {
+
+        //get user id and create cache key
+        $userId = $request->session()->pull('2fa:user:id');
+        $key    = $userId . ':' . $request->otp;
+
+        //use cache to store token to blacklist
+        Cache::add($key, true, 4);
+
+        //login and redirect user
+        Auth::loginUsingId($userId);
+
+        return redirect()->intended($this->redirectTo);
+    }
+
     public function authenticated(Request $request, $user)
     {
-        // dd($user->passwordSecurity);
         if ($user->passwordSecurity) {
 
             $request->session()->forget('password_expired_id');
@@ -119,6 +155,14 @@ class LoginController extends Controller
             ]);
         }
 
+        if ($user->google2fa_secret) {
+            Auth::logout();
+            $request->session()->put('2fa:user:id', $user->id);
+            return redirect('2fa/validate');
+        }
+        return redirect()->intended($this->redirectTo);
+        // }
+        // dd($user->passwordSecurity);
 
         return redirect()->intended($this->redirectPath());
     }

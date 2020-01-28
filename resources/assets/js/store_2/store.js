@@ -16,6 +16,7 @@ export default {
         clientSearch: [],
         deleted_clients: [],
         deleted_users: [],
+        tasks: [],
 
         leaves: [],
         leaves_type: [],

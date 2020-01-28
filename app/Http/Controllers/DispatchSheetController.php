@@ -19,7 +19,7 @@ class DispatchSheetController extends Controller
     {
         // dd($search);
 
-        $search = str_replace(' ', '', $search);
+        $search = trim($search);
         return Shipment::where('bar_code', 'LIKE', "%{$search}%")->first();
     }
 }

@@ -79,11 +79,11 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $props = Props::get();
+        return view('home');
         // return redirect('/login');
-        if (Auth::check()) {
-            return redirect('/courier');
-        }
+        // if (Auth::check()) {
+        //     return redirect('/courier');
+        // }
     }
 
     /**

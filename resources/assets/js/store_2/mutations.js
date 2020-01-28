@@ -60,4 +60,7 @@ export default {
     updateAttendancesList(state, payload) {
         state.attendances = payload
     },
+    updateTasksList(state, payload) {
+        state.tasks = payload
+    },
 }

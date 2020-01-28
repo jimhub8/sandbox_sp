@@ -264,7 +264,7 @@ class UserController extends Controller
         ]);
         $user = User::find(Auth::id());
         $password_hash = Hash::make($request->password);
-        dd($password_hash);
+        // dd($password_hash);
         $user->password_hash = $password_hash;
         $this->reset_password($user);
         $user = User::find(Auth::id());
@@ -488,5 +488,19 @@ class UserController extends Controller
     public function token_f()
     {
         return session()->get('token.access_token');
+    }
+
+    public function change_password(Request $request, $id)
+    {
+        $this->Validate($request, [
+            'password' => 'required|string|min:6',
+        ]);
+        $user = User::find($id);
+        $password_hash = Hash::make($request->password);
+        $user->password  = $password_hash;
+        // $this->reset_password($user);
+        // $user = User::find($id);
+        // $user->password = $password_hash;
+        $user->save();
     }
 }

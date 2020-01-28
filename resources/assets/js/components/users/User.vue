@@ -35,7 +35,7 @@
                         <v-spacer></v-spacer>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line></v-text-field>
                     </v-card-title>
-                    <v-data-table :headers="headers" :items="Allusers" class="elevation-1" :loading="loading" :search="search"  disable-initial-sort>
+                    <v-data-table :headers="headers" :items="Allusers" class="elevation-1" :loading="loading" :search="search" disable-initial-sort>
                         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
                         <template slot="items" slot-scope="props">
                             <td>{{ props.item.name }}</td>
@@ -44,7 +44,7 @@
                             <td class="text-xs-right">{{ props.item.phone }}</td>
                             <td class="text-xs-right">{{ props.item.city }}</td>
                             <!-- <td class="text-xs-right">{{ props.item.branch }}</td> -->
-                            <!-- <td class="text-xs-right">{{ props.item.country }}</td> -->
+                            <td class="text-xs-right">{{ props.item.country }}</td>
                             <td class="text-xs-right">{{ props.item.status }}</td>
                             <td class="text-xs-right">{{ props.item.created_at }}</td>
                             <td class="justify-center layout px-0">
@@ -70,6 +70,15 @@
                                 <v-btn icon class="mx-0" @click="deleteItem(props.item)" slot="activator" v-if="user.can['edit users']">
                                     <v-icon small color="pink darken-2">delete</v-icon>
                                 </v-btn>
+
+                                <v-tooltip bottom>
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn v-on="on" icon class="mx-0" @click="openPassword(props.item.id)" slot="activator">
+                                            <v-icon small color="blue darken-2">lock</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Change password</span>
+                                </v-tooltip>
                                 <!-- <span>Delete</span> -->
                                 <!-- </v-tooltip> -->
                             </td>
@@ -95,6 +104,7 @@
     <PermUser @closeRequest="close" :openPermRequest="permEdit" :form="editedItem"></PermUser>
     <UserProfile @closeRequest="close" :openShowRequest="dispShow" :user="editedItem" :AllShips="AllShips"></UserProfile>
     <DeletedUsers></DeletedUsers>
+    <myPassword></myPassword>
 </div>
 </template>
 
@@ -104,6 +114,8 @@ import PermUser from './Permission.vue'
 import DeletedUsers from './DeletedUsers.vue'
 import EditUser from "./EditUser.vue"
 import UserProfile from "./UserProfile.vue"
+
+import myPassword from './Password'
 export default {
     props: ["user", "role"],
     components: {
@@ -111,7 +123,8 @@ export default {
         PermUser,
         EditUser,
         UserProfile,
-        DeletedUsers
+        DeletedUsers,
+        myPassword
     },
     data() {
         return {
@@ -220,6 +233,9 @@ export default {
     methods: {
         openDeleted() {
             eventBus.$emit('openDeletedEvent')
+        },
+        openPassword(data) {
+            eventBus.$emit('openPasswordEvent', data)
         },
         openAdd() {
             this.dispAdd = true;
