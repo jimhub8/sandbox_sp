@@ -98,7 +98,6 @@ import {
     vueTopprogress
 } from "vue-top-progress";
 import Logout from "./Logout";
-
 import DigitalClock from "vue-digital-clock";
 
 export default {

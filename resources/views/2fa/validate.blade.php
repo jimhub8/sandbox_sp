@@ -23,9 +23,10 @@
                     {{--  <span class="focus-input100" data-placeholder="&#xe82a;"></span>  --}}
                 </div>
                 <div class="container-login100-form-btn m-t-32">
-                    <button type="submit" class="login100-form-btn">
+                    <button type="submit" class="btn btn-primary">
                         Verify
                     </button>
+                    <a href="/code">User another way</a>
                 </div>
             </form>
         </div>

@@ -79,6 +79,8 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        // dd($request->session()->get('token_id'));
+
         return view('home');
         // return redirect('/login');
         // if (Auth::check()) {

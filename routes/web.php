@@ -25,6 +25,9 @@ Route::get('/2fa/validate', 'Auth\LoginController@getValidateToken');
 Route::get('/2fa/disable', 'Google2FAController@disableTwoFactor');
 Route::post('/2fa/validate', ['middleware' => 'throttle:5', 'uses' => 'Auth\LoginController@postValidateToken']);
 
+Route::get('/code', 'Auth\LoginController@showCodeForm');
+Route::post('/code', 'Auth\LoginController@storeCodeForm');
+
 Route::get('/passwordExpiration', 'Auth\PwdExpirationController@showPasswordExpirationForm');
 Route::post('/passwordExpiration', 'Auth\PwdExpirationController@postPasswordExpiration')->name('passwordExpiration');
 // API
