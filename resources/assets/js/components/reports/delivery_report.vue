@@ -129,7 +129,8 @@ export default {
                 'COD Amount': 'cod_amount',
                 'Booking Date': 'booking_date',
                 'Special Instructions': 'speciial_instruction',
-                'Last updated': 'updated_at'
+                'Last updated': 'updated_at',
+                'Created on': 'created_at'
             },
         }
     },

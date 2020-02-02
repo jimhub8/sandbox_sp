@@ -90,11 +90,12 @@ class ShipmentController extends Controller
         // dd($cancelled, $refused);
         // $bar_code = Shipment::select('bar_code')->setEagerLoads([])->whereIn('id', $id_can)->get()->toArray();
         // $bar_code_ = array_flatten($bar_code);
-        // Shipment::whereIn('id', $id_ref)->update(['status' => 'Refused']);
-        // Shipment::whereIn('id', $id_can)->update(['status' => 'Cancelled']);
+        Shipment::whereIn('id', $id_ref)->update(['status' => 'Refused']);
+        Shipment::whereIn('id', $id_can)->update(['status' => 'Cancelled']);
 
-        // Shipment::whereIn('id', $id_ref)->count();
-        // Shipment::whereIn('id', $id_can)->count();
+        $data = Shipment::whereIn('id', $id_ref)->count();
+        $data_1 = Shipment::whereIn('id', $id_can)->count();
+        dd($data, $data_1);
         // $update_s = new Cancelled;
         // $this->update_status($bar_code_);
         Shipment::setEventDispatcher($dispatcher);
