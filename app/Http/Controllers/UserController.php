@@ -201,8 +201,8 @@ class UserController extends Controller
                 $image_path = 'storage/profile/' . $upload->image;
 
                 File::delete($image_path);
-                $imagename = Storage::disk('public')->put('profile', $img);
             }
+            $imagename = Storage::disk('public')->put('profile', $img);
             // return('noop');
             $imgArr = explode('/', $imagename);
             $image_name = $imgArr[1];
@@ -329,7 +329,7 @@ class UserController extends Controller
 
     public function user_api($user)
     {
-    $token = $this->token_f();
+        $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/user', [
@@ -358,8 +358,8 @@ class UserController extends Controller
 
     public function client_api($user)
     {
-    $token = $this->token_f();
-    try {
+        $token = $this->token_f();
+        try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/clients', [
                 'headers' => [
