@@ -164,7 +164,7 @@ class LoginController extends Controller
         //     return redirect("login");
         // }
 
-        $token = Token::where('user_id', session()->get("token_id"))->first();
+        $token = Token::where('user_id', session()->get("token_id"))->latest()->first();
         // dd(session()->get("token_id"), $token);
         // dd(
         //     !$token,
