@@ -8,6 +8,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use App\models\Apimft;
 
 // use Illuminate\Support\Carbon;
 
@@ -15,7 +16,13 @@ class ScanController extends Controller
 {
     public function token_f()
     {
-        return session()->get('token.access_token');
+        // return session()->get('token.access_token');
+        $token = Apimft::where('user_id', Auth::id())->first();
+        if ($token) {
+            return $token->access_token;
+        }else {
+            abort(401);
+        }
     }
     // Out Scan
     public function barcodeUpdate(Request $request, Shipment $shipment, $bar_code = null)
@@ -46,6 +53,7 @@ class ScanController extends Controller
     }
     public function update_status($data)
     {
+        $token = $this->token_f();
         $url = env('API_URL') . '/api/orderScan';
         try {
             $client = new Client;
@@ -53,7 +61,7 @@ class ScanController extends Controller
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
                 'body' => json_encode([
                     'data' => $data,
@@ -98,13 +106,14 @@ class ScanController extends Controller
         // $shipment = Shipment::whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'driver' => $rider_out, 'assign_date' => $assign_date, 'derivery_date' => $scan_date_out]);
         foreach ($id as $value) {
 
-            try {
+        $token = $this->token_f();
+        try {
                 $client = new Client();
                 $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
                     'headers' => [
                         'Content-type' => 'application/json',
                         'Accept' => 'application/json',
-                        'Authorization' => 'Bearer ' . $this->token_f(),
+                        'Authorization' => 'Bearer ' . $token,
                     ],
                     'body' => json_encode([
                         'data' => $request->all(),

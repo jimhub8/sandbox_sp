@@ -17,9 +17,20 @@ use App\models\Rider;
 use App\PasswordSecurity;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use App\models\Apimft;
 
 class UserController extends Controller
 {
+    public function token_f()
+    {
+        // return session()->get('token.access_token');
+        $token = Apimft::where('user_id', Auth::id())->first();
+        if ($token) {
+            return $token->access_token;
+        } else {
+            abort(401);
+        }
+    }
     public function getUsers(Request $request)
     {
         // return User::find(1)->country;
@@ -318,13 +329,14 @@ class UserController extends Controller
 
     public function user_api($user)
     {
+    $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/user', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -346,13 +358,14 @@ class UserController extends Controller
 
     public function client_api($user)
     {
-        try {
+    $token = $this->token_f();
+    try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/clients', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -374,13 +387,14 @@ class UserController extends Controller
 
     public function clientupdate_api($user)
     {
+        $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request('PATCH', env('API_URL') . '/api/clients', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -402,13 +416,14 @@ class UserController extends Controller
 
     public function userupdate_api($user)
     {
+        $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/update_user', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -430,13 +445,14 @@ class UserController extends Controller
 
     public function reset_password($user)
     {
+        $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/user_password', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -459,13 +475,14 @@ class UserController extends Controller
 
     public function api_delete($user)
     {
+        $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request("DELETE", env('API_URL') . '/api/user', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
                 'body' => json_encode([
                     'data' => $user,
@@ -485,10 +502,6 @@ class UserController extends Controller
         }
     }
 
-    public function token_f()
-    {
-        return session()->get('token.access_token');
-    }
 
     public function change_password(Request $request, $id)
     {

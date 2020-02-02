@@ -11,22 +11,30 @@ use App\User;
 use App\Shipment;
 use App\Status;
 use Illuminate\Support\Facades\Auth;
+use App\models\Apimft;
 
 class UploadController extends Controller
 {
     public function token_f()
     {
-        return session()->get('token.access_token');
+        // return session()->get('token.access_token');
+        $token = Apimft::where('user_id', Auth::id())->first();
+        if ($token) {
+            return $token->access_token;
+        }else {
+            abort(401);
+        }
     }
     public function update_status($data)
     {
+        $token = $this->token_f();
         try {
             $client = new Client();
             $request = $client->request('POST', env('API_URL') . '/api/importOrder', [
                 'headers' => [
                     'Content-type' => 'application/json',
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->token_f(),
+                    'Authorization' => 'Bearer ' . $token,
                 ],
                 'body' => json_encode([
                     'data' => $data,
