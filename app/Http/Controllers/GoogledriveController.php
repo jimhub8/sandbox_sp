@@ -106,7 +106,7 @@ class GoogledriveController extends Controller
         $shipment_array = [];
         foreach ($orders as $order) {
             // dd($order);
-            $order_id = ' '.$order["order_id"];
+            $order_id = ' '.$order["orderid"];
             $shipment = Shipment::where('bar_code', '=', $order['orderid'])->orWhere('bar_code', $order_id)->exists();
             if (!$shipment) {
                 $shipment = new Shipment;
