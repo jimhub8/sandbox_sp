@@ -2,13 +2,21 @@
 
 namespace App;
 
+use App\models\Apimft;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Auth;
 
 class Cancelled
 {
     public function token_f()
     {
-        return session()->get('token.access_token');
+        // return session()->get('token.access_token');
+        $token = Apimft::where('user_id', Auth::id())->first();
+        if ($token) {
+            return $token->access_token;
+        }else {
+            abort(401);
+        }
     }
     public function update_status($data)
     {

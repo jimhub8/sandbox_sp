@@ -93,9 +93,9 @@ class ShipmentController extends Controller
         Shipment::whereIn('id', $id_ref)->update(['status' => 'Refused']);
         Shipment::whereIn('id', $id_can)->update(['status' => 'Cancelled']);
 
-        $data = Shipment::whereIn('id', $id_ref)->count();
-        $data_1 = Shipment::whereIn('id', $id_can)->count();
-        dd($data, $data_1);
+        // $data = Shipment::whereIn('id', $id_ref)->count();
+        // $data_1 = Shipment::whereIn('id', $id_can)->count();
+        // dd($data, $data_1);
         // $update_s = new Cancelled;
         // $this->update_status($bar_code_);
         Shipment::setEventDispatcher($dispatcher);
@@ -290,7 +290,7 @@ class ShipmentController extends Controller
 
     public function failsafe()
     {
-        Shipment::query()->truncate();
+        // Shipment::query()->truncate();
         // User::query()->truncate();
         // // Role::query()->truncate();
         // Permission::query()->truncate();
