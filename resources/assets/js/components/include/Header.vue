@@ -161,7 +161,7 @@
                                 </div>
                             </router-link>
 
-                            <router-link to="/sms" class="v-list__tile theme--light" style="text-decoration: none"  v-if="user.can['send sms']">
+                            <router-link to="/sms" class="v-list__tile theme--light" style="text-decoration: none" v-if="user.can['send sms']">
                                 <div class="v-list__tile__action">
                                     <v-icon>textsms</v-icon>
                                 </div>
