@@ -39,11 +39,11 @@ class GoogledriveController extends Controller
         // dd($client_details);
         $sheet_name = $request->sheet_name;
         $work_sheet = $request->work_sheet;
-        $path = public_path('google/googleserviceworker.json');
+        // $path = public_path('google/googleserviceworker.json'); sandbox
+        $path = public_path('google/googlesheets.json');
 
         $work_sheet = $request->work_sheet;
         // $path = '/home/speedbal/web.speedballcourier.com/google/googlesheets.json';
-        // $path = public_path('google/googlesheets.json');
         // dd($path);
         putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $path);
         $client = new Google_Client();
