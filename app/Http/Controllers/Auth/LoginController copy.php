@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use Socialite;
 use Cache;
 
-class LoginController extends Controller
+class LoginController_1 extends Controller
 {
     /*
 		    |--------------------------------------------------------------------------

@@ -204,4 +204,53 @@ const app = new Vue({
         myClients, myScreen, myRiders, myDispatch, mySendSms, myUpdate
         // myContainer, myUploadFile, myTasks, myscheduled
     },
+    data() {
+        return {
+            timer: '',
+            timeout: 7.2e+6
+        }
+    },
+    mounted() { 
+        // window.addEventListener('click', this.resetTimer())
+
+        this.inactivityTime()
+        this.timer = setTimeout(() => {
+            window.location.reload();
+            // alert('test_1')
+            // this.reload_page()
+        }, this.timeout);
+        // this.reload_page()
+
+        // setTimeout(() => {
+        //     // window.location.reload();
+        //     // alert('test')
+        //     // clearInterval(this.timer);
+
+        //     this.reload_page()
+        // }, this.timer)
+    },
+
+    methods: {
+        inactivityTime() {
+            let self = this
+            // document.querySelector('#app')
+            window.addEventListener('keyup', function () {
+                self.resetTimer()
+            })
+            window.addEventListener('click', function () {
+                self.resetTimer()
+            })
+        },
+        resetTimer() {
+            // this.check_user()
+            this.timeout = 7.2e+6
+            clearInterval(this.timer);
+            this.timer = setTimeout(() => {
+                window.location.reload();
+            }, this.timeout);
+        },
+        check_user() {
+
+        }
+    },
 });

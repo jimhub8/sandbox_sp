@@ -3,12 +3,10 @@
 @endsection
 
 @section('content')
-<my-header :user="{{ json_encode($auth_user) }}"></my-header>
-{{--
-<my-header :user="{{ Auth::user() }}" :role="{{ json_encode($rolename) }}"></my-header> --}}
-<transition name="fade">
-    <router-view :user="{{ json_encode($auth_user) }}"></router-view>
-    {{--
-    <router-view :user="{{ Auth::user() }}" :role="{{ json_encode($rolename) }}"></router-view> --}}
-</transition>
+<div id="app_reload">
+    <my-header :user="{{ json_encode($auth_user) }}"></my-header>
+    <transition name="fade">
+        <router-view :user="{{ json_encode($auth_user) }}"></router-view>
+    </transition>
+</div>
 @endsection

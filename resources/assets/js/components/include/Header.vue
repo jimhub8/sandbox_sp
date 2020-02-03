@@ -458,7 +458,28 @@ export default {
         },
         reload_app_page() {
             window.location.href = "/login";
+        },
+
+        inactivityTime() {
+            document.querySelector('#test2').addEventListener('click', function () {
+                alert("HOVER2")
+            })
+
+            // var time;
+            // window.onload = this.resetTimer;
+            // // DOM Events
+            // document.onmousemove = this.resetTimer;
+            // document.onkeypress = this.resetTimer;
+
+        },
+        resetTimer() {
+            clearTimeout(time);
+            time = setTimeout(logout, 3000)
+            // 1000 milliseconds = 1 second
         }
+    },
+    mounted () {
+        // this.inactivityTime();
     },
     created() {
         eventBus.$on("progressEvent", data => {
