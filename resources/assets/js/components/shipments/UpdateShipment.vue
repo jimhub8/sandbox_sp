@@ -54,14 +54,13 @@
                                     </div>
                                 </v-textarea>
                             </v-flex>
-
+<!--
                             <v-flex xs12 sm12>
                                 <v-btn flat color="primary" @click="paid" v-if="updateitedItem.paid === 0">Mark as paid</v-btn>
                                 <v-btn flat color="primary" @click="paid" v-if="updateitedItem.paid === 1">Mark as unpaid</v-btn>
                                 <v-btn color="primary" raised disabled style="color: rgb(76, 175, 80) !important;" v-if="updateitedItem.paid === 0">Not Paid</v-btn>
                                 <v-btn color="primary" raised disabled style="color: rgb(76, 175, 80) !important;" v-if="updateitedItem.paid === 1">Paid</v-btn>
-                                <!-- <v-btn flat color="success" disabled>{{ updateitedItem.paid }}</v-btn> -->
-                            </v-flex>
+                            </v-flex> -->
                         </v-flex>
                     </v-layout>
                     <v-layout row wrap>
@@ -70,9 +69,9 @@
                 </v-card>
                 <v-card-actions>
                     <v-btn flat @click="close">Close</v-btn>
-                    <v-flex xs4 sm3>
+                    <!-- <v-flex xs4 sm3>
                         <v-text-field v-model="dist" color="blue darken-2" label="Distance" ref="distanceGet" required></v-text-field>
-                    </v-flex>
+                    </v-flex> -->
                     <v-spacer></v-spacer>
                     <v-btn color="primary" flat @click="UpdateStatus" :loading="loading" :disabled="loading">Update Status</v-btn>
                 </v-card-actions>
