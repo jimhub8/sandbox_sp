@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-use Socialite;
+// use Socialite;
 use Cache;
 
 class LoginController_1 extends Controller
@@ -54,7 +54,7 @@ class LoginController_1 extends Controller
      */
     public function redirectToProvider($service)
     {
-        return Socialite::driver($service)->redirect();
+        // return Socialite::driver($service)->redirect();
     }
 
     /**
@@ -64,24 +64,24 @@ class LoginController_1 extends Controller
      */
     public function handleProviderCallback($service)
     {
-        $userSocialite = Socialite::driver($service)->user();
-        $findUser = User::where('email', $userSocialite->email)->first();
-        if ($findUser) {
-            // return $findUser;
-            // Auth::login($findUser);
-            return redirect('/courier');
-        } else {
-            $user = new User;
-            $user->name = $userSocialite->name;
-            $user->email = $userSocialite->email;
-            // $user->profile = $userSocialite->avatar;
-            // return $user;
-            // $user->status = '0';
-            $user->password = Hash::make('password');
-            $user->save();
-            Auth::login($userSocialite->email);
-            return redirect('/');
-        }
+        // $userSocialite = Socialite::driver($service)->user();
+        // $findUser = User::where('email', $userSocialite->email)->first();
+        // if ($findUser) {
+        //     // return $findUser;
+        //     // Auth::login($findUser);
+        //     return redirect('/courier');
+        // } else {
+        //     $user = new User;
+        //     $user->name = $userSocialite->name;
+        //     $user->email = $userSocialite->email;
+        //     // $user->profile = $userSocialite->avatar;
+        //     // return $user;
+        //     // $user->status = '0';
+        //     $user->password = Hash::make('password');
+        //     $user->save();
+        //     Auth::login($userSocialite->email);
+        //     return redirect('/');
+        // }
     }
 
 

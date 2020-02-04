@@ -5,7 +5,7 @@ namespace App;
 use App\Scopes\ClientScope;
 use App\Scopes\ShipmentScope;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
+// use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Event;
 // use Symfony\Component\EventDispatcher\Event;

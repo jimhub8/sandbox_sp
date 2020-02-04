@@ -79,61 +79,61 @@ class LoginController extends Controller
         return redirect()->intended($this->redirectTo);
     }
 
-    public function authenticated(Request $request, $user)
-    {
-        // dd($request->session()->get('token_id'));
-        // if ($user->passwordSecurity) {
+    // public function authenticated(Request $request, $user)
+    // {
+    //     // dd($request->session()->get('token_id'));
+    //     // if ($user->passwordSecurity) {
 
-        //     $request->session()->forget('password_expired_id');
+    //     //     $request->session()->forget('password_expired_id');
 
-        //     $password_updated_at = $user->passwordSecurity->password_updated_at;
-        //     $password_expiry_days = $user->passwordSecurity->password_expiry_days;
-        //     $password_expiry_at = Carbon::parse($password_updated_at)->addDays($password_expiry_days);
-        //     if ($password_expiry_at->lessThan(Carbon::now())) {
-        //         $request->session()->put('password_expired_id', $user->id);
-        //         auth()->logout();
-        //         return redirect('/passwordExpiration')->with("info", "Your Password has expired, Please change your password. The new password will expire in 24 hours");
-        //     }
-        // } else {
-        //     $passwordSecurity = PasswordSecurity::create([
-        //         'user_id' => $user->id,
-        //         'password_expiry_days' => 1,
-        //         'password_updated_at' => Carbon::now(),
-        //     ]);
-        // }
-        if ($request->verify == 'sms') {
-            $min = pow(10, 4);
-            $max = $min * 10 - 1;
-            $code = mt_rand($min, $max);
+    //     //     $password_updated_at = $user->passwordSecurity->password_updated_at;
+    //     //     $password_expiry_days = $user->passwordSecurity->password_expiry_days;
+    //     //     $password_expiry_at = Carbon::parse($password_updated_at)->addDays($password_expiry_days);
+    //     //     if ($password_expiry_at->lessThan(Carbon::now())) {
+    //     //         $request->session()->put('password_expired_id', $user->id);
+    //     //         auth()->logout();
+    //     //         return redirect('/passwordExpiration')->with("info", "Your Password has expired, Please change your password. The new password will expire in 24 hours");
+    //     //     }
+    //     // } else {
+    //     //     $passwordSecurity = PasswordSecurity::create([
+    //     //         'user_id' => $user->id,
+    //     //         'password_expiry_days' => 1,
+    //     //         'password_updated_at' => Carbon::now(),
+    //     //     ]);
+    //     // }
+    //     if ($request->verify == 'sms') {
+    //         $min = pow(10, 4);
+    //         $max = $min * 10 - 1;
+    //         $code = mt_rand($min, $max);
 
-            // dd($code);
-            $token = Token::create([
-                'user_id' => $user->id
-            ]);
-            // $request->session()->forget('token_id');
-            // session(['token_id' => $user->id]);
-            $africas_talking = new Sms;
-            $phone = $user->phone;
-            $code =  $token->code;
-            $code = substr($code, 0, -1);
+    //         // dd($code);
+    //         $token = Token::create([
+    //             'user_id' => $user->id
+    //         ]);
+    //         // $request->session()->forget('token_id');
+    //         // session(['token_id' => $user->id]);
+    //         $africas_talking = new Sms;
+    //         $phone = $user->phone;
+    //         $code =  $token->code;
+    //         $code = substr($code, 0, -1);
 
-            // dd($code);
-            $africas_talking->verify($phone, $code);
+    //         // dd($code);
+    //         $africas_talking->verify($phone, $code);
 
-            Auth::logout();
-            $request->session()->put('token_id', $user->id);
-            $request->session()->put('user_id', $user->id);
-            $request->session()->put('remember', $request->get('remember'));
-            return redirect('code');
-        } else {
-            if ($user->google2fa_secret) {
-                Auth::logout();
-                $request->session()->put('2fa:user:id', $user->id);
-                return redirect('2fa/validate');
-            }
-        }
-        // return redirect()->intended($this->redirectTo);
-    }
+    //         Auth::logout();
+    //         $request->session()->put('token_id', $user->id);
+    //         $request->session()->put('user_id', $user->id);
+    //         $request->session()->put('remember', $request->get('remember'));
+    //         return redirect('code');
+    //     } else {
+    //         if ($user->google2fa_secret) {
+    //             Auth::logout();
+    //             $request->session()->put('2fa:user:id', $user->id);
+    //             return redirect('2fa/validate');
+    //         }
+    //     }
+    //     // return redirect()->intended($this->redirectTo);
+    // }
 
 
     /**

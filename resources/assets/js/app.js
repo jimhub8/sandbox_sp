@@ -10,28 +10,15 @@ require('./bootstrap');
 window.Vue = require('vue');
 import VueRouter from 'vue-router'
 import Vuetify from 'vuetify'
+
 import Vuex from 'vuex'
-// // import Print from 'vue-print-nb'
-// import * as VueGoogleMaps from 'vue2-google-maps'
-// import VueChartkick from 'vue-chartkick'
-// import Chart from 'chart.js'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import '@fortawesome/fontawesome-free/css/all.css' // Ensure you are using css-loader
 import 'vuetify/dist/vuetify.min.css'
 // import VueCharts from 'vue-chartjs'
 // import { Bar, Line } from 'vue-chartjs'
 import JsonExcel from 'vue-json-excel'
-// import * as VueGoogleMaps from 'vue2-google-maps'
-// import { abilitiesPlugin } from '@casl/vue'
-// import VueChatScroll from 'vue-chat-scroll'
-// import VueResource from "vue-resource"
-// window.Echo = new Echo({
 
-//     broadcaster: 'pusher',
-
-//     key: 'c0a8d7b1122459cd74c9' //Add your pusher key here
-
-// });
 import ElementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en'
 import 'element-ui/lib/theme-chalk/index.css';
@@ -41,29 +28,7 @@ import StoreData from './store/store'
 // import VueCharts from 'vue-chartjs'
 // import { Bar, Line } from 'vue-chartjs'
 window.eventBus = new Vue()
-// import Pusher from 'pusher-js';
 
-// import Toaster from 'v-toaster'
-// import 'v-toaster/dist/v-toaster.css'
-// Vue.use(Toaster, { timeout: 5000 })
-// import jsPDF from 'jsPDF'
-// vue.use(Vuetify, {
-//     iconfont: 'mdi'
-// })
-// Vue.use(VueChartkick, {adapter: Chart})
-
-// Vue.use(abilitiesPlugin)
-// Vue.use(VueChatScroll)
-// Vue.use(VueGoogleMaps, {
-//     load: {
-//         key: 'AIzaSyBNzKeF6ZwxlAOUCyeH8UxvvYRHP_w_Guk',
-//         libraries: ['geometry', 'places'],
-//         // libraries: 'places',
-//     },
-// })
-// Vue.use(VueResource);
-
-// Vue.use(Print);
 Vue.use(Vuetify)
 Vue.use(VueRouter)
 Vue.use(Vuex)
@@ -210,7 +175,7 @@ const app = new Vue({
             timeout: 7.2e+6
         }
     },
-    mounted() { 
+    mounted() {
         // window.addEventListener('click', this.resetTimer())
 
         this.inactivityTime()
