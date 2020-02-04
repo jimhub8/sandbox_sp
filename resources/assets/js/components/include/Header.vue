@@ -457,7 +457,7 @@ export default {
             window.location.href = "/apilogin";
         },
         reload_app_page() {
-            window.location.href = "/login";
+             window.location.reload();
         },
 
         inactivityTime() {

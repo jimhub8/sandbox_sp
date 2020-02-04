@@ -12,6 +12,7 @@ class FilterController extends Controller
 {
     public function filterShipment(Request $request)
     {
+        // abort(401);
         if (Auth::guard('clients')->check()) {
             $shipment_filter = Shipment::withoutGlobalScope(ShipmentScope::class);
             if ($request->country_id) {

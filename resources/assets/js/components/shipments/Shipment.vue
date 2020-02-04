@@ -738,6 +738,20 @@ export default {
                 this.shipmentsCount = response.data;
             })
             .catch(error => {
+                if (error.response.status === 500) {
+                    eventBus.$emit('errorEvent', error.response.statusText)
+                    this.loading = false
+                    return
+                } else if (error.response.status === 401 || error.response.status === 409) {
+                    this.loading = false
+                    eventBus.$emit('reloadRequest')
+                    return
+                } else if (error.response.status === 422) {
+                    this.loading = false
+                    eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                    this.errors = error.response.data.errors
+                    return
+                }
                 this.errors = error.response.data.errors;
             });
     },

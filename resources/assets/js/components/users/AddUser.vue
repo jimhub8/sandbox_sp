@@ -117,12 +117,12 @@ export default {
                     // alert('error1')
                     this.loading = false
                     // console.log(response);
-                    this.$parent.Allusers.push(response.data)
+                    eventBus.$emit('alertRequest', 'User created')
+                    eventBus.$emit('userEvent')
+                    // this.$parent.Allusers.push(response.data)
                     this.close();
                     // this.resetForm();
                     // this.$emit('alertRequest');
-                    eventBus.$emit('userEvent')
-                    eventBus.$emit('alertRequest', 'User created')
                 })
                 .catch((error) => {
                     this.loading = false
@@ -138,6 +138,7 @@ export default {
                     } else if (error.response.status === 422) {
                         this.loading = false
                         eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                        this.errors = error.response.data.errors
                         return
                     }
                     this.loading = false

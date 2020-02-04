@@ -87,7 +87,7 @@
                                 </v-tooltip>
                                 <v-tooltip bottom v-if="user.can['delete users']">
                                     <template v-slot:activator="{ on }">
-                                        <v-btn v-on="on" icon class="mx-0" @click="disable_2fa(props.item)" slot="activator">
+                                        <v-btn v-on="on" icon class="mx-0" @click="disable_2fa(props.item)" slot="activator" :disabled="!props.item.google2fa_secret">
                                             <v-icon small color="blue darken-2">location_disabled</v-icon>
                                         </v-btn>
                                     </template>

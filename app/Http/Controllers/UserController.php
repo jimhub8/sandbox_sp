@@ -44,6 +44,8 @@ class UserController extends Controller
             // dd($user);
             // $country_name = Country::find($user->country_id);
             // $user->branch = ($user->branch) ? $user->branch->branch_name : null;
+
+            $user->google2fa_secret = ($user->google2fa_secret) ? true : false;
             $user->country = ($user->country_) ? $user->country_->country_name : '';
             $user->country_name = ($user->country) ? $user->country : 'null';
             $user->country_name = ($user->country) ? $user->country : 'null';
@@ -65,7 +67,7 @@ class UserController extends Controller
         // return $request->all();
         $this->Validate($request, [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users',
             'phone' => 'required|numeric',
             'countryList' => 'required',
             'role_id' => 'required',
