@@ -90,7 +90,7 @@ Route::get('/callback', function (Request $request) {
 
     return redirect('/courier/#/shipments');
 });
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/2fa_home', 'HomeController@index')->name('2fa_home');
 
 
 
@@ -99,8 +99,8 @@ Route::any('confirmation', 'SafaricomController@confirmation')->name('confirmati
 Route::any('register_url', 'SafaricomController@register_url')->name('register_url');
 Route::any('validation', 'SafaricomController@validation')->name('validation');
 
-Route::get('scheduler', function () {
-    \Illuminate\Support\Facades\Artisan::call('schedule:run');
+Route::get('home', function () {
+    return redirect('courier');
 });
 // Socialite
 Route::get('login/{service}', 'Auth\LoginController@redirectToProvider');
@@ -124,7 +124,11 @@ Route::get('/google_s', 'GoogledriveController@google_s')->name('google_s');
 
 Auth::routes();
 
-Route::group(['middleware' => ['authcheck', '2fa']], function () {
+
+Route::group(['middleware' => ['auth', '2fa']], function () {
+    Route::get('/courier', 'HomeController@courier')->name('courier');
+});
+    Route::group(['middleware' => ['authcheck', '2fa']], function () {
     // Route::get('/testSS', function () {
     //     $today = Carbon::today();
     //     $shipments = (Shipment::whereBetween('created_at', [$today->subMonth(1), $today->addMonth(1)])->get());
@@ -149,7 +153,6 @@ Route::group(['middleware' => ['authcheck', '2fa']], function () {
     Route::get('/logoutOther', 'UserController@logoutOther')->name('logoutOther');
     Route::post('/logOtherDevices', 'UserController@logOtherDevices')->name('logOtherDevices');
     // Route::any('/home', 'HomeController@index')->name('home');
-    Route::get('/courier', 'HomeController@courier')->name('courier');
     // Route::get('/courier/{name}', 'HomeController@courierHome')->name('courierHome');
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
@@ -224,6 +227,9 @@ Route::group(['middleware' => ['authcheck', '2fa']], function () {
     Route::get('deletedUsers', 'UserController@deletedUsers')->name('deletedUsers');
     Route::patch('undeletedUser/{id}', 'UserController@undeletedUser')->name('undeletedUser');
     Route::post('change_password/{id}', 'UserController@change_password')->name('change_password');
+
+    Route::get('check_user', 'UserController@check_user')->name('check_user');
+
 
 
     Route::get('getUsersRole', 'RoleController@getUsersRole')->name('getUsersRole');

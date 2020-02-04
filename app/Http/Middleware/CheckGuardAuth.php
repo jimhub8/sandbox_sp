@@ -19,6 +19,7 @@ class CheckGuardAuth
         if (Auth::guard('clients')->check() || Auth::guard('web')->check()) {
             return $next($request);
         }
-        return redirect('/login');
+        // return redirect('/login');
+        abort(401);
     }
 }

@@ -104,7 +104,7 @@ class ReportController extends Controller
         $client = $request->client;
         $shipments = Shipment::setEagerLoads([]);
         if (Auth::user()->hasPermissionTo('filter by country') && $request->country) {
-            $shipments = $shipments->withoutGlobalScope(ShipmentScope::class);
+            $shipments = $shipments->withoutGlobalScope(ShipmentScope::class)->where('country_id', $request->country);
         }
         if ($request->start_date && $request->end_date) {
             $start_date = Carbon::parse($request->start_date);
@@ -226,7 +226,7 @@ class ReportController extends Controller
             $shipments = $shipments->whereIn('client_id', $client);
         }
         if (Auth::user()->hasPermissionTo('filter by country') && $request->country) {
-            $shipments = $shipments->withoutGlobalScope(ShipmentScope::class);
+            $shipments = $shipments->withoutGlobalScope(ShipmentScope::class)->where('country_id', $request->country);
         }
         $shipments = $shipments->whereBetween('created_at', $date_array);
         $shipments = $shipments->get();

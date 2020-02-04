@@ -27,6 +27,6 @@ class Google2FAMiddleware
             return $next($request);
         }
         // return redirect()->intended($this->redirectTo);
-        return redirect('/home');
+        return redirect('/2fa_home');
     }
 }

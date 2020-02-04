@@ -519,4 +519,14 @@ class UserController extends Controller
         // $user->password = $password_hash;
         $user->save();
     }
+    public function check_user()
+    {
+        // return 'logged_out';
+        $login = Auth::guard('web')->check();
+        if ($login) {
+            return 'logged_in';
+        } else {
+            return 'logged_out';
+        }
+    }
 }

@@ -58,9 +58,13 @@ export default {
         // console.log(payload.url);
         context.commit('loading', true)
         axios.post(model, data).then((response) => {
+            console.log(response);
+
             context.commit('loading', false)
             context.commit(list, response.data)
         }).catch((error) => {
+            console.log(error);
+
             context.commit('loading', false)
             if (error.response.status === 500) {
                 eventBus.$emit('errorEvent', error.response.statusText)
@@ -236,6 +240,33 @@ export default {
         context.commit('loading', true)
         axios.patch(model, data).then((response) => {
             context.commit('loading', false)
+        }).catch((error) => {
+            context.commit('loading', false)
+            if (error.response.status === 500 || error.response.status === 405) {
+                eventBus.$emit('errorEvent', error.response.statusText)
+                return
+            } else if (error.response.status === 401 || error.response.status === 409) {
+                eventBus.$emit('reloadAppRequest', error.response.statusText)
+            } else if (error.response.status === 422) {
+                eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                return
+            }
+            this.errors = error.response.data.errors
+        })
+    },
+
+
+    checkUser(context, payload) {
+        console.log(payload);
+        var model = payload.url
+        // context.commit('loading', true)
+        axios.get(model).then((response) => {
+            console.log(response.data);
+
+            if (response.data == 'logged_out') {
+                window.location.reload()
+            }
+            // context.commit('loading', false)
         }).catch((error) => {
             context.commit('loading', false)
             if (error.response.status === 500 || error.response.status === 405) {

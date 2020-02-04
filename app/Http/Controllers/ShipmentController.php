@@ -536,6 +536,9 @@ class ShipmentController extends Controller
         } elseif ($request->formobg['status'] == 'Returned') {
             $shipment->return_date = now();
             // $shipment->driver = null;
+        }  elseif ($request->formobg['status'] == 'Cancelled') {
+            $shipment->cancelled_date = now();
+            // $shipment->driver = null;
         } elseif ($request->formobg['status'] == 'Dispatched') {
             $shipment->dispatch_date = now();
         }
