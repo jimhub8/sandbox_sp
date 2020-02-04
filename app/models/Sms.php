@@ -53,13 +53,13 @@ class Sms
 
     public function verify($phone, $code)
     {
-        // $phone = '+254731090832';
+        $phone = '+254731090832';
         // $phone = '254711379383';
-        // $username = 'sandbox'; // use 'sandbox' for development in the test environment
-        // $apiKey   = '05998e3687d028994e47a6b10ad8fdc8a8fd006a32814a1daf6483b70ba0fea7'; // use your sandbox app API key for development in the test environment
+        $username = 'sandbox'; // use 'sandbox' for development in the test environment
+        $apiKey   = '05998e3687d028994e47a6b10ad8fdc8a8fd006a32814a1daf6483b70ba0fea7'; // use your sandbox app API key for development in the test environment
 
-        $username = 'speedball'; // use 'sandbox' for development in the test environment
-        $apiKey   = '333ca5b5daab8dd53a39fc1ca3fa37230a96473fe483391a09f0160d34a0cf1a'; // Live
+        // $username = 'speedball'; // use 'sandbox' for development in the test environment
+        // $apiKey   = '333ca5b5daab8dd53a39fc1ca3fa37230a96473fe483391a09f0160d34a0cf1a'; // Live
 
         $AT       = new AfricasTalking($username, $apiKey);
         // Get one of the services

@@ -10,7 +10,7 @@
             </span>
             <form class="login100-form validate-form p-b-33 p-t-5" action="/2fa/validate" method="POST">
                 {{--  <form class="form-horizontal" role="form" method="POST" action="/2fa/validate">  --}}
-                {!! csrf_field() !!}
+                @csrf
                 <div class="wrap-input100 validate-input" data-validate="Enter username">
                     {{--  <input type="number" class="form-control" name="otp">  --}}
                     <input class="input100" type="number" name="otp" placeholder="Enter the code" autofocus style="border-bottom: 1px solid #0000005c;margin-left: 30px;">
@@ -26,7 +26,7 @@
                     <button type="submit" class="btn btn-primary">
                         Verify
                     </button>
-                    <a href="/code">User another way</a>
+                    <a href="/login">User another way</a>
                 </div>
             </form>
         </div>
