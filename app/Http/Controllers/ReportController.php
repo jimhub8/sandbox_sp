@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Scopes\ShipmentScope;
 use App\Shipment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -140,35 +141,6 @@ class ReportController extends Controller
         });
         return $shipments;
     }
-    // public function DelivReport(Request $request)
-    // {
-    //     // return $request->all();
-    //     $date_array = array(
-    //         'start_date' => $request->start_date,
-    //         'end_date' => $request->end_date,
-    //     );
-    //     $Update_array = array(
-    //         'Upstart_date' => $request->Upstart_date,
-    //         'Upend_date' => $request->Upend_date,
-    //     );
-    //     $status = $request->status;
-    //     $branch_id = $request->branch_id;
-
-    //     if (empty($branch_id)) {
-    //         if ($status == 'Dispatched') {
-    //             return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->whereBetween('created_at', [$Update_array])->take(15000)->get();
-    //         } else {
-    //             return Shipment::where('country_id', Auth::user()->country_id)->latest()->setEagerLoads([])->whereBetween('derivery_date', [$date_array])->whereBetween('created_at', [$Update_array])->where('status', $status)->take(15000)->get();
-    //         }
-    //     } else {
-    //         if ($status == 'Dispatched') {
-    //             return Shipment::where('country_id', Auth::user()->country_id)->where('branch_id', $branch_id)->latest()->setEagerLoads([])->whereBetween('dispatch_date', [$date_array])->whereBetween('created_at', [$Update_array])->take(15000)->get();
-    //         } else {
-    //             return Shipment::where('country_id', Auth::user()->country_id)->where('branch_id', $branch_id)->latest()->setEagerLoads([])->whereBetween('derivery_date', [$date_array])->whereBetween('created_at', [$Update_array])->where('status', $status)->take(15000)->get();
-    //         }
-    //     }
-    // }
-
     public function ProdReport(Request $request)
     {
         // return $request->all();
@@ -252,6 +224,9 @@ class ReportController extends Controller
         $shipments = $shipments->whereIn('status', $request->status);
         if (!empty($client)) {
             $shipments = $shipments->whereIn('client_id', $client);
+        }
+        if (Auth::user()->hasPermissionTo('filter by country') && $request->country) {
+            $shipments = $shipments->withoutGlobalScope(ShipmentScope::class);
         }
         $shipments = $shipments->whereBetween('created_at', $date_array);
         $shipments = $shipments->get();

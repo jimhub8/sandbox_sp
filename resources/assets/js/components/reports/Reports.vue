@@ -6,10 +6,6 @@
     <v-container fluid fill-height v-show="!loader">
         <!-- <div> -->
         <v-layout justify-center align-center>
-            <!-- <v-layout row>
-                <v-flex xs6 sm6>
-                </v-flex>
-            </v-layout> -->
             <v-layout wrap>
                 <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
@@ -17,10 +13,9 @@
                     </v-card>
                 </v-flex>
 
-                <!-- <v-divider vertical></v-divider> -->
                 <v-flex xs4 sm4 style="margin-top: 40px;">
                     <v-card>
-                        <mySReport :statuses="statuses"></mySReport>
+                        <mySReport :statuses="statuses" :countries="countries" :user="user"></mySReport>
                     </v-card>
                 </v-flex>
 
@@ -29,7 +24,6 @@
                         <myBranchReport :branches="branches" :statuses="statuses"></myBranchReport>
                     </v-card>
                 </v-flex>
-                <!-- <v-divider vertical></v-divider> -->
                 <v-flex xs4 sm4 style="margin-top: 140px;">
                     <v-card>
                         <myRiderReport></myRiderReport>
@@ -40,43 +34,6 @@
                         <myDeliveryReport :countries="countries" :user="user" :statuses="statuses"></myDeliveryReport>
                     </v-card>
                 </v-flex>
-                <!--
-                <v-flex xs4 sm4 style="margin-top: 40px;">
-                    <v-card>
-                        <h1>Product Reports</h1>
-                        <hr>
-                        <label for="">Status</label>
-                        <v-flex xs12 sm12>
-                            <v-text-field v-model="ProdR.email" color="blue darken-2" label="Product email" required></v-text-field>
-                        </v-flex>
-                        <select v-model="ProdR.status" class="custom-select custom-select-md col-md-12">
-                            <option value=""></option>
-                            <option v-for="status in statuses" :key="status.id" :value="status.name">{{ status.name }}</option>
-                        </select>
-                        Delivery Date Between:
-                        <hr>
-                        <v-flex xs12 sm12>
-                            <v-text-field v-model="ProdR.start_date" label="start date" type="date" color="blue darken-2" required></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 sm12>
-                            <v-text-field v-model="ProdR.end_date" label="End Date" type="date" color="blue darken-2" required></v-text-field>
-                        </v-flex>
-                        <v-card-actions>
-                            <v-btn flat @click="AllProdR" :loading="Pload" :disabled="Pload" success color="black">Get Data</v-btn>
-                            <v-spacer></v-spacer>
-                            <v-btn flat color="orange">{{ AllProd.length }} </v-btn>
-                        </v-card-actions>
-                        <v-divider></v-divider>
-                        <download-excel :data="AllProd" :fields="json_fields" v-show="Pdown">
-                            Export
-                            <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
-                        </download-excel>
-                        <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
-                            {{ message }}
-                            <v-icon dark right>check_circle</v-icon>
-                        </v-snackbar>
-                    </v-card>
-                </v-flex>-->
             </v-layout>
         </v-layout>
 

@@ -21,6 +21,16 @@
                 </el-select>
             </div>
             <div style="margin: 10px 0;"></div>
+
+            <div v-if="user.can['filter by country']">
+                <label for="">Country</label>
+                <el-select v-model="status_report.country" filterable clearable placeholder="Select Country" style="width: 100%;">
+                    <el-option v-for="item in countries" :key="item.id" :label="item.country_name" :value="item.id">
+                    </el-option>
+                </el-select>
+            </div>
+            <div style="margin: 10px 0;"></div>
+
             <div class="block">
                 <span class="demonstration" style="float: left">Start Date</span>
                 <el-date-picker v-model="status_report.start_date" type="date" placeholder="Pick a day" style="width: 100%;">
@@ -61,7 +71,8 @@
 
 <script>
 export default {
-    props: ['user', 'statuses'],
+    name: 'status_report',
+    props: ['user', 'statuses', 'countries'],
     data() {
         return {
             form: {

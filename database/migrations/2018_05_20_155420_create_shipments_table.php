@@ -71,6 +71,8 @@ class CreateShipmentsTable extends Migration {
 			$table->double('distance', 5, 2)->nullable();
 			$table->boolean('printReceipt')->nullable();
 			$table->date('assign_date')->nullable();
+			$table->date('cancelled_date')->nullable();
+			$table->date('refused_on')->nullable();
 			$table->boolean('sticker')->default(0);
 			$table->softDeletes();
 			$table->timestamps();
