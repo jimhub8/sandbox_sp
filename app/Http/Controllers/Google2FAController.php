@@ -6,6 +6,7 @@ use Crypt;
 use Google2FA;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Auth;
 use \ParagonIE\ConstantTime\Base32;
@@ -69,6 +70,21 @@ class Google2FAController extends Controller
         $user->save();
 
         return view('2fa/disableTwoFactor');
+    }
+
+    /**
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function disable_2fa($id)
+    {
+        $user = User::find($id);
+
+        //make secret column blank
+        $user->google2fa_secret = null;
+        $user->save();
+        return $user;
     }
 
     /**

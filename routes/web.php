@@ -125,11 +125,12 @@ Route::get('/google_s', 'GoogledriveController@google_s')->name('google_s');
 Auth::routes();
 
 Route::group(['middleware' => ['authcheck', '2fa']], function () {
-    Route::get('/testSS', function () {
-        $today = Carbon::today();
-        $shipments = (Shipment::whereBetween('created_at', [$today->subMonth(1), $today->addMonth(1)])->get());
-        return view('home', compact('shipments'));
-    });
+    // Route::get('/testSS', function () {
+    //     $today = Carbon::today();
+    //     $shipments = (Shipment::whereBetween('created_at', [$today->subMonth(1), $today->addMonth(1)])->get());
+    //     return view('home', compact('shipments'));
+    // });
+
 
     Route::get('/screen', 'ScreenController@screen')->name('screen');
     Route::get('/screen_chart', 'ScreenController@screen_chart')->name('screen_chart');
@@ -168,6 +169,9 @@ Route::group(['middleware' => ['authcheck', '2fa']], function () {
     Route::resource('delStatus', 'DelStatusController');
     Route::resource('clients', 'ClientController');
     Route::resource('riders', 'RiderController');
+
+
+    Route::get('/disable_2fa/{id}', 'Google2FAController@disable_2fa')->name('disable_2fa');
 
     Route::post('updateStatus/{id}', 'ShipmentController@updateStatus')->name('updateStatus');
     Route::get('getAdmin', 'ShipmentController@getAdmin')->name('getAdmin');

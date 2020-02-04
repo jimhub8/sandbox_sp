@@ -49,9 +49,16 @@
                             <td class="text-xs-right">{{ props.item.created_at }}</td>
                             <td class="justify-center layout px-0">
                                 <!-- <v-tooltip bottom> -->
-                                <v-btn icon class="mx-0" @click="openEdit(props.item)" slot="activator" v-if="user.can['edit users']">
-                                    <v-icon small color="blue darken-2">edit</v-icon>
-                                </v-btn>
+
+
+                                <v-tooltip bottom v-if="user.can['edit users']">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn v-on="on" icon class="mx-0" @click="openEdit(props.item)" slot="activator">
+                                            <v-icon small color="blue darken-2">edit</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Edit {{ props.item.name }}'s details</span>
+                                </v-tooltip>
                                 <!-- <span>Edit</span> -->
                                 <!-- </v-tooltip> -->
                                 <v-tooltip bottom>
@@ -60,24 +67,48 @@
                                     </v-btn>
                                     <span>View user</span>
                                 </v-tooltip>
-                                <!-- <v-tooltip bottom> -->
-                                <v-btn icon class="mx-0" @click="openPerm(props.item)" slot="activator" v-if="user.can['edit users']">
-                                    <v-icon small color="orange darken-2">dialpad</v-icon>
-                                </v-btn>
-                                <!-- <span>Edit Permissions</span> -->
-                                <!-- </v-tooltip> -->
-                                <!-- <v-tooltip bottom> -->
-                                <v-btn icon class="mx-0" @click="deleteItem(props.item)" slot="activator" v-if="user.can['edit users']">
-                                    <v-icon small color="pink darken-2">delete</v-icon>
-                                </v-btn>
 
+                                <v-tooltip bottom v-if="user.can['edit users']">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn v-on="on" icon class="mx-0" @click="openPerm(props.item)" slot="activator">
+                                            <v-icon small color="orange darken-2">dialpad</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Edit {{ props.item.name }}'s permisions</span>
+                                </v-tooltip>
+
+                                <v-tooltip bottom v-if="user.can['delete users']">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn v-on="on" icon class="mx-0" @click="deleteItem(props.item)" slot="activator">
+                                            <v-icon small color="pink darken-2">delete</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Delete {{ props.item.name }}</span>
+                                </v-tooltip>
+                                <v-tooltip bottom v-if="user.can['delete users']">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn v-on="on" icon class="mx-0" @click="disable_2fa(props.item)" slot="activator">
+                                            <v-icon small color="blue darken-2">location_disabled</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Disable {{ props.item.name }}'s 2fa</span>
+                                </v-tooltip>
+
+                                <!-- <v-tooltip bottom v-if="user.can['edit users']">
+                                    <template v-slot:activator="{ on }">
+                                        <v-btn v-on="on" icon class="mx-0" @click="disable_2fa(props.item.id)" slot="activator">
+                                            <v-icon small color="blue darken-2">mobile_off</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>Disable 2fa</span>
+                                </v-tooltip> -->
                                 <v-tooltip bottom>
                                     <template v-slot:activator="{ on }">
                                         <v-btn v-on="on" icon class="mx-0" @click="openPassword(props.item.id)" slot="activator">
                                             <v-icon small color="blue darken-2">lock</v-icon>
                                         </v-btn>
                                     </template>
-                                    <span>Change password</span>
+                                    <span>Change {{ props.item.name }}'s' password</span>
                                 </v-tooltip>
                                 <!-- <span>Delete</span> -->
                                 <!-- </v-tooltip> -->
@@ -231,6 +262,16 @@ export default {
         };
     },
     methods: {
+        disable_2fa(item){
+            axios
+                .get(`/disable_2fa/${item.id}`)
+                .then(response => {
+                    eventBus.$emit('alertRequest', '2fa disabled')
+                })
+                .catch(error => {
+                    this.errors = error.response.data.errors;
+                });
+        },
         openDeleted() {
             eventBus.$emit('openDeletedEvent')
         },
