@@ -121,10 +121,10 @@ export default {
             }).
             then((response) => {
                     // console.log(response);
+                    eventBus.$emit('alertRequest', 'User Updated')
                     this.loading = false
                     this.close();
                     eventBus.$emit('userEvent')
-                    eventBus.$emit('alertRequest', 'User Updated')
                     // Object.assign(this.$parent.Allusers[this.$parent.editedIndex], this.$parent.editedItem)
                 })
                 .catch((error) => {

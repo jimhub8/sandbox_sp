@@ -2,8 +2,7 @@
 <div>
     <v-content>
         <v-container fluid fill-height v-show="!loader">
-            <v-layout justify-center align-center>
-                <div class="container">
+            <div style="width: 100%;">
                     <v-card style="background: rgba(5, 117, 230, 0.16);">
                         <v-layout wrap>
                             <v-flex xs4 sm3 offset-sm4>
@@ -120,7 +119,6 @@
                     </v-data-table>
                     <!-- users display -->
                 </div>
-            </v-layout>
         </v-container>
         <div v-show="loader" style="text-align: center; width: 100%;">
             <v-progress-circular :width="3" indeterminate color="green" style="margin: 1rem"></v-progress-circular>
