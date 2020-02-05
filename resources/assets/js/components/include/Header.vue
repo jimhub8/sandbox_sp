@@ -105,8 +105,8 @@
                                     print
                                 </div>
                             </div>
-              </router-link>-->
-                        <v-list-group prepend-icon="book" v-if="user.can['print waybill']">
+                        </router-link>-->
+                        <v-list-group prepend-icon="local_printshop" v-if="user.can['print waybill']">
                             <v-list-tile slot="activator">
                                 <v-list-tile-title>Print</v-list-tile-title>
                             </v-list-tile>
@@ -190,7 +190,7 @@
                             </router-link>
                         </v-list-group>
 
-                        <v-list-group prepend-icon="account_circle" v-if="user.can['view users']">
+                        <v-list-group prepend-icon="people" v-if="user.can['view users']">
                             <v-list-tile slot="activator">
                                 <v-list-tile-title>Clients & Riders</v-list-tile-title>
                             </v-list-tile>
@@ -200,12 +200,12 @@
                                 </v-list-tile-action>
                                 <v-list-tile-title>Manage Clients</v-list-tile-title>
                             </router-link>
-                            <router-link to="/groups" class="v-list__tile theme--light" style="text-decoration: none">
+                            <!-- <router-link to="/groups" class="v-list__tile theme--light" style="text-decoration: none">
                                 <v-list-tile-action>
-                                    <v-icon>gavel</v-icon>
+                                    <v-icon>speaker_group</v-icon>
                                 </v-list-tile-action>
                                 <v-list-tile-title>Client Group</v-list-tile-title>
-                            </router-link>
+                            </router-link> -->
                             <router-link to="/riders" class="v-list__tile theme--light" style="text-decoration: none">
                                 <v-list-tile-action>
                                     <v-icon>accessible</v-icon>

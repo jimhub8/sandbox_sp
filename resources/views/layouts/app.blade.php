@@ -17,10 +17,11 @@
     <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
-     <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+     {{--  <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">  --}}
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
     <!-- Styles -->
     {{-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> --}}
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@1.x/dist/vuetify.min.css" rel="stylesheet">
 
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
