@@ -80,6 +80,7 @@ class ClientController extends Controller
         // $user->givePermissionTo($request->selected);
         // $user->password_hash = $password_hash;
         $user = $user->makeVisible('password')->toArray();
+        $token = $this->token_f();
         try {
             $client = new GuzzleHttpClient();
             $request = $client->request('POST', env('API_URL') . '/api/clients', [
@@ -196,6 +197,7 @@ class ClientController extends Controller
 
     public function client_api($user)
     {
+        $token = $this->token_f();
         try {
             $client = new GuzzleHttpClient();
             $request = $client->request('POST', env('API_URL') . '/api/clients', [
