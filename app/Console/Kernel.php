@@ -36,13 +36,13 @@ class Kernel extends ConsoleKernel
         // $schedule->command('backup:run --only-db')->dailyAt('01:35');
         // $schedule->command('notifications:SchedueledShipment')
         //     ->everyMinute();
-        $schedule->command('Canceled:CanceledShipments')
-            ->everyMinute();
+        // $schedule->command('Canceled:CanceledShipments')
+        //     ->everyMinute();
 
-        $schedule->command('queue:work --force --tries=5')
-            ->everyMinute()
-            //->withoutOverlapping()
-            ->sendOutputTo(storage_path('queue-work.log'));
+        // $schedule->command('queue:work --force --tries=5')
+        //     ->everyMinute()
+        //     //->withoutOverlapping()
+        //     ->sendOutputTo(storage_path('queue-work.log'));
 
         // $schedule->command('db:backup')->mondays()->at('23:00');
     }
