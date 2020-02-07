@@ -159,6 +159,9 @@ return [
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+
+        App\Providers\GoogleDriveServiceProvider::class,
         // // Studio\Totem\Providers\TotemServiceProvider::class,
         // Barryvdh\DomPDF\ServiceProvider::class,
         // Jimmyjs\ReportGenerator\ServiceProvider::class,

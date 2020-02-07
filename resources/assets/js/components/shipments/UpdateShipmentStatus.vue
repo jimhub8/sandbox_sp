@@ -92,8 +92,9 @@ export default {
                     form: this.form
                 },
             }
-            this.$store.dispatch('postItems', payload)
-                .then((response) => {
+            this.$store.dispatch('postItems', payload).then((response) => {
+                    // console.log(response)
+                    // var data = response.data
                     eventBus.$emit('alertRequest', 'Status updated')
                     this.close();
                     this.form.delivery_date = ''
@@ -104,6 +105,7 @@ export default {
                     this.receiver_id = ''
                     eventBus.$emit('selectClear');
                     eventBus.$emit("refreshShipEvent");
+                    eventBus.$emit("refreshDataEvent");
                 })
 
         },

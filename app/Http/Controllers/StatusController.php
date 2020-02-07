@@ -122,7 +122,7 @@ class StatusController extends Controller
         // $derivery_time = $request->form['derivery_time'];
         // $remark = $request->form['remark'];
         // $derivery_date = $request->form['scheduled_date'];
-        $shipment = Shipment::whereIn('id', $id)->update(['printed' => 1, 'printReceipt' => 1, 'printed_at' => now()]);
+        // $shipment = Shipment::whereIn('id', $id)->get();
         $print_shipment->transform(function ($shipment) {
             // $length = strlen($shipment->bar_code);
             // if ($length > 10) {
@@ -142,6 +142,7 @@ class StatusController extends Controller
             // $shipment->country_logo = $country_logo;
             return $shipment;
         });
+        Shipment::whereIn('id', $id)->update(['printed' => 1, 'printReceipt' => 1, 'printed_at' => now()]);
         Shipment::setEventDispatcher($dispatcher);
         return $print_shipment;
     }

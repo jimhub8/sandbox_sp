@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
 
-    //This is the line of code added, at the end, we the have class name of ScheduledCommand.php inside app\console\commands
+        //This is the line of code added, at the end, we the have class name of ScheduledCommand.php inside app\console\commands
         // '\App\Console\Commands\ScheduledCommand',
         '\App\Console\Commands\CanceledCommand',
         // '\App\Console\Commands\BackupDatabase',
@@ -31,6 +31,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        // Backups (to Google Drive)
+        // $schedule->command('backup:clean')->dailyAt('01:30');
+        // $schedule->command('backup:run --only-db')->dailyAt('01:35');
         // $schedule->command('notifications:SchedueledShipment')
         //     ->everyMinute();
         $schedule->command('Canceled:CanceledShipments')

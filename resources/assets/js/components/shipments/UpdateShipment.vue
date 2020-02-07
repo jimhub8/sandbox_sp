@@ -54,7 +54,7 @@
                                     </div>
                                 </v-textarea>
                             </v-flex>
-<!--
+                            <!--
                             <v-flex xs12 sm12>
                                 <v-btn flat color="primary" @click="paid" v-if="updateitedItem.paid === 0">Mark as paid</v-btn>
                                 <v-btn flat color="primary" @click="paid" v-if="updateitedItem.paid === 1">Mark as unpaid</v-btn>
@@ -109,7 +109,7 @@ export default {
                     address: this.address
                 })
                 .then(response => {
-                    console.log(response.data);
+                    // console.log(response.data);
                     this.loading = false;
                     this.close();
                     eventBus.$emit('alertRequest', 'updated');
@@ -127,17 +127,21 @@ export default {
                     //   );
                 })
                 .catch(error => {
-                    // console.log(error.response.data.message);
+                    console.log(error.response.data.message);
                     this.loading = false;
                     if (error.response.status === 500) {
-                        eventBus.$emit('errorEvent', error.response.statusText)
+                        if (error.response.data.message) {
+                            eventBus.$emit('errorEvent', error.response.data.message)
+
+                        } else {
+                            eventBus.$emit('errorEvent', error.response.statusText)
+                        }
                         return
                     } else if (error.response.status === 401 || error.response.status === 409) {
-                       // window.location.href = "/apilogin";
+                        // window.location.href = "/apilogin";
                         eventBus.$emit('reloadRequest')
                         return
-                    }
-                    else if (error.response.status === 422) {
+                    } else if (error.response.status === 422) {
                         eventBus.$emit('errorEvent', error.response.data.message)
                         return
                     }
@@ -174,7 +178,7 @@ export default {
             return this.$store.getters.statuses
         }
     },
-    created () {
+    created() {
         eventBus.$on('UpdateStatusEvent', data => {
             this.dialog = true
             this.updateitedItem = data

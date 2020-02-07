@@ -174,6 +174,14 @@ export default {
         },
 
     },
+    created () {
+        eventBus.$on('refreshDataEvent', data => {
+            this.resetForm()
+            //  this.scanned_orders = []
+
+            //  this.scanned_orders = data
+        });
+    },
     mounted() {
         this.getStatus()
     },

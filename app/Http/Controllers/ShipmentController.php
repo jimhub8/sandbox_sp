@@ -511,12 +511,15 @@ class ShipmentController extends Controller
         //     abort(422, $message);
         //     // return $e->getMessage();
         // }
+        $shipment = Shipment::find($request->id);
+        if ($shipment->status == 'Delivered') {
+            abort(500, 'The shipment has already been Delivered');
+        }
         $this->update_status($request->formobg);
         $no = $request->formobg['client_phone'];
         $no_A = explode(' ', $no);
         $phone_no = $no_A[0];
         // return $request->all();
-        $shipment = Shipment::find($request->id);
         $City = $shipment->client_city;
         $shipment->derivery_status = $request->formobg['status'];
         $shipment->status = $request->formobg['status'];
@@ -630,6 +633,7 @@ class ShipmentController extends Controller
             $this->update_status($array_item);
             $id[] = $selectedItems['id'];
         }
+        // return Shipment::whereIn('id', $id)->get();
         $status = $request->form['status'];
         $derivery_time = $request->form['derivery_time'];
         $remark = $request->form['remark'];
@@ -638,7 +642,6 @@ class ShipmentController extends Controller
             $shipment = Shipment::find($value);
             $shipment->derivery_date = $derivery_date;
             $shipment->status = $status;
-
 
             if ($status == 'Returned') {
                 $shipment->return_date = now();
@@ -663,6 +666,9 @@ class ShipmentController extends Controller
             $shipment->dispatch_date = now();
             $shipment->save();
         }
+        return Shipment::whereIn('id', $id)->get();
+
+
     }
     public function UpdateShipment_1(Request $request, Shipment $shipment)
     {

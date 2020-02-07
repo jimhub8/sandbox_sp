@@ -202,7 +202,7 @@ export default {
 
     // Post Items
     postItems(context, payload) {
-        // console.log(payload);
+        console.log('payloadp', payload);
 
         var model = payload['url']
         var data = payload['data']
@@ -210,11 +210,12 @@ export default {
         // var update_ = payload['update_list']
         context.commit('loading', true)
         axios.post(model, data).then((response) => {
+            console.log(response);
             context.commit('loading', false)
             // console.log(response.data);
             // context.commit(update_, response.data)
         }).catch((error) => {
-            // console.log(error);
+            console.log(error);
 
             context.commit('loading', false)
             if (error.response.status === 500 || error.response.status === 405) {
