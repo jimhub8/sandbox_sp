@@ -512,9 +512,9 @@ class ShipmentController extends Controller
         //     // return $e->getMessage();
         // }
         $shipment = Shipment::find($request->id);
-        if ($shipment->status == 'Delivered') {
-            abort(500, 'The shipment has already been Delivered');
-        }
+        // if ($shipment->status == 'Delivered') {
+        //     abort(500, 'The shipment has already been Delivered');
+        // }
         $this->update_status($request->formobg);
         $no = $request->formobg['client_phone'];
         $no_A = explode(' ', $no);

@@ -224,9 +224,11 @@ class UploadController extends Controller
 
         $this->update_status($data);
         foreach ($arr as $key => $order) {
-            $order_id = ' '.$order["order_id"];
-            $phone = ' ' . $order["phone"];
-            $order_exists = Shipment::where('bar_code', $order_id)->orWhere('bar_code', $order["order_id"])->first();
+            $order_id = $order["order_id"];
+            $phone = $order["phone"];
+            $order_id_1 = ' '.$order["order_id"];
+            // $phone = ' ' . $order["phone"];
+            $order_exists = Shipment::where('bar_code', $order_id_1)->orWhere('bar_code', $order["order_id"])->first();
             if (!$order_exists) {
                 // dd($order['delivery_date']);
                 $order_data = new Shipment();
