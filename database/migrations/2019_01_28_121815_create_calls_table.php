@@ -19,7 +19,8 @@ class CreateCallsTable extends Migration
             $table->integer('country_id');
             $table->integer('shipment_id');
             $table->string('event');
-            $table->text('update_data');
+            $table->text('update_data')->nullable();
+            $table->text('original_data')->nullable();
 			$table->softDeletes();
             $table->timestamps();
         });

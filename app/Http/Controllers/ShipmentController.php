@@ -377,7 +377,7 @@ class ShipmentController extends Controller
         $shipment->sender_city = $request->form['sender_city'];
         // }
 
-        $shipment->update_data = 'test';
+        // $shipment->update_data = 'test';
         // return $request->form['customer_id'];
         // $shipment->user_id = Auth::id();
         // $shipment->branch_id = Auth::user()->branch_id;
