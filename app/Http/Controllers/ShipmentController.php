@@ -314,6 +314,8 @@ class ShipmentController extends Controller
         //     ], 422);
         // }
         $shipment = Shipment::find($id);
+
+
         if ($request->selectCl == []) {
             // $shipment->client_id = null;
             // dd('nn');
@@ -375,18 +377,18 @@ class ShipmentController extends Controller
         $shipment->sender_city = $request->form['sender_city'];
         // }
 
+        $shipment->update_data = 'test';
         // return $request->form['customer_id'];
-        $shipment->user_id = Auth::id();
-        $shipment->shipment_id = random_int(1000000, 9999999);
+        // $shipment->user_id = Auth::id();
         // $shipment->branch_id = Auth::user()->branch_id;
         $shipment->save();
-        $users = $this->getAdmin();
+        // $users = $this->getAdmin();
         // if ($shipment->save()) {
         //     $shipment->products()->saveMany($products);
         // }
         // Notification::send($users, new ShipmentNoty($shipment));
         // $users->notify(new ShipmentNoty($shipment));
-        return $shipment;
+        // return $shipment;
     }
 
     /**
@@ -482,35 +484,6 @@ class ShipmentController extends Controller
 
     public function updateStatus(Request $request, Shipment $shipment, $id)
     {
-        // try {
-        //     $client = new Client;
-        //     $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
-        //         'headers' => [
-        //             'Content-type' => 'application/json',
-        //             'Accept' => 'application/json',
-        //             'Authorization' => 'Bearer ' . $this->token_f(),
-        //         ],
-        //         'body' => json_encode([
-        //             'data' => $request->formobg,
-        //         ])
-        //     ]);
-        //     // $response = $http->get(env('API_URL').'/api/getUsers');
-        //     return $response = $request->getBody()->getContents();
-        // } catch (\Exception $e) {
-        //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
-        //     // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
-        //     // return $e->getMessage();
-        //     return $message = $e->getResponse()->getBody();
-        //     // return $code = $e->getResponse()->getStatusCode();
-        //     if ($code == 401) {
-        //         abort(401);
-        //     }
-        //     // return;
-        //     // $arrayName = array('error' => 'Error', 'message' => $message);
-        //     dd($message);
-        //     abort(422, $message);
-        //     // return $e->getMessage();
-        // }
         $shipment = Shipment::find($request->id);
         // if ($shipment->status == 'Delivered') {
         //     abort(500, 'The shipment has already been Delivered');
@@ -544,6 +517,8 @@ class ShipmentController extends Controller
         } elseif ($request->formobg['status'] == 'Dispatched') {
             $shipment->dispatch_date = now();
         }
+        $original_status = $shipment->getOriginal('status');
+        $shipment->remark = 'order status updated from ' . $original_status . ' to ' .  $request->formobg['status'] . ' by ' . Auth::user()->name;
         if ($shipment->save()) {
             $shipStatus = Shipment::find($id);
             $statusUpdate = new ShipmentStatus;
@@ -554,35 +529,8 @@ class ShipmentController extends Controller
             $statusUpdate->user_id = Auth::id();
             $statusUpdate->branch_id = Auth::user()->branch_id;
             $statusUpdate->shipment_id = $id;
-
-            // $ip = $request->ip();
-            // $ip = '197.136.134.5';
-            // return view('home');
-            // $arr_ip = geoip()->getLocation($ip);
-            // // dd($arr_ip);
-            // $statusUpdate->ip = $arr_ip->ip;
-            // $statusUpdate->lat = $arr_ip->lat;
-            // $statusUpdate->lng = $arr_ip->lon;
-            // $statusUpdate->city = $arr_ip->city;
-            // $statusUpdate->state = $arr_ip->state;
-            // $statusUpdate->state_name = $arr_ip->state_name;
-            // return $statusUpdate;
-            // $this->shipmentUpdated($shipment);
             $statusUpdate->save();
         }
-        // return $shipment;
-        // $sms = new Sms;
-
-        // if ($request->formobg['status'] == 'Not picking') {
-        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
-        // } elseif ($request->formobg['status'] == 'Not available') {
-        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', we tried calling you but you were not available  Incase of queries call +254207608777, +254207608778, +254207608779   ');
-        // } elseif ($request->formobg['status'] == 'Delivered') {
-        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been delivered. Incase of queries call +254207608777, +254207608778, +254207608779    ');
-        // } elseif ($request->formobg['status'] == 'Dispatched') {
-        //     $sms->send_sms($phone_no, 'Dear ' . $request->formobg['client_name'] . ', Your parcel (waybill number: ' . $request->formobg['bar_code'] . ') has been dispatched to ' . $City . '  Incase of queries call +254207608777, +254207608778, +254207608779  ');
-        // }
-        // return $response;
     }
 
     public function shipmentUpdated($shipment)
@@ -678,36 +626,7 @@ class ShipmentController extends Controller
         foreach ($request->selected as $selectedItems) {
             // return $selectedItems;
             $array_item = Arr::prepend($selectedItems, $status, 'status');
-            // return $array_item;
 
-            // try {
-            //     $client = new Client;
-            //     $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
-            //         'headers' => [
-            //             'Content-type' => 'application/json',
-            //             'Accept' => 'application/json',
-            //             'Authorization' => 'Bearer ' . $this->token_f(),
-            //         ],
-            //         'body' => json_encode([
-            //             'data' => $array_item,
-            //         ])
-            //     ]);
-            //     // $response = $http->get(env('API_URL').'/api/getUsers');
-            //     return $response = $request->getBody()->getContents();
-            // } catch (\Exception $e) {
-            //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
-            //     // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
-            //     // return $e->getMessage();
-            //     $message = $e->getResponse()->getBody();
-            //     $code = $e->getResponse()->getStatusCode();
-            //     if ($code == 401) {
-            //         abort(401);
-            //     }
-            //     // $arrayName = array('error' => 'Error', 'message' => $message);
-            //     // dd($message);
-            //     abort(422, $message);
-            //     // return $e->getMessage();
-            // }
             $this->update_status($array_item);
             $id[] = $selectedItems['id'];
         }
@@ -719,24 +638,8 @@ class ShipmentController extends Controller
         // $location = $request->form['location'];
         $derivery_date = $request->form['delivery_date'];
         if ($status == 'Returned') {
-            // if (empty($remark)) {
-            //     // $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
-            //     foreach ($id as $value) {
-            //         // $shipment = Shipment::setEagerLoads([])->find($value)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
 
-            //         $shipment = Shipment::find($value);
-            //         $shipment->derivery_date = $derivery_date;
-            //         $shipment->status = $status;
-            //         // $shipment->speciial_instruction = $remark;
-            //         // $shipment->remark = $remark;
-            //         $shipment->derivery_status = $status;
-            //         $shipment->return_date = now();
-            //         $shipment->save();
-            //     }
-            // } else {
-            // $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
             foreach ($id as $value) {
-                // $shipment = Shipment::setEagerLoads([])->find($value)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
 
                 $shipment = Shipment::find($value);
                 $shipment->derivery_date = $derivery_date;
@@ -749,10 +652,7 @@ class ShipmentController extends Controller
             // }
         } elseif ($status == 'Delivered' || $status == 'Cancelled') {
             if (empty($remark)) {
-                // $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
                 foreach ($id as $value) {
-                    // $shipment = Shipment::setEagerLoads([])->find($value)->update(['status' => $status, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'derivery_status' => $status]);
-
                     $shipment = Shipment::find($value);
                     $shipment->delivered_on     = now();
                     $shipment->derivery_date = $derivery_date;
@@ -761,9 +661,7 @@ class ShipmentController extends Controller
                     $shipment->save();
                 }
             } else {
-                // $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
                 foreach ($id as $value) {
-                    // $shipment = Shipment::setEagerLoads([])->find($value)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
 
                     $shipment = Shipment::find($value);
                     $shipment->derivery_date = $derivery_date;
@@ -776,9 +674,6 @@ class ShipmentController extends Controller
             }
         } elseif ($status == 'Dispatched') {
             if (empty($remark)) {
-                // return 'test';
-                // $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'dispatch_date' => now(), 'derivery_status' => $status]);
-                // $shipment = Shipment::setEagerLoads([])->find($value)->update(['status' => $status, 'dispatch_date' => now(), 'derivery_status' => $status]);
                 foreach ($id as $value) {
                     $shipment = Shipment::find($value);
                     $shipment->status = $status;
@@ -787,9 +682,7 @@ class ShipmentController extends Controller
                     $shipment->save();
                 }
             } else {
-                // $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'dispatch_date' => now(), 'speciial_instruction' => $remark, 'derivery_status' => $status]);
                 foreach ($id as $value) {
-                    // $shipment = Shipment::setEagerLoads([])->find($value)->update(['status' => $status, 'remark' => $remark, 'dispatch_date' => now(), 'speciial_instruction' => $remark, 'derivery_status' => $status]);
                     foreach ($id as $value) {
                         $shipment = Shipment::find($value);
                         $shipment->status = $status;
@@ -813,9 +706,7 @@ class ShipmentController extends Controller
                     $shipment->save();
                 }
             } else {
-                // $shipment = Shipment::setEagerLoads([])->whereIn('id', $id)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
                 foreach ($id as $value) {
-                    // $shipment = Shipment::setEagerLoads([])->find($value)->update(['status' => $status, 'remark' => $remark, 'derivery_date' => $derivery_date, 'derivery_time' => $derivery_time, 'speciial_instruction' => $remark, 'derivery_status' => $status]);
                     $shipment = Shipment::find($value);
                     $shipment->status = $status;
                     $shipment->derivery_date = $derivery_date;

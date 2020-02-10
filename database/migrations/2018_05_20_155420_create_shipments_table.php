@@ -73,7 +73,9 @@ class CreateShipmentsTable extends Migration {
 			$table->date('assign_date')->nullable();
 			$table->date('cancelled_date')->nullable();
 			$table->date('refused_on')->nullable();
-			$table->boolean('sticker')->default(0);
+            $table->boolean('sticker')->default(0);
+            $table->text('update_data')->nullable();
+            $table->text('original_data')->nullable();
 			$table->softDeletes();
 			$table->timestamps();
 		});

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Call;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CallController extends Controller
 {
@@ -15,10 +16,12 @@ class CallController extends Controller
      */
     public function index()
     {
-        $calls = Call::with('shipment', 'user')->latest()->paginate(200);
+        $calls = Call::where('country_id', Auth::user()->country_id)->with('shipment', 'user')->latest()->paginate(200);
         $calls->transform(function ($call, $key) {
             // dd($call->shipment);
             // $call->shipment = unserialize($call->shipment);
+            $call->original_data = ($call->original_data) ? (unserialize($call->original_data)) : '';
+            $call->update_data = ($call->update_data) ? (unserialize($call->update_data)) : '';
             $call->user_name = $call->user->name;
             return $call;
         });
@@ -30,7 +33,7 @@ class CallController extends Controller
         // return $request->all();
         $end_date = $request->end_date;
         $start_date = $request->start_date;
-        $calls = Call::latest()->with('shipment', 'user');
+        $calls = Call::where('country_id', Auth::user()->country_id)->latest()->with('shipment', 'user');
         if ($end_date & $start_date) {
             $calls = $calls->whereBetween('created_at', [$start_date, $end_date]);
         }
@@ -41,6 +44,8 @@ class CallController extends Controller
         $calls->transform(function ($call, $key) {
             // dd($call->shipment);
             // $call->shipment = unserialize($call->shipment);
+            $call->original_data = ($call->original_data) ? (unserialize($call->original_data)) : '';
+            $call->update_data = ($call->update_data) ? (unserialize($call->update_data)) : '';
             $call->user_name = $call->user->name;
             return $call;
         });
