@@ -401,28 +401,29 @@ class ShipmentController extends Controller
     {
         $token = $this->token_f();
         $shipment = Shipment::find($id);
-        try {
-            $client = new Client;
-            $request = $client->request('DELETE', env('API_URL') . '/api/order_delete/' . $shipment->bar_code, [
-                'headers' => [
-                    'Content-type' => 'application/json',
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token,
-                ],
-            ]);
             Shipment::find($id)->delete();
+        //     try {
+        //     $client = new Client;
+        //     $request = $client->request('DELETE', env('API_URL') . '/api/order_delete/' . $shipment->bar_code, [
+        //         'headers' => [
+        //             'Content-type' => 'application/json',
+        //             'Accept' => 'application/json',
+        //             'Authorization' => 'Bearer ' . $token,
+        //         ],
+        //     ]);
+        //     Shipment::find($id)->delete();
 
-            return $response = $request->getBody()->getContents();
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
-            $message = $e->getResponse()->getBody();
-            $code = $e->getResponse()->getStatusCode();
-            abort(422, $message);
-            if ($code == 401) {
-                abort(401);
-            }
-            return;
-        }
+        //     return $response = $request->getBody()->getContents();
+        // } catch (\Exception $e) {
+        //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+        //     $message = $e->getResponse()->getBody();
+        //     $code = $e->getResponse()->getStatusCode();
+        //     abort(422, $message);
+        //     if ($code == 401) {
+        //         abort(401);
+        //     }
+        //     return;
+        // }
     }
 
     public function getAdmin()
