@@ -48,7 +48,7 @@
                     <v-flex xs12 sm6>
                         <ul class="list-group">
                             <li class="list-group-item active text-center">
-                                <h5>Original data</h5>
+                                <h5>Updated data</h5>
                             </li>
                             <li class="list-group-item" v-for="(data, key) in all_data.update_data" :key="key">
                                 <label for=""><b>{{ key }}</b></label>{{ data }}
