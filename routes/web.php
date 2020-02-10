@@ -473,6 +473,7 @@ Route::group(['middleware' => ['auth', '2fa']], function () {
 
     Route::post('Filterlogs', 'CallController@Filterlogs')->name('Filterlogs');
     Route::get('callcount', 'CallController@callcount')->name('callcount');
+    Route::get('logs_search/{search}', 'CallController@logs_search')->name('logs_search');
 
     Route::any('invoiceOrder', 'InvoiceController@invoiceOrder')->name('invoiceOrder');
     Route::any('invoice/{id}', 'InvoiceController@invoice')->name('invoice');

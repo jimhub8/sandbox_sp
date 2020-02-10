@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Call;
-use App\User;
+use App\Shipment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -54,5 +54,28 @@ class CallController extends Controller
     public function callcount()
     {
         return Call::count();
+    }
+
+    public function logs_search($search)
+    {
+        $shipments = Shipment::select('id')->withoutGlobalScope(ShipmentScope::class)
+            ->where('bar_code', 'LIKE', "%{$search}%")
+            ->orwhere('client_phone', 'LIKE', "%{$search}%")
+            ->orwhere('client_email', 'LIKE', "%{$search}%")
+            ->orwhere('client_name', 'LIKE', "%{$search}%")->get();
+
+        $id = [];
+        foreach ($shipments as $shipment) {
+          $id[] = $shipment->id;
+        }
+
+        $calls = Call::where('country_id', Auth::user()->country_id)->with('shipment', 'user')->latest()->whereIn('shipment_id', $id)->paginate(500);
+        $calls->transform(function ($call, $key) {
+            $call->original_data = ($call->original_data) ? (unserialize($call->original_data)) : '';
+            $call->update_data = ($call->update_data) ? (unserialize($call->update_data)) : '';
+            $call->user_name = $call->user->name;
+            return $call;
+        });
+        return $calls;
     }
 }

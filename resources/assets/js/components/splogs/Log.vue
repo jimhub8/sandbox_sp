@@ -6,8 +6,11 @@
         </div>
         <v-container fluid fill-height v-show="!loader">
             <v-layout justify-center align-center>
+
                 <div v-show="!loader">
-                    <v-layout wrap>
+                    <v-layout wrap><v-flex sm12>
+                    <v-text-field v-model="glsearch.search" append-icon="search" label="Global Search" single-line hide-details @keyup.enter="itemSearch"></v-text-field>
+                </v-flex>
                         <v-flex sm6>
                             <v-pagination v-model="AllCalls.current_page" :length="AllCalls.last_page" total-visible="5" @input="next()" circle v-if="AllCalls.last_page > 1"></v-pagination>
                         </v-flex>
@@ -22,10 +25,10 @@
                             </template> <span>Refresh</span>
                         </v-tooltip>
                         <v-flex xs4 sm3>
-                                <el-select v-model="form.client_id" clearable filterable placeholder="Select User" @change="changeCat">
-                                    <el-option v-for="item in Allusers" :key="item.id" :label="item.name" :value="item.id">
-                                    </el-option>
-                                </el-select>
+                            <el-select v-model="form.client_id" clearable filterable placeholder="Select User" @change="changeCat">
+                                <el-option v-for="item in Allusers" :key="item.id" :label="item.name" :value="item.id">
+                                </el-option>
+                            </el-select>
                             <!-- <v-select :items="Allusers" v-model="select" label="Select User" single-line item-text="name" item-value="name" return-object persistent-hint></v-select> -->
                         </v-flex>
                         <v-flex xs12 sm2 offset-sm1>
@@ -105,12 +108,14 @@ export default {
             loading: false,
             select: [],
             Allusers: [],
+            glsearch: {
+                search: ''
+            },
             between: {
                 start: 1,
                 end: 500
             },
-            headers: [
-                {
+            headers: [{
                     text: 'User Name',
                     align: 'left',
                     value: 'user_name'
@@ -245,6 +250,27 @@ export default {
                     this.loading = false;
                     this.errors = error.response.data.errors;
                 });
+        },
+
+        itemSearch() {
+
+            eventBus.$emit("progressEvent");
+            axios.get(`/logs_search/${this.glsearch.search}`)
+                .then((response) => {
+                    eventBus.$emit("StoprogEvent");
+                    this.loader = false;
+                    this.AllCalls = response.data
+                })
+                .catch((error) => {
+                    eventBus.$emit("StoprogEvent");
+                    this.loader = false;
+                    this.errors = error.response.data.errors
+                })
+            // var payload = {
+            //     url: '/logs_search/' + this.glsearch.search,
+            //     list: 'updateShipmentsList',
+            // }
+            // this.$store.dispatch('searchItems', payload)
         },
     },
     mounted() {
