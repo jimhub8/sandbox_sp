@@ -8,33 +8,48 @@
             <v-layout justify-center align-center>
 
                 <div v-show="!loader">
-                    <v-layout wrap><v-flex sm12>
-                    <v-text-field v-model="glsearch.search" append-icon="search" label="Global Search" single-line hide-details @keyup.enter="itemSearch"></v-text-field>
-                </v-flex>
+                    <v-layout wrap>
+                        <v-flex sm12>
+                            <v-text-field v-model="glsearch.search" append-icon="search" label="Global Search" single-line hide-details @keyup.enter="itemSearch"></v-text-field>
+                        </v-flex>
                         <v-flex sm6>
                             <v-pagination v-model="AllCalls.current_page" :length="AllCalls.last_page" total-visible="5" @input="next()" circle v-if="AllCalls.last_page > 1"></v-pagination>
                         </v-flex>
                     </v-layout>
                     <v-card-title>
-                        Logs
-                        <v-tooltip right>
-                            <template v-slot:activator="{ on }">
-                                <v-btn v-on="on" icon slot="activator" class="mx-0" @click="getCalls">
-                                    <v-icon color="blue darken-2" small>refresh</v-icon>
-                                </v-btn>
-                            </template> <span>Refresh</span>
-                        </v-tooltip>
-                        <v-flex xs4 sm3>
+                        <v-flex xs6 sm12>
+                            Logs
+                        </v-flex>
+
+                        <v-flex xs1 sm1>
+                            <v-tooltip right>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn v-on="on" icon slot="activator" class="mx-0" @click="getCalls">
+                                        <v-icon color="blue darken-2" small>refresh</v-icon>
+                                    </v-btn>
+                                </template> <span>Refresh</span>
+                            </v-tooltip>
+                        </v-flex>
+
+                        <v-flex xs4 sm2>
+                            <label for="">Country</label>
+                            <el-select v-model="form.country" filterable clearable placeholder="Select Country" style="width: 100%;">
+                                <el-option v-for="item in countries" :key="item.id" :label="item.country_name" :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </v-flex>
+                        <v-flex xs4 sm2 style="margin-left: 10px">
+                            <label for="">Clients</label>
                             <el-select v-model="form.client_id" clearable filterable placeholder="Select User" @change="changeCat">
                                 <el-option v-for="item in Allusers" :key="item.id" :label="item.name" :value="item.id">
                                 </el-option>
                             </el-select>
                             <!-- <v-select :items="Allusers" v-model="select" label="Select User" single-line item-text="name" item-value="name" return-object persistent-hint></v-select> -->
                         </v-flex>
-                        <v-flex xs12 sm2 offset-sm1>
+                        <v-flex xs12 sm2 style="margin-left: 10px">
                             <v-text-field label="Start Date" v-model="form.start_date" color="blue darken-2" type="date" required></v-text-field>
                         </v-flex>
-                        <v-flex xs12 sm2>
+                        <v-flex xs12 sm2 style="margin-left: 10px">
                             <v-text-field label="End Date" v-model="form.end_date" color="blue darken-2" type="date" required></v-text-field>
                         </v-flex>
                         <v-flex sm1>
@@ -272,11 +287,20 @@ export default {
             // }
             // this.$store.dispatch('searchItems', payload)
         },
+
+        getCountry() {
+            var payload = {
+                url: '/getCountry',
+                list: 'updateCountryList',
+                data: this.form,
+            }
+            this.$store.dispatch('getItems', payload)
+        },
     },
     mounted() {
         this.loader = true
         this.getUsers()
-        // this.schedulepct()
+        this.getCountry()
         this.getCalls()
         axios
             .get("/callcount")
@@ -286,6 +310,11 @@ export default {
             .catch(error => {
                 this.errors = error.response.data.errors;
             });
+    },
+    computed: {
+        countries() {
+            return this.$store.getters.countries
+        },
     },
     beforeRouteEnter(to, from, next) {
         next(vm => {

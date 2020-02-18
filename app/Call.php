@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\ShipmentScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +16,7 @@ class Call extends Model
     }
     public function shipment()
     {
-        return $this->belongsTo('App\Shipment', 'shipment_id');
+        return $this->belongsTo('App\Shipment', 'shipment_id')->withoutGlobalScope(ShipmentScope::class);
     }
 
     public function getUpdatedAtAttribute($date)

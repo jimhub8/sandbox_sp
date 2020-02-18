@@ -33,7 +33,14 @@ class CallController extends Controller
         // return $request->all();
         $end_date = $request->end_date;
         $start_date = $request->start_date;
-        $calls = Call::where('country_id', Auth::user()->country_id)->latest()->with('shipment', 'user');
+
+
+        if ($request->country) {
+            $calls = Call::where('country_id', $request->country)->latest()->with('shipment', 'user');
+        } else {
+            $calls = Call::where('country_id', Auth::user()->country_id)->latest()->with('shipment', 'user');
+        }
+
         if ($end_date & $start_date) {
             $calls = $calls->whereBetween('created_at', [$start_date, $end_date]);
         }
