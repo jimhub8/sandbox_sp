@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Call extends Model
 {
+    // protected $hidden = ['update_data'];
+
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id');

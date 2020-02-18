@@ -11,7 +11,7 @@ class ShipmentObserver
 {
     public function updated(Shipment $shipment)
     {
-        // dd($shipment->id);
+        // dd($shipment);
         $original = $shipment->getOriginal();
         $dirty = $shipment->getDirty();
         $key_v = array();
@@ -37,7 +37,7 @@ class ShipmentObserver
             // dd($shipment->event);
             // dd($shipment);
         } elseif ($shipment->update_data) {
-            // dd($shipment->id);
+            // dd($shipment->update_data);
             $call = new Call;
             $shipment_id = $shipment->id;
             $call->shipment_id = $shipment_id;
