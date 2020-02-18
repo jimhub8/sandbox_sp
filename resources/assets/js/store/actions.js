@@ -234,13 +234,14 @@ export default {
 
     // Patch Items
     patchItems(context, payload) {
-        console.log(payload);
+        // console.log(payload);
 
         var model = payload['url']
         var data = payload['data']
         context.commit('loading', true)
         axios.patch(model, data).then((response) => {
-            context.commit('loading', false)
+        eventBus.$emit('alertRequest', 'Updated')
+        context.commit('loading', false)
         }).catch((error) => {
             context.commit('loading', false)
             if (error.response.status === 500 || error.response.status === 405) {
