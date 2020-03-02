@@ -51,6 +51,24 @@ Vue.component('message', require('./components/chat/Message.vue'));
 import myHeader from './components/include/Header.vue';
 import myScreen from './components/screen';
 
+import passportClients from './components/passport/Clients.vue'
+import passportAuthorizedClients from './components/passport/AuthorizedClients.vue'
+import passportPersonalAccessTokens from './components/passport/PersonalAccessTokens.vue'
+
+// Vue.component(
+//     'passport-clients',
+//     require('./components/passport/Clients.vue').default
+// );
+
+// Vue.component(
+//     'passport-authorized-clients',
+//     require('./components/passport/AuthorizedClients.vue').default
+// );
+
+// Vue.component(
+//     'passport-personal-access-tokens',
+//     require('./components/passport/PersonalAccessTokens.vue').default
+// );
 
 const app = new Vue({
     el: '#app',
@@ -58,7 +76,11 @@ const app = new Vue({
     router,
     components: {
         myScreen,
-        myHeader
+        myHeader,
+
+        passportClients,
+        passportAuthorizedClients,
+        passportPersonalAccessTokens,
     },
     data() {
         return {

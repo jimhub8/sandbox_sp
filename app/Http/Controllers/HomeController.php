@@ -57,11 +57,15 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         // dd($request->session()->all());
-        
+
         return view('home');
         // return redirect('/login');
         // if (Auth::check()) {
         //     return redirect('/courier');
         // }
+    }
+    public function passport()
+    {
+        return view('passport/passport');
     }
 }

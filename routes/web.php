@@ -109,6 +109,7 @@ Route::get('/search', 'ShipmentController@search')->name('search');
 Route::get('/algoria', function () {
     return view('vendor.passport.passport');
 });
+Route::get('/passport', 'HomeController@passport')->name('passport');
 
 // Route::get('/map', function () {
 // 	return App\User::take(100)->get();
