@@ -66,8 +66,11 @@ class ShipmentUpdateController extends Controller
     public function transform_shipment($shipments)
     {
         $shipments->transform(function ($shipment) {
+            // dd($shipment->branch->branch_name);
             $shipment->created_by = $shipment->user->name;
             $shipment->bar_code = $shipment->shipment->bar_code;
+            $shipment->rider_name = $shipment->rider->name;
+            $shipment->branch_name = $shipment->branch->branch_name;
             return $shipment;
         });
         return $shipments;

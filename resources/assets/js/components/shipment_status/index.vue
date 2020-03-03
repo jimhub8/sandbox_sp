@@ -117,6 +117,14 @@ export default {
                     field: "comment"
                 },
                 {
+                    label: "Rider",
+                    field: "rider_name"
+                },
+                {
+                    label: "Branch",
+                    field: "branch_name"
+                },
+                {
                     label: "Status",
                     field: "delivery_status"
                 },
