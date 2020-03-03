@@ -25,13 +25,15 @@ use Illuminate\Http\Request;
 //         Route::get('user', 'AuthController@user');
 //     });
 // });
-Route::resource('shipment', 'api\ShipmentController');
+Route::resource('status', 'StatusController');
+
 
 Route::group([
     'middleware' => 'auth:api',
 ], function () {
     // Route::resource('users', 'UserController');
     // Route::resource('roles', 'RoleController');
+    Route::resource('shipment', 'api\ShipmentController');
     // Route::resource('product', 'ProductController');
     // Route::resource('reports', 'ReportController');
     // Route::resource('container', 'ContainerController');
@@ -39,7 +41,6 @@ Route::group([
     // Route::resource('companies', 'CompanyController');
     // Route::resource('email', 'EmailController');
     // Route::resource('invoice', 'InvoiceController');
-	Route::resource('status', 'StatusController');
 
     Route::get('loggedin_user', 'api\UserController@loggedin_user')->name('loggedin_user');
     Route::get('search/{order_no}', 'api\ShipmentController@search')->name('search');
