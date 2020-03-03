@@ -21,6 +21,9 @@ class ClientScope implements Scope
         if (Auth::guard('clients')->check()) {
             $user = Auth::guard('clients')->user();
             return $builder->where('client_id', $user->id);
+        } elseif (auth('api')->check()) {
+            $user = auth('api')->user();
+            return $builder->where('client_id', $user->id);
         }
     }
 }

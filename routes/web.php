@@ -20,6 +20,11 @@ use Illuminate\Support\Facades\Auth;
 // 	\Illuminate\Support\Facades\Artisan::call('notifications:SchedueledShipment');
 //  });
 
+
+// Route::get('/docs', function () {
+//     return view('vendor.apidoc.documentarian');
+// });
+
 Route::get('/2fa/enable', 'Google2FAController@enableTwoFactor');
 Route::get('/2fa/validate', 'Auth\LoginController@getValidateToken');
 Route::get('/2fa/disable', 'Google2FAController@disableTwoFactor');

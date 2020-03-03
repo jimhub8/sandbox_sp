@@ -12,28 +12,64 @@ use App\Shipment;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Notification;
+use Illuminate\Support\Facades\Notification;
 
 class ShipmentController extends Controller
 {
+    /**
+     * Get you orders
+     * The orders will have a pagination of 100
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $user = auth('api')->user();
-        if ($user->hasRole('Client')) {
-            $shipment = Shipment::where('client_id', Auth::id())->orderBy('id', 'desc')->paginate();
-        } else {
-            $shipment = Shipment::where('country_id', $user->country_id)->orderBy('id', 'desc')->paginate();
-        }
+        // $shipment = Shipment::setEagerLoads([])->where('id', 1)->paginate(2);
+        // if ($user->hasRole('Client')) {
+        //     $shipment = Shipment::setEagerLoads([])->where('client_id', Auth::id())->orderBy('id', 'desc')->paginate();
+        // } else {
+            $shipment = Shipment::setEagerLoads([])->where('client_id', $user->id)->orderBy('id', 'desc')->paginate(100);
+        // }
         return ShipmentResource::collection($shipment);
     }
 
     public function show($id)
     {
-        return ShipmentResource::collection(Shipment::where('id', $id)->get());
+        return ShipmentResource::collection(Shipment::setEagerLoads([])->where('id', $id)->get());
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a new order.
+     *Send a json file with the following details
+     *
+     *
+     {
+        "bar_code": "EMS0220222",
+        "quantity": 1,
+        "client_address": "Riruta, kabiria. Near kivuli center",
+        "client_city": ''Nairobi'',
+        "product_name": "SLICER",
+        "client_name": "Edward njenga",
+        "client_phone": "722703019",
+        "cod_amount": "3500.00",
+        "products": [
+            {
+                "product_name": "Test Product",
+                "price": 299,
+                "total": 299,
+                "quantity": 1,
+            },
+            {
+                "product_name": "Test Product",
+                "price": 299,
+                "total": 299,
+                "quantity": 1,
+            },
+        ]
+    }
+     *
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -58,27 +94,27 @@ class ShipmentController extends Controller
         //     ], 422);
         // }
         $shipment = new Shipment;
-        if ($request->selectCl == []) {
-            $shipment->client_id = null;
-        } else {
-            $shipment->client_id = $request->selectCl['id'];
-        }
-        if ($request->selectD == []) {
-            $shipment->driver = '';
-        } else {
-            $shipment->driver = $request->selectD['id'];
-        }
+        // if ($request->selectCl == []) {
+        //     $shipment->client_id = null;
+        // } else {
+        //     $shipment->client_id = $request->selectCl['id'];
+        // }
+        // if ($request->selectD == []) {
+        //     $shipment->driver = '';
+        // } else {
+        //     $shipment->driver = $request->selectD['id'];
+        // }
 
-        if ($request->selectB == []) {
-            $shipment->branch_id = $user_data->branch_id;
-        } else {
-            $shipment->branch_id = $request->selectB['id'];
-        }
+        // if ($request->selectB == []) {
+        //     $shipment->branch_id = $user_data->branch_id;
+        // } else {
+        //     $shipment->branch_id = $request->selectB['id'];
+        // }
 
         // $shipment->sub_total = $products->sum('total');
         $shipment->client_name = $request->client_name;
         $shipment->client_phone = $request->client_phone;
-        $shipment->client_email = $request->client_email;
+        $shipment->client_email = $request->product_name;
         $shipment->client_address = $request->client_address;
         $shipment->client_city = $request->client_city;
         $shipment->airway_bill_no = $request->bar_code;
@@ -90,6 +126,7 @@ class ShipmentController extends Controller
         $shipment->to_city = $request->to_city;
         $shipment->cod_amount = $request->cod_amount;
         $shipment->from_city = $request->from_city;
+        $shipment->amount_ordered = $request->quantity;
         $shipment->user_id = $user_id;
 
         if ($request->model) {
@@ -111,6 +148,21 @@ class ShipmentController extends Controller
         // return $user_id;
         $shipment->shipment_id = random_int(1000000, 9999999);
         $shipment->save();
+
+        if (!empty($products)) {
+            $products = collect($request->form['products'])->transform(function ($product) {
+                $product['total'] = $product['quantity'] * $product['price'];
+                $product['user_id'] = Auth::id();
+                return new Product($product);
+            });
+
+            $shipment->sub_total = $products->sum('total');
+            // return $products;
+        }
+
+        if (!empty($products)) {
+            $shipment->products()->saveMany($products);
+        }
         $users = $this->getAdmin();
         // $users = User::all();
         // if ($shipment->save()) {
@@ -138,29 +190,7 @@ class ShipmentController extends Controller
         //         'product_empty' => ['One or more products is required'],
         //     ], 422);
         // }
-        $shipment = Shipment::where($id)->get();
-        if ($request->selectCl == []) {
-            // $shipment->client_id = null;
-            // dd('nn');
-        } else {
-            $shipment->client_id = $request->selectCl['id'];
-            // dd( $request->selectCl['id']);
-        }
-        if ($request->selectD == []) {
-            // $shipment->driver = '';
-            // dd('renn');
-        } else {
-            $shipment->driver = $request->selectD['id'];
-            // dd( $request->selectD['id']);
-        }
-
-        if ($request->selectB == []) {
-            // $shipment->branch_id = Auth::user()->branch_id;
-            // dd(Auth::user()->branch_id);
-        } else {
-            $shipment->branch_id = $request->selectB['id'];
-            // dd( $request->selectB['id']);
-        }
+        $shipment = Shipment::setEagerLoads([])->where($id)->get();
 
         // $shipment->sub_total = $products->sum('total');
         $shipment->client_name = $request->form['client_name'];
@@ -383,14 +413,28 @@ class ShipmentController extends Controller
         return response()->json(['success' => 'Sucessfully Deleted', 'status' => '200'], 200);
     }
 
-    public function glSearch(Request $request)
+
+    /**
+     * Search through you orders
+     * Search by order_no, client phone number or client name
+     * The orders will have a pagination of 100
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function search($order_no)
     {
         // return $request->all();
-        $search = $request->search;
-        return Shipment::where('bar_code', 'LIKE', "%{$search}%")
+        $user = auth('api')->user();
+        $search = $order_no;
+        $shipment = Shipment::setEagerLoads([])
+            ->where('client_id', $user->id)
+            ->where('bar_code', 'LIKE', "%{$search}%")
             ->orwhere('client_phone', 'LIKE', "%{$search}%")
             ->orwhere('client_email', 'LIKE', "%{$search}%")
-            ->orwhere('client_name', 'LIKE', "%{$search}%")->take(500)->get();
-    }
+            ->orwhere('client_name', 'LIKE', "%{$search}%")
+            ->paginate(1);
+        return ShipmentResource::collection($shipment);
 
+    }
 }

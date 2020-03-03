@@ -57,13 +57,13 @@ class UserController extends Controller
         return response()->json(['success' => $success], $this->successStatus);
     }
     /**
-     * details api
+     * Logged in user details
      *
      * @return \Illuminate\Http\Response
      */
-    public function details()
+    public function loggedin_user()
     {
-        $user = Auth::user();
+        $user = auth('api')->user();
         return response()->json(['success' => $user], $this->successStatus);
     }
 
