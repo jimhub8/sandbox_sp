@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\models\ShipmentUpdate;
+use App\models\Status_update;
 use App\Shipment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +38,8 @@ class ShipmentUpdateController extends Controller
         $shipmentUpdate->rider_id = $request->driver;
         $shipmentUpdate->shipment_id = $request->id;
         $shipmentUpdate->save();
+        $ship_status = new Status_update;
+        $ship_status->updateStatus($request->all());
     }
 
     /**
