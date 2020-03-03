@@ -179,6 +179,9 @@ Route::group(['middleware' => ['auth', '2fa']], function () {
     Route::resource('clients', 'ClientController');
     Route::resource('riders', 'RiderController');
 
+    Route::resource('statusupdates', 'ShipmentUpdateController');
+    Route::post('filter_updates/', 'ShipmentUpdateController@filter_updates')->name('filter_updates');
+
 
     Route::get('/disable_2fa/{id}', 'Google2FAController@disable_2fa')->name('disable_2fa');
 
@@ -495,6 +498,8 @@ Route::group(['middleware' => ['auth', '2fa']], function () {
 
     Route::get('searchClient/{search}', 'ClientController@searchClient')->name('searchClient');
     Route::get('searchRider/{search}', 'RiderController@searchRider')->name('searchRider');
+
+    Route::get('Waybill_search/{search}', 'ShipmentUpdateController@Waybill_search')->name('Waybill_search');
 
     Route::post('/google_sheets', 'GoogledriveController@google_sheets')->name('google_sheets')->middleware('exc_time');
 });

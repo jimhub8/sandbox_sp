@@ -36,4 +36,7 @@ export default {
     branches(state) {
         return state.branches
     },
+    statusupdates(state) {
+        return state.statusupdates
+    },
 }

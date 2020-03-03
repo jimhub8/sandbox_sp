@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\models\ShipmentUpdate;
 use App\models\Token;
 use App\Notifications\verifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -70,6 +71,11 @@ class User extends Authenticatable
     public function calls()
     {
         return $this->hasMany('App\Call');
+    }
+
+    public function shipment_status()
+    {
+        return $this->hasMany(ShipmentUpdate::class);
     }
 
     public function shipStatus()

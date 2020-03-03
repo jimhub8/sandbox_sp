@@ -26,6 +26,12 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI, { locale });
 import StoreData from './store/store'
 
+import VueGoodTablePlugin from 'vue-good-table';
+
+// import the styles
+import 'vue-good-table/dist/vue-good-table.css'
+
+Vue.use(VueGoodTablePlugin);
 // import VueCharts from 'vue-chartjs'
 // import { Bar, Line } from 'vue-chartjs'
 window.eventBus = new Vue()

@@ -56,6 +56,7 @@ import mySendSms from './components/shipments/sms/Sendsms'
 
 import myStatuses from './components/status/Status.vue';
 import myDStatus from './components/status/DStatus.vue';
+import myShipentUpdates from './components/shipment_status';
 
 const routes = [
     // {path: '/', component: dashboard },
@@ -108,6 +109,7 @@ const routes = [
 
     { path: '/sms', component: mySendSms },
     { path: '/update', component: myUpdate },
+    { path: '/shipment_status', component: myShipentUpdates },
 ]
 
 

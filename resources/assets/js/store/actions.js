@@ -126,11 +126,11 @@ export default {
 
     nextPage(context, payload) {
 
+        // console.log(payload);
         var data = payload.data
         var path = payload.path
         var page = payload.page
         var update_ = payload.list
-        // console.log(update_);
         context.commit('loading', true)
         axios.post(path + `?page=` + page, data)
             .then((response) => {
@@ -202,7 +202,7 @@ export default {
 
     // Post Items
     postItems(context, payload) {
-        console.log('payloadp', payload);
+        // console.log('payloadp', payload);
 
         var model = payload['url']
         var data = payload['data']

@@ -15,6 +15,7 @@ export default {
         branches: [],
         statuses: [],
         logs: [],
+        statusupdates: [],
 
     },
     getters,

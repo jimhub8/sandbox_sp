@@ -40,6 +40,9 @@ export default {
     updateDeletedClients(state, payload) {
         state.deleted_clients = payload
     },
+    updateStatusupdateList(state, payload) {
+        state.statusupdates = payload
+    },
 
     // Api
     updateApiStatusItemList(state, payload) {

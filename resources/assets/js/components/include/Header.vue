@@ -52,6 +52,15 @@
                                 <div class="v-list__tile__title">Manage Shipments</div>
                             </div>
                         </router-link>
+
+                        <router-link to="/shipment_status" class="v-list__tile theme--light" style="text-decoration: none">
+                            <div class="v-list__tile__action">
+                                <v-icon>update</v-icon>
+                            </div>
+                            <div class="v-list__tile__content">
+                                <div class="v-list__tile__title">Shipment status</div>
+                            </div>
+                        </router-link>
                         <router-link to="/charges" class="v-list__tile v-list__tile--link" v-if="user.can['view charges']">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">attach_money</i>
@@ -457,7 +466,7 @@ export default {
             window.location.href = "/apilogin";
         },
         reload_app_page() {
-             window.location.reload();
+            window.location.reload();
         },
 
         inactivityTime() {
@@ -478,7 +487,7 @@ export default {
             // 1000 milliseconds = 1 second
         }
     },
-    mounted () {
+    mounted() {
         // this.inactivityTime();
     },
     created() {
