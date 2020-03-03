@@ -25,13 +25,13 @@ use Illuminate\Http\Request;
 //         Route::get('user', 'AuthController@user');
 //     });
 // });
+Route::resource('shipment', 'api\ShipmentController');
 
 Route::group([
     'middleware' => 'auth:api',
 ], function () {
     // Route::resource('users', 'UserController');
     // Route::resource('roles', 'RoleController');
-    Route::resource('shipment', 'api\ShipmentController');
     // Route::resource('product', 'ProductController');
     // Route::resource('reports', 'ReportController');
     // Route::resource('container', 'ContainerController');
