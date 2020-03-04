@@ -15,7 +15,7 @@
                             <div>
                                 <!-- <label for="">Waybill</label> -->
                                 <!-- <el-autocomplete v-model="form.waybill_no" placeholder="Please input" @select="handleSelect"></el-autocomplete> -->
-                                <v-text-field v-model="form.bar_code" color="blue darken-2" label="Country name" append-icon="search" @keyup.enter="Waybill_search">
+                                <v-text-field v-model="form.bar_code" color="blue darken-2" label="Waybill" append-icon="search" @change="Waybill_search">
                                 </v-text-field>
                             </div>
                             <div v-show="update_status">
