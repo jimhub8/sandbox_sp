@@ -9,7 +9,7 @@
                 </el-select>
             </v-flex> -->
             <v-flex xs4 sm2 offset-sm1>
-                <el-select v-model="form.rider_id" clearable filterable placeholder="Select Branch">
+                <el-select v-model="form.rider_id" clearable filterable placeholder="Select rider">
                     <el-option v-for="item in riders" :key="item.id" :label="item.name" :value="item.id">
                     </el-option>
                 </el-select>
