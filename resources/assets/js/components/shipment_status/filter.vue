@@ -3,7 +3,7 @@
     <v-card style="background: rgba(5, 117, 230, 0.16); padding: 10px 0;">
         <v-layout wrap>
             <v-flex xs4 sm2>
-                <el-select v-model="form.country_id" clearable filterable placeholder="Select Country" @change="changeCat">
+                <el-select v-model="form.country_id" clearable filterable placeholder="Select Country">
                     <el-option v-for="item in countries" :key="item.id" :label="item.country_name" :value="item.id">
                     </el-option>
                 </el-select>
