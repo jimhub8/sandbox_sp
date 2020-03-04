@@ -160,11 +160,20 @@ export default {
             }
             this.$store.dispatch('getItems', payload)
         },
+        getCountry() {
+            var payload = {
+                url: '/getCountry',
+                list: 'updateCountryList',
+                data: this.form,
+            }
+            this.$store.dispatch('getItems', payload)
+        }
     },
     mounted() {
         this.getStatus()
         this.getBranch()
         this.getDrivers()
+        this.getCountry()
     },
     computed: {
         statuses() {

@@ -40,6 +40,7 @@ class ShipmentUpdateController extends Controller
         $shipmentUpdate->branch_id = $request->branch_id;
         $shipmentUpdate->rider_id = $request->driver;
         $shipmentUpdate->shipment_id = $request->id;
+        $shipmentUpdate->country_id = Auth::user()->country_id;
         $shipmentUpdate->save();
         $ship_status = new Status_update;
         $ship_status->updateStatus($request->all());
@@ -79,6 +80,11 @@ class ShipmentUpdateController extends Controller
         }
         if ($request->status) {
             $shipmentUpdates = $shipmentUpdates->where('delivery_status', $request->status);
+        }
+        if ($request->country_id) {
+            $shipmentUpdates = $shipmentUpdates->where('country_id', $request->country_id);
+        } else {
+            $shipmentUpdates = $shipmentUpdates->where('country_id', Auth::user()->country_id);
         }
         $shipmentUpdates = $shipmentUpdates->paginate(300);
         return $this->transform_shipment($shipmentUpdates);

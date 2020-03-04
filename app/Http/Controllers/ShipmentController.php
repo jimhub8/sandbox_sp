@@ -543,6 +543,7 @@ class ShipmentController extends Controller
             // $shipmentUpdate->branch_id = $request->branch_id;
             // $shipmentUpdate->rider_id = $request->driver;
             $shipmentUpdate->shipment_id = $id;
+            $shipmentUpdate->country_id = Auth::user()->country_id;
             $shipmentUpdate->save();
         }
     }

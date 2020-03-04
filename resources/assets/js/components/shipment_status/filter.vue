@@ -2,12 +2,12 @@
 <div>
     <v-card style="background: rgba(5, 117, 230, 0.16); padding: 10px 0;">
         <v-layout wrap>
-            <!-- <v-flex xs4 sm2 v-if="user.can['filter by country']">
+            <v-flex xs4 sm2>
                 <el-select v-model="form.country_id" clearable filterable placeholder="Select Country" @change="changeCat">
                     <el-option v-for="item in countries" :key="item.id" :label="item.country_name" :value="item.id">
                     </el-option>
                 </el-select>
-            </v-flex> -->
+            </v-flex>
             <v-flex xs4 sm2 offset-sm1>
                 <el-select v-model="form.rider_id" clearable filterable placeholder="Select rider">
                     <el-option v-for="item in riders" :key="item.id" :label="item.name" :value="item.id">
@@ -105,6 +105,9 @@ export default {
         },
         branches() {
             return this.$store.getters.branches
+        },
+        countries() {
+            return this.$store.getters.countries
         }
     },
 
