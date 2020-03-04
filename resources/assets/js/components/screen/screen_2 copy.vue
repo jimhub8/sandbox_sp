@@ -151,7 +151,7 @@ export default {
     methods: {
         get_data() {
             eventBus.$emit('screenProgressEvent')
-            axios.get('get_data_1')
+            axios.get('/get_data_1')
                 .then(response => {
                     eventBus.$emit('screenStopProgressEvent')
                     this.total = response.data.total
@@ -170,7 +170,7 @@ export default {
             eventBus.$emit('refreshChartEvent')
             // console.log(id);
             eventBus.$emit('screenProgressEvent')
-            axios.get(`get_filter_data_1/${this.client.id}`)
+            axios.get(`/get_filter_data_1/${this.client.id}`)
                 .then(response => {
                     eventBus.$emit('screenStopProgressEvent')
                     this.total = response.data.total
@@ -185,7 +185,7 @@ export default {
                 });
         },
         getClients() {
-            axios.get('clients')
+            axios.get('/clients')
                 .then(response => {
                     this.clients = response.data
                 })

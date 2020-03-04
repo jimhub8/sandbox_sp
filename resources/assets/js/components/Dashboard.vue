@@ -392,7 +392,7 @@ export default {
                     this.errors = error.response.data.errors
                 })
         },
- 
+
         scheduledShipmentCount() {
             axios.post('/scheduledShipmentCount', this.form)
                 .then((response) => {

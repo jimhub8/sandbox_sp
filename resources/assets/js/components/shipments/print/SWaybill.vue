@@ -10,7 +10,7 @@ import PrintSpdf from './PrintSpdf.vue';
 import TzSprint from './TzSprint';
 export default {
     components: {
-        TzSprint, PrintSpdf 
+        TzSprint, PrintSpdf
     },
     props: ['user'],
 data() {

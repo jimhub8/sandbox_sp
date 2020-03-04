@@ -12,7 +12,7 @@
                         <!-- <v-btn @click="ref">Refresh</v-btn> -->
                     </div>
                 </v-layout>
-                
+
                 <div class="col-md-12" style="margin-top: 40px;">
                     <div class="card card-stats card-raised">
                         <div class="card-body">
@@ -148,7 +148,7 @@ export default {
                 .then((response) => {
                     this.countryC = response.data
                 })
-                .catch((error) => { 
+                .catch((error) => {
                     this.errors = error.response.data.errors
                 })
         },

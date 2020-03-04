@@ -463,7 +463,7 @@ export default {
             this.form.products.splice(index, 1)
         },
         // getUserDetails() {
-        //     axios.get(`getUserDetails/${this.model}`)
+        //     axios.get(`/getUserDetails/${this.model}`)
         //   .then(res => {
         //     this.customerArr = res.data
         //     this.isLoading = false

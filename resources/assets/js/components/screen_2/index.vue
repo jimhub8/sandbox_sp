@@ -51,7 +51,7 @@ export default {
     },
     methods: {
         getClients() {
-            axios.get('clients')
+            axios.get('/clients')
                 .then(response => {
                     this.clients = response.data
                 })

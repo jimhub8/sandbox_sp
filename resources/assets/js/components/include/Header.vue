@@ -53,14 +53,16 @@
                             </div>
                         </router-link>
 
-                        <router-link to="/shipment_status" class="v-list__tile theme--light" style="text-decoration: none">
+
+                        <router-link to="/shipment_status" class="v-list__tile v-list__tile--link" v-if="user.can['view shipments'] || user.is_client">
                             <div class="v-list__tile__action">
-                                <v-icon>update</v-icon>
+                                <i aria-hidden="true" class="icon material-icons">update</i>
                             </div>
                             <div class="v-list__tile__content">
                                 <div class="v-list__tile__title">Shipment status</div>
                             </div>
                         </router-link>
+
                         <router-link to="/charges" class="v-list__tile v-list__tile--link" v-if="user.can['view charges']">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">attach_money</i>

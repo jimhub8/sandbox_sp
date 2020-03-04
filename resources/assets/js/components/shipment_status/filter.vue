@@ -59,7 +59,7 @@ export default {
     methods: {
         sortItem() {
             var payload = {
-                url: 'filter_updates',
+                url: '/filter_updates',
                 data: this.form,
                 list: 'updateStatusupdateList',
             }
@@ -93,7 +93,7 @@ export default {
     },
 
     mounted() {
-        this.sortItem();
+        // this.sortItem();
     },
 
     computed: {

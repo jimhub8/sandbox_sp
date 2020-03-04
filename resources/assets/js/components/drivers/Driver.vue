@@ -172,7 +172,7 @@ export default {
             this.nextPage = true
             // alert('success')
             axios.post('/getsearchRe', this.form)
-                .then((response) => {
+                .then((response) => { 
                     this.nextPage = false
                     this.AllShip = response.data
                 })

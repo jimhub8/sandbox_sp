@@ -146,18 +146,14 @@ export default {
     methods: {
         openCreate() {
             eventBus.$emit("openCreateStatusupdate");
-            var payload = {
-                model: 'groups',
-                update_list: 'updateGroupList',
-            }
-            this.$store.dispatch("getItems", payload);
+
         },
         openShow(data) {
             eventBus.$emit("openShowStatusupdate", data);
         },
         getStatusupdates() {
             // var payload = {
-            //     url: 'statusupdates',
+            //     url: '/statusupdates',
             //     list: 'updateStatusupdateList',
             // }
             // this.$store.dispatch("getItems", payload);

@@ -145,7 +145,7 @@ export default {
     methods: {
         get_data() {
             eventBus.$emit('screenProgressEvent')
-            axios.get('get_data')
+            axios.get('/get_data')
                 .then(response => {
                     eventBus.$emit('screenStopProgressEvent')
                     // console.log(response.data);
@@ -165,7 +165,7 @@ export default {
             eventBus.$emit('refreshChartEvent')
             // console.log(id);
             eventBus.$emit('screenProgressEvent')
-            axios.get(`get_filter_data/${this.client.id}`)
+            axios.get(`/get_filter_data/${this.client.id}`)
                 .then(response => {
                     // console.log(response.data);
                     eventBus.$emit('screenStopProgressEvent')

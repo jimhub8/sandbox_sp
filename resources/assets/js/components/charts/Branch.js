@@ -1,7 +1,7 @@
   //Importing Line class from the vue-chartjs wrapper
   import {Bar} from 'vue-chartjs'
   //Exporting this so it can be used in other components
-  export default { 
+  export default {
     // extend: Line,
     extends: Bar,
     data () {

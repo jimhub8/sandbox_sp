@@ -12,6 +12,8 @@ export default {
 
     // GET
     getUsers(context) {
+
+        context.commit('error', [])
         context.commit('loading', true)
         axios.get('users').then((response) => {
             context.commit('loading', false)
@@ -25,13 +27,14 @@ export default {
                 eventBus.$emit('reloadAppRequest', error.response.statusText)
             } else if (error.response.status === 422) {
                 eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                return
             }
-            this.errors = error.response.data.errors
+            context.commit('error', error.response.data.errors)
         })
     },
 
     getRoles(context) {
+
+        context.commit('error', [])
         context.commit('loading', true)
         axios.get('roles').then((response) => {
             context.commit('loading', false)
@@ -44,10 +47,9 @@ export default {
                 eventBus.$emit('reloadAppRequest', error.response.statusText)
             } else if (error.response.status === 422) {
                 eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                return
             }
             context.commit('loading', false)
-            this.errors = error.response.data.errors
+            context.commit('error', error.response.data.errors)
         })
     },
 
@@ -73,9 +75,8 @@ export default {
                 eventBus.$emit('reloadAppRequest', error.response.statusText)
             } else if (error.response.status === 422) {
                 eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                return
             }
-            this.errors = error.response.data.errors
+            context.commit('error', error.response.data.errors)
         })
     },
 
@@ -95,9 +96,8 @@ export default {
                 eventBus.$emit('reloadAppRequest', error.response.statusText)
             } else if (error.response.status === 422) {
                 eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                return
             }
-            this.errors = error.response.data.errors
+            context.commit('error', error.response.data.errors)
         })
     },
 
@@ -118,9 +118,8 @@ export default {
                 eventBus.$emit('reloadAppRequest', error.response.statusText)
             } else if (error.response.status === 422) {
                 eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                return
             }
-            this.errors = error.response.data.errors
+            context.commit('error', error.response.data.errors)
         })
     },
 
@@ -148,9 +147,10 @@ export default {
                     eventBus.$emit('reloadAppRequest', error.response.statusText)
                 } else if (error.response.status === 422) {
                     eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                    context.commit('error', error.response.data.errors)
                     return
                 } else {
-                    this.errors = error.response.data.errors
+                    context.commit('error', error.response.data.errors)
                 }
             })
     },
@@ -172,9 +172,8 @@ export default {
                 eventBus.$emit('reloadAppRequest', error.response.statusText)
             } else if (error.response.status === 422) {
                 eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                return
             }
-            this.errors = error.response.data.errors
+            context.commit('error', error.response.data.errors)
         })
     },
 
@@ -202,32 +201,37 @@ export default {
 
     // Post Items
     postItems(context, payload) {
-        // console.log('payloadp', payload);
-
-        var model = payload['url']
-        var data = payload['data']
-        // console.log(data);
-        // var update_ = payload['update_list']
-        context.commit('loading', true)
-        axios.post(model, data).then((response) => {
-            console.log(response);
-            context.commit('loading', false)
-            // console.log(response.data);
-            // context.commit(update_, response.data)
-        }).catch((error) => {
-            console.log(error);
-
-            context.commit('loading', false)
-            if (error.response.status === 500 || error.response.status === 405) {
-                eventBus.$emit('errorEvent', error.response.statusText)
-                return
-            } else if (error.response.status === 401 || error.response.status === 409) {
-                eventBus.$emit('reloadAppRequest', error.response.statusText)
-            } else if (error.response.status === 422) {
-                eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                return
-            }
-            // this.errors = error.response.data.errors
+        context.commit('error', [])
+        return new Promise((resolve, reject) => {
+            // console.log('payloadp', payload);
+            var model = payload['url']
+            var data = payload['data']
+            // console.log(data);
+            // var update_ = payload['update_list']
+            context.commit('loading', true)
+            axios.post(model, data).then((response) => {
+                // console.log(response);
+                context.commit('loading', false)
+                // return 'success'
+                resolve(response)
+                // console.log(response.data);
+                // context.commit(update_, response.data)
+            }).catch((error) => {
+                // console.log(error);
+                reject(error)
+                context.commit('loading', false)
+                if (error.response.status === 500 || error.response.status === 405) {
+                    eventBus.$emit('errorEvent', error.response.statusText)
+                    return
+                } else if (error.response.status === 401 || error.response.status === 409) {
+                    eventBus.$emit('reloadAppRequest', error.response.statusText)
+                } else if (error.response.status === 422) {
+                    eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
+                    context.commit('error', error.response.data.errors)
+                }
+                return 'error'
+                // context.commit('error', error.response.data.errors)
+            })
         })
     },
 
@@ -235,13 +239,14 @@ export default {
     // Patch Items
     patchItems(context, payload) {
         // console.log(payload);
+        context.commit('error', [])
 
         var model = payload['url']
         var data = payload['data']
         context.commit('loading', true)
         axios.patch(model, data).then((response) => {
-        eventBus.$emit('alertRequest', 'Updated')
-        context.commit('loading', false)
+            eventBus.$emit('alertRequest', 'Updated')
+            context.commit('loading', false)
         }).catch((error) => {
             context.commit('loading', false)
             if (error.response.status === 500 || error.response.status === 405) {
@@ -251,15 +256,13 @@ export default {
                 eventBus.$emit('reloadAppRequest', error.response.statusText)
             } else if (error.response.status === 422) {
                 eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                return
             }
-            this.errors = error.response.data.errors
+            context.commit('error', error.response.data.errors)
         })
     },
 
-
     checkUser(context, payload) {
-        console.log(payload);
+        // console.log(payload);
         var model = payload.url
         // context.commit('loading', true)
         axios.get(model).then((response) => {
@@ -278,9 +281,8 @@ export default {
                 eventBus.$emit('reloadAppRequest', error.response.statusText)
             } else if (error.response.status === 422) {
                 eventBus.$emit('errorEvent', error.response.data.message + ': ' + error.response.statusText)
-                return
             }
-            this.errors = error.response.data.errors
+            context.commit('error', error.response.data.errors)
         })
     },
 }

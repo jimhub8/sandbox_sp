@@ -107,7 +107,7 @@ export default {
         getReport(query) {
             this.loading = true;
             this.form.search = query
-            axios.post('userDateExpo', this.client_report).then((response) => {
+            axios.post('/userDateExpo', this.client_report).then((response) => {
                 this.loading = false
                 this.client_data = response.data
                 if (response.data.length < 1) {
@@ -132,7 +132,7 @@ export default {
             if (query.length > 2) {
                 this.loading = true;
                 this.form.search = query
-                axios.get(`searchClient/${query}`).then((response) => {
+                axios.get(`/searchClient/${query}`).then((response) => {
                     this.loading = false
                     this.clients = response.data
 
@@ -144,7 +144,7 @@ export default {
         getProducts(query) {
             if (query.length > 2) {
                 this.loading = true;
-                axios.get(`filter_prod/${query}`).then((response) => {
+                axios.get(`/filter_prod/${query}`).then((response) => {
                     this.loading = false
                     this.products = response.data
 

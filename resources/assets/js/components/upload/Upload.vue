@@ -17,7 +17,7 @@
                                     <attachment-list :settings="props"></attachment-list>
                                 </v-layout>
                             </v-container>
-                        </v-content> 
+                        </v-content>
                     </v-layout>
                 </v-card-text>
                 <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">

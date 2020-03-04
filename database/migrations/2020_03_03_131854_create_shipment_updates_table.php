@@ -17,8 +17,8 @@ class CreateShipmentUpdatesTable extends Migration
             $table->bigIncrements('id');
             $table->text('comment')->nullable();
             $table->text('delivery_status')->nullable();
-            $table->unsignedBigInteger('branch_id');
-            $table->unsignedBigInteger('rider_id');
+            $table->unsignedBigInteger('branch_id')->nullable();
+            $table->unsignedBigInteger('rider_id')->nullable();
             $table->unsignedBigInteger('shipment_id');
             $table->unsignedBigInteger('user_id');
             // $table->foreign('rider_id')->references('id')->on('riders')->onDelete('cascade');

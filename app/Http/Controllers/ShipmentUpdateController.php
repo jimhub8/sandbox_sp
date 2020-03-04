@@ -29,6 +29,9 @@ class ShipmentUpdateController extends Controller
      */
     public function store(Request $request)
     {
+        $this->Validate($request, [
+            'comment' =>'required',
+        ]);
         // return $request->all();
         $shipmentUpdate = new ShipmentUpdate;
         $shipmentUpdate->comment = $request->comment;
@@ -40,17 +43,6 @@ class ShipmentUpdateController extends Controller
         $shipmentUpdate->save();
         $ship_status = new Status_update;
         $ship_status->updateStatus($request->all());
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\models\ShipmentUpdate  $shipmentUpdate
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ShipmentUpdate $shipmentUpdate)
-    {
-        //
     }
 
     public function Waybill_search($search)
@@ -67,10 +59,10 @@ class ShipmentUpdateController extends Controller
     {
         $shipments->transform(function ($shipment) {
             // dd($shipment->branch->branch_name);
-            $shipment->created_by = $shipment->user->name;
-            $shipment->bar_code = $shipment->shipment->bar_code;
-            $shipment->rider_name = $shipment->rider->name;
-            $shipment->branch_name = $shipment->branch->branch_name;
+            $shipment->created_by = ($shipment->user) ? $shipment->user->name : null;
+            $shipment->bar_code = ($shipment->shipment) ? $shipment->shipment->bar_code : null;
+            $shipment->rider_name = ($shipment->rider) ? $shipment->rider->name : null;
+            $shipment->branch_name = ($shipment->branch) ? $shipment->branch->branch_name : null;
             return $shipment;
         });
         return $shipments;

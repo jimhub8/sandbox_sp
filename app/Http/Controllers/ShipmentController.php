@@ -6,6 +6,7 @@ use App\Branch;
 use App\Cancelled;
 use App\models\Apimft;
 use App\models\Rider;
+use App\models\ShipmentUpdate;
 use App\Notifications\ShipmentNoty;
 use App\Product;
 use App\ScheduleLogs;
@@ -402,7 +403,7 @@ class ShipmentController extends Controller
     {
         $token = $this->token_f();
         $shipment = Shipment::find($id);
-            Shipment::find($id)->delete();
+        Shipment::find($id)->delete();
         //     try {
         //     $client = new Client;
         //     $request = $client->request('DELETE', env('API_URL') . '/api/order_delete/' . $shipment->bar_code, [
@@ -533,6 +534,17 @@ class ShipmentController extends Controller
             $statusUpdate->shipment_id = $id;
             $statusUpdate->save();
         }
+
+        if ($request->formobg['status'] == 'Cancelled') {
+            $shipmentUpdate = new ShipmentUpdate();
+            $shipmentUpdate->comment = $request->speciial_instruction;
+            $shipmentUpdate->delivery_status = $request->status;
+            $shipmentUpdate->user_id = Auth::id();
+            // $shipmentUpdate->branch_id = $request->branch_id;
+            // $shipmentUpdate->rider_id = $request->driver;
+            $shipmentUpdate->shipment_id = $id;
+            $shipmentUpdate->save();
+        }
     }
 
     public function shipmentUpdated($shipment)
@@ -617,8 +629,6 @@ class ShipmentController extends Controller
             $shipment->save();
         }
         return Shipment::whereIn('id', $id)->get();
-
-
     }
     public function UpdateShipment_1(Request $request, Shipment $shipment)
     {

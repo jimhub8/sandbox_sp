@@ -44,6 +44,9 @@
                                     <label for="">Comment</label>
                                     <el-input type="textarea" placeholder="Please input" v-model="form.comment">
                                     </el-input>
+                                    <div v-if="error">
+                                        <small class="has-text-danger" v-if="error.comment">{{ error.comment[0] }}</small>
+                                    </div>
                                 </div>
                             </div>
                         </v-flex>
@@ -99,13 +102,18 @@ export default {
         save() {
             this.payload = {
                 data: this.form,
-                url: 'statusupdates'
+                url: '/statusupdates'
             }
+
             this.$store.dispatch('postItems', this.payload)
                 .then(response => {
                     this.$message.success('Updated.');
                     eventBus.$emit("statusupdateEvent")
-                });
+                    // console.log("Got some data, now lets show something in this component")
+                }, error => {
+                    console.error(error.response)
+                })
+
         },
 
         Waybill_search() {
@@ -154,7 +162,6 @@ export default {
         },
     },
     mounted() {
-
         this.getStatus()
         this.getBranch()
         this.getDrivers()
@@ -168,6 +175,9 @@ export default {
         },
         branches() {
             return this.$store.getters.branches
+        },
+        error() {
+            return this.$store.getters.error
         }
     },
 };

@@ -43,7 +43,7 @@
                 <v-spacer></v-spacer>
             </v-card-actions>
         </v-card>
-        
+
     <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left="left" v-model="snackbar">
         {{ message }}
         <v-icon dark right>check_circle</v-icon>

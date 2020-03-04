@@ -162,7 +162,7 @@ export default {
       .then((response) => {
         this.loader = false
         console.log(response);
-        this.$parent.AllContainers.push(response.data) 
+        this.$parent.AllContainers.push(response.data)
         // this.$emit('closeRequest');
         // this.resetForm;
       })

@@ -5,7 +5,7 @@ import mutations from './mutations';
 export default {
     state: {
         loading: false,
-        error: null,
+        error: [],
         users: [],
         roles: [],
         clients: [],
