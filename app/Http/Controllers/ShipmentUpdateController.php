@@ -30,7 +30,7 @@ class ShipmentUpdateController extends Controller
     public function store(Request $request)
     {
         $this->Validate($request, [
-            'comment' =>'required',
+            'comment' => 'required',
         ]);
         // return $request->all();
         $shipmentUpdate = new ShipmentUpdate;
@@ -48,9 +48,12 @@ class ShipmentUpdateController extends Controller
 
     public function Waybill_search($search)
     {
-        $shipment = Shipment::select('id', 'driver', 'branch_id', 'status', 'bar_code')->setEagerLoads([])->where('bar_code', $search)->first();
-        if ($shipment) {
-            return response()->json(['status' => true, 'shipment' => $shipment]);
+        $shipments = Shipment::select('id', 'driver', 'branch_id', 'status', 'bar_code')->setEagerLoads([])->where('bar_code', $search)->first();
+        $shipments->transform(function ($shipment) {
+            $shipment->driver = ($shipment->driver) ? (int) $shipment->driver : null;
+        });
+        if ($shipments) {
+            return response()->json(['status' => true, 'shipment' => $shipments]);
         }
         return response()->json(['status' => false]);
     }
