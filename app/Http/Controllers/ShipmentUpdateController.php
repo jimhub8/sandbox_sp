@@ -48,11 +48,12 @@ class ShipmentUpdateController extends Controller
 
     public function Waybill_search($search)
     {
-        $shipments = Shipment::select('id', 'driver', 'branch_id', 'status', 'bar_code')->setEagerLoads([])->where('bar_code', $search)->get();
-        $shipments->transform(function ($shipment) {
+        $shipments = Shipment::setEagerLoads([])->where('bar_code', $search)->get();
+        $shipments = $shipments->transform(function ($shipment) {
             $shipment->driver = ($shipment->driver) ? (int) $shipment->driver : null;
+            return $shipment;
         });
-        if ($shipments) {
+        if (count($shipments) > 0) {
             return response()->json(['status' => true, 'shipment' => $shipments[0]]);
         }
         return response()->json(['status' => false]);
