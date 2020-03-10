@@ -54,7 +54,7 @@
                         </router-link>
 
 
-                        <router-link to="/shipment_status" class="v-list__tile v-list__tile--link" v-if="user.can['view shipments'] || user.is_client">
+                        <router-link to="/shipment_status" class="v-list__tile v-list__tile--link" v-if="!user.is_client">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">update</i>
                             </div>
