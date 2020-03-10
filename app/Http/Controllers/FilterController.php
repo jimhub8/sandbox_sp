@@ -16,7 +16,7 @@ class FilterController extends Controller
         if (Auth::guard('clients')->check()) {
             $shipment_filter = Shipment::withoutGlobalScope(ShipmentScope::class);
             if ($request->country_id) {
-                    $shipment_filter = $shipment_filter->where('country_id', $request->country_id);
+                $shipment_filter = $shipment_filter->where('country_id', $request->country_id);
             }
             if ($request->status == "Returned" && ($request->start_date && $request->end_date)) {
                 $date_b = [
@@ -327,6 +327,11 @@ class FilterController extends Controller
                     ->orwhere('client_email', 'LIKE', "%{$search}%")
                     ->orwhere('client_name', 'LIKE', "%{$search}%")->paginate(500);
             }
+        } else {
+            return Shipment::where('bar_code', 'LIKE', "%{$search}%")
+                ->orwhere('client_phone', 'LIKE', "%{$search}%")
+                ->orwhere('client_email', 'LIKE', "%{$search}%")
+                ->orwhere('client_name', 'LIKE', "%{$search}%")->paginate(500);
+        }
     }
-}
 }
