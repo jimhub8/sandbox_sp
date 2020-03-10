@@ -88,7 +88,9 @@ class ShipmentUpdateController extends Controller
         if ($request->country_id) {
             $shipmentUpdates = $shipmentUpdates->where('country_id', $request->country_id);
         } else {
-            $shipmentUpdates = $shipmentUpdates->where('country_id', Auth::user()->country_id);
+            if (Auth::guard('web')->check()) {
+                $shipmentUpdates = $shipmentUpdates->where('country_id', Auth::user()->country_id);
+            }
         }
         $shipmentUpdates = $shipmentUpdates->paginate(300);
         return $this->transform_shipment($shipmentUpdates);
