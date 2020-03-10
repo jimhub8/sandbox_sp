@@ -27,7 +27,7 @@ class PermissionController extends Controller
     public function getShipmentsCount(Request $request)
     {
 
-        if (Auth::guard('web')->check()) {
+        if (Auth::guard('clients')->check()) {
             return;
         }
         if (empty($request->country)) {
