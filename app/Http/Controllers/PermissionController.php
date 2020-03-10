@@ -26,7 +26,10 @@ class PermissionController extends Controller
 
     public function getShipmentsCount(Request $request)
     {
-        
+
+        if (Auth::guard('web')->check()) {
+            return;
+        }
         if (empty($request->country)) {
             return Shipment::where('country_id', Auth::user()->country_id)->whereYear('created_at', '=', date("Y"))->count();
         } else {
@@ -49,7 +52,7 @@ class PermissionController extends Controller
         }
     }
 
-// Dashboard
+    // Dashboard
     public function delayedShipmentCount(Request $request)
     {
         if (empty($request->country)) {
