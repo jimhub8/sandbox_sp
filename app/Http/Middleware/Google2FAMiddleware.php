@@ -22,11 +22,13 @@ class Google2FAMiddleware
         //     return $next($request);
         // }
         // return $authenticator->makeRequestOneTimePasswordResponse();
-        $user = Auth::user();
-        if ($user->google2fa_secret || $user->email == 'sandbox@speedball.com') {
-            return $next($request);
+        if (Auth::guard('web')->check()) {
+            $user = Auth::user();
+            if ($user->google2fa_secret || $user->email == 'sandbox@speedball.com') {
+                return $next($request);
+            }
+            // return redirect()->intended($this->redirectTo);
+            return redirect('/2fa_home');
         }
-        // return redirect()->intended($this->redirectTo);
-        return redirect('/2fa_home');
     }
 }
