@@ -131,10 +131,10 @@ Route::get('/google_s', 'GoogledriveController@google_s')->name('google_s');
 Auth::routes();
 
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', '2fa']], function () {
     Route::get('/courier', 'HomeController@courier')->name('courier');
 });
-    Route::group(['middleware' => ['authcheck']], function () {
+    Route::group(['middleware' => ['authcheck', '2fa']], function () {
     // Route::get('/testSS', function () {
     //     $today = Carbon::today();
     //     $shipments = (Shipment::whereBetween('created_at', [$today->subMonth(1), $today->addMonth(1)])->get());
