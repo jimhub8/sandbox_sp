@@ -315,17 +315,18 @@ class FilterController extends Controller
             return;
         }
         $search = trim($search);
-
-        if (Auth::user()->hasRole('Admin')) {
-            return Shipment::withoutGlobalScope(ShipmentScope::class)->where('bar_code', 'LIKE', "%{$search}%")
-                ->orwhere('client_phone', 'LIKE', "%{$search}%")
-                ->orwhere('client_email', 'LIKE', "%{$search}%")
-                ->orwhere('client_name', 'LIKE', "%{$search}%")->paginate(500);
-        } else {
-            return Shipment::where('bar_code', 'LIKE', "%{$search}%")
-                ->orwhere('client_phone', 'LIKE', "%{$search}%")
-                ->orwhere('client_email', 'LIKE', "%{$search}%")
-                ->orwhere('client_name', 'LIKE', "%{$search}%")->paginate(500);
-        }
+        if (Auth::guard('web')->check()) {
+            if (Auth::user()->hasRole('Admin')) {
+                return Shipment::withoutGlobalScope(ShipmentScope::class)->where('bar_code', 'LIKE', "%{$search}%")
+                    ->orwhere('client_phone', 'LIKE', "%{$search}%")
+                    ->orwhere('client_email', 'LIKE', "%{$search}%")
+                    ->orwhere('client_name', 'LIKE', "%{$search}%")->paginate(500);
+            } else {
+                return Shipment::where('bar_code', 'LIKE', "%{$search}%")
+                    ->orwhere('client_phone', 'LIKE', "%{$search}%")
+                    ->orwhere('client_email', 'LIKE', "%{$search}%")
+                    ->orwhere('client_name', 'LIKE', "%{$search}%")->paginate(500);
+            }
     }
+}
 }
