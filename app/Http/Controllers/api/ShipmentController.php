@@ -252,7 +252,7 @@ class ShipmentController extends Controller
      */
     public function destroy(Shipment $shipment)
     {
-        Shipment::find($shipment->id)->delete();
+        // Shipment::find($shipment->id)->delete();
     }
 
     public function getAdmin()
