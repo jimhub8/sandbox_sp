@@ -41,6 +41,22 @@ class AuthController extends Controller
 
     /**
      * Login user and create token
+     * To login you will provide you email and password.
+     * You will get a response with this JSON     *
+     * {
+    "accessToken": "access_token",
+    "token": {
+        "id": "id",
+        "user_id": 1,
+        "client_id": 1,
+        "name": "Personal Access Token",
+        "scopes": [],
+        "revoked": false,
+        "created_at": "2020-03-13 09:28:24",
+        "updated_at": "2020-03-13 09:28:24",
+        "expires_at": "2021-03-13 09:28:24"
+    }
+    }
      *
      * @param  [string] email
      * @param  [string] password

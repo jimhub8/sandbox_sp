@@ -16,8 +16,8 @@ Route::group([
     'prefix' => 'auth',
 ], function () {
     Route::post('login', 'api\AuthController@login');
-    Route::post('signup', 'api\AuthController@signup');
-    Route::get('signup/activate/{token}', 'api\AuthController@signupActivate');
+    // Route::post('signup', 'api\AuthController@signup');
+    // Route::get('signup/activate/{token}', 'api\AuthController@signupActivate');
     Route::group([
         'middleware' => 'auth:api',
     ], function () {

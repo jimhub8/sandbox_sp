@@ -16,29 +16,175 @@ toc_footers:
 # Info
 
 Welcome to the generated API reference.
-[Get Postman Collection](http://courier.jimkiarie8/docs/collection.json)
+[Get Postman Collection](http://sandbox.jim/docs/collection.json)
 
 <!-- END_INFO -->
 
 #general
 
 
-<!-- START_3205ce71c134175d802bda484c46394e -->
-## Get you orders
-The orders will have a pagination of 100
+<!-- START_a925a8d22b3615f12fca79456d286859 -->
+## Login user and create token
+To login you will provide you email and password.
+
+You will get a response with an
+
+
+{
+"accessToken": "access_token",
+"token": {
+"id": "id",
+"user_id": 1,
+"client_id": 1,
+"name": "Personal Access Token",
+"scopes": [],
+"revoked": false,
+"created_at": "2020-03-13 09:28:24",
+"updated_at": "2020-03-13 09:28:24",
+"expires_at": "2021-03-13 09:28:24"
+}
+}
 
 > Example request:
 
 ```bash
-curl -X GET \
-    -G "http://courier.jimkiarie8/api/shipment" \
+curl -X POST \
+    "http://sandbox.jim/api/auth/login" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://courier.jimkiarie8/api/shipment"
+    "http://sandbox.jim/api/auth/login"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`POST api/auth/login`
+
+
+<!-- END_a925a8d22b3615f12fca79456d286859 -->
+
+<!-- START_16928cb8fc6adf2d9bb675d62a2095c5 -->
+## Logout user (Revoke the token)
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://sandbox.jim/api/auth/logout" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://sandbox.jim/api/auth/logout"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (401):
+
+```json
+{
+    "error": "Unauthenticated."
+}
+```
+
+### HTTP Request
+`GET api/auth/logout`
+
+
+<!-- END_16928cb8fc6adf2d9bb675d62a2095c5 -->
+
+<!-- START_ff6d656b6d81a61adda963b8702034d2 -->
+## Get the authenticated User
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://sandbox.jim/api/auth/user" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://sandbox.jim/api/auth/user"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (401):
+
+```json
+{
+    "error": "Unauthenticated."
+}
+```
+
+### HTTP Request
+`GET api/auth/user`
+
+
+<!-- END_ff6d656b6d81a61adda963b8702034d2 -->
+
+<!-- START_8efbe258b403f46396ec1dff3d1e5620 -->
+## Store a newly created resource in storage.
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://sandbox.jim/api/status" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://sandbox.jim/api/status"
 );
 
 let headers = {
@@ -58,243 +204,316 @@ fetch(url, {
 > Example response (200):
 
 ```json
-{
-    "data": [
-        {
-            "airway_bill_no": "EMS0220222",
-            "amount_ordered": 1,
-            "booking_date": "2020-01-13",
-            "charges": null,
-            "client_address": "Riruta, kabiria. Near kivuli center",
-            "client_city": null,
-            "client_email": "SLICER",
-            "client_id": 1,
-            "client_name": "Edward njenga",
-            "client_phone": "722703019",
-            "cod_amount": "3500.00",
-            "created_at": "2020-01-13T13:13:21.000000Z",
-            "derivery_date": "2019-04-11",
-            "derivery_status": "Delivered",
-            "dispatch_date": null,
-            "distance": null,
-            "driver": null,
-            "from_city": null,
-            "id": 1,
-            "insuarance_status": null,
-            "lat": null,
-            "lat_to": null,
-            "lng": null,
-            "lng_to": null,
-            "location": null,
-            "order_id": null,
-            "paid": null,
-            "pickup_at": 0,
-            "pickup_id": 0,
-            "products": [
-                {
-                    "id": 1,
-                    "product_name": "Test Product",
-                    "weight": 0,
-                    "price": 299,
-                    "total": 299,
-                    "quantity": 1,
-                    "user_id": 1,
-                    "branch_id": null,
-                    "lat_from": "-1.2875376",
-                    "long_from": "36.8142597",
-                    "shipments_id": 1,
-                    "deleted_at": null,
-                    "created_at": "2019-11-16 21:04:23",
-                    "updated_at": "2019-11-16 21:04:23"
-                },
-                {
-                    "id": 2,
-                    "product_name": "test prod",
-                    "weight": 0,
-                    "price": 299,
-                    "total": 299,
-                    "quantity": 4,
-                    "user_id": 1,
-                    "branch_id": null,
-                    "lat_from": "-1.2875376",
-                    "long_from": "36.8142597",
-                    "shipments_id": 1,
-                    "deleted_at": null,
-                    "created_at": "2019-11-16 21:04:23",
-                    "updated_at": "2019-11-16 21:04:23"
-                }
-            ],
-            "receiver_name": null,
-            "sender_address": "main st",
-            "sender_city": "Nairobi",
-            "sender_email": "jane@doe.com",
-            "sender_name": "John Doe",
-            "sender_phone": "7220100",
-            "speciial_instruction": null,
-            "status": "Delivered",
-            "statuses": [
-                {
-                    "id": 3,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Dispatched",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-03 10:33:24",
-                    "updated_at": "2019-12-03 10:33:24"
-                },
-                {
-                    "id": 19,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Scheduled",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-05 11:43:15",
-                    "updated_at": "2019-12-05 11:43:15"
-                },
-                {
-                    "id": 20,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Scheduled",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-09 14:34:47",
-                    "updated_at": "2019-12-09 14:34:47"
-                },
-                {
-                    "id": 21,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Scheduled",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-09 14:35:05",
-                    "updated_at": "2019-12-09 14:35:05"
-                },
-                {
-                    "id": 22,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Dispatched",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-09 14:35:15",
-                    "updated_at": "2019-12-09 14:35:15"
-                },
-                {
-                    "id": 35,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Dispatched",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2020-01-08 11:58:39",
-                    "updated_at": "2020-01-08 11:58:39"
-                },
-                {
-                    "id": 47,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Delivered",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2020-01-17 10:20:24",
-                    "updated_at": "2020-01-17 10:20:24"
-                }
-            ],
-            "sub_total": null,
-            "to_city": null,
-            "user_id": 1,
-            "weight": null
-        }
-    ],
-    "links": {
-        "first": "http:\/\/localhost\/api\/shipment?page=1",
-        "last": "http:\/\/localhost\/api\/shipment?page=1",
-        "prev": null,
-        "next": null
+[
+    {
+        "id": 11,
+        "name": "Busy",
+        "deleted_at": null,
+        "created_at": "2018-12-20 21:28:32",
+        "updated_at": "2018-12-20 21:28:32"
     },
-    "meta": {
-        "current_page": 1,
-        "from": 1,
-        "last_page": 1,
-        "path": "http:\/\/localhost\/api\/shipment",
-        "per_page": 2,
-        "to": 1,
-        "total": 1
+    {
+        "id": 18,
+        "name": "Call back if i dont call back",
+        "deleted_at": null,
+        "created_at": "2018-12-27 22:34:14",
+        "updated_at": "2018-12-27 22:34:14"
+    },
+    {
+        "id": 13,
+        "name": "Call back in a few",
+        "deleted_at": null,
+        "created_at": "2018-12-20 21:53:18",
+        "updated_at": "2018-12-20 21:53:18"
+    },
+    {
+        "id": 3,
+        "name": "Cancelled",
+        "deleted_at": null,
+        "created_at": "2018-12-20 19:15:16",
+        "updated_at": "2018-12-20 19:15:16"
+    },
+    {
+        "id": 2,
+        "name": "Delivered",
+        "deleted_at": null,
+        "created_at": "2018-12-20 17:52:15",
+        "updated_at": "2018-12-20 17:52:15"
+    },
+    {
+        "id": 15,
+        "name": "Did not place the order",
+        "deleted_at": null,
+        "created_at": "2018-12-20 22:47:24",
+        "updated_at": "2018-12-20 22:47:24"
+    },
+    {
+        "id": 6,
+        "name": "Dispatched",
+        "deleted_at": null,
+        "created_at": "2018-12-20 19:16:05",
+        "updated_at": "2018-12-20 19:16:05"
+    },
+    {
+        "id": 20,
+        "name": "Excess numbers",
+        "deleted_at": null,
+        "created_at": "2019-01-03 00:24:42",
+        "updated_at": "2019-01-03 00:24:42"
+    },
+    {
+        "id": 14,
+        "name": "Hanged up",
+        "deleted_at": null,
+        "created_at": "2018-12-20 22:08:03",
+        "updated_at": "2018-12-20 22:08:03"
+    },
+    {
+        "id": 17,
+        "name": "Incomplete number",
+        "deleted_at": null,
+        "created_at": "2018-12-21 20:53:07",
+        "updated_at": "2018-12-21 20:53:07"
+    },
+    {
+        "id": 5,
+        "name": "Not Available",
+        "deleted_at": null,
+        "created_at": "2018-12-20 19:15:53",
+        "updated_at": "2018-12-20 19:15:53"
+    },
+    {
+        "id": 4,
+        "name": "Not Picking",
+        "deleted_at": null,
+        "created_at": "2018-12-20 19:15:43",
+        "updated_at": "2018-12-20 19:15:43"
+    },
+    {
+        "id": 21,
+        "name": "Paying in installments",
+        "deleted_at": null,
+        "created_at": "2019-01-17 00:11:54",
+        "updated_at": "2019-01-17 00:11:54"
+    },
+    {
+        "id": 12,
+        "name": "Picked up",
+        "deleted_at": null,
+        "created_at": "2018-12-20 21:40:05",
+        "updated_at": "2018-12-20 21:40:05"
+    },
+    {
+        "id": 16,
+        "name": "Returned",
+        "deleted_at": null,
+        "created_at": "2018-12-21 20:00:09",
+        "updated_at": "2018-12-21 20:00:09"
+    },
+    {
+        "id": 1,
+        "name": "Scheduled",
+        "deleted_at": null,
+        "created_at": "2018-12-20 17:52:05",
+        "updated_at": "2018-12-20 17:52:05"
+    },
+    {
+        "id": 19,
+        "name": "Warehouse",
+        "deleted_at": null,
+        "created_at": "2018-12-27 23:03:18",
+        "updated_at": "2018-12-27 23:03:18"
+    },
+    {
+        "id": 8,
+        "name": "Will call us back",
+        "deleted_at": null,
+        "created_at": "2018-12-20 20:52:20",
+        "updated_at": "2018-12-20 20:52:20"
+    },
+    {
+        "id": 10,
+        "name": "Will call us back when around",
+        "deleted_at": null,
+        "created_at": "2018-12-20 20:53:20",
+        "updated_at": "2018-12-20 20:53:20"
+    },
+    {
+        "id": 9,
+        "name": "Will call us back when financially stable",
+        "deleted_at": null,
+        "created_at": "2018-12-20 20:53:04",
+        "updated_at": "2018-12-20 20:53:04"
+    },
+    {
+        "id": 7,
+        "name": "Wrong Number",
+        "deleted_at": null,
+        "created_at": "2018-12-20 19:16:22",
+        "updated_at": "2018-12-20 19:16:22"
     }
+]
+```
+
+### HTTP Request
+`GET api/status`
+
+
+<!-- END_8efbe258b403f46396ec1dff3d1e5620 -->
+
+<!-- START_7ea19774b653ab501f5f28825297b33d -->
+## Store a newly created resource in storage.
+
+> Example request:
+
+```bash
+curl -X POST \
+    "http://sandbox.jim/api/status" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://sandbox.jim/api/status"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`POST api/status`
+
+
+<!-- END_7ea19774b653ab501f5f28825297b33d -->
+
+<!-- START_57d72bbb9a0eadf1cc03f59b3575d88f -->
+## Update the specified resource in storage.
+
+> Example request:
+
+```bash
+curl -X PUT \
+    "http://sandbox.jim/api/status/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://sandbox.jim/api/status/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`PUT api/status/{status}`
+
+`PATCH api/status/{status}`
+
+
+<!-- END_57d72bbb9a0eadf1cc03f59b3575d88f -->
+
+<!-- START_2338829cfb377a2a681a6e196d3c7647 -->
+## Remove the specified resource from storage.
+
+> Example request:
+
+```bash
+curl -X DELETE \
+    "http://sandbox.jim/api/status/1" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://sandbox.jim/api/status/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`DELETE api/status/{status}`
+
+
+<!-- END_2338829cfb377a2a681a6e196d3c7647 -->
+
+<!-- START_3205ce71c134175d802bda484c46394e -->
+## Get you orders
+The orders will have a pagination of 100
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://sandbox.jim/api/shipment" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://sandbox.jim/api/shipment"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (401):
+
+```json
+{
+    "error": "Unauthenticated."
 }
 ```
 
@@ -339,14 +558,14 @@ Send a json file with the following details
 
 ```bash
 curl -X POST \
-    "http://courier.jimkiarie8/api/shipment" \
+    "http://sandbox.jim/api/shipment" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://courier.jimkiarie8/api/shipment"
+    "http://sandbox.jim/api/shipment"
 );
 
 let headers = {
@@ -376,14 +595,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://courier.jimkiarie8/api/shipment/1" \
+    -G "http://sandbox.jim/api/shipment/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://courier.jimkiarie8/api/shipment/1"
+    "http://sandbox.jim/api/shipment/1"
 );
 
 let headers = {
@@ -400,231 +619,11 @@ fetch(url, {
 ```
 
 
-> Example response (200):
+> Example response (401):
 
 ```json
 {
-    "data": [
-        {
-            "airway_bill_no": "EMS0220222",
-            "amount_ordered": 1,
-            "booking_date": "2020-01-13",
-            "charges": null,
-            "client_address": "Riruta, kabiria. Near kivuli center",
-            "client_city": null,
-            "client_email": "SLICER",
-            "client_id": 1,
-            "client_name": "Edward njenga",
-            "client_phone": "722703019",
-            "cod_amount": "3500.00",
-            "created_at": "2020-01-13T13:13:21.000000Z",
-            "derivery_date": "2019-04-11",
-            "derivery_status": "Delivered",
-            "dispatch_date": null,
-            "distance": null,
-            "driver": null,
-            "from_city": null,
-            "id": 1,
-            "insuarance_status": null,
-            "lat": null,
-            "lat_to": null,
-            "lng": null,
-            "lng_to": null,
-            "location": null,
-            "order_id": null,
-            "paid": null,
-            "pickup_at": 0,
-            "pickup_id": 0,
-            "products": [
-                {
-                    "id": 1,
-                    "product_name": "Test Product",
-                    "weight": 0,
-                    "price": 299,
-                    "total": 299,
-                    "quantity": 1,
-                    "user_id": 1,
-                    "branch_id": null,
-                    "lat_from": "-1.2875376",
-                    "long_from": "36.8142597",
-                    "shipments_id": 1,
-                    "deleted_at": null,
-                    "created_at": "2019-11-16 21:04:23",
-                    "updated_at": "2019-11-16 21:04:23"
-                },
-                {
-                    "id": 2,
-                    "product_name": "test prod",
-                    "weight": 0,
-                    "price": 299,
-                    "total": 299,
-                    "quantity": 4,
-                    "user_id": 1,
-                    "branch_id": null,
-                    "lat_from": "-1.2875376",
-                    "long_from": "36.8142597",
-                    "shipments_id": 1,
-                    "deleted_at": null,
-                    "created_at": "2019-11-16 21:04:23",
-                    "updated_at": "2019-11-16 21:04:23"
-                }
-            ],
-            "receiver_name": null,
-            "sender_address": "main st",
-            "sender_city": "Nairobi",
-            "sender_email": "jane@doe.com",
-            "sender_name": "John Doe",
-            "sender_phone": "7220100",
-            "speciial_instruction": null,
-            "status": "Delivered",
-            "statuses": [
-                {
-                    "id": 3,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Dispatched",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-03 10:33:24",
-                    "updated_at": "2019-12-03 10:33:24"
-                },
-                {
-                    "id": 19,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Scheduled",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-05 11:43:15",
-                    "updated_at": "2019-12-05 11:43:15"
-                },
-                {
-                    "id": 20,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Scheduled",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-09 14:34:47",
-                    "updated_at": "2019-12-09 14:34:47"
-                },
-                {
-                    "id": 21,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Scheduled",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-09 14:35:05",
-                    "updated_at": "2019-12-09 14:35:05"
-                },
-                {
-                    "id": 22,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Dispatched",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-09 14:35:15",
-                    "updated_at": "2019-12-09 14:35:15"
-                },
-                {
-                    "id": 35,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Dispatched",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2020-01-08 11:58:39",
-                    "updated_at": "2020-01-08 11:58:39"
-                },
-                {
-                    "id": 47,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Delivered",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2020-01-17 10:20:24",
-                    "updated_at": "2020-01-17 10:20:24"
-                }
-            ],
-            "sub_total": null,
-            "to_city": null,
-            "user_id": 1,
-            "weight": null
-        }
-    ]
+    "error": "Unauthenticated."
 }
 ```
 
@@ -641,14 +640,14 @@ fetch(url, {
 
 ```bash
 curl -X PUT \
-    "http://courier.jimkiarie8/api/shipment/1" \
+    "http://sandbox.jim/api/shipment/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://courier.jimkiarie8/api/shipment/1"
+    "http://sandbox.jim/api/shipment/1"
 );
 
 let headers = {
@@ -681,14 +680,14 @@ fetch(url, {
 
 ```bash
 curl -X DELETE \
-    "http://courier.jimkiarie8/api/shipment/1" \
+    "http://sandbox.jim/api/shipment/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://courier.jimkiarie8/api/shipment/1"
+    "http://sandbox.jim/api/shipment/1"
 );
 
 let headers = {
@@ -719,14 +718,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://courier.jimkiarie8/api/loggedin_user" \
+    -G "http://sandbox.jim/api/loggedin_user" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://courier.jimkiarie8/api/loggedin_user"
+    "http://sandbox.jim/api/loggedin_user"
 );
 
 let headers = {
@@ -743,11 +742,11 @@ fetch(url, {
 ```
 
 
-> Example response (200):
+> Example response (401):
 
 ```json
 {
-    "success": null
+    "error": "Unauthenticated."
 }
 ```
 
@@ -766,14 +765,14 @@ The orders will have a pagination of 100
 
 ```bash
 curl -X GET \
-    -G "http://courier.jimkiarie8/api/search/1" \
+    -G "http://sandbox.jim/api/search/1" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://courier.jimkiarie8/api/search/1"
+    "http://sandbox.jim/api/search/1"
 );
 
 let headers = {
@@ -790,246 +789,11 @@ fetch(url, {
 ```
 
 
-> Example response (200):
+> Example response (401):
 
 ```json
 {
-    "data": [
-        {
-            "airway_bill_no": "EMS0220222",
-            "amount_ordered": 1,
-            "booking_date": "2020-01-13",
-            "charges": null,
-            "client_address": "Riruta, kabiria. Near kivuli center",
-            "client_city": null,
-            "client_email": "SLICER",
-            "client_id": 1,
-            "client_name": "Edward njenga",
-            "client_phone": "722703019",
-            "cod_amount": "3500.00",
-            "created_at": "2020-01-13T13:13:21.000000Z",
-            "derivery_date": "2019-04-11",
-            "derivery_status": "Delivered",
-            "dispatch_date": null,
-            "distance": null,
-            "driver": null,
-            "from_city": null,
-            "id": 1,
-            "insuarance_status": null,
-            "lat": null,
-            "lat_to": null,
-            "lng": null,
-            "lng_to": null,
-            "location": null,
-            "order_id": null,
-            "paid": null,
-            "pickup_at": 0,
-            "pickup_id": 0,
-            "products": [
-                {
-                    "id": 1,
-                    "product_name": "Test Product",
-                    "weight": 0,
-                    "price": 299,
-                    "total": 299,
-                    "quantity": 1,
-                    "user_id": 1,
-                    "branch_id": null,
-                    "lat_from": "-1.2875376",
-                    "long_from": "36.8142597",
-                    "shipments_id": 1,
-                    "deleted_at": null,
-                    "created_at": "2019-11-16 21:04:23",
-                    "updated_at": "2019-11-16 21:04:23"
-                },
-                {
-                    "id": 2,
-                    "product_name": "test prod",
-                    "weight": 0,
-                    "price": 299,
-                    "total": 299,
-                    "quantity": 4,
-                    "user_id": 1,
-                    "branch_id": null,
-                    "lat_from": "-1.2875376",
-                    "long_from": "36.8142597",
-                    "shipments_id": 1,
-                    "deleted_at": null,
-                    "created_at": "2019-11-16 21:04:23",
-                    "updated_at": "2019-11-16 21:04:23"
-                }
-            ],
-            "receiver_name": null,
-            "sender_address": "main st",
-            "sender_city": "Nairobi",
-            "sender_email": "jane@doe.com",
-            "sender_name": "John Doe",
-            "sender_phone": "7220100",
-            "speciial_instruction": null,
-            "status": "Delivered",
-            "statuses": [
-                {
-                    "id": 3,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Dispatched",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-03 10:33:24",
-                    "updated_at": "2019-12-03 10:33:24"
-                },
-                {
-                    "id": 19,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Scheduled",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-05 11:43:15",
-                    "updated_at": "2019-12-05 11:43:15"
-                },
-                {
-                    "id": 20,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Scheduled",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-09 14:34:47",
-                    "updated_at": "2019-12-09 14:34:47"
-                },
-                {
-                    "id": 21,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Scheduled",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-09 14:35:05",
-                    "updated_at": "2019-12-09 14:35:05"
-                },
-                {
-                    "id": 22,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Dispatched",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2019-12-09 14:35:15",
-                    "updated_at": "2019-12-09 14:35:15"
-                },
-                {
-                    "id": 35,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Dispatched",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2020-01-08 11:58:39",
-                    "updated_at": "2020-01-08 11:58:39"
-                },
-                {
-                    "id": 47,
-                    "user_id": 1,
-                    "branch_id": 1,
-                    "shipment_id": 1,
-                    "status": "Delivered",
-                    "location": null,
-                    "geo_location": null,
-                    "lat": null,
-                    "lng": null,
-                    "ip": null,
-                    "state_name": null,
-                    "country": null,
-                    "state": null,
-                    "city": null,
-                    "remark": null,
-                    "deleted_at": null,
-                    "created_at": "2020-01-17 10:20:24",
-                    "updated_at": "2020-01-17 10:20:24"
-                }
-            ],
-            "sub_total": null,
-            "to_city": null,
-            "user_id": 1,
-            "weight": null
-        }
-    ],
-    "links": {
-        "first": "http:\/\/localhost\/api\/search\/1?page=1",
-        "last": "http:\/\/localhost\/api\/search\/1?page=45",
-        "prev": null,
-        "next": "http:\/\/localhost\/api\/search\/1?page=2"
-    },
-    "meta": {
-        "current_page": 1,
-        "from": 1,
-        "last_page": 45,
-        "path": "http:\/\/localhost\/api\/search\/1",
-        "per_page": 1,
-        "to": 1,
-        "total": 45
-    }
+    "error": "Unauthenticated."
 }
 ```
 
@@ -1045,14 +809,14 @@ fetch(url, {
 
 ```bash
 curl -X GET \
-    -G "http://courier.jimkiarie8/api/getShipments" \
+    -G "http://sandbox.jim/api/getShipments" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://courier.jimkiarie8/api/getShipments"
+    "http://sandbox.jim/api/getShipments"
 );
 
 let headers = {
@@ -1069,11 +833,11 @@ fetch(url, {
 ```
 
 
-> Example response (500):
+> Example response (401):
 
 ```json
 {
-    "message": "Server Error"
+    "error": "Unauthenticated."
 }
 ```
 
