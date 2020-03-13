@@ -46,11 +46,13 @@ class ShipmentController extends Controller
      *Send a json file with the following details
      *
      *
-     {
+
+{
+    "data": {
         "bar_code": "EMS0220222",
         "quantity": 1,
         "client_address": "Riruta, kabiria. Near kivuli center",
-        "client_city": ''Nairobi'',
+        "client_city": "Nairobi",
         "product_name": "SLICER",
         "client_name": "Edward njenga",
         "client_phone": "722703019",
@@ -60,16 +62,17 @@ class ShipmentController extends Controller
                 "product_name": "Test Product",
                 "price": 299,
                 "total": 299,
-                "quantity": 1,
+                "quantity": 1
             },
             {
                 "product_name": "Test Product",
                 "price": 299,
                 "total": 299,
-                "quantity": 1,
-            },
+                "quantity": 1
+            }
         ]
     }
+}
      *
      *
      * @param  \Illuminate\Http\Request  $request
