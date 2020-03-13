@@ -31,7 +31,7 @@ class ShipmentController extends Controller
         // if ($user->hasRole('Client')) {
         //     $shipment = Shipment::setEagerLoads([])->where('client_id', Auth::id())->orderBy('id', 'desc')->paginate();
         // } else {
-            $shipment = Shipment::setEagerLoads([])->where('client_id', $user->id)->orderBy('id', 'desc')->paginate(100);
+        $shipment = Shipment::setEagerLoads([])->where('client_id', $user->id)->orderBy('id', 'desc')->paginate(100);
         // }
         return ShipmentResource::collection($shipment);
     }
@@ -444,6 +444,5 @@ class ShipmentController extends Controller
             ->orwhere('client_name', 'LIKE', "%{$search}%")
             ->paginate(1);
         return ShipmentResource::collection($shipment);
-
     }
 }
