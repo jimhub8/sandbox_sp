@@ -487,6 +487,38 @@ class ShipmentController extends Controller
 
     public function updateStatus(Request $request, Shipment $shipment, $id)
     {
+        $token = $this->token_f();
+        try {
+            $client = new Client;
+            $request = $client->request('POST', env('API_URL') . '/api/orderStatus', [
+                'headers' => [
+                    'Content-type' => 'application/json',
+                    'Accept' => 'application/json',
+                    'Authorization' => 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6Ijg3YTIxNWYzMDc0NTFmYzQyZTNhNDAxNmU3NDdhMjhlZThhNmUyMmZmOTJhYzlhODNlOTI3Y2VmOWI1MTNhOGUzYTMzMjA1MzMzZGMyMzQzIn0.eyJhdWQiOiIyIiwianRpIjoiODdhMjE1ZjMwNzQ1MWZjNDJlM2E0MDE2ZTc0N2EyOGVlOGE2ZTIyZmY5MmFjOWE4M2U5MjdjZWY5YjUxM2E4ZTNhMzMyMDUzMzNkYzIzNDMiLCJpYXQiOjE1ODM4NDI3MTYsIm5iZiI6MTU4Mzg0MjcxNiwiZXhwIjoxNjE1Mzc4NzE2LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.WFlvqgv1RIewr3ff9cgoZ9LAfONHwo_sDGAFUuw18yMPK2zGgtUKUzAjWPL3OL2IlvQjobKQTevtUSaYvT3PuPMl1X53RlMKi49Y5hWF4xVyi0CfGWfzQt12WHYJ5-VqpvDxSlpvvAPtrNMGLhbaLXGCjGOD4F0yRJEsG5El5MoLS93I4Vcu_YCD4JdzeeOplDCixTBR5Cd7Dy7XKoVquauLdqRvIkdm54sylhTcJQBz3gdoh8IS6zJVIQegGOXjwZGuDnnRtHh1X9F6c3669sMYMIXS-W62UybG0oNITVKYN_Xk1A5ZMWRImdfZb41tH955wKvdQuhBnzJIKWmVNyfUAkX9Iyw2Etq2eM5R0CvNOLhLEGPjsXfEPDwmV2yHUxL-FdNjCEHc5CXVt5xqblU7owmSVyUYxw0GC62JyaGTK3XwAoJ6yYi5lRknedll6-sLT0DsytVdANX7lbSYZW2g3HjUVVTYC6RTh2D5iSyUpool68wgOhPGftgBQc6kTJXNJzPjgS1z_afy-9PRkxHzUAYU3qDGFsdH1rcxvei7_yHVnVdpNjUSqDQ5WoZPZ5dbd9Ysbz-w83y2J7kWWnEdTVnEzYqWjei1kJnxsPkR9_vdTv_1_pYpy_C4IJgcB0jXbhR92nA0LSQedbn0t3u3Zmob8jNtIO-FjyxMJdI',
+                ],
+                'body' => json_encode([
+                    'data' => $request->formobg,
+                ])
+            ]);
+            // $response = $http->get(env('API_URL').'/api/getUsers');
+            return $response = $request->getBody()->getContents();
+        } catch (\Exception $e) {
+            // dd($e);
+            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+            // return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+            // return $e->getMessage();
+            $message = $e->getResponse()->getBody();
+            $code = $e->getResponse()->getStatusCode();
+            if ($code == 401) {
+                abort(401);
+            }
+            return;
+            // $arrayName = array('error' => 'Error', 'message' => $message);
+            // dd($message);
+            abort(422, $message);
+            // return $e->getMessage();
+        }
+        return ;
         $shipment = Shipment::find($request->id);
         // if ($shipment->status == 'Delivered') {
         //     abort(500, 'The shipment has already been Delivered');

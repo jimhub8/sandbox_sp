@@ -75,6 +75,11 @@ class RolesAndPermissionsSeeder extends Seeder
         // $role = Role::create(['guard_name' => 'clients', 'name' => 'Client']);
         // $role->givePermissionTo('view orders');
 
+        $country = new Country;
+        $country->country_name = 'Kenya';
+        $country->user_id = 1;
+        $country->save();
+
         $user = new User();
         $user->password = Hash::make('password');
         $user->name = 'Jimmy';
