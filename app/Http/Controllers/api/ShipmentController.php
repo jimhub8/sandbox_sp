@@ -77,7 +77,10 @@ class ShipmentController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request->data['bar_code'];
         // return $request->all();
+        $data = $request->data;
+        $user = auth('api')->user();
         // $api_user = new ApiUser();
         // $user_data = $api_user->login($request);
         $user_data = auth('api')->user();
@@ -113,45 +116,46 @@ class ShipmentController extends Controller
         // }
 
         // $shipment->sub_total = $products->sum('total');
-        $shipment->client_name = $request->client_name;
-        $shipment->client_phone = $request->client_phone;
-        $shipment->client_email = $request->product_name;
-        $shipment->client_address = $request->client_address;
-        $shipment->client_city = $request->client_city;
-        $shipment->airway_bill_no = $request->bar_code;
-        $shipment->country_id = $request->country_id;
-        $shipment->booking_date = $request->booking_date;
-        $shipment->derivery_date = $request->derivery_date;
-        $shipment->derivery_time = $request->derivery_time;
-        $shipment->bar_code = $request->bar_code;
-        $shipment->to_city = $request->to_city;
-        $shipment->cod_amount = $request->cod_amount;
-        $shipment->from_city = $request->from_city;
-        $shipment->amount_ordered = $request->quantity;
-        $shipment->user_id = $user_id;
+        $shipment->client_name = (array_key_exists('client_name', $data)) ? $data['client_name'] : null;
+        $shipment->client_phone = (array_key_exists('client_phone', $data)) ? $data['client_phone'] : null;
+        $shipment->client_email = (array_key_exists('client_email', $data)) ? $data['product_name'] : null;
+        $shipment->client_address = (array_key_exists('client_address', $data)) ? $data['client_address'] : null;
+        $shipment->client_city = (array_key_exists('client_city', $data)) ? $data['client_city'] : null;
+        $shipment->airway_bill_no = (array_key_exists('airway_bill_no', $data)) ? $data['bar_code'] : null;
+        $shipment->country_id = (array_key_exists('country_id', $data)) ? $data['country_id'] : null;
+        $shipment->booking_date = (array_key_exists('booking_date', $data)) ? $data['booking_date'] : null;
+        $shipment->derivery_date = (array_key_exists('derivery_date', $data)) ? $data['derivery_date'] : null;
+        $shipment->derivery_time = (array_key_exists('derivery_time', $data)) ? $data['derivery_time'] : null;
+        $shipment->bar_code = (array_key_exists('bar_code', $data)) ? $data['bar_code'] : null;
+        $shipment->to_city = (array_key_exists('to_city', $data)) ? $data['to_city'] : null;
+        $shipment->cod_amount = (array_key_exists('cod_amount', $data)) ? $data['cod_amount'] : null;
+        $shipment->from_city = (array_key_exists('from_city', $data)) ? $data['from_city'] : null;
+        $shipment->amount_ordered = (array_key_exists('amount_ordered', $data)) ? $data['quantity'] : null;
+        $shipment->user_id = (array_key_exists('user_id', $data)) ? $user_id : null;
 
-        if ($request->model) {
-            $shipment->client_id = $request->model;
-            $sender = User::find($request->model);
-            $shipment->sender_name = $sender->name;
-            $shipment->sender_email = 'info@speedballcourier.com';
-            $shipment->sender_phone = '+254743332743';
-            $shipment->sender_address = '636400100';
-            $shipment->sender_city = $sender->city;
-        } else {
-            $shipment->sender_name = 'Speedball Courier';
-            $shipment->sender_email = 'info@speedballcourier.com';
-            $shipment->sender_phone = '+254743332743';
-            $shipment->sender_address = '636400100';
-            $shipment->sender_city = 'Nairobi';
+        $shipment->sender_name = $user->name;
+        $shipment->sender_email = $user->email;
+        $shipment->sender_phone = $user->phone;
+        $shipment->sender_address = $user->address;
+        $shipment->sender_city = $user->city;
+        $shipment->user_id = $user->id;
+        $shipment->client_id = $user->id;
+
+        $product_name = '';
+        foreach ($data['products'] as  $product_) {
+            $product_name = $product_name . ',' .  $product_['product_name'];
         }
+        // dd($product_name);
+
 
         // return $user_id;
         $shipment->shipment_id = random_int(1000000, 9999999);
+        // dd($shipment);
         $shipment->save();
 
-        if (!empty($products)) {
-            $products = collect($request->form['products'])->transform(function ($product) {
+        if (!empty($data['products'])) {
+            // dd('test');
+            $products = collect($data['products'])->transform(function ($product) {
                 $product['total'] = $product['quantity'] * $product['price'];
                 $product['user_id'] = Auth::id();
                 return new Product($product);
@@ -160,8 +164,9 @@ class ShipmentController extends Controller
             $shipment->sub_total = $products->sum('total');
             // return $products;
         }
+        // dd('dwd');
 
-        if (!empty($products)) {
+        if (!empty($data['products'])) {
             $shipment->products()->saveMany($products);
         }
         $users = $this->getAdmin();
