@@ -1,14 +1,13 @@
 <?php
+namespace App\Http\api\Controllers;
 
-namespace App\Http\Controllers\api;
-
-use App\Http\Controllers\Controller;
+use App\Notifications\SignupActivate;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class AuthController extends Controller
+class AuthController_1 extends Controller
 {
     /**
      * Create user
@@ -30,10 +29,10 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            // 'activation_token' => str_random(60)
+            'activation_token' => str_random(60)
         ]);
         $user->save();
-        // $user->notify(new SignupActivate($user));
+        $user->notify(new SignupActivate($user));
         return response()->json([
             'message' => 'Successfully created user!'
         ], 201);
@@ -54,21 +53,18 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
-            // 'remember_me' => 'boolean'
+            'remember_me' => 'boolean'
         ]);
         $credentials = request(['email', 'password']);
-        // return ($credentials);
+        $credentials['active'] = 1;
         $credentials['deleted_at'] = null;
-        if (!Auth::guard('clients')->attempt($credentials))
-        // if (!Auth::attempt($credentials))
+        if (!Auth::attempt($credentials))
             return response()->json([
             'message' => 'Unauthorized'
         ], 401);
-        $user = Auth::guard('clients')->user();
-        // $user = $request->user();
+        $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
-        return $tokenResult;
         if ($request->remember_me)
             $token->expires_at = Carbon::now()->addWeeks(1);
         $token->save();
@@ -99,8 +95,6 @@ class AuthController extends Controller
      */
     public function user(Request $request)
     {
-        // return ($request->all());
-        return auth('api')->user();
         return response()->json($request->user());
     }
 

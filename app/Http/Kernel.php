@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         '2fa' => \App\Http\Middleware\Google2FAMiddleware::class,
 
         // '2fa' => \PragmaRX\Google2FALaravel\Middleware::class,
+        'passport' => \App\Http\Middleware\SetPassportAuthGuard::class,
 
     ];
 }

@@ -26,6 +26,7 @@ class ShipmentController extends Controller
     public function index()
     {
         $user = auth('api')->user();
+        // return $user;
         // $shipment = Shipment::setEagerLoads([])->where('id', 1)->paginate(2);
         // if ($user->hasRole('Client')) {
         //     $shipment = Shipment::setEagerLoads([])->where('client_id', Auth::id())->orderBy('id', 'desc')->paginate();
