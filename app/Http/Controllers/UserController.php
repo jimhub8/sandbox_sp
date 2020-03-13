@@ -91,19 +91,19 @@ class UserController extends Controller
         $user->givePermissionTo($request->selected);
         $user->password_hash = $password_hash;
         $user = $user->makeVisible('password')->toArray();
-        if ($request->role_id == 'Client') {
-            $this->client_api($user);
-        } elseif ($request->role_id == 'Rider') {
-            return $user->makeHidden('password_hash')->toArray();
-        } else {
-            $create_user->notify(new SignupActivate($create_user, $password));
-            $this->user_api($user);
-        }
-        $passwordSecurity = PasswordSecurity::create([
-            'user_id' => $user['id'],
-            'password_expiry_days' => 1,
-            'password_updated_at' => Carbon::now(),
-        ]);
+        // if ($request->role_id == 'Client') {
+        //     $this->client_api($user);
+        // } elseif ($request->role_id == 'Rider') {
+        //     return $user->makeHidden('password_hash')->toArray();
+        // } else {
+        //     $create_user->notify(new SignupActivate($create_user, $password));
+        //     $this->user_api($user);
+        // }
+        // $passwordSecurity = PasswordSecurity::create([
+        //     'user_id' => $user['id'],
+        //     'password_expiry_days' => 1,
+        //     'password_updated_at' => Carbon::now(),
+        // ]);
         return;
         // $user->splice('password_hash');
         // return $user->makeHidden('password_hash')->toArray();

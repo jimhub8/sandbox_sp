@@ -80,32 +80,32 @@ class ClientController extends Controller
         // $user->givePermissionTo($request->selected);
         // $user->password_hash = $password_hash;
         $user = $user->makeVisible('password')->toArray();
-        $token = $this->token_f();
-        try {
-            $client = new GuzzleHttpClient();
-            $request = $client->request('POST', env('API_URL') . '/api/clients', [
-                'headers' => [
-                    'Content-type' => 'application/json',
-                    'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $token,
-                ],
-                'body' => json_encode([
-                    'data' => $user,
-                ])
-            ]);
-            return $response = $request->getBody()->getContents();
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
+        // $token = $this->token_f();
+        // try {
+        //     $client = new GuzzleHttpClient();
+        //     $request = $client->request('POST', env('API_URL') . '/api/clients', [
+        //         'headers' => [
+        //             'Content-type' => 'application/json',
+        //             'Accept' => 'application/json',
+        //             'Authorization' => 'Bearer ' . $token,
+        //         ],
+        //         'body' => json_encode([
+        //             'data' => $user,
+        //         ])
+        //     ]);
+        //     return $response = $request->getBody()->getContents();
+        // } catch (\Exception $e) {
+        //     \Log::error($e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile());
 
-            $message = $e->getResponse()->getBody();
-            $code = $e->getResponse()->getStatusCode();
-            if ($code == 401) {
-                abort(401);
-            }
-            abort(422, $message);
-            return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
-        }
-        $this->client_api($user);
+        //     $message = $e->getResponse()->getBody();
+        //     $code = $e->getResponse()->getStatusCode();
+        //     if ($code == 401) {
+        //         abort(401);
+        //     }
+        //     abort(422, $message);
+        //     return $e->getMessage() . ' ' . $e->getLine() . ' ' . $e->getFile();
+        // }
+        // $this->client_api($user);
         return;
         //     if ($request->role_id == 'Client') {
         //     $this->client_api($user);
