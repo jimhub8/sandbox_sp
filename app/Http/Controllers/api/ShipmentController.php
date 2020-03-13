@@ -49,25 +49,25 @@ class ShipmentController extends Controller
 
 {
     "data": {
-        "bar_code": "EMS0220222",
+        "bar_code": "SP0000001",
         "quantity": 1,
-        "client_address": "Riruta, kabiria. Near kivuli center",
+        "client_address": "123 main street",
         "client_city": "Nairobi",
         "product_name": "SLICER",
-        "client_name": "Edward njenga",
-        "client_phone": "722703019",
-        "cod_amount": "3500.00",
+        "client_name": "John Doe",
+        "client_phone": "+257000...",
+        "cod_amount": "1900.00",
         "products": [
             {
                 "product_name": "Test Product",
-                "price": 299,
-                "total": 299,
+                "price": 400,
+                "total": 400,
                 "quantity": 1
             },
             {
                 "product_name": "Test Product",
-                "price": 299,
-                "total": 299,
+                "price": 1500,
+                "total": 1500,
                 "quantity": 1
             }
         ]
