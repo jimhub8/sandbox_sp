@@ -15,8 +15,9 @@ class ShipmentResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'airway_bill_no' => $this->airway_bill_no,
-            'amount_ordered' => $this->amount_ordered,
+            'id' => $this->id,
+            'bar_code' => $this->bar_code,
+            'quantity' => $this->amount_ordered,
             'booking_date' => $this->booking_date,
             // 'charges' => $this->charges,
             'client_address' => $this->client_address,
@@ -26,21 +27,19 @@ class ShipmentResource extends JsonResource
             'client_name' => $this->client_name,
             'client_phone' => $this->client_phone,
             'cod_amount' => $this->cod_amount,
-            'created_at' => $this->created_at,
             'delivery_date' => $this->derivery_date,
             // 'delivery_status' => $this->derivery_status,
             'dispatch_date' => $this->dispatch_date,
             // 'distance' => $this->distance,
             // 'driver' => $this->driver,
-            'from_city' => $this->from_city,
-            'id' => $this->id,
+            // 'from_city' => $this->from_city,
             // 'insuarance_status' => $this->insuarance_status,
             // 'lat' => $this->lat,
             // 'lat_to' => $this->lat_to,
             // 'lng' => $this->lng,
             // 'lng_to' => $this->lng_to,
             // 'location' => $this->location,
-            'order_id' => $this->order_id,
+            'order_id' => $this->bar_code,
             // 'paid' => $this->paid,
             // 'pickup_at' => $this->pickup_at,
             // 'pickup_id' => $this->pickup_id,
@@ -51,13 +50,14 @@ class ShipmentResource extends JsonResource
             'sender_email' => $this->sender_email,
             'sender_name' => $this->sender_name,
             'sender_phone' => $this->sender_phone,
-            'speciial_instruction' => $this->speciial_instruction,
+            'special_instruction' => $this->speciial_instruction,
             'status' => $this->status,
+            'created_at' => $this->created_at,
             // 'statuses' => $this->statuses,
             // 'sub_total' => $this->sub_total,
             // 'to_city' => $this->to_city,
             // 'user_id' => $this->user_id,
-            'weight' => $this->weight
+            // 'weight' => $this->weight
         ];
     }
 }

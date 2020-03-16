@@ -124,12 +124,12 @@ class ShipmentController extends Controller
         $shipment->client_phone = (array_key_exists('client_phone', $data)) ? $data['client_phone'] : null;
         $shipment->client_address = (array_key_exists('client_address', $data)) ? $data['client_address'] : null;
         $shipment->client_city = (array_key_exists('client_city', $data)) ? $data['client_city'] : null;
-        $shipment->airway_bill_no = (array_key_exists('airway_bill_no', $data)) ? $data['bar_code'] : null;
-        $shipment->country_id = (array_key_exists('country_id', $data)) ? $data['country_id'] : null;
-        $shipment->booking_date = (array_key_exists('booking_date', $data)) ? $data['booking_date'] : null;
+        $shipment->country_id = (array_key_exists('country_id', $data)) ? $data['country_id'] : 1;
+        $shipment->booking_date = now();
         $shipment->derivery_date = (array_key_exists('derivery_date', $data)) ? $data['derivery_date'] : null;
         $shipment->derivery_time = (array_key_exists('derivery_time', $data)) ? $data['derivery_time'] : null;
         $shipment->bar_code = (array_key_exists('bar_code', $data)) ? $data['bar_code'] : null;
+        $shipment->airway_bill_no = (array_key_exists('bar_code', $data)) ? $data['bar_code'] : null;
         $shipment->to_city = (array_key_exists('to_city', $data)) ? $data['to_city'] : null;
         $shipment->from_city = (array_key_exists('from_city', $data)) ? $data['from_city'] : null;
         $shipment->status = (array_key_exists('status', $data)) ? $user_id : 'Warehouse';
