@@ -190,7 +190,9 @@ class ShipmentController extends Controller
         // }
         $users = User::find(1);
         $type = 'shipment';
-        $shipment_res = ShipmentResource::collection($shipment);
+        $ret_ship = Shipment::where('id', $shipment->id)->get();
+        // return $ret_ship;
+        $shipment_res = ShipmentResource::collection($ret_ship);
         Notification::send($users, new ShipmentNoty($shipment, $type));
         // return ShipmentResource::collection($shipment);
 
