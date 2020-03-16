@@ -187,7 +187,8 @@ class ShipmentController extends Controller
         Notification::send($users, new ShipmentNoty($shipment, $type));
         // return ShipmentResource::collection($shipment);
 
-        return response()->json(['success' => $shipment, 'status' => '200'], '200');
+        $shipment_res = ShipmentResource::collection($shipment);
+        return response()->json(['success' => $shipment_res, 'status' => '200'], '200');
         // die();
     }
 
