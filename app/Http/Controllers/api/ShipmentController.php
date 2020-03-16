@@ -80,51 +80,16 @@ class ShipmentController extends Controller
      */
     public function store(Request $request)
     {
-        // $users = User::find(1);
-        // $type = 'shipment';
-        // $shipment = Shipment::find(1);
-        // $sent = Notification::send($users, new ShipmentNoty($shipment, $type));
-        // return response()->json(['success' => $sent, 'status' => '200'], '200');
-        // return $sent;
-        // return $request->data['bar_code'];
-        // return $request->all();
         $data = $request->data;
+        $shipment_ex = Shipment::where('bar_code', $data['bar_code'])->exists();
+        if ($shipment_ex) {
+            return response()->json(['error' => 'We found an order with the same order number(bar_code)', 'status' => '422'], '422');
+        }
         // return $data['products'];
         $user = auth('api')->user();
-        // $api_user = new ApiUser();
-        // $user_data = $api_user->login($request);
         $user_data = auth('api')->user();
         $user_id = $user_data->id;
-        // $user_id = !empty($user_data['id']) ? $user_data['id'] : '';
-        // $products = collect($request->form['products'])->transform(function ($product) use ($user_id) {
-        //     $product['total'] = $product['quantity'] * $product['price'];
-        //     $product['user_id'] = $user_id;
-        //     return new Product($product);
-        // });
-
-        // if ($products->isEmpty()) {
-        //     return response()->json([
-        //         'product_empty' => ['One or more products is required'],
-        //     ], 422);
-        // }
         $shipment = new Shipment;
-        // if ($request->selectCl == []) {
-        //     $shipment->client_id = null;
-        // } else {
-        //     $shipment->client_id = $request->selectCl['id'];
-        // }
-        // if ($request->selectD == []) {
-        //     $shipment->driver = '';
-        // } else {
-        //     $shipment->driver = $request->selectD['id'];
-        // }
-
-        // if ($request->selectB == []) {
-        //     $shipment->branch_id = $user_data->branch_id;
-        // } else {
-        //     $shipment->branch_id = $request->selectB['id'];
-        // }
-
         // $shipment->sub_total = $products->sum('total');
         $shipment->client_name = (array_key_exists('client_name', $data)) ? $data['client_name'] : null;
         $shipment->client_phone = (array_key_exists('client_phone', $data)) ? $data['client_phone'] : null;
