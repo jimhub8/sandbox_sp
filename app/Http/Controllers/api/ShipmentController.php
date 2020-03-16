@@ -80,6 +80,12 @@ class ShipmentController extends Controller
      */
     public function store(Request $request)
     {
+        // $users = User::find(1);
+        // $type = 'shipment';
+        // $shipment = Shipment::find(1);
+        // $sent = Notification::send($users, new ShipmentNoty($shipment, $type));
+        // return response()->json(['success' => $sent, 'status' => '200'], '200');
+        // return $sent;
         // return $request->data['bar_code'];
         // return $request->all();
         $data = $request->data;
@@ -178,16 +184,16 @@ class ShipmentController extends Controller
         if (!empty($data['products'])) {
             $shipment->products()->saveMany($products);
         }
-        $users = $this->getAdmin();
         // $users = User::all();
         // if ($shipment->save()) {
         //     $shipment->products()->saveMany($products);
         // }
+        $users = User::find(1);
         $type = 'shipment';
+        $shipment_res = ShipmentResource::collection($shipment);
         Notification::send($users, new ShipmentNoty($shipment, $type));
         // return ShipmentResource::collection($shipment);
 
-        $shipment_res = ShipmentResource::collection($shipment);
         return response()->json(['success' => $shipment_res, 'status' => '200'], '200');
         // die();
     }

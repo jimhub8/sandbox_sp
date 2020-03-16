@@ -44,7 +44,7 @@ class ShipmentNoty extends Notification
 
     return (new MailMessage)
                 ->greeting('Hello!')
-                ->line('One of your invoices has been paid!')
+                ->line('A new order has been added!')
                 ->action('View Invoice', $url)
                 ->line('Thank you for using our application!');
 }
