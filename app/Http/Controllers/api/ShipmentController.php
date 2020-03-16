@@ -83,6 +83,7 @@ class ShipmentController extends Controller
         // return $request->data['bar_code'];
         // return $request->all();
         $data = $request->data;
+        // return $data['products'];
         $user = auth('api')->user();
         // $api_user = new ApiUser();
         // $user_data = $api_user->login($request);
@@ -121,7 +122,6 @@ class ShipmentController extends Controller
         // $shipment->sub_total = $products->sum('total');
         $shipment->client_name = (array_key_exists('client_name', $data)) ? $data['client_name'] : null;
         $shipment->client_phone = (array_key_exists('client_phone', $data)) ? $data['client_phone'] : null;
-        $shipment->client_email = (array_key_exists('client_email', $data)) ? $data['product_name'] : null;
         $shipment->client_address = (array_key_exists('client_address', $data)) ? $data['client_address'] : null;
         $shipment->client_city = (array_key_exists('client_city', $data)) ? $data['client_city'] : null;
         $shipment->airway_bill_no = (array_key_exists('airway_bill_no', $data)) ? $data['bar_code'] : null;
@@ -131,10 +131,8 @@ class ShipmentController extends Controller
         $shipment->derivery_time = (array_key_exists('derivery_time', $data)) ? $data['derivery_time'] : null;
         $shipment->bar_code = (array_key_exists('bar_code', $data)) ? $data['bar_code'] : null;
         $shipment->to_city = (array_key_exists('to_city', $data)) ? $data['to_city'] : null;
-        $shipment->cod_amount = (array_key_exists('cod_amount', $data)) ? $data['cod_amount'] : null;
         $shipment->from_city = (array_key_exists('from_city', $data)) ? $data['from_city'] : null;
-        $shipment->amount_ordered = (array_key_exists('amount_ordered', $data)) ? $data['quantity'] : null;
-        $shipment->user_id = (array_key_exists('user_id', $data)) ? $user_id : null;
+        $shipment->status = (array_key_exists('status', $data)) ? $user_id : 'Warehouse';
 
         $shipment->sender_name = $user->name;
         $shipment->sender_email = $user->email;
@@ -145,10 +143,18 @@ class ShipmentController extends Controller
         $shipment->client_id = $user->id;
 
         $product_name = '';
+        $quantity = 0;
+        $price = 0;
         foreach ($data['products'] as  $product_) {
             $product_name = $product_name . ',' .  $product_['product_name'];
+            $quantity += $product_['quantity'];
+            $price += $product_['price'];
         }
-        // dd($product_name);
+        // return ($quantity);
+        $shipment->client_email = $product_name;
+        $shipment->cod_amount = (array_key_exists('cod_amount', $data)) ? $data['cod_amount'] : $price;
+        $shipment->client_email = $product_name;
+        $shipment->amount_ordered = $quantity;
 
 
         // return $user_id;
