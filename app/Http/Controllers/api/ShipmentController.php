@@ -104,6 +104,7 @@ class ShipmentController extends Controller
         $shipment->to_city = (array_key_exists('to_city', $data)) ? $data['to_city'] : null;
         $shipment->from_city = (array_key_exists('from_city', $data)) ? $data['from_city'] : null;
         $shipment->status = (array_key_exists('status', $data)) ? $user_id : 'Warehouse';
+        $shipment->paid = (array_key_exists('paid', $data)) ? $$data['paid'] : false;
 
         $shipment->sender_name = $user->name;
         $shipment->sender_email = $user->email;
