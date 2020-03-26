@@ -15,14 +15,14 @@ use Illuminate\Http\Request;
 Route::group([
     'prefix' => 'auth',
 ], function () {
-    Route::post('login', 'api\AuthController@login');
-    // Route::post('signup', 'api\AuthController@signup');
-    // Route::get('signup/activate/{token}', 'api\AuthController@signupActivate');
+    Route::post('login', 'Api\AuthController@login');
+    // Route::post('signup', 'Api\AuthController@signup');
+    // Route::get('signup/activate/{token}', 'Api\AuthController@signupActivate');
     Route::group([
         'middleware' => 'auth:api',
     ], function () {
-        Route::get('logout', 'api\AuthController@logout');
-        Route::get('user', 'api\AuthController@user');
+        Route::get('logout', 'Api\AuthController@logout');
+        Route::get('user', 'Api\AuthController@user');
     });
 });
 Route::resource('status', 'StatusController');
@@ -33,19 +33,19 @@ Route::group([
 ], function () {
     // Route::resource('users', 'UserController');
     // Route::resource('roles', 'RoleController');
-    Route::resource('shipment', 'api\ShipmentController');
+    Route::resource('shipment', 'Api\ShipmentController');
     // Route::resource('product', 'ProductController');
     // Route::resource('reports', 'ReportController');
     // Route::resource('container', 'ContainerController');
-    // Route::resource('branches', 'api\BranchController');
+    // Route::resource('branches', 'Api\BranchController');
     // Route::resource('companies', 'CompanyController');
     // Route::resource('email', 'EmailController');
     // Route::resource('invoice', 'InvoiceController');
 
-    Route::get('loggedin_user', 'api\UserController@loggedin_user')->name('loggedin_user');
-    Route::get('search/{order_no}', 'api\ShipmentController@search')->name('search');
+    Route::get('loggedin_user', 'Api\UserController@loggedin_user')->name('loggedin_user');
+    Route::get('search/{order_no}', 'Api\ShipmentController@search')->name('search');
 
-	// Route::post('shopify_orders', 'api\ShopifyController@shopify_orders')->name('shopify_orders');
+	// Route::post('shopify_orders', 'Api\ShopifyController@shopify_orders')->name('shopify_orders');
 
     // Route::post('updateStatus/{id}', 'ShipmentController@updateStatus')->name('updateStatus');
     // Route::post('barcodeUpdate/{bar_code}', 'ShipmentController@barcodeUpdate')->name('barcodeUpdate');
