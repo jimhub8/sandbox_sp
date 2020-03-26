@@ -45,6 +45,8 @@ Route::group([
     Route::get('loggedin_user', 'Api\UserController@loggedin_user')->name('loggedin_user');
     Route::get('search/{order_no}', 'Api\ShipmentController@search')->name('search');
 
+    Route::post('add_shipment', 'Api\ShipmentController@store');
+
 	// Route::post('shopify_orders', 'Api\ShopifyController@shopify_orders')->name('shopify_orders');
 
     // Route::post('updateStatus/{id}', 'ShipmentController@updateStatus')->name('updateStatus');
