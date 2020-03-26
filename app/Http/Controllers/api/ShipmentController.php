@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\BroadcastOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ShipmentResource;
 use App\Http\Resources\UserResource;
@@ -80,6 +81,10 @@ class ShipmentController extends Controller
      */
     public function store(Request $request)
     {
+        // $shipment = Shipment::first();
+        // event(new BroadcastOrder($shipment));
+        // return 's';
+        // BroadcastOrder::class;
         $data = $request->data;
         $shipment_ex = Shipment::where('bar_code', $data['bar_code'])->exists();
         if ($shipment_ex) {
@@ -104,11 +109,11 @@ class ShipmentController extends Controller
         $shipment->to_city = (array_key_exists('to_city', $data)) ? $data['to_city'] : null;
         $shipment->from_city = (array_key_exists('from_city', $data)) ? $data['from_city'] : null;
         $shipment->status = (array_key_exists('status', $data)) ? $user_id : 'Warehouse';
-        $shipment->paid = (array_key_exists('paid', $data)) ? $$data['paid'] : false;
+        $shipment->paid = (array_key_exists('paid', $data)) ? $data['paid'] : false;
 
         $shipment->sender_name = $user->name;
         $shipment->sender_email = $user->email;
-        $shipment->sender_phone = $user->phone;
+        $shipment->sender_phone = ($user->phone) ? $user->phone : null;
         $shipment->sender_address = $user->address;
         $shipment->sender_city = $user->city;
         $shipment->user_id = $user->id;
@@ -124,7 +129,7 @@ class ShipmentController extends Controller
         }
         // return ($quantity);
         $shipment->client_email = $product_name;
-        $shipment->cod_amount = (array_key_exists('cod_amount', $data)) ? $data['cod_amount'] : $price;
+        $shipment->cod_amount = (float) ((array_key_exists('cod_amount', $data)) ? $data['cod_amount'] : $price);
         $shipment->client_email = $product_name;
         $shipment->amount_ordered = $quantity;
 
@@ -134,6 +139,12 @@ class ShipmentController extends Controller
         // dd($shipment);
         $shipment->save();
 
+        $user = User::find(1);
+        $type = 'shipment';
+        // BroadcastOrder::class;
+        // return 'success';
+        Notification::send($user, new ShipmentNoty($shipment, $type));
+        return response()->json(['success' => $shipment, 'status' => '200'], '200');
         if (!empty($data['products'])) {
             // dd('test');
             $products = collect($data['products'])->transform(function ($product) {
@@ -154,12 +165,14 @@ class ShipmentController extends Controller
         // if ($shipment->save()) {
         //     $shipment->products()->saveMany($products);
         // }
-        $users = User::find(1);
-        $type = 'shipment';
+        // $users = User::find(1);
         $ret_ship = Shipment::where('id', $shipment->id)->get();
         // return $ret_ship;
+        $users = $this->getAdmin();
         $shipment_res = ShipmentResource::collection($ret_ship);
-        Notification::send($users, new ShipmentNoty($shipment, $type));
+        foreach ($users as  $user) {
+            Notification::send($user, new ShipmentNoty($shipment, $type));
+        }
         // return ShipmentResource::collection($shipment);
 
         return response()->json(['success' => $shipment_res, 'status' => '200'], '200');
@@ -246,19 +259,11 @@ class ShipmentController extends Controller
 
     public function getAdmin()
     {
-        $usersRolem = User::with('roles')->get();
-        $userArr = [];
-        foreach ($usersRolem as $user) {
-            // var_dump($user->roles); die;
-            foreach ($user->roles as $role) {
-                if ($role->name == 'Admin') {
-                    $userArr[] = $role->id;
-                }
-            }
-        }
-        $users = $userArr;
-        return $admin = User::whereIn('id', $userArr)->get();
-        // return UserResource::collection($admin);
+        // return User::all();
+        return User::setEagerLoads([])->whereHas("roles", function ($q) {
+            $q->where("name", "Admin");
+            $q->orWhere("name", "Customer Service");
+        })->get();
     }
 
     public function delete(Request $request)
