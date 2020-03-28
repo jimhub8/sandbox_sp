@@ -98,6 +98,7 @@ Route::get('/callback', function (Request $request) {
 Route::get('/2fa_home', 'HomeController@index')->name('2fa_home');
 
 
+Route::post('/sendMessage', 'HomeController@sendMessage')->name('sendMessage');
 
 
 Route::any('confirmation', 'SafaricomController@confirmation')->name('confirmation');
@@ -119,10 +120,11 @@ Route::get('/passport', 'HomeController@passport')->name('passport');
 // Route::get('/map', function () {
 // 	return App\User::take(100)->get();
 // });
+Route::get('/', 'HomeController@courier')->name('courier');
 
-Route::get('/', function () {
-    return redirect('courier');
-});
+// Route::get('/', function () {
+//     return redirect('courier');
+// });
 Route::get('signup/activate/{token}', 'AuthController@signupActivate');
 
 Route::get('/google_drive', 'GoogledriveController@google_drive')->name('google_drive');

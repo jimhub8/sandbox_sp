@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use App\Country;
+use App\Events\MessageSent;
 use App\PasswordSecurity;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -67,5 +68,17 @@ class HomeController extends Controller
     public function passport()
     {
         return view('passport/passport');
+    }
+
+
+
+    public function sendMessage(Request $request)
+    {
+        $user = Auth::user();
+        $message = 'A new order just came in from <a href="/shipment/' . $user->id . '">' . $user->name . '</a>';
+        // return (auth()->user());
+		broadcast(new MessageSent(auth()->user(), $message));
+
+        return ['status' => 'Message Sent!'];
     }
 }

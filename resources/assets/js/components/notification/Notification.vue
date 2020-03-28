@@ -133,6 +133,11 @@ export default {
     beforeDestroy() {
         clearInterval(this.timer);
     },
+    created () {
+        eventBus.$on('GetNotyEvent', data => {
+            this.getnotifications()
+        });
+    },
     mounted() {
         axios
             .get("/notifications")

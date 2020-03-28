@@ -52,7 +52,7 @@ Route::group([
     // Route::post('updateStatus/{id}', 'ShipmentController@updateStatus')->name('updateStatus');
     // Route::post('barcodeUpdate/{bar_code}', 'ShipmentController@barcodeUpdate')->name('barcodeUpdate');
     // Route::post('barcodeIn/{bar_code}', 'ShipmentController@barcodeIn')->name('barcodeIn');
-    Route::get('getShipments', 'ShipmentController@getShipments')->name('getShipments');
+    Route::get('additional', 'Api\ShipmentController@additional')->name('additional');
     // Route::post('getcoordinatesArray/{id}', 'ShipmentController@getcoordinatesArray')->name('getcoordinatesArray');
     // Route::patch('UpdateShipment', 'ShipmentController@UpdateShipment')->name('UpdateShipment');
     Route::post('filterShipment', 'ShipmentController@filterShipment')->name('filterShipment');

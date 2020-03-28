@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 // use App\Events\BroadcastOrder;
+
+use App\Events\BroadcastOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ShipmentResource;
 use App\Http\Resources\UserResource;
@@ -81,6 +83,8 @@ class ShipmentController extends Controller
      */
     public function store(Request $request)
     {
+
+        // return $this->getAdmin();
         // $shipment = Shipment::first();
         // event(new BroadcastOrder($shipment));
         // return 's';
@@ -139,12 +143,16 @@ class ShipmentController extends Controller
         // dd($shipment);
         $shipment->save();
 
-        $user = User::find(1);
+        // $user = User::find(1);
         $type = 'shipment';
         // BroadcastOrder::class;
         // return 'success';
-        Notification::send($user, new ShipmentNoty($shipment, $type));
-        return response()->json(['success' => $shipment, 'status' => '200'], '200');
+        // Notification::send($user, new ShipmentNoty($shipment, $type));
+        $message = 'You have a new order ' . $shipment->bar_code . ' from ' . $user->name ;
+        // $message = 'A new order just came in from <a href="/shipment/' . $shipment->id . '">' . $shipment->bar_code . '</a>';
+        $user_broadcast = User::find(1);
+		broadcast(new BroadcastOrder($user_broadcast, $message));
+        // return response()->json(['success' => $shipment, 'status' => '200'], '200');
         if (!empty($data['products'])) {
             // dd('test');
             $products = collect($data['products'])->transform(function ($product) {
@@ -169,6 +177,7 @@ class ShipmentController extends Controller
         $ret_ship = Shipment::where('id', $shipment->id)->get();
         // return $ret_ship;
         $users = $this->getAdmin();
+        // return $users;
         $shipment_res = ShipmentResource::collection($ret_ship);
         foreach ($users as  $user) {
             Notification::send($user, new ShipmentNoty($shipment, $type));
@@ -262,6 +271,7 @@ class ShipmentController extends Controller
         // return User::all();
         return User::setEagerLoads([])->whereHas("roles", function ($q) {
             $q->where("name", "Admin");
+            $q->orWhere("name", "Super admin");
             $q->orWhere("name", "Customer Service");
         })->get();
     }
@@ -430,5 +440,17 @@ class ShipmentController extends Controller
             ->orwhere('client_name', 'LIKE', "%{$search}%")
             ->paginate(1);
         return ShipmentResource::collection($shipment);
+    }
+
+
+
+    /**
+     * Some of the functionality may not be available in the but this can be incoporated as per your requirements
+     *
+     *
+     */
+    public function additional()
+    {
+
     }
 }

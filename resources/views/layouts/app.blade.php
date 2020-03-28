@@ -38,6 +38,9 @@
         </main>
     </div>
 
+<audio id="noty_audio">
+    <source src="{{ asset('audio/on-time.mp3') }}">
+</audio>
 <script src="{{ asset('vuetify/js/vuetify.js') }}"></script>
 </body>
 </html>

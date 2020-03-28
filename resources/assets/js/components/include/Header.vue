@@ -53,7 +53,6 @@
                             </div>
                         </router-link>
 
-
                         <router-link to="/shipment_status" class="v-list__tile v-list__tile--link" v-if="!user.is_client">
                             <div class="v-list__tile__action">
                                 <i aria-hidden="true" class="icon material-icons">update</i>
@@ -347,6 +346,12 @@
                 <img src="/storage/logo.png" alt style="width: 60px; height: 60px; border-radius: 25%;">
             </v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-tooltip bottom style="margin-right: 10px;">
+                <v-btn icon class="mx-0" @click="openWebsocket" slot="activator">
+                    <v-icon color="white darken-2" large>refresh</v-icon>
+                </v-btn>
+                <span>Add Order</span>
+            </v-tooltip>
 
             <!-- <v-btn color="info"></v-btn> -->
             <a href="/apilogin" style="margin-right: 10px;border: 1px solid #fff;padding: 5px;color: #000 !important;background: #fff;" v-for="role in user.roles" :key="role.id" v-if="role.name != 'Client'">api login</a>
@@ -368,6 +373,11 @@
 
         </v-toolbar>
     </v-app>
+
+    <v-snackbar v-model="notify_order" absolute top right color="black">
+        <span v-html="message"></span>
+        <v-icon dark>check_circle</v-icon>
+    </v-snackbar>
 
     <v-snackbar :timeout="timeout" bottom="bottom" :color="Snackcolor" left="left" v-model="snackbar">
         {{ message }}
@@ -412,9 +422,22 @@ export default {
             snackbar: false,
             timeout: 5000,
             message: "Success",
+            notify_order: false,
         };
     },
     methods: {
+        openWebsocket() {
+            const h = this.$createElement;
+
+            this.$message({
+                message: h('p', null, [
+                    h('a', 'Message can be '),
+                    h('i', {
+                        style: 'color: teal'
+                    }, 'VNode')
+                ])
+            });
+        },
         openShipment() {
             eventBus.$emit('addShipmentEvent')
             // this.dialog = true;
@@ -455,6 +478,12 @@ export default {
             this.message = data;
             this.Snackcolor = "indigo";
             this.snackbar = true;
+        },
+
+        showNotify(data) {
+            this.message = data;
+            this.Snackcolor = "black";
+            this.notify_order = true;
         },
 
         errorAlert(data) {
@@ -501,6 +530,9 @@ export default {
         });
         eventBus.$on("alertRequest", data => {
             this.showalert(data)
+        });
+        eventBus.$on("alertOrder", data => {
+            this.showNotify(data)
         });
         eventBus.$on("reloadRequest", data => {
             this.reload_page()

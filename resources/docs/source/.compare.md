@@ -27,9 +27,7 @@ Welcome to the generated API reference.
 ## Login user and create token
 To login you will provide you email and password.
 
-You will get a response with an
-
-
+You will get a response with this JSON     *
 {
 "accessToken": "access_token",
 "token": {
@@ -201,158 +199,12 @@ fetch(url, {
 ```
 
 
-> Example response (200):
+> Example response (500):
 
 ```json
-[
-    {
-        "id": 11,
-        "name": "Busy",
-        "deleted_at": null,
-        "created_at": "2018-12-20 21:28:32",
-        "updated_at": "2018-12-20 21:28:32"
-    },
-    {
-        "id": 18,
-        "name": "Call back if i dont call back",
-        "deleted_at": null,
-        "created_at": "2018-12-27 22:34:14",
-        "updated_at": "2018-12-27 22:34:14"
-    },
-    {
-        "id": 13,
-        "name": "Call back in a few",
-        "deleted_at": null,
-        "created_at": "2018-12-20 21:53:18",
-        "updated_at": "2018-12-20 21:53:18"
-    },
-    {
-        "id": 3,
-        "name": "Cancelled",
-        "deleted_at": null,
-        "created_at": "2018-12-20 19:15:16",
-        "updated_at": "2018-12-20 19:15:16"
-    },
-    {
-        "id": 2,
-        "name": "Delivered",
-        "deleted_at": null,
-        "created_at": "2018-12-20 17:52:15",
-        "updated_at": "2018-12-20 17:52:15"
-    },
-    {
-        "id": 15,
-        "name": "Did not place the order",
-        "deleted_at": null,
-        "created_at": "2018-12-20 22:47:24",
-        "updated_at": "2018-12-20 22:47:24"
-    },
-    {
-        "id": 6,
-        "name": "Dispatched",
-        "deleted_at": null,
-        "created_at": "2018-12-20 19:16:05",
-        "updated_at": "2018-12-20 19:16:05"
-    },
-    {
-        "id": 20,
-        "name": "Excess numbers",
-        "deleted_at": null,
-        "created_at": "2019-01-03 00:24:42",
-        "updated_at": "2019-01-03 00:24:42"
-    },
-    {
-        "id": 14,
-        "name": "Hanged up",
-        "deleted_at": null,
-        "created_at": "2018-12-20 22:08:03",
-        "updated_at": "2018-12-20 22:08:03"
-    },
-    {
-        "id": 17,
-        "name": "Incomplete number",
-        "deleted_at": null,
-        "created_at": "2018-12-21 20:53:07",
-        "updated_at": "2018-12-21 20:53:07"
-    },
-    {
-        "id": 5,
-        "name": "Not Available",
-        "deleted_at": null,
-        "created_at": "2018-12-20 19:15:53",
-        "updated_at": "2018-12-20 19:15:53"
-    },
-    {
-        "id": 4,
-        "name": "Not Picking",
-        "deleted_at": null,
-        "created_at": "2018-12-20 19:15:43",
-        "updated_at": "2018-12-20 19:15:43"
-    },
-    {
-        "id": 21,
-        "name": "Paying in installments",
-        "deleted_at": null,
-        "created_at": "2019-01-17 00:11:54",
-        "updated_at": "2019-01-17 00:11:54"
-    },
-    {
-        "id": 12,
-        "name": "Picked up",
-        "deleted_at": null,
-        "created_at": "2018-12-20 21:40:05",
-        "updated_at": "2018-12-20 21:40:05"
-    },
-    {
-        "id": 16,
-        "name": "Returned",
-        "deleted_at": null,
-        "created_at": "2018-12-21 20:00:09",
-        "updated_at": "2018-12-21 20:00:09"
-    },
-    {
-        "id": 1,
-        "name": "Scheduled",
-        "deleted_at": null,
-        "created_at": "2018-12-20 17:52:05",
-        "updated_at": "2018-12-20 17:52:05"
-    },
-    {
-        "id": 19,
-        "name": "Warehouse",
-        "deleted_at": null,
-        "created_at": "2018-12-27 23:03:18",
-        "updated_at": "2018-12-27 23:03:18"
-    },
-    {
-        "id": 8,
-        "name": "Will call us back",
-        "deleted_at": null,
-        "created_at": "2018-12-20 20:52:20",
-        "updated_at": "2018-12-20 20:52:20"
-    },
-    {
-        "id": 10,
-        "name": "Will call us back when around",
-        "deleted_at": null,
-        "created_at": "2018-12-20 20:53:20",
-        "updated_at": "2018-12-20 20:53:20"
-    },
-    {
-        "id": 9,
-        "name": "Will call us back when financially stable",
-        "deleted_at": null,
-        "created_at": "2018-12-20 20:53:04",
-        "updated_at": "2018-12-20 20:53:04"
-    },
-    {
-        "id": 7,
-        "name": "Wrong Number",
-        "deleted_at": null,
-        "created_at": "2018-12-20 19:16:22",
-        "updated_at": "2018-12-20 19:16:22"
-    }
-]
+{
+    "message": "Server Error"
+}
 ```
 
 ### HTTP Request
@@ -529,29 +381,32 @@ fetch(url, {
 Send a json file with the following details
 
 
+
 {
-"bar_code": "EMS0220222",
+"data": {
+"bar_code": "SP0000001",
 "quantity": 1,
-"client_address": "Riruta, kabiria. Near kivuli center",
-"client_city": ''Nairobi'',
+"client_address": "123 main street",
+"client_city": "Nairobi",
 "product_name": "SLICER",
-"client_name": "Edward njenga",
-"client_phone": "722703019",
-"cod_amount": "3500.00",
+"client_name": "John Doe",
+"client_phone": "+257000...",
+"cod_amount": "1900.00",
 "products": [
 {
 "product_name": "Test Product",
-"price": 299,
-"total": 299,
-"quantity": 1,
+"price": 400,
+"total": 400,
+"quantity": 1
 },
 {
 "product_name": "Test Product",
-"price": 299,
-"total": 299,
-"quantity": 1,
-},
+"price": 1500,
+"total": 1500,
+"quantity": 1
+}
 ]
+}
 }
 
 > Example request:
@@ -803,20 +658,90 @@ fetch(url, {
 
 <!-- END_c5cd019d2bded3ef997832bc64efa504 -->
 
-<!-- START_ddc5ea523d62154609ac550d33d0989c -->
-## api/getShipments
+<!-- START_da36888b3c63d07abfa784a281832530 -->
+## Create a new order.
+
+Send a json file with the following details
+
+
+
+{
+"data": {
+"bar_code": "SP0000001",
+"quantity": 1,
+"client_address": "123 main street",
+"client_city": "Nairobi",
+"product_name": "SLICER",
+"client_name": "John Doe",
+"client_phone": "+257000...",
+"cod_amount": "1900.00",
+"products": [
+{
+"product_name": "Test Product",
+"price": 400,
+"total": 400,
+"quantity": 1
+},
+{
+"product_name": "Test Product",
+"price": 1500,
+"total": 1500,
+"quantity": 1
+}
+]
+}
+}
+
 > Example request:
 
 ```bash
-curl -X GET \
-    -G "http://sandbox.jim/api/getShipments" \
+curl -X POST \
+    "http://sandbox.jim/api/add_shipment" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json"
 ```
 
 ```javascript
 const url = new URL(
-    "http://sandbox.jim/api/getShipments"
+    "http://sandbox.jim/api/add_shipment"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+
+### HTTP Request
+`POST api/add_shipment`
+
+
+<!-- END_da36888b3c63d07abfa784a281832530 -->
+
+<!-- START_3a90b33f57bce1372f0ff7fa015803b2 -->
+## Some of the functionality may not be available in the but this can be incoporated as per your requirements
+
+> Example request:
+
+```bash
+curl -X GET \
+    -G "http://sandbox.jim/api/additional" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json"
+```
+
+```javascript
+const url = new URL(
+    "http://sandbox.jim/api/additional"
 );
 
 let headers = {
@@ -842,9 +767,9 @@ fetch(url, {
 ```
 
 ### HTTP Request
-`GET api/getShipments`
+`GET api/additional`
 
 
-<!-- END_ddc5ea523d62154609ac550d33d0989c -->
+<!-- END_3a90b33f57bce1372f0ff7fa015803b2 -->
 
 

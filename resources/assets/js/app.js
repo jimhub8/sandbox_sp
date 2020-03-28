@@ -91,7 +91,9 @@ const app = new Vue({
     data() {
         return {
             timer: '',
-            timeout: 7.8e+6
+            timeout: 7.8e+6,
+            messages: [],
+            users: [],
         }
     },
     mounted() {
@@ -107,7 +109,9 @@ const app = new Vue({
 
     },
 
+
     methods: {
+
         inactivityTime() {
             let self = this
             // document.querySelector('#app')
@@ -147,15 +151,64 @@ const app = new Vue({
 
     },
 
-    created () {
-        axios.post('/notification').then((response) => {
-            this.notifications = response.data
-        })
 
-        var user_id = $('meta[name=user_id]').attr('content');
-        Echo.private('App.User.' + user_id).notification((notifications) => {
-            console.log(notification);
+    created() {
 
-        })
+        Echo.join('chat')
+            .here(users => {
+                console.log(users);
+
+                this.users = users;
+            })
+            .joining(user => {
+                console.log(user.name + ' is online');
+                this.users.push(user);
+            })
+            .leaving(user => {
+                console.log(user.name + ' left');
+                this.users = this.users.filter(u => u.id !== user.id);
+            })
+            .listenForWhisper('typing', ({ id, name }) => {
+                this.users.forEach((user, index) => {
+                    if (user.id === id) {
+                        user.typing = true;
+                        this.$set(this.users, index, user);
+                    }
+                });
+            })
+            .listen('BroadcastOrder', (event) => {
+                // alert('test');
+                console.log(event);
+                eventBus.$emit('GetNotyEvent')
+                document.getElementById('noty_audio').play()
+                this.$message({
+                    message: event.message,
+                    type: 'success'
+                });
+
+                // this.messages.push({
+                //     message: event.message.message,
+                //     user: event.user
+                // });
+
+                // this.users.forEach((user, index) => {
+                //     if (user.id === event.user.id) {
+                //         user.typing = false;
+                //         this.$set(this.users, index, user);
+                //     }
+                // });
+            });
     },
+
+    // created () {
+    //     axios.post('/notification').then((response) => {
+    //         this.notifications = response.data
+    //     })
+
+    //     var user_id = $('meta[name=user_id]').attr('content');
+    //     Echo.private('App.User.' + user_id).notification((notifications) => {
+    //         console.log(notification);
+
+    //     })
+    // },
 });
