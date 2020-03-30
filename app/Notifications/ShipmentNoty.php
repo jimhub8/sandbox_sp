@@ -36,7 +36,7 @@ class ShipmentNoty extends Notification
     public function via($notifiable)
     {
         // return ['broadcast'];
-        return ['database', 'broadcast'];
+        return ['database', ];
     }
 
 

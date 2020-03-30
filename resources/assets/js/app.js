@@ -131,6 +131,7 @@ const app = new Vue({
                 // window.location.reload();
             }, this.timeout);
         },
+
         check_user() {
             // alert('etettetet')
             var payload = {
@@ -200,15 +201,4 @@ const app = new Vue({
             });
     },
 
-    // created () {
-    //     axios.post('/notification').then((response) => {
-    //         this.notifications = response.data
-    //     })
-
-    //     var user_id = $('meta[name=user_id]').attr('content');
-    //     Echo.private('App.User.' + user_id).notification((notifications) => {
-    //         console.log(notification);
-
-    //     })
-    // },
 });

@@ -120,7 +120,6 @@ Route::get('/passport', 'HomeController@passport')->name('passport');
 // Route::get('/map', function () {
 // 	return App\User::take(100)->get();
 // });
-Route::get('/', 'HomeController@courier')->name('courier');
 
 // Route::get('/', function () {
 //     return redirect('courier');
@@ -135,6 +134,7 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth', '2fa']], function () {
     Route::get('/courier', 'HomeController@courier')->name('courier');
+Route::get('/', 'HomeController@courier')->name('courier');
 });
     Route::group(['middleware' => ['authcheck', '2fa']], function () {
     // Route::get('/testSS', function () {

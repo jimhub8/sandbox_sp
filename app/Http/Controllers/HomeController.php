@@ -15,13 +15,13 @@ class HomeController extends Controller
     public function courier()
     {
         $user = Auth::user();
-        if (!$user->passwordSecurity) {
-            $passwordSecurity = PasswordSecurity::create([
-                'user_id' => $user->id,
-                'password_expiry_days' => 1,
-                'password_updated_at' => Carbon::now(),
-            ]);
-        }
+        // if (!$user->passwordSecurity) {
+        //     $passwordSecurity = PasswordSecurity::create([
+        //         'user_id' => $user->id,
+        //         'password_expiry_days' => 1,
+        //         'password_updated_at' => Carbon::now(),
+        //     ]);
+        // }
         $permissions = [];
         foreach (Permission::all() as $permission) {
             if (Auth::user()->can($permission->name)) {
